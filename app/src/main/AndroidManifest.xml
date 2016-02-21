@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.xpn.spellchecker">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".activities.ViewDocuments"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.ViewTrash"
+            android:label="@string/title_activity_view_trash"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.xpn.spellchecker.activities.ViewDocuments" />
+        </activity>
+        <activity
+            android:name=".activities.ViewArchive"
+            android:label="@string/title_activity_view_archive"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.xpn.spellchecker.activities.ViewDocuments" />
+        </activity>
+        <activity
+            android:name=".activities.SelectLanguages"
+            android:label="@string/title_activity_select_languages"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.About"
+            android:label="@string/title_activity_about"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.xpn.spellchecker.activities.ViewDocuments" />
+        </activity>
+        <activity
+            android:name=".activities.EditDocument"
+            android:label="@string/title_activity_edit_document"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.xpn.spellchecker.activities.ViewDocuments" />
+        </activity>
+    </application>
+
+</manifest>
