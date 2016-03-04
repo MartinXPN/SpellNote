@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.xpn.spellchecker.activities.About">
+    tools:context="com.xpn.spellnote.activities.About">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

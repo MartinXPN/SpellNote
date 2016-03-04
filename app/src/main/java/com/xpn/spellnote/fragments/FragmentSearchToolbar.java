@@ -1,4 +1,4 @@
-package com.xpn.spellchecker.fragments;
+package com.xpn.spellnote.fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -8,17 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.xpn.spellchecker.R;
+import com.xpn.spellnote.R;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AppNavigation.OnFragmentInteractionListener} interface
+ * {@link FragmentSearchToolbar.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AppNavigation#newInstance} factory method to
+ * Use the {@link FragmentSearchToolbar#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AppNavigation extends Fragment {
+public class FragmentSearchToolbar extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -30,7 +30,7 @@ public class AppNavigation extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public AppNavigation() {
+    public FragmentSearchToolbar() {
         // Required empty public constructor
     }
 
@@ -40,11 +40,11 @@ public class AppNavigation extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AppNavigation.
+     * @return A new instance of fragment FragmentSearchToolbar.
      */
     // TODO: Rename and change types and number of parameters
-    public static AppNavigation newInstance(String param1, String param2) {
-        AppNavigation fragment = new AppNavigation();
+    public static FragmentSearchToolbar newInstance(String param1, String param2) {
+        FragmentSearchToolbar fragment = new FragmentSearchToolbar();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -65,7 +65,7 @@ public class AppNavigation extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_app_navigation, container, false);
+        return inflater.inflate(R.layout.fragment_search_toolbar, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

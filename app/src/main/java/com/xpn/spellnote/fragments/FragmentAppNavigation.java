@@ -1,4 +1,4 @@
-package com.xpn.spellchecker.fragments;
+package com.xpn.spellnote.fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -8,17 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.xpn.spellchecker.R;
+import com.xpn.spellnote.R;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link DefaultToolbar.OnFragmentInteractionListener} interface
+ * {@link FragmentAppNavigation.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link DefaultToolbar#newInstance} factory method to
+ * Use the {@link FragmentAppNavigation#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DefaultToolbar extends Fragment {
+public class FragmentAppNavigation extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -30,7 +30,7 @@ public class DefaultToolbar extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public DefaultToolbar() {
+    public FragmentAppNavigation() {
         // Required empty public constructor
     }
 
@@ -40,11 +40,11 @@ public class DefaultToolbar extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment DefaultToolbar.
+     * @return A new instance of fragment FragmentAppNavigation.
      */
     // TODO: Rename and change types and number of parameters
-    public static DefaultToolbar newInstance(String param1, String param2) {
-        DefaultToolbar fragment = new DefaultToolbar();
+    public static FragmentAppNavigation newInstance(String param1, String param2) {
+        FragmentAppNavigation fragment = new FragmentAppNavigation();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -65,7 +65,7 @@ public class DefaultToolbar extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_default_toolbar, container, false);
+        return inflater.inflate(R.layout.fragment_app_navigation, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -1,4 +1,4 @@
-package com.xpn.spellchecker.activities;
+package com.xpn.spellnote.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,14 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.xpn.spellchecker.R;
+import com.xpn.spellnote.R;
 
-public class EditDocument extends AppCompatActivity {
+public class ViewTrash extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_document);
+        setContentView(R.layout.activity_view_trash);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

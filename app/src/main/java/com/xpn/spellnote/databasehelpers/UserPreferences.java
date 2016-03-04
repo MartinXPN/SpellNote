@@ -1,4 +1,4 @@
-package com.xpn.spellchecker.databasehelpers;
+package com.xpn.spellnote.databasehelpers;
 
 /**
  * Created by USER on 20.02.2016.

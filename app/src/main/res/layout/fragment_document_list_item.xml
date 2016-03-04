@@ -6,7 +6,7 @@
 
     android:id="@+id/swipe"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/document_list_item_height"
     android:clickable="true"
     android:longClickable="true"
 
@@ -32,6 +32,8 @@
             android:id="@+id/copy"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackgroundBorderless"
+
             android:layout_weight="1"
             android:clickable="true"
             android:scaleType="centerInside"
@@ -41,6 +43,8 @@
             android:id="@+id/trash"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackgroundBorderless"
+
             android:layout_weight="1"
             android:clickable="true"
             android:scaleType="centerInside"
@@ -50,6 +54,8 @@
             android:id="@+id/send"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackgroundBorderless"
+
             android:layout_weight="1"
             android:clickable="true"
             android:scaleType="centerInside"
@@ -58,65 +64,85 @@
     </LinearLayout>
 
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/content_part"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@drawable/transparent_rectangle"
-        android:weightSum="10"
-        android:baselineAligned="false">
+        android:layout_height="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:background="?attr/selectableItemBackground" >
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2">
+            android:layout_height="match_parent"
+
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/info"
+            android:layout_toStartOf="@+id/info"
+
+            android:orientation="vertical"
+            android:weightSum="10">
+
 
             <TextView
                 android:id="@+id/title"
-                android:background="@drawable/transparent_rectangle"
+                android:layout_weight="5"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="bottom"
 
                 android:maxLines="1"
                 android:ellipsize="end"
 
-
                 android:textStyle="normal"
-                android:textSize="20sp"
-                android:textColor="#002222" />
+                android:textSize="25sp"
+                android:textColor="#009600" />
 
             <TextView
                 android:id="@+id/text"
-                android:background="@drawable/transparent_rectangle"
+                android:layout_weight="5"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="top"
 
-                android:maxLines="1"
+                android:maxLines="2"
                 android:ellipsize="end"
 
-                android:textSize="30sp"
-                android:textColor="#002200" />
+                android:textSize="15sp"
+                android:textColor="#0089f7" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_weight="8"
-            android:layout_width="match_parent"
+            android:id="@+id/info"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal" >
+            android:orientation="vertical"
+            android:weightSum="2"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true" >
+
+            <ImageView
+                android:id="@+id/language_flag"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_launcher" />
 
             <TextView
-                android:gravity="center"
                 android:id="@+id/date"
-                android:textColor="#212121"
-                android:textSize="20sp"
+                android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/transparent_rectangle" />
-
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="#212121"
+                android:text="date\n12:30"
+                android:textSize="15sp"/>
         </LinearLayout>
-
-    </LinearLayout>
+    </RelativeLayout>
 
 </com.daimajia.swipe.SwipeLayout>

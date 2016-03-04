@@ -1,4 +1,4 @@
-package com.xpn.spellchecker.fragments;
+package com.xpn.spellnote.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,9 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.xpn.spellchecker.R;
-
-import java.util.List;
+import com.xpn.spellnote.R;
 
 /**
  * A fragment representing a list of Items.
@@ -20,7 +18,7 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class SuggestionList extends Fragment {
+public class FragmentSuggestionList extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -32,13 +30,13 @@ public class SuggestionList extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public SuggestionList() {
+    public FragmentSuggestionList() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static SuggestionList newInstance(int columnCount) {
-        SuggestionList fragment = new SuggestionList();
+    public static FragmentSuggestionList newInstance(int columnCount) {
+        FragmentSuggestionList fragment = new FragmentSuggestionList();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);

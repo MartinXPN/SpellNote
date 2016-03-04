@@ -1,24 +1,24 @@
-package com.xpn.spellchecker.fragments;
+package com.xpn.spellnote.fragments;
 
-import android.content.Context;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.xpn.spellchecker.R;
+import com.xpn.spellnote.R;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SearchToolbar.OnFragmentInteractionListener} interface
+ * {@link FragmentEditCorrectText.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link SearchToolbar#newInstance} factory method to
+ * Use the {@link FragmentEditCorrectText#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchToolbar extends Fragment {
+public class FragmentEditCorrectText extends Fragment {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -30,26 +30,26 @@ public class SearchToolbar extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public SearchToolbar() {
-        // Required empty public constructor
-    }
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SearchToolbar.
+     * @return A new instance of fragment FragmentEditCorrectText.
      */
     // TODO: Rename and change types and number of parameters
-    public static SearchToolbar newInstance(String param1, String param2) {
-        SearchToolbar fragment = new SearchToolbar();
+    public static FragmentEditCorrectText newInstance(String param1, String param2) {
+        FragmentEditCorrectText fragment = new FragmentEditCorrectText();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public FragmentEditCorrectText() {
+        // Required empty public constructor
     }
 
     @Override
@@ -62,10 +62,9 @@ public class SearchToolbar extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_toolbar, container, false);
+        return inflater.inflate(R.layout.fragment_edit_correct_text, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -76,13 +75,14 @@ public class SearchToolbar extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+    public void onStart() {
+
+        super.onStart();
+        try {
+            mListener = (OnFragmentInteractionListener) getActivity();
+        }
+        catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString() + " must implement OnFragmentInteractionListener");
         }
     }
 

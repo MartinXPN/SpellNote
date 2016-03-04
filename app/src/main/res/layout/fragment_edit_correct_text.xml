@@ -1,0 +1,31 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.xpn.spellnote.fragments.FragmentEditCorrectText">
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="ifContentScrolls" >
+
+        <EditText
+            android:id="@+id/text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="textMultiLine|textNoSuggestions"
+            android:gravity="top|start"
+
+            android:padding="15dp"
+
+            android:background="@drawable/rectangle_transparent"
+            android:keepScreenOn="true"
+            android:cursorVisible="true"
+
+            android:hint="Text" />
+    </ScrollView>
+</FrameLayout>

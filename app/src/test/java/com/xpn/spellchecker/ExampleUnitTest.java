@@ -1,4 +1,4 @@
-package com.xpn.spellchecker;
+package com.xpn.spellnote;
 
 import org.junit.Test;
 
