@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_restaurant_list"
+            android:icon="@drawable/ic_add_note"
+            android:title="hello" />
+    </group>
+
+
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/nav_tips"
+                android:icon="@drawable/ic_add_note"
+                android:title="world" />
+        </menu>
+    </item>
+
+</menu>

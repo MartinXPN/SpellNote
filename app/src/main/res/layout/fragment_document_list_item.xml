@@ -130,7 +130,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:scaleType="centerInside"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@mipmap/ic_launcher"
+                android:contentDescription="@null" />
 
             <TextView
                 android:id="@+id/date"

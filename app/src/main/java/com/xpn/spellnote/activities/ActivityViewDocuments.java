@@ -5,18 +5,24 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.fragments.FragmentDocumentList;
 
-public class ViewDocuments extends AppCompatActivity implements FragmentDocumentList.OnListFragmentInteractionListener {
+public class ActivityViewDocuments
+        extends     AppCompatActivity
+        implements  FragmentDocumentList.OnListFragmentInteractionListener,
+                    NavigationView.OnNavigationItemSelectedListener {
+
 
     private static final String TAG_DOCUMENT_LIST = "document_list";
     private static FragmentDocumentList fragmentDocumentList = null;
@@ -35,7 +41,7 @@ public class ViewDocuments extends AppCompatActivity implements FragmentDocument
             @Override
             public void onClick(View view) {
 
-                Intent i = new Intent( ViewDocuments.this, EditDocument.class );
+                Intent i = new Intent( ActivityViewDocuments.this, ActivityEditDocument.class );
                 startActivityForResult( i, 1 );
             }
         });
@@ -54,6 +60,19 @@ public class ViewDocuments extends AppCompatActivity implements FragmentDocument
             ft.replace( R.id.list_of_documents, fragmentDocumentList, TAG_DOCUMENT_LIST );
             ft.commit();
         }
+
+
+        /// set up navigation-toggle
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        assert drawer != null;
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        /// set up navigation drawer
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        assert navigationView != null;
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -79,65 +98,14 @@ public class ViewDocuments extends AppCompatActivity implements FragmentDocument
     }
 
 
-
-
     @Override
-    public void onArchiveClick(int listPosition, View v) {
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
 
-        Snackbar.make( v, "Archived", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        } ).show();
-    }
-
-    @Override
-    public void onTrashClick(int listPosition, View v) {
-
-        Snackbar.make( v, "Moved to trash", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        } ).show();
-    }
-
-    @Override
-    public void onSendClick(int listPosition, View v) {
-
-        Intent i = new Intent( Intent.ACTION_SEND );
-        i.setType( "text/plain" );
-        i.putExtra( Intent.EXTRA_SUBJECT, fragmentDocumentList.getTitleAt( listPosition ) );
-        i.putExtra( Intent.EXTRA_TEXT, fragmentDocumentList.getTextAt( listPosition ) );
-        try {
-            startActivity( Intent.createChooser( i, "Send Message...") );
-        }
-        catch( android.content.ActivityNotFoundException ex ) {
-            Toast.makeText( ViewDocuments.this, "There are no messaging applications installed", Toast.LENGTH_SHORT ).show();
-        }
-    }
-
-    @Override
-    public void onContentClick(int listPosition, View v) {
-
-        Intent i = new Intent( ViewDocuments.this, EditDocument.class );
-        i.putExtra( "id", fragmentDocumentList.getIdAt( listPosition ) );
-        i.putExtra( "title", fragmentDocumentList.getTitleAt( listPosition ) );
-        i.putExtra( "content", fragmentDocumentList.getTitleAt( listPosition ) );
-        startActivityForResult(i, 1);
-    }
-
-    @Override
-    public String getArchiveExplanation() {
-        return "Archive";
-    }
-
-    @Override
-    public String getTrashExplanation() {
-        return "Move to trash";
-    }
-
-    @Override
-    public String getSendExplanation() {
-        return "Send";
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        assert drawer != null;
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }

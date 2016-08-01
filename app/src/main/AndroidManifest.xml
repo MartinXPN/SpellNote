@@ -7,52 +7,34 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme.NoActionBar">
+
         <activity
-            android:name="com.xpn.spellnote.activities.ViewDocuments"
+            android:name=".activities.ActivityViewDocuments"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name="com.xpn.spellnote.activities.ViewTrash"
-            android:label="@string/title_activity_view_trash"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.xpn.spellnote.activities.ViewDocuments" />
-        </activity>
-        <activity
-            android:name="com.xpn.spellnote.activities.ViewArchive"
-            android:label="@string/title_activity_view_archive"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.xpn.spellnote.activities.ViewDocuments" />
-        </activity>
-        <activity
-            android:name="com.xpn.spellnote.activities.SelectLanguages"
+            android:name=".activities.ActivitySelectLanguages"
             android:label="@string/title_activity_select_languages"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
-            android:name="com.xpn.spellnote.activities.About"
+            android:name=".activities.ActivityAbout"
             android:label="@string/title_activity_about"
             android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.xpn.spellnote.activities.ViewDocuments" />
         </activity>
+
         <activity
-            android:name="com.xpn.spellnote.activities.EditDocument"
+            android:name=".activities.ActivityEditDocument"
             android:label="@string/title_activity_edit_document"
             android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.xpn.spellnote.activities.ViewDocuments" />
         </activity>
-    </application>
 
+    </application>
 </manifest>

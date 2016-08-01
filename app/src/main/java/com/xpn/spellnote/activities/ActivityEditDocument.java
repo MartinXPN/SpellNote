@@ -6,11 +6,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.fragments.FragmentEditCorrectText;
 
-public class EditDocument extends AppCompatActivity implements FragmentEditCorrectText.OnFragmentInteractionListener {
+public class ActivityEditDocument extends AppCompatActivity implements FragmentEditCorrectText.OnFragmentInteractionListener {
 
     private static final String TAG_FRAGMENT_TEXT = "tag_fragment_text";
     private static FragmentEditCorrectText fragmentText;
@@ -22,6 +23,7 @@ public class EditDocument extends AppCompatActivity implements FragmentEditCorre
         setContentView(R.layout.activity_edit_document);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
@@ -40,6 +42,13 @@ public class EditDocument extends AppCompatActivity implements FragmentEditCorre
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if( id == android.R.id.home ) { finish();   return true; }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
