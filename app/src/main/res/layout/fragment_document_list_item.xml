@@ -29,7 +29,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/copy"
+            android:id="@+id/archive"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -37,29 +37,29 @@
             android:layout_weight="1"
             android:clickable="true"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_copy_white"
+            android:src="@drawable/ic_archive"
             android:contentDescription="@null" />
         <ImageView
             android:id="@+id/trash"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="?attr/selectableItemBackgroundBorderless"
 
             android:layout_weight="1"
             android:clickable="true"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_copy_white"
+            android:src="@drawable/ic_trash"
             android:contentDescription="@null" />
         <ImageView
             android:id="@+id/send"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="?attr/selectableItemBackgroundBorderless"
 
             android:layout_weight="1"
             android:clickable="true"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_copy_white"
+            android:src="@drawable/ic_send"
             android:contentDescription="@null" />
     </LinearLayout>
 

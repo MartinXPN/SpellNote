@@ -12,11 +12,7 @@ import com.xpn.spellnote.R;
 import com.xpn.spellnote.activities.ActivityEditDocument;
 import com.xpn.spellnote.adapters.AdapterDocumentList;
 
-
-public class FragmentDocumentList extends BaseFragmentDocumentList {
-
-    public FragmentDocumentList() {
-    }
+public class FragmentArchive extends BaseFragmentDocumentList {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,7 +21,7 @@ public class FragmentDocumentList extends BaseFragmentDocumentList {
     }
 
     @Override
-    public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_document_list, container, false);
         ListView documentListView = (ListView) rootView.findViewById(R.id.list);

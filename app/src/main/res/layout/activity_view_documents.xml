@@ -35,19 +35,6 @@
             android:layout_below="@+id/toolbar_box" >
         </FrameLayout>
 
-
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_add_note"
-            app:fabSize="normal" />
-
         <View
             android:id="@+id/toolbar_shadow"
             android:layout_width="match_parent"
@@ -66,7 +53,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="false"
-        app:headerLayout="@layout/nav_header_main"
+        app:headerLayout="@layout/nav_header"
         app:menu="@menu/navigation_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

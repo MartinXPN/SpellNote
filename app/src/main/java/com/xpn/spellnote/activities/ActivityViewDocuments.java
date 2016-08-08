@@ -1,10 +1,9 @@
 package com.xpn.spellnote.activities;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,10 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.xpn.spellnote.R;
+import com.xpn.spellnote.fragments.FragmentArchive;
 import com.xpn.spellnote.fragments.FragmentDocumentList;
+import com.xpn.spellnote.fragments.FragmentTrash;
+import com.xpn.spellnote.util.TagsUtil;
 
 public class ActivityViewDocuments
         extends     AppCompatActivity
@@ -24,27 +25,18 @@ public class ActivityViewDocuments
                     NavigationView.OnNavigationItemSelectedListener {
 
 
-    private static final String TAG_DOCUMENT_LIST = "document_list";
-    private static FragmentDocumentList fragmentDocumentList = null;
-
+    protected Bundle savedInstanceState = null;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate( savedInstanceState );
+        if( savedInstanceState == null )
+            savedInstanceState = new Bundle();
+        this.savedInstanceState = savedInstanceState;
 
         setContentView(R.layout.activity_view_documents);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent i = new Intent( ActivityViewDocuments.this, ActivityEditDocument.class );
-                startActivityForResult( i, 1 );
-            }
-        });
 
 
         // get fragment manager
@@ -53,11 +45,11 @@ public class ActivityViewDocuments
         fm.executePendingTransactions();
 
         // If there is no fragment yet with this tag...
-        if( fm.findFragmentByTag( TAG_DOCUMENT_LIST ) == null ) {
+        if( fm.findFragmentByTag( TagsUtil.TAG_DOCUMENT_LIST ) == null ) {
             // Add fragment
             FragmentTransaction ft = fm.beginTransaction();
-            fragmentDocumentList = new FragmentDocumentList();
-            ft.replace( R.id.list_of_documents, fragmentDocumentList, TAG_DOCUMENT_LIST );
+            FragmentDocumentList fragmentDocumentList = new FragmentDocumentList();
+            ft.replace( R.id.list_of_documents, fragmentDocumentList, TagsUtil.TAG_DOCUMENT_LIST );
             ft.commit();
         }
 
@@ -66,7 +58,7 @@ public class ActivityViewDocuments
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         assert drawer != null;
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         /// set up navigation drawer
@@ -89,11 +81,6 @@ public class ActivityViewDocuments
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -103,9 +90,43 @@ public class ActivityViewDocuments
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        if( id == R.id.nav_documents )      { showFragment( id, TagsUtil.FRAGMENT_DOCUMENTS); }
+        else if( id == R.id.nav_archive )   { showFragment( id, TagsUtil.FRAGMENT_ARCHIVE); }
+        else if( id == R.id.nav_trash )     { showFragment( id, TagsUtil.FRAGMENT_TRASH); }
+        else if( id == R.id.nav_feedback )  { /* send feedback by mail */  }
+        else if( id == R.id.nav_about )     { /* open activity about */ }
+
+        /// close the drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         assert drawer != null;
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    public void showFragment(int navId, String fragmentTag) {
+
+        /// save the choice
+        savedInstanceState.putInt( TagsUtil.SAVED_STATE_FRAGMENT_ID, navId );
+
+        // get fragment manager
+        FragmentManager fm = getFragmentManager();
+        // Make sure the current transaction finishes first
+        fm.executePendingTransactions();
+
+        // If there is a fragment with this tag...
+        if( fm.findFragmentByTag( fragmentTag ) != null )
+            return;
+
+        Fragment fragment = null;
+        if( navId == R.id.nav_documents)        fragment = new FragmentDocumentList();
+        else if( navId == R.id.nav_archive )    fragment = new FragmentArchive();
+        else if( navId == R.id.nav_trash )      fragment = new FragmentTrash();
+
+        // Add fragment
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace( R.id.list_of_documents, fragment, fragmentTag );
+        //fm.popBackStack();
+        ft.commit();
     }
 }
