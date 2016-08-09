@@ -2,6 +2,7 @@ package com.xpn.spellnote.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.xpn.spellnote.adapters.BaseAdapterDocumentList;
 
@@ -23,6 +24,7 @@ public class BaseFragmentDocumentList extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance( true );
+        setHasOptionsMenu( true );
     }
 
 
@@ -40,5 +42,15 @@ public class BaseFragmentDocumentList extends Fragment {
     public void onDetach() {
         super.onDetach();
         onInteractionListener = null;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected( MenuItem item ) {
+
+        /// some calls are handled in BaseFragmentDocumentList superclass
+        int id = item.getItemId();
+
+        return super.onOptionsItemSelected(item);
     }
 }

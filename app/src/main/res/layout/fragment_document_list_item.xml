@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:weightSum="3"
-        android:background="#F00"
+        android:background="#f05445"
         android:gravity="end"
         android:orientation="horizontal">
 
@@ -82,6 +82,7 @@
             android:layout_alignParentLeft="true"
             android:layout_toLeftOf="@+id/info"
             android:layout_toStartOf="@+id/info"
+            android:paddingRight="10dp"
 
             android:orientation="vertical"
             android:weightSum="10">
@@ -129,6 +130,7 @@
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:padding="3dp"
                 android:scaleType="centerInside"
                 android:src="@mipmap/ic_launcher"
                 android:contentDescription="@null" />
@@ -140,8 +142,7 @@
                 android:layout_height="0dp"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="#212121"
-                android:text="date\n12:30"
+                android:textColor="@color/list_date"
                 android:textSize="15sp"/>
         </LinearLayout>
     </RelativeLayout>

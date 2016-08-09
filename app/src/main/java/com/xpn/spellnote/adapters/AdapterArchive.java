@@ -9,14 +9,14 @@ import com.xpn.spellnote.util.Util;
 
 import java.util.ArrayList;
 
-public class AdapterDocumentList extends BaseAdapterDocumentList {
+public class AdapterArchive extends BaseAdapterDocumentList {
 
     @Override
     public ItemInteractionListener getArchiveListener() {
         return new ItemInteractionListener() {
             @Override
             public void onClick( int listPosition, View v ) {
-                Snackbar.make( v, "Archived", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
+                Snackbar.make( v, "Unarchived", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                     }
@@ -25,12 +25,12 @@ public class AdapterDocumentList extends BaseAdapterDocumentList {
 
             @Override
             public int getDrawableResId() {
-                return R.drawable.ic_archive;
+                return R.drawable.ic_unarchive;
             }
 
             @Override
             public String getExplanation() {
-                return "Archive";
+                return "Unarchive";
             }
         };
     }
@@ -64,7 +64,7 @@ public class AdapterDocumentList extends BaseAdapterDocumentList {
         return new ItemInteractionListener() {
             @Override
             public void onClick(int listPosition, View v) {
-                Util.sendEmail( AdapterDocumentList.this.context, new String[]{}, documentList.get( listPosition ).getTitle(), documentList.get( listPosition ).getText() );
+                Util.sendEmail( context, new String[]{}, documentList.get( listPosition ).getTitle(), documentList.get( listPosition ).getText() );
             }
 
             @Override
@@ -80,17 +80,17 @@ public class AdapterDocumentList extends BaseAdapterDocumentList {
     }
 
     @Override
-    public ArrayList <DocumentData> getDocumentList() {
+    public ArrayList<DocumentData> getDocumentList() {
 
         ArrayList <DocumentData> documentList = new ArrayList<>();
-        for( int i=0; i < 100; ++i ) {
+        for( int i=0; i < 3; ++i ) {
             documentList.add( new DocumentData( "Title No:" + i, "Text No:", "Aug 09\n13:16", (long)i ) );
         }
         return documentList;
     }
 
 
-    public AdapterDocumentList(Context context ) {
+    public AdapterArchive(Context context ) {
         super( context );
     }
 }

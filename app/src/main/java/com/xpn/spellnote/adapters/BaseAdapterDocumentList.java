@@ -2,7 +2,6 @@ package com.xpn.spellnote.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,13 +17,35 @@ import com.xpn.spellnote.activities.ActivityEditDocument;
 
 import java.util.ArrayList;
 
-public class BaseAdapterDocumentList extends BaseSwipeAdapter {
+public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
 
     protected Context context;
+    protected ArrayList <DocumentData> documentList = new ArrayList<>();
+
+    public interface ItemInteractionListener {
+        void onClick( int listPosition, View v );
+        int getDrawableResId();
+        String getExplanation();
+    }
+    ItemInteractionListener archive;
+    ItemInteractionListener trash;
+    ItemInteractionListener send;
+    public abstract ItemInteractionListener getArchiveListener();
+    public abstract ItemInteractionListener getTrashListener();
+    public abstract ItemInteractionListener getSendListener();
+
+
 
     public BaseAdapterDocumentList( Context context ) {
         this.context = context;
+        documentList = getDocumentList();
+
+        archive = getArchiveListener();
+        trash = getTrashListener();
+        send = getSendListener();
     }
+
+    public abstract ArrayList <DocumentData> getDocumentList();
 
     @Override
     public int getSwipeLayoutResourceId(int position) {
@@ -33,8 +54,7 @@ public class BaseAdapterDocumentList extends BaseSwipeAdapter {
 
     @Override
     public View generateView(int position, ViewGroup viewGroup) {
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
-        return layoutInflater.inflate(R.layout.fragment_document_list_item, null);
+        return LayoutInflater.from(context).inflate(R.layout.fragment_document_list_item, null);
     }
 
     @Override
@@ -48,39 +68,43 @@ public class BaseAdapterDocumentList extends BaseSwipeAdapter {
         final ImageView trash = (ImageView) convertView.findViewById( R.id.trash );
         final ImageView send = (ImageView) convertView.findViewById( R.id.send );
 
-        final String titleValue = getTitleAt( position );
-        final String textValue = getTextAt( position );
-        final String creationDate = getDateAt( position );
+        final String titleValue = documentList.get( position ).getTitle();
+        final String textValue = documentList.get( position ).getText();
+        final String dateValue = documentList.get( position ).getDate();
 
         title.setText( titleValue.matches("") ? "Untitled" : titleValue );
         text.setText( textValue );
-        date.setText( creationDate );
+        date.setText( dateValue );
+
+        archive.setImageResource( this.archive.getDrawableResId() );
+        trash.setImageResource( this.trash.getDrawableResId() );
+        send.setImageResource( this.send.getDrawableResId() );
 
 
         archive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BaseAdapterDocumentList.this.closeAllItems();
-                onArchiveClick(position, v);
+                BaseAdapterDocumentList.this.archive.onClick( position, v );
             }
         });
         trash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BaseAdapterDocumentList.this.closeAllItems();
-                onTrashClick(position, v);
+                BaseAdapterDocumentList.this.trash.onClick( position, v );
             }
         });
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onSendClick(position, v);
+                BaseAdapterDocumentList.this.send.onClick( position, v );
             }
         });
         contentPart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onContentClick(position, v);
+                onContentClick( position, v );
             }
         });
 
@@ -89,21 +113,21 @@ public class BaseAdapterDocumentList extends BaseSwipeAdapter {
         archive.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText( context, getArchiveExplanation(), Toast.LENGTH_SHORT ).show();
+                Toast.makeText( context, BaseAdapterDocumentList.this.archive.getExplanation(), Toast.LENGTH_SHORT ).show();
                 return true;
             }
         });
         trash.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText( context, getTrashExplanation(), Toast.LENGTH_SHORT ).show();
+                Toast.makeText( context, BaseAdapterDocumentList.this.trash.getExplanation(), Toast.LENGTH_SHORT ).show();
                 return true;
             }
         });
         send.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(context, getSendExplanation(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, BaseAdapterDocumentList.this.send.getExplanation(), Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -122,7 +146,7 @@ public class BaseAdapterDocumentList extends BaseSwipeAdapter {
 
     @Override
     public int getCount() {
-        return 100;/*documentList.size();*/
+        return documentList.size();
     }
     @Override
     public Object getItem(int position) {
@@ -130,90 +154,62 @@ public class BaseAdapterDocumentList extends BaseSwipeAdapter {
     }
     @Override
     public long getItemId(int position) {
-        return position;
+        return documentList.get( position ).getId();
     }
 
 
 
 
-
-
-    public int getIdAt( int position ) {
-        return 0;
-        //return (String) documentList.get( position ).get( 0 );
-    }
-    public String getTitleAt( int position ) {
-        return "Title No: " + String.valueOf( position );
-        //return (String) documentList.get( position ).get( 1 );
-    }
-    public String getTextAt( int position ) {
-        return "Text No: ";
-        //return (String) documentList.get( position ).get( 2 );
-    }
-    public String getDateAt( int position ) {
-        return "date\n12:30";
-        //return (String) documentList.get( position ).get( 3 );
-    }
-    public ArrayList getRowAt(int position ) {
-        return new ArrayList();
-        //return documentList.get( position );
-    }
-
-
-
-
-
-
-    public void onArchiveClick(int listPosition, View v) {
-
-        Snackbar.make( v, "Archived", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        } ).show();
-    }
-
-    public void onTrashClick(int listPosition, View v) {
-
-        Snackbar.make( v, "Moved to trash", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        } ).show();
-    }
-
-    public void onSendClick(int listPosition, View v) {
-
-        Intent i = new Intent( Intent.ACTION_SEND );
-        i.setType( "text/plain" );
-        i.putExtra( Intent.EXTRA_SUBJECT, getTitleAt( listPosition ) );
-        i.putExtra( Intent.EXTRA_TEXT, getTextAt( listPosition ) );
-        try {
-            context.startActivity( Intent.createChooser( i, "Send Message...") );
-        }
-        catch( android.content.ActivityNotFoundException ex ) {
-            Toast.makeText( context, "There are no messaging applications installed", Toast.LENGTH_SHORT ).show();
-        }
-    }
-
-    public void onContentClick(int listPosition, View v) {
+    private void onContentClick(int position, View v) {
 
         Intent i = new Intent( context, ActivityEditDocument.class );
-        i.putExtra( "id", getIdAt( listPosition ) );
-        i.putExtra( "title", getTitleAt( listPosition ) );
-        i.putExtra( "content", getTitleAt( listPosition ) );
+        i.putExtra( "id", documentList.get( position ).getId() );
+        i.putExtra( "title", documentList.get( position ).getTitle() );
+        i.putExtra( "content", documentList.get( position ).getText() );
         context.startActivity(i);
     }
 
-    public String getArchiveExplanation() {
-        return "Archive";
-    }
 
-    public String getTrashExplanation() {
-        return "Move to trash";
-    }
 
-    public String getSendExplanation() {
-        return "Send";
+    public class DocumentData {
+        private String title;
+        private String text;
+        private String date;
+        private Long id;
+
+        public DocumentData( String title, String text, String date, Long id ) {
+            this.title = title;
+            this.text = text;
+            this.date = date;
+            this.id = id;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getText() {
+            return text;
+        }
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public String getDate() {
+            return date;
+        }
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public Long getId() {
+            return id;
+        }
+        public void setId(Long id) {
+            this.id = id;
+        }
     }
 }

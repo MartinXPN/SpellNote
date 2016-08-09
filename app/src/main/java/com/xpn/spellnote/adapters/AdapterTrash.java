@@ -1,5 +1,6 @@
 package com.xpn.spellnote.adapters;
 
+
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -9,14 +10,14 @@ import com.xpn.spellnote.util.Util;
 
 import java.util.ArrayList;
 
-public class AdapterDocumentList extends BaseAdapterDocumentList {
+public class AdapterTrash extends BaseAdapterDocumentList {
 
     @Override
     public ItemInteractionListener getArchiveListener() {
         return new ItemInteractionListener() {
             @Override
             public void onClick( int listPosition, View v ) {
-                Snackbar.make( v, "Archived", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
+                Snackbar.make( v, "Unarchived", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                     }
@@ -25,12 +26,12 @@ public class AdapterDocumentList extends BaseAdapterDocumentList {
 
             @Override
             public int getDrawableResId() {
-                return R.drawable.ic_archive;
+                return R.drawable.ic_unarchive;
             }
 
             @Override
             public String getExplanation() {
-                return "Archive";
+                return "Unarchive";
             }
         };
     }
@@ -40,7 +41,7 @@ public class AdapterDocumentList extends BaseAdapterDocumentList {
         return new ItemInteractionListener() {
             @Override
             public void onClick(int listPosition, View v) {
-                Snackbar.make( v, "Moved to trash", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
+                Snackbar.make( v, "Moved to documents", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                     }
@@ -49,12 +50,12 @@ public class AdapterDocumentList extends BaseAdapterDocumentList {
 
             @Override
             public int getDrawableResId() {
-                return R.drawable.ic_trash;
+                return R.drawable.ic_undo_delete;
             }
 
             @Override
             public String getExplanation() {
-                return "Move to trash";
+                return "Move to documents";
             }
         };
     }
@@ -64,7 +65,7 @@ public class AdapterDocumentList extends BaseAdapterDocumentList {
         return new ItemInteractionListener() {
             @Override
             public void onClick(int listPosition, View v) {
-                Util.sendEmail( AdapterDocumentList.this.context, new String[]{}, documentList.get( listPosition ).getTitle(), documentList.get( listPosition ).getText() );
+                Util.sendEmail( context, new String[]{}, documentList.get( listPosition ).getTitle(), documentList.get( listPosition ).getText() );
             }
 
             @Override
@@ -80,17 +81,17 @@ public class AdapterDocumentList extends BaseAdapterDocumentList {
     }
 
     @Override
-    public ArrayList <DocumentData> getDocumentList() {
+    public ArrayList<DocumentData> getDocumentList() {
 
         ArrayList <DocumentData> documentList = new ArrayList<>();
-        for( int i=0; i < 100; ++i ) {
-            documentList.add( new DocumentData( "Title No:" + i, "Text No:", "Aug 09\n13:16", (long)i ) );
+        for( int i=0; i < 10; ++i ) {
+            documentList.add( new DocumentData( "Title No:" + i, "This item is in trash for a long long time and I don't think it will get out from here soon... Bla bla bla, bla bla bla bla!!!", "Aug 09\n13:16", (long)i ) );
         }
         return documentList;
     }
 
 
-    public AdapterDocumentList(Context context ) {
+    public AdapterTrash(Context context ) {
         super( context );
     }
 }
