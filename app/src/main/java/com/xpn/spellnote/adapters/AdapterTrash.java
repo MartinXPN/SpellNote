@@ -85,7 +85,7 @@ public class AdapterTrash extends BaseAdapterDocumentList {
 
         ArrayList <DocumentData> documentList = new ArrayList<>();
         for( int i=0; i < 10; ++i ) {
-            documentList.add( new DocumentData( "Title No:" + i, "This item is in trash for a long long time and I don't think it will get out from here soon... Bla bla bla, bla bla bla bla!!!", "Aug 09\n13:16", (long)i ) );
+            documentList.add( new DocumentData( "Title No:" + i, "This item is in trash for a long long time and I I I I I I don't think it will get out from here soon... Bla bla bla, bla bla bla bla!!!", "Aug 09\n13:16", (long)i ) );
         }
         return documentList;
     }

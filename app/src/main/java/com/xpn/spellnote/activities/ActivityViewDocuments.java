@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.xpn.spellnote.R;
@@ -73,8 +72,9 @@ public class ActivityViewDocuments
         if( id == R.id.nav_documents )      { showFragment( TagsUtil.FRAGMENT_DOCUMENTS ); }
         else if( id == R.id.nav_archive )   { showFragment( TagsUtil.FRAGMENT_ARCHIVE ); }
         else if( id == R.id.nav_trash )     { showFragment( TagsUtil.FRAGMENT_TRASH ); }
+        else if( id == R.id.nav_languages ) { Intent i = new Intent( this, ActivitySelectLanguages.class );     startActivity( i ) ; }
         else if( id == R.id.nav_feedback )  { Util.sendFeedback( this ); }
-        else if( id == R.id.nav_about )     { Intent i = new Intent( this, ActivityAbout.class );   startActivity( i ); }
+        else if( id == R.id.nav_about )     { Intent i = new Intent( this, ActivityAbout.class );               startActivity( i ); }
 
         /// close the drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -85,8 +85,6 @@ public class ActivityViewDocuments
 
 
     public void showFragment( String fragmentTag ) {
-
-        Log.d( "showFragment", fragmentTag );
 
         // get fragment manager
         FragmentManager fm = getFragmentManager();

@@ -6,4 +6,5 @@
     <dimen name="text_margin">16dp</dimen>
 
     <dimen name="document_list_item_height">95dp</dimen>
+    <dimen name="language_grid_column_width">100dp</dimen>
 </resources>

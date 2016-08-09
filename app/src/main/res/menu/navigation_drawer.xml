@@ -19,6 +19,11 @@
             android:title="@string/nav_trash" />
     </group>
 
+    <item
+        android:id="@+id/nav_languages"
+        android:icon="@drawable/ic_language"
+        android:title="My languages" />
+
 
     <item android:title="@null">
         <menu>
