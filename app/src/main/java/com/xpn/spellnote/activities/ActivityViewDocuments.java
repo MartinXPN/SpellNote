@@ -72,7 +72,7 @@ public class ActivityViewDocuments
         if( id == R.id.nav_documents )      { showFragment( TagsUtil.FRAGMENT_DOCUMENTS ); }
         else if( id == R.id.nav_archive )   { showFragment( TagsUtil.FRAGMENT_ARCHIVE ); }
         else if( id == R.id.nav_trash )     { showFragment( TagsUtil.FRAGMENT_TRASH ); }
-        else if( id == R.id.nav_languages ) { Intent i = new Intent( this, ActivitySelectLanguages.class );     startActivity( i ) ; }
+        else if( id == R.id.nav_dictionaries) { Intent i = new Intent( this, ActivitySelectLanguages.class );     startActivity( i ) ; }
         else if( id == R.id.nav_feedback )  { Util.sendFeedback( this ); }
         else if( id == R.id.nav_about )     { Intent i = new Intent( this, ActivityAbout.class );               startActivity( i ); }
 

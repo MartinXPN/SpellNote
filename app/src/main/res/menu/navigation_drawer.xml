@@ -2,41 +2,48 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/nav_group_navigation"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_documents"
             android:icon="@drawable/ic_document"
             android:title="@string/nav_documents" />
-
         <item
             android:id="@+id/nav_archive"
             android:icon="@drawable/ic_archive_black"
             android:title="@string/nav_archive" />
-
         <item
             android:id="@+id/nav_trash"
             android:icon="@drawable/ic_trash_black"
             android:title="@string/nav_trash" />
     </group>
 
-    <item
-        android:id="@+id/nav_languages"
-        android:icon="@drawable/ic_language"
-        android:title="My languages" />
+
+    <group
+        android:id="@+id/nav_group_dictionaries"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_dictionaries"
+            android:icon="@drawable/ic_language"
+            android:title="@string/nav_dictionaries" />
+    </group>
 
 
-    <item android:title="@null">
-        <menu>
-            <item
-                android:id="@+id/nav_feedback"
-                android:icon="@drawable/ic_feedback"
-                android:title="@string/nav_send_feedback" />
-
-            <item
-                android:id="@+id/nav_about"
-                android:icon="@drawable/ic_about"
-                android:title="@string/nav_about" />
-        </menu>
-    </item>
-
+    <group
+        android:id="@+id/nav_group_assistant"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_help_black"
+            android:title="@string/nav_help_and_tips" />
+        <item
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_feedback"
+            android:title="@string/nav_send_feedback" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_about"
+            android:title="@string/nav_about" />
+    </group>
 </menu>

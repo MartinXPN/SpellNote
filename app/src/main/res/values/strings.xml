@@ -12,8 +12,12 @@
     <string name="nav_documents">Documents</string>
     <string name="nav_archive">Archive</string>
     <string name="nav_trash">Trash</string>
+    <string name="nav_dictionaries">My dictionaries</string>
+    <string name="nav_help_and_tips"><![CDATA[Help & Tips]]></string>
     <string name="nav_send_feedback">Send feedback</string>
     <string name="nav_about">About us</string>
+
+
     <string name="action_search">Search</string>
     <string name="action_sort_by">Sort by</string>
 </resources>
