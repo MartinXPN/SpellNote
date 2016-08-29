@@ -19,6 +19,7 @@ public class AdapterChooseLanguage extends BaseAdapter {
     Fragment fragment;
     Context context;
     ArrayList <LanguagePackage> languages;
+    ViewHolder holder;
 
     public AdapterChooseLanguage( Fragment fragment ) {
         this.fragment = fragment;
@@ -46,55 +47,98 @@ public class AdapterChooseLanguage extends BaseAdapter {
 
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        final View rootView = inflater.inflate( R.layout.language_grid_item, null );
-        final ImageView status = (ImageView) rootView.findViewById( R.id.language_package_status );
-        final TextView language = (TextView) rootView.findViewById( R.id.language_name );
 
-        language.setText( languages.get( i ).name );
+        if( view == null ) {
 
-
-        if( languages.get(i).isDownloaded ) {
-
-            if( languages.get(i).toBeRemoved )  status.setImageResource( R.drawable.ic_remove );
-            else                                status.setImageResource( R.drawable.ic_supported );
-            rootView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if( !languages.get(i).toBeRemoved ) { status.setImageResource(R.drawable.ic_remove);        languages.get(i).toBeRemoved = true; }
-                    else                                { status.setImageResource( R.drawable.ic_supported );   languages.get(i).toBeRemoved = false; }
-                }
-            });
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate( R.layout.language_grid_item, viewGroup, false );
+            holder = new ViewHolder( view );
+            view.setTag( holder );
         }
         else {
-            status.setImageResource( R.drawable.ic_download );
-            if( languages.get(i).toBeDownloaded )   status.setVisibility( View.VISIBLE );
-            else                                    status.setVisibility( View.GONE );
-
-            rootView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (languages.get(i).toBeDownloaded)    { status.setVisibility(View.GONE);      languages.get(i).toBeDownloaded = false; }
-                    else                                    { status.setVisibility(View.VISIBLE);   languages.get(i).toBeDownloaded = true; }
-                }
-            });
+            holder = (ViewHolder) view.getTag();
         }
 
-        return rootView;
+
+        final ImageView flag = holder.languageFlag;
+        final ImageView status = holder.languagePackageStatus;
+        final TextView language = holder.languageName;
+
+        final LanguagePackage currentItem = languages.get( i );
+
+        flag.setImageResource( currentItem.flagDrawableResId );
+        language.setText( currentItem.name );
+        status.setImageResource( currentItem.statusDrawableResId);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentItem.flipStatus();
+                status.setImageResource( currentItem.statusDrawableResId);
+            }
+        });
+
+        return view;
     }
 
     public ArrayList<LanguagePackage> getAllLanguages() {
         ArrayList <LanguagePackage> res = new ArrayList<>();
+
+        for( int i=0; i < 5; ++i )
+            res.add( new LanguagePackage( LanguagePackage.Status.SUPPORTED, "English" ) );
+
         for( int i=0; i < 20; ++i )
-            res.add( new LanguagePackage() );
+            res.add( new LanguagePackage(LanguagePackage.Status.NEUTRAL, "Armenian" ) );
         return res;
     }
 
+    private static class ViewHolder {
+        private ImageView languageFlag;
+        private ImageView languagePackageStatus;
+        private TextView languageName;
 
-    public class LanguagePackage {
-        boolean isDownloaded = false;
-        boolean toBeRemoved = false;
-        boolean toBeDownloaded = false;
+        public ViewHolder( View v ) {
+            languageFlag = (ImageView) v.findViewById( R.id.language_flag );
+            languagePackageStatus = (ImageView) v.findViewById( R.id.language_package_status );
+            languageName = (TextView) v.findViewById( R.id.language_name );
+        }
+    }
+
+
+    public static class LanguagePackage {
+
+        public enum Status {
+            NEUTRAL,
+            SUPPORTED,
+            TOBEREMOVED,
+            TOBEDOWNLOADED
+        }
+
+        public LanguagePackage( Status status, String name ) {
+            this.status = status;
+            this.name = name;
+            this.flagDrawableResId = R.mipmap.ic_flag_arm;
+
+            switch ( status ) {
+                case SUPPORTED:         statusDrawableResId = R.drawable.ic_supported;    break;
+                case TOBEREMOVED:       statusDrawableResId = R.drawable.ic_remove;       break;
+                case TOBEDOWNLOADED:    statusDrawableResId = R.drawable.ic_download;     break;
+                case NEUTRAL:           statusDrawableResId = R.drawable.ic_nothing;      break;
+            }
+        }
+
+        public void flipStatus() {
+
+            switch ( status ) {
+                case SUPPORTED:         status = Status.TOBEREMOVED;    statusDrawableResId = R.drawable.ic_remove;       break;
+                case TOBEREMOVED:       status = Status.SUPPORTED;      statusDrawableResId = R.drawable.ic_supported;    break;
+                case TOBEDOWNLOADED:    status = Status.NEUTRAL;        statusDrawableResId = R.drawable.ic_nothing;      break;
+                case NEUTRAL:           status = Status.TOBEDOWNLOADED; statusDrawableResId = R.drawable.ic_download;     break;
+            }
+        }
+
+        int statusDrawableResId;
+        Status status = Status.NEUTRAL;
+        int flagDrawableResId;
         String name = "Armenian";
     }
 }

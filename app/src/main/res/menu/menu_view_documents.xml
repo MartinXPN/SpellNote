@@ -12,6 +12,39 @@
         android:id="@+id/action_sort"
         android:title="@string/action_sort_by"
         android:icon="@drawable/ic_sort"
-        app:showAsAction="always"
-        />
+        app:showAsAction="always">
+
+        <menu>
+            <group
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/action_sort_by_date_added"
+                    android:title="@string/action_sort_by_date_added"
+                    app:showAsAction="never"/>
+
+                <item android:id="@+id/action_sort_by_date_modified"
+                    android:title="@string/action_sort_by_date_modified"
+                    app:showAsAction="never"/>
+
+                <item android:id="@+id/action_sort_by_name"
+                    android:title="@string/action_sort_by_name"
+                    app:showAsAction="never"/>
+
+                <item android:id="@+id/action_sort_by_language"
+                    android:title="@string/action_sort_by_language"
+                    app:showAsAction="never"/>
+
+                <item android:id="@+id/action_sort_by_color"
+                    android:title="@string/action_sort_by_color"
+                    app:showAsAction="never"/>
+            </group>
+            <item
+                android:id="@+id/action_sort_ascending"
+                android:checkable="true"
+                android:title="@string/action_sort_by_ascending"
+                app:showAsAction="never"/>
+        </menu>
+    </item>
+
+
 </menu>
