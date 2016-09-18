@@ -6,6 +6,7 @@
     <color name="colorAccent">#527dad</color>
     <color name="textPrimary">#fff</color>
     <color name="windowBackground">#FAFAFA</color>
+    <color name="url_color">#3366BB</color>
 
     <color name="list_date">#737373</color>
 </resources>

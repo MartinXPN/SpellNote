@@ -30,11 +30,22 @@
         android:layout_below="@+id/toolbar_box" >
     </FrameLayout>
 
+
+    <fragment
+        android:id="@+id/supported_languages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:name="com.xpn.spellnote.fragments.FragmentChooseEditingLanguage"
+        tools:layout="@layout/fragment_choose_editing_language" />
+
+
     <View
         android:id="@+id/toolbar_shadow"
         android:layout_width="match_parent"
         android:layout_height="4dp"
         android:layout_below="@id/toolbar_box"
         android:background="@drawable/shadow" />
-
 </RelativeLayout>

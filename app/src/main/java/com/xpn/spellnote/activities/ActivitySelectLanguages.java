@@ -2,11 +2,11 @@ package com.xpn.spellnote.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.xpn.spellnote.R;
 
@@ -27,8 +27,11 @@ public class ActivitySelectLanguages extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Started downloading dictionaries", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Toast.makeText( ActivitySelectLanguages.this, "Started downloading dictionaries", Toast.LENGTH_LONG ).show();
+                /// start downloading files
+                /// and remove unneeded ones
+                /// and update obsolete ones
+                ActivitySelectLanguages.this.finish();
             }
         });
     }

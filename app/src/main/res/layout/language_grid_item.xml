@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
 
+    android:id="@+id/language_item"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="10dp"
@@ -19,7 +20,7 @@
         android:id="@+id/language_package_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_download"
+        android:src="@drawable/ic_nothing"
         android:layout_alignRight="@+id/language_flag"
         android:layout_alignEnd="@+id/language_flag"
         android:layout_alignBottom="@+id/language_flag"
