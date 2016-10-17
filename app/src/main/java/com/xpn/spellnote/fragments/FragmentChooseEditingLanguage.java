@@ -12,6 +12,9 @@ import android.widget.ImageButton;
 
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.adapters.AdapterChooseEditingLanguage;
+import com.xpn.spellnote.databasemodels.LanguageSchema;
+
+import org.greenrobot.eventbus.EventBus;
 
 
 public class FragmentChooseEditingLanguage extends Fragment implements AdapterChooseEditingLanguage.OnItemClickListener {
@@ -32,7 +35,7 @@ public class FragmentChooseEditingLanguage extends Fragment implements AdapterCh
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_choose_editing_language, container, false);
-        int numberOfItems = 3;
+        int numberOfItems = 3; /// number of dictionaries shown in one row
 
         supportedLanguagesCard = (CardView) view.findViewById( R.id.supported_languages_card );
         supportedLanguagesGrid = (RecyclerView) view.findViewById( R.id.supported_languages );
@@ -49,17 +52,26 @@ public class FragmentChooseEditingLanguage extends Fragment implements AdapterCh
         currentLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentLanguage.setVisibility( View.GONE );
-                supportedLanguagesCard.setVisibility( View.VISIBLE );
+                showAvailableDictionaries();
             }
         });
-
         return view;
     }
 
+
     @Override
     public void onItemClicked(int position) {
-        currentLanguage.setVisibility( View.VISIBLE );
+        hideAvailableDictionaries();
+        // EventBus.getDefault().post( new LanguageSchema("hy") );
+    }
+
+
+    public void showAvailableDictionaries() {
+        currentLanguage.setVisibility( View.GONE );
+        supportedLanguagesCard.setVisibility( View.VISIBLE );
+    }
+    public void hideAvailableDictionaries() {
         supportedLanguagesCard.setVisibility( View.GONE );
+        currentLanguage.setVisibility( View.VISIBLE );
     }
 }

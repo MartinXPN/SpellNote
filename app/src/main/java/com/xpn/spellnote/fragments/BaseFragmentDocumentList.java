@@ -1,6 +1,5 @@
 package com.xpn.spellnote.fragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -8,7 +7,7 @@ import com.xpn.spellnote.adapters.BaseAdapterDocumentList;
 
 import java.util.ArrayList;
 
-public class BaseFragmentDocumentList extends Fragment {
+public class BaseFragmentDocumentList extends BaseSearchableSortableFragment {
 
     protected ArrayList documentList = new ArrayList<>();      /// the list of created documents
     protected BaseAdapterDocumentList adapter;

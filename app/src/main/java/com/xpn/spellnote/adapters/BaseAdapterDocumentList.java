@@ -165,7 +165,7 @@ public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
         Intent i = new Intent( context, ActivityEditDocument.class );
         i.putExtra( "id", documentList.get( position ).getId() );
         i.putExtra( "title", documentList.get( position ).getTitle() );
-        i.putExtra( "content", documentList.get( position ).getText() );
+        i.putExtra( "text", documentList.get( position ).getText() );
         context.startActivity(i);
     }
 
