@@ -5,6 +5,9 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.xpn.spellnote.R;
+import com.xpn.spellnote.databasehelpers.CreatedDocuments;
+import com.xpn.spellnote.databasemodels.DocumentSchema;
+import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
 import java.util.ArrayList;
@@ -64,7 +67,7 @@ public class AdapterArchive extends BaseAdapterDocumentList {
         return new ItemInteractionListener() {
             @Override
             public void onClick(int listPosition, View v) {
-                Util.sendEmail( context, new String[]{}, documentList.get( listPosition ).getTitle(), documentList.get( listPosition ).getText() );
+                Util.sendEmail( context, new String[]{}, documentList.get( listPosition ).getTitle(), documentList.get( listPosition ).getContent() );
             }
 
             @Override
@@ -80,17 +83,18 @@ public class AdapterArchive extends BaseAdapterDocumentList {
     }
 
     @Override
-    public ArrayList<DocumentData> getDocumentList() {
+    public String getDocumentCategory() {
+        return "Archive";
+    }
 
-        ArrayList <DocumentData> documentList = new ArrayList<>();
-        for( int i=0; i < 3; ++i ) {
-            documentList.add( new DocumentData( "Title No:" + i, "Text No:", "Aug 09\n13:16", (long)i ) );
-        }
-        return documentList;
+    @Override
+    public ArrayList<DocumentSchema> getDocumentList() {
+
+        return (ArrayList<DocumentSchema>) CreatedDocuments.getAllDocuments( TagsUtil.CATEGORY_ARCHIVE, "title", true );
     }
 
 
-    public AdapterArchive(Context context ) {
+    public AdapterArchive( Context context ) {
         super( context );
     }
 }

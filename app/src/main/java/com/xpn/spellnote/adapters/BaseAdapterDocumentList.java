@@ -14,29 +14,32 @@ import android.widget.Toast;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.activities.ActivityEditDocument;
+import com.xpn.spellnote.databasemodels.DocumentSchema;
+import com.xpn.spellnote.util.TagsUtil;
 
 import java.util.ArrayList;
 
 public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
 
     protected Context context;
-    protected ArrayList <DocumentData> documentList = new ArrayList<>();
+    ArrayList <DocumentSchema> documentList = new ArrayList<>();
 
-    public interface ItemInteractionListener {
+    interface ItemInteractionListener {
         void onClick( int listPosition, View v );
         int getDrawableResId();
         String getExplanation();
     }
-    ItemInteractionListener archive;
-    ItemInteractionListener trash;
-    ItemInteractionListener send;
+    private ItemInteractionListener archive;
+    private ItemInteractionListener trash;
+    private ItemInteractionListener send;
     public abstract ItemInteractionListener getArchiveListener();
     public abstract ItemInteractionListener getTrashListener();
     public abstract ItemInteractionListener getSendListener();
+    public abstract String getDocumentCategory();
 
 
 
-    public BaseAdapterDocumentList( Context context ) {
+    BaseAdapterDocumentList(Context context) {
         this.context = context;
         documentList = getDocumentList();
 
@@ -45,7 +48,7 @@ public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
         send = getSendListener();
     }
 
-    public abstract ArrayList <DocumentData> getDocumentList();
+    public abstract ArrayList <DocumentSchema> getDocumentList();
 
     @Override
     public int getSwipeLayoutResourceId(int position) {
@@ -68,9 +71,10 @@ public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
         final ImageView trash = (ImageView) convertView.findViewById( R.id.trash );
         final ImageView send = (ImageView) convertView.findViewById( R.id.send );
 
-        final String titleValue = documentList.get( position ).getTitle();
-        final String textValue = documentList.get( position ).getText();
-        final String dateValue = documentList.get( position ).getDate();
+        final DocumentSchema currentItem = documentList.get( position );
+        final String titleValue = currentItem.getTitle();
+        final String textValue = currentItem.getContent();
+        final String dateValue = currentItem.getDateAddedValue();
 
         title.setText( titleValue.matches("") ? "Untitled" : titleValue );
         text.setText( textValue );
@@ -163,53 +167,10 @@ public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
     private void onContentClick(int position, View v) {
 
         Intent i = new Intent( context, ActivityEditDocument.class );
-        i.putExtra( "id", documentList.get( position ).getId() );
-        i.putExtra( "title", documentList.get( position ).getTitle() );
-        i.putExtra( "text", documentList.get( position ).getText() );
+        i.putExtra( TagsUtil.EXTRA_ID, documentList.get( position ).getId() );
+        i.putExtra( TagsUtil.EXTRA_TITLE, documentList.get( position ).getTitle() );
+        i.putExtra( TagsUtil.EXTRA_CONTENT, documentList.get( position ).getContent() );
+        i.putExtra( TagsUtil.EXTRA_CATEGORY, getDocumentCategory() );
         context.startActivity(i);
-    }
-
-
-
-    public class DocumentData {
-        private String title;
-        private String text;
-        private String date;
-        private Long id;
-
-        public DocumentData( String title, String text, String date, Long id ) {
-            this.title = title;
-            this.text = text;
-            this.date = date;
-            this.id = id;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getText() {
-            return text;
-        }
-        public void setText(String text) {
-            this.text = text;
-        }
-
-        public String getDate() {
-            return date;
-        }
-        public void setDate(String date) {
-            this.date = date;
-        }
-
-        public Long getId() {
-            return id;
-        }
-        public void setId(Long id) {
-            this.id = id;
-        }
     }
 }

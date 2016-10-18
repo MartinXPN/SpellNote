@@ -14,6 +14,7 @@ import android.widget.ListView;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.activities.ActivityEditDocument;
 import com.xpn.spellnote.adapters.AdapterArchive;
+import com.xpn.spellnote.util.TagsUtil;
 
 
 public class FragmentViewArchive extends BaseFragmentDocumentList {
@@ -37,6 +38,7 @@ public class FragmentViewArchive extends BaseFragmentDocumentList {
             public void onClick(View view) {
 
                 Intent i = new Intent( getActivity(), ActivityEditDocument.class );
+                i.putExtra(TagsUtil.EXTRA_CATEGORY, adapter.getDocumentCategory() );
                 startActivity( i );
             }
         });

@@ -4,12 +4,13 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.xpn.spellnote.adapters.BaseAdapterDocumentList;
+import com.xpn.spellnote.databasemodels.DocumentSchema;
 
 import java.util.ArrayList;
 
 public class BaseFragmentDocumentList extends BaseSearchableSortableFragment {
 
-    protected ArrayList documentList = new ArrayList<>();      /// the list of created documents
+    /// the list of created documents
     protected BaseAdapterDocumentList adapter;
     protected OnListFragmentInteractionListener onInteractionListener;
 

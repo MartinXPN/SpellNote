@@ -5,6 +5,9 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.xpn.spellnote.R;
+import com.xpn.spellnote.databasehelpers.CreatedDocuments;
+import com.xpn.spellnote.databasemodels.DocumentSchema;
+import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
 import java.util.ArrayList;
@@ -64,7 +67,7 @@ public class AdapterDocumentList extends BaseAdapterDocumentList {
         return new ItemInteractionListener() {
             @Override
             public void onClick(int listPosition, View v) {
-                Util.sendEmail( AdapterDocumentList.this.context, new String[]{}, documentList.get( listPosition ).getTitle(), documentList.get( listPosition ).getText() );
+                Util.sendEmail( AdapterDocumentList.this.context, new String[]{}, documentList.get( listPosition ).getTitle(), documentList.get( listPosition ).getContent() );
             }
 
             @Override
@@ -80,13 +83,14 @@ public class AdapterDocumentList extends BaseAdapterDocumentList {
     }
 
     @Override
-    public ArrayList <DocumentData> getDocumentList() {
+    public String getDocumentCategory() {
+        return "Documents";
+    }
 
-        ArrayList <DocumentData> documentList = new ArrayList<>();
-        for( int i=0; i < 100; ++i ) {
-            documentList.add( new DocumentData( "Title No:" + i, "Text No:", "Aug 09\n13:16", (long)i ) );
-        }
-        return documentList;
+    @Override
+    public ArrayList<DocumentSchema> getDocumentList() {
+
+        return (ArrayList<DocumentSchema>) CreatedDocuments.getAllDocuments(TagsUtil.CATEGORY_DOCUMENTS, "title", true );
     }
 
 
