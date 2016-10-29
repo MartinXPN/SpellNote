@@ -1,18 +1,25 @@
 package com.xpn.spellnote.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.xpn.spellnote.adapters.BaseAdapterDocumentList;
-import com.xpn.spellnote.databasemodels.DocumentSchema;
+import com.xpn.spellnote.adapters.BaseAdapterDocumentList.DocumentMoveListener;
+import com.xpn.spellnote.util.Codes;
 
-import java.util.ArrayList;
 
-public class BaseFragmentDocumentList extends BaseSearchableSortableFragment {
+public abstract class BaseFragmentDocumentList
+        extends BaseSearchableSortableFragment
+        implements DocumentMoveListener {
 
     /// the list of created documents
     protected BaseAdapterDocumentList adapter;
     protected OnListFragmentInteractionListener onInteractionListener;
+
+    public void updateDocumentList() {
+        adapter.notifyDataSetChanged();
+    }
 
     /// empty public constructor ( documentation-required )
     public BaseFragmentDocumentList() {}
@@ -44,6 +51,13 @@ public class BaseFragmentDocumentList extends BaseSearchableSortableFragment {
         onInteractionListener = null;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if( requestCode == Codes.EDIT_DOCUMENT_CODE ) {
+            updateDocumentList();
+        }
+    }
+
 
     @Override
     public boolean onOptionsItemSelected( MenuItem item ) {
@@ -52,5 +66,11 @@ public class BaseFragmentDocumentList extends BaseSearchableSortableFragment {
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onDocumentMoved() {
+        updateDocumentList();
     }
 }

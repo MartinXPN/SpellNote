@@ -18,7 +18,7 @@ public class FragmentViewTrash extends BaseFragmentDocumentList {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new AdapterTrash( getActivity() );
+        adapter = new AdapterTrash( getActivity(), this );
     }
 
     @Override

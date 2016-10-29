@@ -21,7 +21,7 @@
     <string name="action_sort_by">Sort by</string>
     <string name="action_sort_by_date_added">Date added</string>
     <string name="action_sort_by_date_modified">Date modified</string>
-    <string name="action_sort_by_name">Name</string>
+    <string name="action_sort_by_title">Title</string>
     <string name="action_sort_by_language">Language</string>
     <string name="action_sort_by_color">Color</string>
     <string name="action_sort_by_ascending">Ascending</string>

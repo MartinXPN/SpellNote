@@ -1,5 +1,6 @@
 package com.xpn.spellnote.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -15,13 +16,17 @@ import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.activities.ActivityEditDocument;
 import com.xpn.spellnote.databasemodels.DocumentSchema;
+import com.xpn.spellnote.fragments.BaseFragmentDocumentList;
+import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.TagsUtil;
 
 import java.util.ArrayList;
 
 public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
 
+    protected BaseFragmentDocumentList fragmentDocumentList;
     protected Context context;
+    DocumentMoveListener documentMoveListener;
     ArrayList <DocumentSchema> documentList = new ArrayList<>();
 
     interface ItemInteractionListener {
@@ -29,20 +34,31 @@ public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
         int getDrawableResId();
         String getExplanation();
     }
+    public interface DocumentMoveListener {
+        void onDocumentMoved();
+    }
     private ItemInteractionListener archive;
     private ItemInteractionListener trash;
     private ItemInteractionListener send;
+
     public abstract ItemInteractionListener getArchiveListener();
     public abstract ItemInteractionListener getTrashListener();
     public abstract ItemInteractionListener getSendListener();
     public abstract String getDocumentCategory();
 
 
-
-    BaseAdapterDocumentList(Context context) {
-        this.context = context;
+    @Override
+    public void notifyDataSetChanged() {
         documentList = getDocumentList();
+        super.notifyDataSetChanged();
+    }
 
+    BaseAdapterDocumentList(Context context, BaseFragmentDocumentList fragmentDocumentList) {
+        this.context = context;
+        this.fragmentDocumentList = fragmentDocumentList;
+        documentMoveListener = fragmentDocumentList;
+
+        documentList = getDocumentList();
         archive = getArchiveListener();
         trash = getTrashListener();
         send = getSendListener();
@@ -171,6 +187,6 @@ public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
         i.putExtra( TagsUtil.EXTRA_TITLE, documentList.get( position ).getTitle() );
         i.putExtra( TagsUtil.EXTRA_CONTENT, documentList.get( position ).getContent() );
         i.putExtra( TagsUtil.EXTRA_CATEGORY, getDocumentCategory() );
-        context.startActivity(i);
+        ( (Activity) context ).startActivityForResult( i, Codes.EDIT_DOCUMENT_CODE );
     }
 }

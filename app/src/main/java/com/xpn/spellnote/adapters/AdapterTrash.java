@@ -8,6 +8,7 @@ import android.view.View;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databasehelpers.CreatedDocuments;
 import com.xpn.spellnote.databasemodels.DocumentSchema;
+import com.xpn.spellnote.fragments.BaseFragmentDocumentList;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
@@ -20,9 +21,13 @@ public class AdapterTrash extends BaseAdapterDocumentList {
         return new ItemInteractionListener() {
             @Override
             public void onClick( int listPosition, View v ) {
+                final DocumentSchema document = documentList.get( listPosition );
+                CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_ARCHIVE );
+
                 Snackbar.make( v, "Archived", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_TRASH );
                     }
                 } ).show();
             }
@@ -85,17 +90,17 @@ public class AdapterTrash extends BaseAdapterDocumentList {
 
     @Override
     public String getDocumentCategory() {
-        return "Trash";
+        return TagsUtil.CATEGORY_TRASH;
     }
 
     @Override
     public ArrayList<DocumentSchema> getDocumentList() {
 
-        return (ArrayList<DocumentSchema>) CreatedDocuments.getAllDocuments( TagsUtil.CATEGORY_TRASH, "title", true );
+        return (ArrayList<DocumentSchema>) CreatedDocuments.getAllDocuments( getDocumentCategory(), "title", true );
     }
 
 
-    public AdapterTrash(Context context ) {
-        super( context );
+    public AdapterTrash( Context context, BaseFragmentDocumentList fragmentDocumentList ) {
+        super( context, fragmentDocumentList );
     }
 }

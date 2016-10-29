@@ -7,6 +7,7 @@ import android.view.View;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databasehelpers.CreatedDocuments;
 import com.xpn.spellnote.databasemodels.DocumentSchema;
+import com.xpn.spellnote.fragments.BaseFragmentDocumentList;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
@@ -19,9 +20,15 @@ public class AdapterDocumentList extends BaseAdapterDocumentList {
         return new ItemInteractionListener() {
             @Override
             public void onClick( int listPosition, View v ) {
+                final DocumentSchema document = documentList.get( listPosition );
+                CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_ARCHIVE );
+                documentMoveListener.onDocumentMoved();
+
                 Snackbar.make( v, "Archived", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_DOCUMENTS );
+                        documentMoveListener.onDocumentMoved();
                     }
                 } ).show();
             }
@@ -94,7 +101,7 @@ public class AdapterDocumentList extends BaseAdapterDocumentList {
     }
 
 
-    public AdapterDocumentList(Context context ) {
-        super( context );
+    public AdapterDocumentList(Context context, BaseFragmentDocumentList fragmentDocumentList) {
+        super( context, fragmentDocumentList );
     }
 }

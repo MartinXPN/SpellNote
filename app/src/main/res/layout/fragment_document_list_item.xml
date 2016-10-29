@@ -142,7 +142,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="@color/list_date"
-                android:textSize="15sp"/>
+                android:textSize="13sp"/>
         </LinearLayout>
     </RelativeLayout>
 

@@ -98,4 +98,15 @@ public class DocumentSchema extends Model {
     public void setCategory(String category) {
         this.category = category;
     }
+
+
+    public String toString() {
+        return title + '\n' +
+                content + '\n' +
+                dateAdded + '\n' +
+                dateModified + '\n' +
+                languageLocale + '\n' +
+                color + '\n' +
+                category + '\n';
+    }
 }

@@ -1,10 +1,10 @@
 package com.xpn.spellnote.activities;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,9 +14,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.xpn.spellnote.R;
+import com.xpn.spellnote.fragments.BaseFragmentDocumentList;
 import com.xpn.spellnote.fragments.FragmentViewArchive;
 import com.xpn.spellnote.fragments.FragmentViewDocumentList;
 import com.xpn.spellnote.fragments.FragmentViewTrash;
+import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
@@ -25,6 +27,8 @@ public class ActivityViewDocuments
         implements  FragmentViewDocumentList.OnListFragmentInteractionListener,
                     NavigationView.OnNavigationItemSelectedListener {
 
+
+    BaseFragmentDocumentList documentFragment = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,13 @@ public class ActivityViewDocuments
 
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if( requestCode == Codes.EDIT_DOCUMENT_CODE )
+            documentFragment.updateDocumentList();
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
@@ -65,7 +76,7 @@ public class ActivityViewDocuments
 
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -99,14 +110,13 @@ public class ActivityViewDocuments
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         assert navigationView != null;
 
-        Fragment fragment = null;
-        if( fragmentTag.matches( TagsUtil.FRAGMENT_DOCUMENTS ) )        { fragment = new FragmentViewDocumentList();    navigationView.setCheckedItem( R.id.nav_documents ); }
-        else if( fragmentTag.matches( TagsUtil.FRAGMENT_ARCHIVE ) )     { fragment = new FragmentViewArchive();         navigationView.setCheckedItem( R.id.nav_archive ); }
-        else if( fragmentTag.matches( TagsUtil.FRAGMENT_TRASH ) )       { fragment = new FragmentViewTrash();           navigationView.setCheckedItem( R.id.nav_trash ); }
+        if( fragmentTag.matches( TagsUtil.FRAGMENT_DOCUMENTS ) )        { documentFragment = new FragmentViewDocumentList();    navigationView.setCheckedItem( R.id.nav_documents ); }
+        else if( fragmentTag.matches( TagsUtil.FRAGMENT_ARCHIVE ) )     { documentFragment = new FragmentViewArchive();         navigationView.setCheckedItem( R.id.nav_archive ); }
+        else if( fragmentTag.matches( TagsUtil.FRAGMENT_TRASH ) )       { documentFragment = new FragmentViewTrash();           navigationView.setCheckedItem( R.id.nav_trash ); }
 
         // Add the fragment
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace( R.id.list_of_documents, fragment, fragmentTag );
+        ft.replace( R.id.list_of_documents, documentFragment, fragmentTag );
         ft.commit();
     }
 }

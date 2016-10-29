@@ -7,6 +7,7 @@ import android.view.View;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databasehelpers.CreatedDocuments;
 import com.xpn.spellnote.databasemodels.DocumentSchema;
+import com.xpn.spellnote.fragments.BaseFragmentDocumentList;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
@@ -94,7 +95,7 @@ public class AdapterArchive extends BaseAdapterDocumentList {
     }
 
 
-    public AdapterArchive( Context context ) {
-        super( context );
+    public AdapterArchive( Context context, BaseFragmentDocumentList fragmentDocumentList ) {
+        super( context, fragmentDocumentList );
     }
 }
