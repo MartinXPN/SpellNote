@@ -1,10 +1,9 @@
 package com.xpn.spellnote.databasehelpers;
 
 
-import android.util.Log;
-
 import com.activeandroid.query.Select;
 import com.xpn.spellnote.databasemodels.DocumentSchema;
+import com.xpn.spellnote.util.TagsUtil;
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ public class CreatedDocuments {
         return new Select()
                         .from(DocumentSchema.class)
                         .where("Category = ?", category)
-                        .orderBy( orderBy + " " + ( ascending ? "ASC" : "DESC" ) )
+                        .orderBy( orderBy + " " + ( ascending ? TagsUtil.ORDER_ASCENDING : TagsUtil.ORDER_DESCENDING ) )
                         .execute();
     }
 

@@ -50,9 +50,15 @@ public class AdapterDocumentList extends BaseAdapterDocumentList {
         return new ItemInteractionListener() {
             @Override
             public void onClick(int listPosition, View v) {
+                final DocumentSchema document = documentList.get( listPosition );
+                CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_TRASH );
+                documentMoveListener.onDocumentMoved();
+
                 Snackbar.make( v, "Moved to trash", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_DOCUMENTS );
+                        documentMoveListener.onDocumentMoved();
                     }
                 } ).show();
             }
@@ -91,13 +97,13 @@ public class AdapterDocumentList extends BaseAdapterDocumentList {
 
     @Override
     public String getDocumentCategory() {
-        return "Documents";
+        return TagsUtil.CATEGORY_DOCUMENTS;
     }
 
     @Override
     public ArrayList<DocumentSchema> getDocumentList() {
 
-        return (ArrayList<DocumentSchema>) CreatedDocuments.getAllDocuments(TagsUtil.CATEGORY_DOCUMENTS, "title", true );
+        return (ArrayList<DocumentSchema>) CreatedDocuments.getAllDocuments(getDocumentCategory(), fragmentDocumentList.getSortingOrder(), true );
     }
 
 

@@ -12,9 +12,6 @@ import android.widget.ImageButton;
 
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.adapters.AdapterChooseEditingLanguage;
-import com.xpn.spellnote.databasemodels.LanguageSchema;
-
-import org.greenrobot.eventbus.EventBus;
 
 
 public class FragmentChooseEditingLanguage extends Fragment implements AdapterChooseEditingLanguage.OnItemClickListener {
@@ -38,7 +35,7 @@ public class FragmentChooseEditingLanguage extends Fragment implements AdapterCh
         int numberOfItems = 3; /// number of dictionaries shown in one row
 
         supportedLanguagesCard = (CardView) view.findViewById( R.id.supported_languages_card );
-        supportedLanguagesGrid = (RecyclerView) view.findViewById( R.id.supported_languages );
+        supportedLanguagesGrid = (RecyclerView) view.findViewById( R.id.supported_languages_grid);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), numberOfItems);
         layoutManager.setAutoMeasureEnabled(true);
         assert supportedLanguagesGrid != null;

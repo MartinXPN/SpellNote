@@ -63,4 +63,9 @@ public class FragmentViewDocumentList extends BaseFragmentDocumentList {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public String getCategory() {
+        return TagsUtil.CATEGORY_DOCUMENTS;
+    }
 }

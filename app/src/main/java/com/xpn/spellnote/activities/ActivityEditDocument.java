@@ -1,7 +1,6 @@
 package com.xpn.spellnote.activities;
 
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -39,15 +38,10 @@ public class ActivityEditDocument extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        /// add edit correct text fragment
+        /// get edit correct text fragment
         FragmentManager fm = getFragmentManager();
         fm.executePendingTransactions();
-        if( fm.findFragmentByTag( TagsUtil.FRAGMENT_EDIT_CORRECT_TEXT ) == null ) {
-            FragmentTransaction ft = fm.beginTransaction();
-            fragmentContent = new FragmentEditCorrectText();
-            ft.replace( R.id.text, fragmentContent, TagsUtil.FRAGMENT_EDIT_CORRECT_TEXT );
-            ft.commit();
-        }
+        fragmentContent = (FragmentEditCorrectText) fm.findFragmentById( R.id.text );
     }
 
     @Override

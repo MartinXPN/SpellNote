@@ -4,17 +4,21 @@ package com.xpn.spellnote.adapters;
 import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.Toast;
 
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databasehelpers.CreatedDocuments;
 import com.xpn.spellnote.databasemodels.DocumentSchema;
 import com.xpn.spellnote.fragments.BaseFragmentDocumentList;
 import com.xpn.spellnote.util.TagsUtil;
-import com.xpn.spellnote.util.Util;
 
 import java.util.ArrayList;
 
 public class AdapterTrash extends BaseAdapterDocumentList {
+
+    public AdapterTrash( Context context, BaseFragmentDocumentList fragmentDocumentList ) {
+        super( context, fragmentDocumentList );
+    }
 
     @Override
     public ItemInteractionListener getArchiveListener() {
@@ -23,11 +27,13 @@ public class AdapterTrash extends BaseAdapterDocumentList {
             public void onClick( int listPosition, View v ) {
                 final DocumentSchema document = documentList.get( listPosition );
                 CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_ARCHIVE );
+                documentMoveListener.onDocumentMoved();
 
                 Snackbar.make( v, "Archived", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_TRASH );
+                        documentMoveListener.onDocumentMoved();
                     }
                 } ).show();
             }
@@ -49,9 +55,15 @@ public class AdapterTrash extends BaseAdapterDocumentList {
         return new ItemInteractionListener() {
             @Override
             public void onClick(int listPosition, View v) {
-                Snackbar.make( v, "Moved to documents", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
+                final DocumentSchema document = documentList.get( listPosition );
+                CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_DOCUMENTS );
+                documentMoveListener.onDocumentMoved();
+
+                Snackbar.make( v, "Restored", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_TRASH );
+                        documentMoveListener.onDocumentMoved();
                     }
                 } ).show();
             }
@@ -63,7 +75,7 @@ public class AdapterTrash extends BaseAdapterDocumentList {
 
             @Override
             public String getExplanation() {
-                return "Move to documents";
+                return "Restore";
             }
         };
     }
@@ -73,17 +85,20 @@ public class AdapterTrash extends BaseAdapterDocumentList {
         return new ItemInteractionListener() {
             @Override
             public void onClick(int listPosition, View v) {
-                Util.sendEmail( context, new String[]{}, documentList.get( listPosition ).getTitle(), documentList.get( listPosition ).getContent() );
+                documentList.get( listPosition ).delete();
+                documentMoveListener.onDocumentMoved();
+                closeAllItems();
+                Toast.makeText( context, "Document Deleted", Toast.LENGTH_SHORT ).show();
             }
 
             @Override
             public int getDrawableResId() {
-                return R.drawable.ic_send;
+                return R.drawable.ic_delete_forever;
             }
 
             @Override
             public String getExplanation() {
-                return "Send";
+                return "Delete Forever";
             }
         };
     }
@@ -96,11 +111,6 @@ public class AdapterTrash extends BaseAdapterDocumentList {
     @Override
     public ArrayList<DocumentSchema> getDocumentList() {
 
-        return (ArrayList<DocumentSchema>) CreatedDocuments.getAllDocuments( getDocumentCategory(), "title", true );
-    }
-
-
-    public AdapterTrash( Context context, BaseFragmentDocumentList fragmentDocumentList ) {
-        super( context, fragmentDocumentList );
+        return (ArrayList<DocumentSchema>) CreatedDocuments.getAllDocuments( getDocumentCategory(), fragmentDocumentList.getSortingOrder(), true );
     }
 }

@@ -90,7 +90,7 @@ public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
         final DocumentSchema currentItem = documentList.get( position );
         final String titleValue = currentItem.getTitle();
         final String textValue = currentItem.getContent();
-        final String dateValue = currentItem.getDateAddedValue();
+        final String dateValue = currentItem.getDateModifiedValue();
 
         title.setText( titleValue.matches("") ? "Untitled" : titleValue );
         text.setText( textValue );

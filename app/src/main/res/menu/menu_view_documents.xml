@@ -21,7 +21,7 @@
                     android:title="@string/action_sort_by_date_added"
                     app:showAsAction="never"/>
 
-                <item android:id="@+id/action_sort_by_name"
+                <item android:id="@+id/action_sort_by_title"
                     android:title="@string/action_sort_by_title"
                     app:showAsAction="never"/>
 

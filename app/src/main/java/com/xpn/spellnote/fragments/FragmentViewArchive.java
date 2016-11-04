@@ -63,4 +63,9 @@ public class FragmentViewArchive extends BaseFragmentDocumentList {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public String getCategory() {
+        return TagsUtil.CATEGORY_ARCHIVE;
+    }
 }

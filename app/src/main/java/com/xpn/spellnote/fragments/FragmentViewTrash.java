@@ -11,6 +11,7 @@ import android.widget.ListView;
 
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.adapters.AdapterTrash;
+import com.xpn.spellnote.util.TagsUtil;
 
 
 public class FragmentViewTrash extends BaseFragmentDocumentList {
@@ -46,5 +47,10 @@ public class FragmentViewTrash extends BaseFragmentDocumentList {
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public String getCategory() {
+        return TagsUtil.CATEGORY_TRASH;
     }
 }

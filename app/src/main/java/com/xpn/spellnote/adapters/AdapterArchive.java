@@ -20,9 +20,15 @@ public class AdapterArchive extends BaseAdapterDocumentList {
         return new ItemInteractionListener() {
             @Override
             public void onClick( int listPosition, View v ) {
+                final DocumentSchema document = documentList.get( listPosition );
+                CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_DOCUMENTS );
+                documentMoveListener.onDocumentMoved();
+
                 Snackbar.make( v, "Unarchived", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_ARCHIVE );
+                        documentMoveListener.onDocumentMoved();
                     }
                 } ).show();
             }
@@ -44,9 +50,15 @@ public class AdapterArchive extends BaseAdapterDocumentList {
         return new ItemInteractionListener() {
             @Override
             public void onClick(int listPosition, View v) {
+                final DocumentSchema document = documentList.get( listPosition );
+                CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_TRASH );
+                documentMoveListener.onDocumentMoved();
+
                 Snackbar.make( v, "Moved to trash", Snackbar.LENGTH_LONG ).setAction( "UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_ARCHIVE );
+                        documentMoveListener.onDocumentMoved();
                     }
                 } ).show();
             }
@@ -85,13 +97,13 @@ public class AdapterArchive extends BaseAdapterDocumentList {
 
     @Override
     public String getDocumentCategory() {
-        return "Archive";
+        return TagsUtil.CATEGORY_ARCHIVE;
     }
 
     @Override
     public ArrayList<DocumentSchema> getDocumentList() {
 
-        return (ArrayList<DocumentSchema>) CreatedDocuments.getAllDocuments( TagsUtil.CATEGORY_ARCHIVE, "title", true );
+        return (ArrayList<DocumentSchema>) CreatedDocuments.getAllDocuments( getDocumentCategory(), fragmentDocumentList.getSortingOrder(), true );
     }
 
 

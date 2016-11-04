@@ -31,7 +31,7 @@ public class AdapterChooseEditingLanguage extends RecyclerView.Adapter<AdapterCh
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) parentFragment.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = inflater.inflate( R.layout.language_grid_item, parent, false );
+        View layout = inflater.inflate( R.layout.editing_language_grid_item, parent, false );
 
         holder = new ViewHolder(layout);
         return holder;

@@ -23,16 +23,18 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
 
-    <FrameLayout
+    <fragment
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar_box" >
-    </FrameLayout>
+        android:layout_below="@+id/toolbar_box"
+        android:name="com.xpn.spellnote.fragments.FragmentEditCorrectText"
+        tools:layout="@layout/fragment_edit_correct_text">
+    </fragment>
 
 
     <fragment
-        android:id="@+id/supported_languages"
+        android:id="@+id/fragment_supported_languages"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
