@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -23,7 +20,7 @@ public class FragmentViewArchive extends BaseFragmentDocumentList {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new AdapterArchive( getActivity(), this );
+        adapter = new AdapterArchive( this );
     }
 
     @Override
@@ -45,23 +42,6 @@ public class FragmentViewArchive extends BaseFragmentDocumentList {
         });
 
         return rootView;
-    }
-
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate( R.menu.menu_view_documents, menu );
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        /// some calls are handled in BaseFragmentDocumentList superclass
-        int id = item.getItemId();
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

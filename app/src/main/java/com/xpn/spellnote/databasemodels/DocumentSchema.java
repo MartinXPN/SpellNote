@@ -14,7 +14,6 @@ public class DocumentSchema extends Model {
 
     @Column private String title;
     @Column private String content;
-    @Column private Date dateAdded;
     @Column private Date dateModified;
     @Column private String languageLocale;
     @Column private String color;
@@ -27,7 +26,6 @@ public class DocumentSchema extends Model {
 
     public DocumentSchema(String title,
                           String content,
-                          Date dateAdded,
                           Date dateModified,
                           String languageLocale,
                           String color,
@@ -35,7 +33,6 @@ public class DocumentSchema extends Model {
         super();
         this.title = title;
         this.content = content;
-        this.dateAdded = dateAdded;
         this.dateModified = dateModified;
         this.languageLocale = languageLocale;
         this.color = color;
@@ -43,7 +40,7 @@ public class DocumentSchema extends Model {
     }
 
     public String getFormattedDate(Date date ) {
-        return new SimpleDateFormat( "MMM d\nHH:MM", Locale.US ).format( date );
+        return new SimpleDateFormat( "MMM d\nHH:mm", Locale.US ).format( date );
     }
 
     public String getTitle() {
@@ -58,16 +55,6 @@ public class DocumentSchema extends Model {
     }
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Date getDateAdded() {
-        return dateAdded;
-    }
-    public String getDateAddedValue() {
-        return getFormattedDate( getDateAdded() );
-    }
-    public void setDateAdded(Date dateAdded) {
-        this.dateAdded = dateAdded;
     }
 
     public Date getDateModified() {
@@ -103,7 +90,6 @@ public class DocumentSchema extends Model {
     public String toString() {
         return title + '\n' +
                 content + '\n' +
-                dateAdded + '\n' +
                 dateModified + '\n' +
                 languageLocale + '\n' +
                 color + '\n' +

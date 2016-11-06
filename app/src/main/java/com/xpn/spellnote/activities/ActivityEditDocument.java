@@ -6,19 +6,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.activeandroid.query.Select;
 import com.xpn.spellnote.R;
+import com.xpn.spellnote.databasehelpers.CreatedDocuments;
 import com.xpn.spellnote.databasemodels.DocumentSchema;
 import com.xpn.spellnote.fragments.FragmentEditCorrectText;
 import com.xpn.spellnote.util.TagsUtil;
 
 import java.util.Date;
 
-public class ActivityEditDocument extends AppCompatActivity {
+public class ActivityEditDocument extends AppCompatActivity implements FragmentEditCorrectText.OnTextChangedListener {
 
     private FragmentEditCorrectText fragmentContent;
-    private String documentCategory;
-    private long documentId = -1;
+    private DocumentSchema document;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +25,18 @@ public class ActivityEditDocument extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_document);
 
+        /// document was already created in the database
         Bundle extras = getIntent().getExtras();
-        documentCategory = extras.getString( TagsUtil.EXTRA_CATEGORY );
-        if( extras.containsKey( TagsUtil.EXTRA_ID ) )   documentId = extras.getLong( TagsUtil.EXTRA_ID );
-        else                                            documentId = -1;
+        if( extras.containsKey( TagsUtil.EXTRA_DOCUMENT_ID ) ) {
+            Long documentId = extras.getLong( TagsUtil.EXTRA_DOCUMENT_ID);
+            document = CreatedDocuments.getDocument( documentId );
+        }
+        /// create a new document
+        else {
+            String category = extras.getString( TagsUtil.EXTRA_CATEGORY );
+            String languageLocale = extras.getString( TagsUtil.EXTRA_LANGUAGE_LOCALE );
+            document = new DocumentSchema( "", "", new Date(), languageLocale, "#FFFFFF", category );
+        }
 
         /// set-up the actionbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -41,28 +48,13 @@ public class ActivityEditDocument extends AppCompatActivity {
         /// get edit correct text fragment
         FragmentManager fm = getFragmentManager();
         fm.executePendingTransactions();
-        fragmentContent = (FragmentEditCorrectText) fm.findFragmentById( R.id.text );
+        fragmentContent = (FragmentEditCorrectText) fm.findFragmentById( R.id.edit_correct_text_fragment);
     }
 
     @Override
     public void finish() {
-
-        DocumentSchema document = new DocumentSchema("",
-                fragmentContent.getText(),
-                new Date(),
-                new Date(),
-                "en",
-                "White",
-                getDocumentCategory());
-
-        /// delete previous one
-        if( documentId != -1 ) {
-            new Select().from( DocumentSchema.class )
-                    .where( "Id = ?", documentId )
-                    .executeSingle()
-                    .delete();
-        }
-
+        /// we just modified the document so we have to update the date
+        document.setDateModified( new Date() );
         document.save();
         super.finish();
     }
@@ -75,7 +67,8 @@ public class ActivityEditDocument extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public String getDocumentCategory() {
-        return documentCategory;
+    @Override
+    public void onTextChanged(String text) {
+        document.setContent( text );
     }
 }

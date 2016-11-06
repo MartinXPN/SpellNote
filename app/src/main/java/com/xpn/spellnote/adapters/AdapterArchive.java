@@ -1,6 +1,5 @@
 package com.xpn.spellnote.adapters;
 
-import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
@@ -11,9 +10,13 @@ import com.xpn.spellnote.fragments.BaseFragmentDocumentList;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
-import java.util.ArrayList;
 
 public class AdapterArchive extends BaseAdapterDocumentList {
+
+
+    public AdapterArchive( BaseFragmentDocumentList fragmentDocumentList ) {
+        super( fragmentDocumentList );
+    }
 
     @Override
     public ItemInteractionListener getArchiveListener() {
@@ -80,7 +83,7 @@ public class AdapterArchive extends BaseAdapterDocumentList {
         return new ItemInteractionListener() {
             @Override
             public void onClick(int listPosition, View v) {
-                Util.sendEmail( context, new String[]{}, documentList.get( listPosition ).getTitle(), documentList.get( listPosition ).getContent() );
+                Util.sendEmail( fragmentDocumentList.getActivity(), new String[]{}, documentList.get( listPosition ).getTitle(), documentList.get( listPosition ).getContent() );
             }
 
             @Override
@@ -98,16 +101,5 @@ public class AdapterArchive extends BaseAdapterDocumentList {
     @Override
     public String getDocumentCategory() {
         return TagsUtil.CATEGORY_ARCHIVE;
-    }
-
-    @Override
-    public ArrayList<DocumentSchema> getDocumentList() {
-
-        return (ArrayList<DocumentSchema>) CreatedDocuments.getAllDocuments( getDocumentCategory(), fragmentDocumentList.getSortingOrder(), true );
-    }
-
-
-    public AdapterArchive( Context context, BaseFragmentDocumentList fragmentDocumentList ) {
-        super( context, fragmentDocumentList );
     }
 }

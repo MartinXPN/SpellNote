@@ -24,7 +24,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <fragment
-        android:id="@+id/text"
+        android:id="@+id/edit_correct_text_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar_box"

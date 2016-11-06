@@ -22,10 +22,10 @@ import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
+
 public class ActivityViewDocuments
         extends     AppCompatActivity
-        implements  FragmentViewDocumentList.OnListFragmentInteractionListener,
-                    NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
 
     BaseFragmentDocumentList documentFragment = null;
@@ -60,8 +60,11 @@ public class ActivityViewDocuments
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if( requestCode == Codes.EDIT_DOCUMENT_CODE )
+        if( requestCode == Codes.EDIT_DOCUMENT_CODE ) {
+            if( documentFragment == null )
+                documentFragment = (BaseFragmentDocumentList) getFragmentManager().findFragmentById( R.id.list_of_documents );
             documentFragment.updateDocumentList();
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 

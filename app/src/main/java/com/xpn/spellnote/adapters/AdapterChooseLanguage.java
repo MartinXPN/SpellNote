@@ -16,14 +16,12 @@ import java.util.ArrayList;
 
 public class AdapterChooseLanguage extends BaseAdapter {
 
-    Fragment fragment;
-    Context context;
-    ArrayList <LanguagePackage> languages;
-    ViewHolder holder;
+    private Fragment fragment;
+    private ArrayList <LanguagePackage> languages;
+    private ViewHolder holder;
 
     public AdapterChooseLanguage( Fragment fragment ) {
         this.fragment = fragment;
-        this.context = fragment.getActivity();
 
         if( languages == null ) {
             languages = getAllLanguages();
@@ -50,7 +48,7 @@ public class AdapterChooseLanguage extends BaseAdapter {
 
         if( view == null ) {
 
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) fragment.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate( R.layout.language_grid_item, viewGroup, false );
             holder = new ViewHolder( view );
             view.setTag( holder );
@@ -96,7 +94,7 @@ public class AdapterChooseLanguage extends BaseAdapter {
         private ImageView languagePackageStatus;
         private TextView languageName;
 
-        public ViewHolder( View v ) {
+        ViewHolder(View v) {
             languageFlag = (ImageView) v.findViewById( R.id.language_flag );
             languagePackageStatus = (ImageView) v.findViewById( R.id.language_package_status );
             languageName = (TextView) v.findViewById( R.id.language_name );
@@ -104,16 +102,16 @@ public class AdapterChooseLanguage extends BaseAdapter {
     }
 
 
-    public static class LanguagePackage {
+    private static class LanguagePackage {
 
-        public enum Status {
+        enum Status {
             NEUTRAL,
             SUPPORTED,
             TOBEREMOVED,
             TOBEDOWNLOADED
         }
 
-        public LanguagePackage( Status status, String name ) {
+        LanguagePackage(Status status, String name) {
             this.status = status;
             this.name = name;
             this.flagDrawableResId = R.mipmap.ic_flag_arm;
@@ -126,7 +124,7 @@ public class AdapterChooseLanguage extends BaseAdapter {
             }
         }
 
-        public void flipStatus() {
+        void flipStatus() {
 
             switch ( status ) {
                 case SUPPORTED:         status = Status.TOBEREMOVED;    statusDrawableResId = R.drawable.ic_remove;       break;

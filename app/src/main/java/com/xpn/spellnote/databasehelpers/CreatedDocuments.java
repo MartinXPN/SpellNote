@@ -27,4 +27,11 @@ public class CreatedDocuments {
         document.setCategory( newCategory );
         document.save();
     }
+
+    public static DocumentSchema getDocument( Long id ) {
+        return new Select()
+                .from( DocumentSchema.class )
+                .where( "Id = ?", id )
+                .executeSingle();
+    }
 }

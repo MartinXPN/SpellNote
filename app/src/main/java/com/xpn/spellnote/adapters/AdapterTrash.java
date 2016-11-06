@@ -1,7 +1,5 @@
 package com.xpn.spellnote.adapters;
 
-
-import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Toast;
@@ -12,12 +10,11 @@ import com.xpn.spellnote.databasemodels.DocumentSchema;
 import com.xpn.spellnote.fragments.BaseFragmentDocumentList;
 import com.xpn.spellnote.util.TagsUtil;
 
-import java.util.ArrayList;
 
 public class AdapterTrash extends BaseAdapterDocumentList {
 
-    public AdapterTrash( Context context, BaseFragmentDocumentList fragmentDocumentList ) {
-        super( context, fragmentDocumentList );
+    public AdapterTrash( BaseFragmentDocumentList fragmentDocumentList ) {
+        super( fragmentDocumentList );
     }
 
     @Override
@@ -88,7 +85,7 @@ public class AdapterTrash extends BaseAdapterDocumentList {
                 documentList.get( listPosition ).delete();
                 documentMoveListener.onDocumentMoved();
                 closeAllItems();
-                Toast.makeText( context, "Document Deleted", Toast.LENGTH_SHORT ).show();
+                Toast.makeText( fragmentDocumentList.getActivity(), "Document Deleted", Toast.LENGTH_SHORT ).show();
             }
 
             @Override
@@ -106,11 +103,5 @@ public class AdapterTrash extends BaseAdapterDocumentList {
     @Override
     public String getDocumentCategory() {
         return TagsUtil.CATEGORY_TRASH;
-    }
-
-    @Override
-    public ArrayList<DocumentSchema> getDocumentList() {
-
-        return (ArrayList<DocumentSchema>) CreatedDocuments.getAllDocuments( getDocumentCategory(), fragmentDocumentList.getSortingOrder(), true );
     }
 }

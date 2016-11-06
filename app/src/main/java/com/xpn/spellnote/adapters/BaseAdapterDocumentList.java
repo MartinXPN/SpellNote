@@ -1,7 +1,5 @@
 package com.xpn.spellnote.adapters;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,6 +13,7 @@ import android.widget.Toast;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.activities.ActivityEditDocument;
+import com.xpn.spellnote.databasehelpers.CreatedDocuments;
 import com.xpn.spellnote.databasemodels.DocumentSchema;
 import com.xpn.spellnote.fragments.BaseFragmentDocumentList;
 import com.xpn.spellnote.util.Codes;
@@ -22,10 +21,10 @@ import com.xpn.spellnote.util.TagsUtil;
 
 import java.util.ArrayList;
 
+
 public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
 
-    protected BaseFragmentDocumentList fragmentDocumentList;
-    protected Context context;
+    BaseFragmentDocumentList fragmentDocumentList;
     DocumentMoveListener documentMoveListener;
     ArrayList <DocumentSchema> documentList = new ArrayList<>();
 
@@ -53,8 +52,7 @@ public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
         super.notifyDataSetChanged();
     }
 
-    BaseAdapterDocumentList(Context context, BaseFragmentDocumentList fragmentDocumentList) {
-        this.context = context;
+    BaseAdapterDocumentList( BaseFragmentDocumentList fragmentDocumentList) {
         this.fragmentDocumentList = fragmentDocumentList;
         documentMoveListener = fragmentDocumentList;
 
@@ -64,7 +62,11 @@ public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
         send = getSendListener();
     }
 
-    public abstract ArrayList <DocumentSchema> getDocumentList();
+    public ArrayList <DocumentSchema> getDocumentList() {
+        return (ArrayList<DocumentSchema>) CreatedDocuments.getAllDocuments( getDocumentCategory(),
+                                                                             fragmentDocumentList.getSortingOrder(),
+                                                                             fragmentDocumentList.getAscending() );
+    }
 
     @Override
     public int getSwipeLayoutResourceId(int position) {
@@ -73,15 +75,15 @@ public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
 
     @Override
     public View generateView(int position, ViewGroup viewGroup) {
-        return LayoutInflater.from(context).inflate(R.layout.fragment_document_list_item, null);
+        return LayoutInflater.from(fragmentDocumentList.getActivity()).inflate(R.layout.fragment_document_list_item, null);
     }
 
     @Override
-    public void fillValues( final int position, final View convertView ) {
+    public void fillValues( final int position, View convertView ) {
 
         final RelativeLayout contentPart = (RelativeLayout) convertView.findViewById( R.id.content_part );
         final TextView title = (TextView) convertView.findViewById( R.id.title );
-        final TextView text = (TextView) convertView.findViewById( R.id.text );
+        final TextView text = (TextView) convertView.findViewById( R.id.edit_correct_text_fragment);
         final TextView date = (TextView) convertView.findViewById( R.id.date );
         final ImageView archive = (ImageView) convertView.findViewById( R.id.archive );
         final ImageView trash = (ImageView) convertView.findViewById( R.id.trash );
@@ -133,21 +135,21 @@ public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
         archive.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText( context, BaseAdapterDocumentList.this.archive.getExplanation(), Toast.LENGTH_SHORT ).show();
+                Toast.makeText( fragmentDocumentList.getActivity(), BaseAdapterDocumentList.this.archive.getExplanation(), Toast.LENGTH_SHORT ).show();
                 return true;
             }
         });
         trash.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText( context, BaseAdapterDocumentList.this.trash.getExplanation(), Toast.LENGTH_SHORT ).show();
+                Toast.makeText( fragmentDocumentList.getActivity(), BaseAdapterDocumentList.this.trash.getExplanation(), Toast.LENGTH_SHORT ).show();
                 return true;
             }
         });
         send.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(context, BaseAdapterDocumentList.this.send.getExplanation(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(fragmentDocumentList.getActivity(), BaseAdapterDocumentList.this.send.getExplanation(), Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -170,7 +172,7 @@ public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
     }
     @Override
     public Object getItem(int position) {
-        return null;
+        return documentList.get( position );
     }
     @Override
     public long getItemId(int position) {
@@ -182,11 +184,8 @@ public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
 
     private void onContentClick(int position, View v) {
 
-        Intent i = new Intent( context, ActivityEditDocument.class );
-        i.putExtra( TagsUtil.EXTRA_ID, documentList.get( position ).getId() );
-        i.putExtra( TagsUtil.EXTRA_TITLE, documentList.get( position ).getTitle() );
-        i.putExtra( TagsUtil.EXTRA_CONTENT, documentList.get( position ).getContent() );
-        i.putExtra( TagsUtil.EXTRA_CATEGORY, getDocumentCategory() );
-        ( (Activity) context ).startActivityForResult( i, Codes.EDIT_DOCUMENT_CODE );
+        Intent i = new Intent( fragmentDocumentList.getActivity(), ActivityEditDocument.class );
+        i.putExtra( TagsUtil.EXTRA_DOCUMENT_ID, documentList.get( position ).getId() );
+        fragmentDocumentList.getActivity().startActivityForResult( i, Codes.EDIT_DOCUMENT_CODE );
     }
 }
