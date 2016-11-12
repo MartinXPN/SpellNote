@@ -38,8 +38,8 @@ public class ActivitySelectLanguages extends AppCompatActivity {
 
                 Toast.makeText( ActivitySelectLanguages.this, "Started downloading dictionaries", Toast.LENGTH_LONG ).show();
 
-                /// Remove unneeded ones
-                /// Update obsolete ones
+                /// TODO Remove unneeded ones
+                /// TODO Update obsolete ones
                 ActivitySelectLanguages.this.finish();
             }
         });

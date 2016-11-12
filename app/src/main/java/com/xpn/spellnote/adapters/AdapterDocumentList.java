@@ -83,7 +83,7 @@ public class AdapterDocumentList extends BaseAdapterDocumentList {
         return new ItemInteractionListener() {
             @Override
             public void onClick(int listPosition, View v) {
-                Util.sendEmail( fragmentDocumentList.getActivity(), new String[]{}, documentList.get( listPosition ).getTitle(), documentList.get( listPosition ).getContent() );
+                Util.sendDocument( fragmentDocumentList.getActivity(), documentList.get( listPosition ).getTitle(), documentList.get( listPosition ).getContent() );
             }
 
             @Override

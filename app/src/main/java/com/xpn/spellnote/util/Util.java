@@ -1,11 +1,16 @@
 package com.xpn.spellnote.util;
 
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.speech.RecognizerIntent;
 import android.widget.Toast;
+
+import java.util.Locale;
 
 public class Util {
 
@@ -28,6 +33,24 @@ public class Util {
     }
 
 
+    /**
+     * Sends the note via messenger or e-mail
+     */
+    public static void sendDocument( Activity activity, String messageTitle, String messageBody ) {
+
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("text/plain");
+        i.putExtra(Intent.EXTRA_SUBJECT, messageTitle);
+        i.putExtra(Intent.EXTRA_TEXT, messageBody);
+        try {
+            activity.startActivity(Intent.createChooser( i, "Send Message...") );
+        }
+        catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText( activity, "There are no messaging applications installed", Toast.LENGTH_SHORT ).show();
+        }
+    }
+
+
     public static void copyTextToClipboard( Context context, String text, boolean showToast ) {
 
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService( Context.CLIPBOARD_SERVICE );
@@ -41,4 +64,17 @@ public class Util {
         copyTextToClipboard( context, text, true );
     }
 
+
+
+    public static void displaySpeechRecognizer( Activity activity, Integer SPEECH_RECOGNIZER_CODE ) {
+
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.ENGLISH);
+        try {
+            activity.startActivityForResult(intent, SPEECH_RECOGNIZER_CODE);
+        }
+        catch ( ActivityNotFoundException e ) {
+            Toast.makeText(activity, "Speech recognizer not found on your device", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

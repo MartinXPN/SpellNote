@@ -1,21 +1,24 @@
 package com.xpn.spellnote.fragments;
 
-
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import com.xpn.spellnote.R;
+import com.xpn.spellnote.util.CacheUtil;
+import com.xpn.spellnote.util.TagsUtil;
 
 
-public class FragmentEditCorrectText extends Fragment {
+public class FragmentEditCorrectText extends Fragment implements TextWatcher {
 
-    protected TextView text;
+    protected Boolean spellCheckingEnabled;
+    protected EditText text;
     protected OnTextChangedListener onTextChangedListener;
 
     public interface OnTextChangedListener {
@@ -57,27 +60,56 @@ public class FragmentEditCorrectText extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_edit_correct_text, container, false);
-        text = (TextView) view.findViewById( R.id.edit_correct_text_fragment);
-        text.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                FragmentEditCorrectText.this.onTextChangedListener.onTextChanged( editable.toString() );
-            }
-        });
+        text = (EditText) view.findViewById( R.id.text);
+        text.addTextChangedListener( this );
+        spellCheckingEnabled = CacheUtil.getCache( getActivity(), TagsUtil.USER_PREFERENCE_CHECK_SPELLING, true );
         return view;
     }
 
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+        if( onTextChangedListener != null )
+            onTextChangedListener.onTextChanged( editable.toString() );
+    }
+
+    public void setSpellCheckingEnabled( boolean checkSpelling ) {
+        spellCheckingEnabled = checkSpelling;
+    }
+    public boolean isSpellCheckingEnabled() {
+        return spellCheckingEnabled;
+    }
+
+
     public String getText() {
         return text.getText().toString();
+    }
+    public void setText( String newText ) {
+        text.setText( newText );
+    }
+    public void setText( SpannableStringBuilder newText ) {
+        text.setText( newText );
+    }
+
+
+    public void replaceSelection( String newText ) {
+        int l = text.getSelectionStart();
+        int r = text.getSelectionEnd();
+
+        SpannableStringBuilder res = new SpannableStringBuilder( text.getText() );
+        res.delete(l, r);
+        res.insert(l, newText);
+        text.setText(res);
+        text.setSelection(l + newText.length());
     }
 }

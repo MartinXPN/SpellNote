@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_show_suggestions"
+        android:title="@string/action_title_show_suggestions"
+        android:icon="@mipmap/ic_show_suggestions"
+        android:visible="true"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_overflow_menu"
+        android:title="@string/action_title_overflow_menu"
+        android:icon="@drawable/ic_overflow_menu"
+        app:showAsAction="always" >
+
+        <menu>
+            <item
+                android:id="@+id/action_record"
+                android:title="@string/action_title_record"
+                android:icon="@drawable/ic_record_black"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/action_send"
+                android:title="@string/action_title_send"
+                android:icon="@drawable/ic_send_black"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/action_copy"
+                android:title="@string/action_title_copy"
+                android:icon="@drawable/ic_copy_black"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/action_check_spelling"
+                android:title="@string/action_title_check_spelling"
+                android:icon="@drawable/ic_spellcheck_black"
+                android:checkable="true"
+                app:showAsAction="never" />
+        </menu>
+    </item>
+
+</menu>

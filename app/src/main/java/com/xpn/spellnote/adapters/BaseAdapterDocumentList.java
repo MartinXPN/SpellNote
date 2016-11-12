@@ -83,7 +83,7 @@ public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
 
         final RelativeLayout contentPart = (RelativeLayout) convertView.findViewById( R.id.content_part );
         final TextView title = (TextView) convertView.findViewById( R.id.title );
-        final TextView text = (TextView) convertView.findViewById( R.id.edit_correct_text_fragment);
+        final TextView text = (TextView) convertView.findViewById( R.id.text);
         final TextView date = (TextView) convertView.findViewById( R.id.date );
         final ImageView archive = (ImageView) convertView.findViewById( R.id.archive );
         final ImageView trash = (ImageView) convertView.findViewById( R.id.trash );
@@ -182,7 +182,7 @@ public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
 
 
 
-    private void onContentClick(int position, View v) {
+    protected void onContentClick(int position, View v) {
 
         Intent i = new Intent( fragmentDocumentList.getActivity(), ActivityEditDocument.class );
         i.putExtra( TagsUtil.EXTRA_DOCUMENT_ID, documentList.get( position ).getId() );

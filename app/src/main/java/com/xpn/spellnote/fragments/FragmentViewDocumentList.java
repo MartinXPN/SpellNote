@@ -37,7 +37,6 @@ public class FragmentViewDocumentList extends BaseFragmentDocumentList {
 
                 Intent i = new Intent( getActivity(), ActivityEditDocument.class );
                 i.putExtra( TagsUtil.EXTRA_CATEGORY, adapter.getDocumentCategory() );
-                i.putExtra( TagsUtil.EXTRA_LANGUAGE_LOCALE, "en" );
                 startActivityForResult( i, Codes.EDIT_DOCUMENT_CODE );
             }
         });

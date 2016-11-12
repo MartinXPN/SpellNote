@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -31,11 +33,11 @@ public class FragmentChooseEditingLanguage extends Fragment implements AdapterCh
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_choose_editing_language, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_choose_editing_language, container, false);
         int numberOfItems = 3; /// number of dictionaries shown in one row
 
-        supportedLanguagesCard = (CardView) view.findViewById( R.id.supported_languages_card );
-        supportedLanguagesGrid = (RecyclerView) view.findViewById( R.id.supported_languages_grid);
+        supportedLanguagesCard = (CardView) rootView.findViewById( R.id.supported_languages_card );
+        supportedLanguagesGrid = (RecyclerView) rootView.findViewById( R.id.supported_languages_grid);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), numberOfItems);
         layoutManager.setAutoMeasureEnabled(true);
         assert supportedLanguagesGrid != null;
@@ -45,30 +47,46 @@ public class FragmentChooseEditingLanguage extends Fragment implements AdapterCh
         supportedLanguagesGrid.setAdapter(adapter);
 
 
-        currentLanguage = (ImageButton) view.findViewById( R.id.current_language );
+        currentLanguage = (ImageButton) rootView.findViewById( R.id.current_language );
         currentLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showAvailableDictionaries();
+                showAvailableLanguages();
             }
         });
-        return view;
+
+        /// set-up the controlling view
+        rootView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Log.d( "controller", "onTouch" );
+                if( isLanguageListOpen() ) {
+                    hideAvailableLanguages();
+                    return true;
+                }
+                return false;
+            }
+        });
+        return rootView;
     }
 
 
     @Override
     public void onItemClicked(int position) {
-        hideAvailableDictionaries();
+        hideAvailableLanguages();
         // EventBus.getDefault().post( new LanguageSchema("hy") );
     }
 
 
-    public void showAvailableDictionaries() {
+    public void showAvailableLanguages() {
         currentLanguage.setVisibility( View.GONE );
         supportedLanguagesCard.setVisibility( View.VISIBLE );
     }
-    public void hideAvailableDictionaries() {
+    public void hideAvailableLanguages() {
         supportedLanguagesCard.setVisibility( View.GONE );
         currentLanguage.setVisibility( View.VISIBLE );
+    }
+    public boolean isLanguageListOpen() {
+        return supportedLanguagesCard.getVisibility() == View.VISIBLE;
     }
 }

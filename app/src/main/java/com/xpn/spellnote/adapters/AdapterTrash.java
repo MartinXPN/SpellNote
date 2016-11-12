@@ -104,4 +104,17 @@ public class AdapterTrash extends BaseAdapterDocumentList {
     public String getDocumentCategory() {
         return TagsUtil.CATEGORY_TRASH;
     }
+
+
+    @Override
+    protected void onContentClick(final int position, View v) {
+        Snackbar.make( v, "Can't edit documents in Trash", Snackbar.LENGTH_LONG ).setAction( "RESTORE", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreatedDocuments.moveDocument( documentList.get( position ), TagsUtil.CATEGORY_DOCUMENTS );
+                documentMoveListener.onDocumentMoved();
+                Toast.makeText( fragmentDocumentList.getActivity(), "Document restored", Toast.LENGTH_SHORT ).show();
+            }
+        } ).show();
+    }
 }

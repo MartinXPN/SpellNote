@@ -13,7 +13,7 @@
         android:overScrollMode="ifContentScrolls" >
 
         <EditText
-            android:id="@+id/edit_correct_text_fragment"
+            android:id="@+id/text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:imeOptions="flagNoExtractUi"

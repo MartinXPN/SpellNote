@@ -20,23 +20,24 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            app:navigationIcon="@drawable/ic_done"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
 
+
     <fragment
-        android:id="@+id/edit_correct_text_fragment"
+        android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar_box"
         android:name="com.xpn.spellnote.fragments.FragmentEditCorrectText"
-        tools:layout="@layout/fragment_edit_correct_text">
-    </fragment>
+        tools:layout="@layout/fragment_edit_correct_text" />
 
 
     <fragment
         android:id="@+id/fragment_supported_languages"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"

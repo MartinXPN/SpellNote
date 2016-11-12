@@ -34,5 +34,11 @@
         \tIt\'s an open-source <a href="https://github.com/MartinXPN/ProCorrector.git">project</a> done mainly for educational reasons.\n
     </string>
     <string name="about_author">© 2016 <a href="https://www.linkedin.com/in/martin-mirakyan-945597101">Martin Mirakyan</a>\nAll Rights Reserved.</string>
+    <string name="action_title_show_suggestions">Show suggestions</string>
+    <string name="action_title_overflow_menu">More options</string>
+    <string name="action_title_record">Record</string>
+    <string name="action_title_send">Send</string>
+    <string name="action_title_copy">Copy</string>
+    <string name="action_title_check_spelling">Check Spelling</string>
 
 </resources>

@@ -8,6 +8,8 @@ public class TagsUtil {
     public static final String FRAGMENT_ARCHIVE = "archive_f";
     public static final String FRAGMENT_TRASH = "trash_f";
 
+    public static final String USER_PREFERENCE_SHOW_SUGGESTIONS = "show_sugg";
+    public static final String USER_PREFERENCE_CHECK_SPELLING = "spell_check";
 
     public static final String CATEGORY_DOCUMENTS = "Documents";
     public static final String CATEGORY_ARCHIVE = "Archive";
@@ -15,7 +17,6 @@ public class TagsUtil {
 
     public static final String EXTRA_DOCUMENT_ID = "id";
     public static final String EXTRA_CATEGORY = "category";
-    public static final String EXTRA_LANGUAGE_LOCALE = "lang_loc";
 
     public static final String SORT_ORDER = "sort_order";
     public static final String ORDER_DATE_MODIFIED = "dateModified";
