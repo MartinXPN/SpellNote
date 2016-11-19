@@ -2,7 +2,7 @@ package com.xpn.spellnote.databasehelpers;
 
 
 import com.activeandroid.query.Select;
-import com.xpn.spellnote.databasemodels.DocumentSchema;
+import com.xpn.spellnote.models.DocumentSchema;
 import com.xpn.spellnote.util.TagsUtil;
 
 import java.util.List;

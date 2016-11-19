@@ -60,7 +60,7 @@ public class FragmentEditCorrectText extends Fragment implements TextWatcher {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_edit_correct_text, container, false);
-        text = (EditText) view.findViewById( R.id.text);
+        text = (EditText) view.findViewById( R.id.fragment_content);
         text.addTextChangedListener( this );
         spellCheckingEnabled = CacheUtil.getCache( getActivity(), TagsUtil.USER_PREFERENCE_CHECK_SPELLING, true );
         return view;

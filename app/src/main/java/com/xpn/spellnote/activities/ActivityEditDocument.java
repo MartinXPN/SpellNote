@@ -12,7 +12,7 @@ import android.view.View;
 
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databasehelpers.CreatedDocuments;
-import com.xpn.spellnote.databasemodels.DocumentSchema;
+import com.xpn.spellnote.models.DocumentSchema;
 import com.xpn.spellnote.fragments.FragmentEditCorrectText;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.TagsUtil;
@@ -61,7 +61,7 @@ public class ActivityEditDocument extends AppCompatActivity implements FragmentE
         /// get fragments
         FragmentManager fm = getFragmentManager();
         fm.executePendingTransactions();
-        fragmentContent = (FragmentEditCorrectText) fm.findFragmentById( R.id.text );
+        fragmentContent = (FragmentEditCorrectText) fm.findFragmentById( R.id.fragment_content);
     }
 
     @Override
@@ -107,6 +107,8 @@ public class ActivityEditDocument extends AppCompatActivity implements FragmentE
     }
     public void updateSpellChecking( boolean checkSpelling, MenuItem item ) {
         this.checkSpelling = checkSpelling;
+        CacheUtil.setCache( this, TagsUtil.USER_PREFERENCE_CHECK_SPELLING, checkSpelling );
+
         item.setChecked( checkSpelling );
         fragmentContent.setSpellCheckingEnabled( checkSpelling );
     }

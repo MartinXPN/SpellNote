@@ -1,6 +1,6 @@
 package com.xpn.spellnote.databasehelpers;
 
-import com.xpn.spellnote.databasemodels.LanguageSchema;
+import com.xpn.spellnote.models.LanguageSchema;
 
 import org.greenrobot.eventbus.Subscribe;
 

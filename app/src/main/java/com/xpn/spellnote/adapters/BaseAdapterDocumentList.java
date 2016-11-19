@@ -14,7 +14,7 @@ import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.activities.ActivityEditDocument;
 import com.xpn.spellnote.databasehelpers.CreatedDocuments;
-import com.xpn.spellnote.databasemodels.DocumentSchema;
+import com.xpn.spellnote.models.DocumentSchema;
 import com.xpn.spellnote.fragments.BaseFragmentDocumentList;
 import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.TagsUtil;
@@ -83,7 +83,7 @@ public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
 
         final RelativeLayout contentPart = (RelativeLayout) convertView.findViewById( R.id.content_part );
         final TextView title = (TextView) convertView.findViewById( R.id.title );
-        final TextView text = (TextView) convertView.findViewById( R.id.text);
+        final TextView text = (TextView) convertView.findViewById( R.id.fragment_content);
         final TextView date = (TextView) convertView.findViewById( R.id.date );
         final ImageView archive = (ImageView) convertView.findViewById( R.id.archive );
         final ImageView trash = (ImageView) convertView.findViewById( R.id.trash );

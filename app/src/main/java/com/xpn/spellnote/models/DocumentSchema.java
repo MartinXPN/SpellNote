@@ -1,4 +1,4 @@
-package com.xpn.spellnote.databasemodels;
+package com.xpn.spellnote.models;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
@@ -39,7 +39,7 @@ public class DocumentSchema extends Model {
         this.category = category;
     }
 
-    public String getFormattedDate(Date date ) {
+    String getFormattedDate(Date date ) {
         return new SimpleDateFormat( "MMM d\nHH:mm", Locale.US ).format( date );
     }
 

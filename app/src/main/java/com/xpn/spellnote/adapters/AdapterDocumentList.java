@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databasehelpers.CreatedDocuments;
-import com.xpn.spellnote.databasemodels.DocumentSchema;
+import com.xpn.spellnote.models.DocumentSchema;
 import com.xpn.spellnote.fragments.BaseFragmentDocumentList;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;

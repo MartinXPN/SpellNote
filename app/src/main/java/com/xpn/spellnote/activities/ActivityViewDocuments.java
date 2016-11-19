@@ -117,6 +117,8 @@ public class ActivityViewDocuments
         else if( fragmentTag.matches( TagsUtil.FRAGMENT_ARCHIVE ) )     { documentFragment = new FragmentViewArchive();         navigationView.setCheckedItem( R.id.nav_archive ); }
         else if( fragmentTag.matches( TagsUtil.FRAGMENT_TRASH ) )       { documentFragment = new FragmentViewTrash();           navigationView.setCheckedItem( R.id.nav_trash ); }
 
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setTitle( documentFragment.getCategory() );
         // Add the fragment
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace( R.id.list_of_documents, documentFragment, fragmentTag );
