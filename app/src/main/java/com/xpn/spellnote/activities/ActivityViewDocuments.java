@@ -100,10 +100,15 @@ public class ActivityViewDocuments
 
     public void showFragment( String fragmentTag ) {
 
-        // get fragment manager
+        // get fragment manager, Make sure the current transaction finishes first
         FragmentManager fm = getFragmentManager();
-        // Make sure the current transaction finishes first
         fm.executePendingTransactions();
+
+
+        /// show category name in actionbar
+        assert getSupportActionBar() != null;
+        if( documentFragment == null )  getSupportActionBar().setTitle( TagsUtil.CATEGORY_DOCUMENTS );
+        else                            getSupportActionBar().setTitle( documentFragment.getCategory() );
 
         // If there is a fragment with this tag...
         if( fm.findFragmentByTag( fragmentTag ) != null )
@@ -117,8 +122,6 @@ public class ActivityViewDocuments
         else if( fragmentTag.matches( TagsUtil.FRAGMENT_ARCHIVE ) )     { documentFragment = new FragmentViewArchive();         navigationView.setCheckedItem( R.id.nav_archive ); }
         else if( fragmentTag.matches( TagsUtil.FRAGMENT_TRASH ) )       { documentFragment = new FragmentViewTrash();           navigationView.setCheckedItem( R.id.nav_trash ); }
 
-        assert getSupportActionBar() != null;
-        getSupportActionBar().setTitle( documentFragment.getCategory() );
         // Add the fragment
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace( R.id.list_of_documents, documentFragment, fragmentTag );
