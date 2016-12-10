@@ -83,12 +83,12 @@ public class ActivityViewDocuments
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if( id == R.id.nav_documents )      { showFragment( TagsUtil.FRAGMENT_DOCUMENTS ); }
-        else if( id == R.id.nav_archive )   { showFragment( TagsUtil.FRAGMENT_ARCHIVE ); }
-        else if( id == R.id.nav_trash )     { showFragment( TagsUtil.FRAGMENT_TRASH ); }
-        else if( id == R.id.nav_dictionaries) { Intent i = new Intent( this, ActivitySelectLanguages.class );     startActivity( i ) ; }
-        else if( id == R.id.nav_feedback )  { Util.sendFeedback( this ); }
-        else if( id == R.id.nav_about )     { Intent i = new Intent( this, ActivityAbout.class );               startActivity( i ); }
+        if( id == R.id.nav_documents )          { showFragment( TagsUtil.FRAGMENT_DOCUMENTS ); }
+        else if( id == R.id.nav_archive )       { showFragment( TagsUtil.FRAGMENT_ARCHIVE ); }
+        else if( id == R.id.nav_trash )         { showFragment( TagsUtil.FRAGMENT_TRASH ); }
+        else if( id == R.id.nav_dictionaries)   { Intent i = new Intent( this, ActivitySelectLanguages.class );     startActivity( i ) ; }
+        else if( id == R.id.nav_feedback )      { Util.sendFeedback( this ); }
+        else if( id == R.id.nav_about )         { Intent i = new Intent( this, ActivityAbout.class );               startActivity( i ); }
 
         /// close the drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -103,16 +103,14 @@ public class ActivityViewDocuments
         // get fragment manager, Make sure the current transaction finishes first
         FragmentManager fm = getFragmentManager();
         fm.executePendingTransactions();
-
-
-        /// show category name in actionbar
         assert getSupportActionBar() != null;
-        if( documentFragment == null )  getSupportActionBar().setTitle( TagsUtil.CATEGORY_DOCUMENTS );
-        else                            getSupportActionBar().setTitle( documentFragment.getCategory() );
 
         // If there is a fragment with this tag...
-        if( fm.findFragmentByTag( fragmentTag ) != null )
+        if( fm.findFragmentByTag( fragmentTag ) != null ) {
+            documentFragment = (BaseFragmentDocumentList) fm.findFragmentById( R.id.list_of_documents );
+            getSupportActionBar().setTitle( documentFragment.getCategory() );
             return;
+        }
 
         /// set up navigation drawer
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -126,5 +124,9 @@ public class ActivityViewDocuments
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace( R.id.list_of_documents, documentFragment, fragmentTag );
         ft.commit();
+
+
+        /// show category name in actionbar
+        getSupportActionBar().setTitle( documentFragment.getCategory() );
     }
 }

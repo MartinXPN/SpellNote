@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,11 +46,6 @@ public class FragmentEditCorrectText extends Fragment implements TextWatcher {
             throw new ClassCastException(getActivity().toString() + " must implement OnTextChangedListener");
         }
     }
-
-
-    /**
-     * remove reference onDetach for not leaking memory
-     */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -68,13 +64,15 @@ public class FragmentEditCorrectText extends Fragment implements TextWatcher {
 
 
     @Override
-    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+    public void beforeTextChanged(CharSequence charSequence, int start, int previousLength, int changedLength) {
 
+        Log.d( "TextChanged", "start: " + start + "\tpreviousLength: " + previousLength + "\tchangedLength: " + changedLength + "\n" );
     }
 
     @Override
-    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+    public void onTextChanged(CharSequence charSequence, int start, int previousLength, int changedLength) {
 
+        Log.d( "TextChanged", "start: " + start + "\tpreviousLength: " + previousLength + "\tchangedLength: " + changedLength + "\n" );
     }
 
     @Override
