@@ -27,13 +27,16 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
         </android.support.design.widget.AppBarLayout>
 
-        <fragment
-            android:id="@+id/fragment_language_grid"
+        <GridView
+            android:id="@+id/language_grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
             android:layout_below="@+id/toolbar_box"
-            android:name="com.xpn.spellnote.fragments.FragmentChooseLanguage"
-            tools:layout="@layout/fragment_choose_language" />
+            android:stretchMode="spacingWidthUniform"
+            android:overScrollMode="ifContentScrolls"
+            android:numColumns="auto_fit"
+            android:columnWidth="@dimen/language_grid_column_width" />
 
         <View
             android:id="@+id/toolbar_shadow"

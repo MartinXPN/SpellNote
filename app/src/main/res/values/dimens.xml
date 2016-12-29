@@ -7,4 +7,5 @@
 
     <dimen name="document_list_item_height">95dp</dimen>
     <dimen name="language_grid_column_width">100dp</dimen>
+    <dimen name="language_flag_size">70dp</dimen>
 </resources>

@@ -1,7 +1,7 @@
 package com.xpn.spellnote.restapi;
 
 
-import com.xpn.spellnote.models.LanguageSchema;
+import com.xpn.spellnote.models.DictionarySchema;
 import com.xpn.spellnote.models.WordSchema;
 
 import java.util.ArrayList;
@@ -14,11 +14,11 @@ import retrofit2.http.Query;
 public interface DataTransferAPI {
 
     /// base url of all requests
-    String BASE_URL = "http://...";
+    String BASE_URL = "https://spellnote.herokuapp.com";
 
 
-    @GET( "/getAllLanguages" )
-    Call<ArrayList<LanguageSchema>> getAllLanguages();
+    @GET( "/dictionaries" )
+    Call<ArrayList<DictionarySchema>> getAllDictionaries();
 
     @GET( "/getWords" )
     Call <ArrayList <WordSchema> > getWords( @Query("locales") ArrayList <String> locales );

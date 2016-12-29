@@ -1,8 +1,10 @@
 package com.xpn.spellnote.adapters;
 
 
-import android.app.Fragment;
+import android.app.Activity;
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,27 +12,38 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.xpn.spellnote.R;
+import com.xpn.spellnote.models.DictionarySchema;
 
 import java.util.ArrayList;
 
 public class AdapterChooseLanguage extends BaseAdapter {
 
-    private Fragment fragment;
-    private ArrayList <LanguagePackage> languages;
-    private ViewHolder holder;
+    private Activity activity;
+    private ArrayList <DictionarySchema> dictionaries;
+    private ItemGetter listener;
 
-    public AdapterChooseLanguage( Fragment fragment ) {
-        this.fragment = fragment;
+    public interface ItemGetter {
+        ArrayList<DictionarySchema> getAllDictionaries();
+    }
 
-        if( languages == null ) {
-            languages = getAllLanguages();
-        }
+    public AdapterChooseLanguage( Activity activity ) {
+        this.activity = activity;
+        this.listener = (ItemGetter) activity;
+        this.dictionaries = listener.getAllDictionaries();
     }
 
     @Override
     public int getCount() {
-        return languages.size();
+        Log.d( "getCount -> ", "" + dictionaries.size() );
+        return dictionaries.size();
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        dictionaries = listener.getAllDictionaries();
+        super.notifyDataSetChanged();
     }
 
     @Override
@@ -46,12 +59,13 @@ public class AdapterChooseLanguage extends BaseAdapter {
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
 
+        ViewHolder holder;
         if( view == null ) {
 
-            LayoutInflater inflater = (LayoutInflater) fragment.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate( R.layout.language_grid_item, viewGroup, false );
             holder = new ViewHolder( view );
-            view.setTag( holder );
+            view.setTag(holder);
         }
         else {
             holder = (ViewHolder) view.getTag();
@@ -61,32 +75,26 @@ public class AdapterChooseLanguage extends BaseAdapter {
         final ImageView flag = holder.languageFlag;
         final ImageView status = holder.languagePackageStatus;
         final TextView language = holder.languageName;
+        final DictionarySchema currentItem = dictionaries.get( i );
 
-        final LanguagePackage currentItem = languages.get( i );
+        Picasso.with(activity)
+                .load(currentItem.logoURL)
+                .placeholder(ContextCompat.getDrawable(activity, R.mipmap.ic_placeholder))
+                .resizeDimen(R.dimen.language_flag_size, R.dimen.language_flag_size)
+                .centerCrop()
+                .into(flag);
 
-        flag.setImageResource( currentItem.flagDrawableResId );
-        language.setText( currentItem.name );
-        status.setImageResource( currentItem.statusDrawableResId);
+        language.setText( currentItem.languageName );
+        status.setImageResource( R.drawable.ic_supported );
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentItem.flipStatus();
-                status.setImageResource( currentItem.statusDrawableResId);
+//                currentItem.flipStatus();
+//                status.setImageResource( currentItem.statusDrawableResId);
             }
         });
 
         return view;
-    }
-
-    public ArrayList<LanguagePackage> getAllLanguages() {
-        ArrayList <LanguagePackage> res = new ArrayList<>();
-
-        for( int i=0; i < 5; ++i )
-            res.add( new LanguagePackage( LanguagePackage.Status.SUPPORTED, "English" ) );
-
-        for( int i=0; i < 20; ++i )
-            res.add( new LanguagePackage(LanguagePackage.Status.NEUTRAL, "Armenian" ) );
-        return res;
     }
 
     private static class ViewHolder {
@@ -125,7 +133,6 @@ public class AdapterChooseLanguage extends BaseAdapter {
         }
 
         void flipStatus() {
-
             switch ( status ) {
                 case SUPPORTED:         status = Status.TOBEREMOVED;    statusDrawableResId = R.drawable.ic_remove;       break;
                 case TOBEREMOVED:       status = Status.SUPPORTED;      statusDrawableResId = R.drawable.ic_supported;    break;
