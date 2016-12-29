@@ -4,13 +4,14 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.Toast;
 
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.adapters.AdapterChooseLanguage;
+import com.xpn.spellnote.databasehelpers.SavedDictionaries;
 import com.xpn.spellnote.models.DictionarySchema;
 import com.xpn.spellnote.services.DictionaryGetterService;
 
@@ -32,8 +33,13 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Adapte
         /// setup the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        assert getSupportActionBar() != null;
-        getSupportActionBar().setDisplayHomeAsUpEnabled( true );
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivitySelectLanguages.this.finish();
+            }
+        });
+
 
         /// get list of all dictionaries available on a server
         DictionaryGetterService.loadDictionaries();
@@ -41,7 +47,6 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Adapte
         if( adapter == null ) {
             adapter = new AdapterChooseLanguage( this );
         }
-
         GridView restaurantGrid = (GridView) findViewById( R.id.language_grid );
         restaurantGrid.setAdapter( adapter );
 
@@ -59,6 +64,8 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Adapte
                 ActivitySelectLanguages.this.finish();
             }
         });
+
+//        Log.d( "Saved dictionaries", "" + SavedDictionaries.getSavedDictionaries().size() );
     }
 
     @Override
@@ -85,14 +92,12 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Adapte
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if( id == android.R.id.home )   { finish(); return true; }
-        return super.onOptionsItemSelected(item);
+    public ArrayList<DictionarySchema> getAllDictionaries() {
+        return dictionaries;
     }
 
     @Override
-    public ArrayList<DictionarySchema> getAllDictionaries() {
-        return dictionaries;
+    public ArrayList<String> getSavedLocales() {
+        return SavedDictionaries.getSavedLocales();
     }
 }

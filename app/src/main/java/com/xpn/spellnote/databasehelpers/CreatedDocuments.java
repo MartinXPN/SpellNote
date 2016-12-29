@@ -7,7 +7,6 @@ import com.xpn.spellnote.util.TagsUtil;
 
 import java.util.List;
 
-
 public class CreatedDocuments {
 
     public static List<DocumentSchema> getAllDocuments(String category,

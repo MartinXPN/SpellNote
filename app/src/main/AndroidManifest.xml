@@ -14,7 +14,7 @@
 
         <meta-data android:name="AA_DB_NAME" android:value="documents.db" />
         <meta-data android:name="AA_DB_VERSION" android:value="1" />
-        <meta-data android:name="AA_MODELS" android:value="com.xpn.spellnote.models.DocumentSchema, com.xpn.spellnote.models.WordSchema" />
+        <meta-data android:name="AA_MODELS" android:value="com.xpn.spellnote.models.DocumentSchema, com.xpn.spellnote.models.WordSchema, com.xpn.spellnote.models.SavedDictionarySchema" />
 
 
         <activity
@@ -44,6 +44,5 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
-        <service android:name="com.xpn.spellnote.databasehelpers.DownloaderService" />
     </application>
 </manifest>

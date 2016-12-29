@@ -11,4 +11,19 @@ public class WordSchema extends Model {
     @Column(index = true) public Integer usage;
     @Column(index = true) public String locale;
     @Column public Boolean isUserDefined = false;
+
+    public WordSchema() {
+        super();
+    }
+
+    public WordSchema( String word,
+                       Integer usage,
+                       String locale,
+                       Boolean isUserDefined ) {
+        super();
+        this.word = word;
+        this.usage = usage;
+        this.locale = locale;
+        this.isUserDefined = isUserDefined;
+    }
 }

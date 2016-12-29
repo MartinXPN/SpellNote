@@ -75,7 +75,7 @@ public abstract class BaseAdapterDocumentList extends BaseSwipeAdapter {
 
     @Override
     public View generateView(int position, ViewGroup viewGroup) {
-        return LayoutInflater.from(fragmentDocumentList.getActivity()).inflate(R.layout.fragment_document_list_item, null);
+        return LayoutInflater.from(fragmentDocumentList.getActivity()).inflate(R.layout.item_document_list, null);
     }
 
     @Override
