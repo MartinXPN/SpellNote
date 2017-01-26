@@ -74,7 +74,7 @@ public class FragmentChooseEditingLanguage extends Fragment implements AdapterCh
     @Override
     public void onItemClicked(int position) {
         hideAvailableLanguages();
-        // EventBus.getDefault().post( new DictionarySchema("hy") );
+        // EventBus.getDefault().post( new DictionaryModel("hy") );
     }
 
 

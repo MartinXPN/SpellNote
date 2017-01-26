@@ -3,8 +3,8 @@ package com.xpn.spellnote.databasehelpers;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Select;
-import com.xpn.spellnote.models.DictionarySchema;
-import com.xpn.spellnote.models.SavedDictionarySchema;
+import com.xpn.spellnote.entities.dictionary.DictionaryModel;
+import com.xpn.spellnote.entities.SavedDictionarySchema;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +40,10 @@ public class SavedDictionaries {
         }
     }
 
-    public static void saveDictionaries(ArrayList <DictionarySchema> dictionaries ) {
+    public static void saveDictionaries(ArrayList <DictionaryModel> dictionaries ) {
         ActiveAndroid.beginTransaction();
         try {
-            for (DictionarySchema dictionary : dictionaries ) {
+            for (DictionaryModel dictionary : dictionaries ) {
                 SavedDictionarySchema schema = new SavedDictionarySchema( dictionary );
                 schema.save();
             }

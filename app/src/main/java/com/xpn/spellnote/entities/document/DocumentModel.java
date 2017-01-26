@@ -1,16 +1,14 @@
-package com.xpn.spellnote.models;
+package com.xpn.spellnote.entities.document;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 
-@Table(name = "DocumentSchema")
-public class DocumentSchema extends Model {
+@Table(name = "DocumentModel")
+public class DocumentModel extends Model {
 
     @Column private String title;
     @Column private String content;
@@ -20,16 +18,16 @@ public class DocumentSchema extends Model {
     @Column(index = true) private String category;
 
 
-    public DocumentSchema() {
+    public DocumentModel() {
         super();
     }
 
-    public DocumentSchema(String title,
-                          String content,
-                          Date dateModified,
-                          String languageLocale,
-                          String color,
-                          String category ) {
+    public DocumentModel(String title,
+                         String content,
+                         Date dateModified,
+                         String languageLocale,
+                         String color,
+                         String category ) {
         super();
         this.title = title;
         this.content = content;
@@ -37,10 +35,6 @@ public class DocumentSchema extends Model {
         this.languageLocale = languageLocale;
         this.color = color;
         this.category = category;
-    }
-
-    String getFormattedDate(Date date ) {
-        return new SimpleDateFormat( "MMM d\nHH:mm", Locale.US ).format( date );
     }
 
     public String getTitle() {
@@ -60,7 +54,6 @@ public class DocumentSchema extends Model {
     public Date getDateModified() {
         return dateModified;
     }
-    public String getDateModifiedValue() { return getFormattedDate( getDateModified() ); }
     public void setDateModified(Date dateModified) {
         this.dateModified = dateModified;
     }

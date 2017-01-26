@@ -12,7 +12,7 @@ import android.view.View;
 
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databasehelpers.CreatedDocuments;
-import com.xpn.spellnote.models.DocumentSchema;
+import com.xpn.spellnote.entities.document.DocumentModel;
 import com.xpn.spellnote.fragments.FragmentEditCorrectText;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.TagsUtil;
@@ -26,7 +26,7 @@ public class ActivityEditDocument extends AppCompatActivity implements FragmentE
 
     private static final Integer SPEECH_RECOGNIZER_CODE = 1;
     private FragmentEditCorrectText fragmentContent;
-    private DocumentSchema document;
+    private DocumentModel document;
     private boolean showSuggestions;
     private boolean checkSpelling;
 
@@ -45,7 +45,7 @@ public class ActivityEditDocument extends AppCompatActivity implements FragmentE
         /// create a new document
         else {
             String category = extras.getString( TagsUtil.EXTRA_CATEGORY );
-            document = new DocumentSchema( "", "", new Date(), "en", "#FFFFFF", category );
+            document = new DocumentModel( "", "", new Date(), "en", "#FFFFFF", category );
         }
 
         /// set-up the actionbar

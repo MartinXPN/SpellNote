@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.xpn.spellnote.R;
-import com.xpn.spellnote.models.DictionarySchema;
+import com.xpn.spellnote.entities.dictionary.DictionaryModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,14 +23,14 @@ import java.util.Comparator;
 public class AdapterChooseLanguage extends BaseAdapter {
 
     private Activity activity;
-    private ArrayList <DictionarySchema> dictionaries;
+    private ArrayList <DictionaryModel> dictionaries;
     private ArrayList <String> savedLocales;
     private ArrayList <String> tobeDownloadedLocales;
     private ArrayList <String> tobeRemovedLocales;
     private ItemGetter listener;
 
     public interface ItemGetter {
-        ArrayList <DictionarySchema> getAllDictionaries();
+        ArrayList <DictionaryModel> getAllDictionaries();
         ArrayList <String> getSavedLocales();
     }
 
@@ -53,12 +53,12 @@ public class AdapterChooseLanguage extends BaseAdapter {
     public void notifyDataSetChanged() {
         dictionaries = listener.getAllDictionaries();
         savedLocales = listener.getSavedLocales();
-        Collections.sort(dictionaries, new Comparator<DictionarySchema>() {
+        Collections.sort(dictionaries, new Comparator<DictionaryModel>() {
             @Override
-            public int compare(DictionarySchema a, DictionarySchema b) {    /// first show downloaded dictionaries
+            public int compare(DictionaryModel a, DictionaryModel b) {    /// first show downloaded dictionaries
                 int res = 0;
-                if( savedLocales.contains( a.locale ) )   res--;
-                if( savedLocales.contains( b.locale ) )   res++;
+                if( savedLocales.contains( a.getLocale() ) )   res--;
+                if( savedLocales.contains( b.getLocale() ) )   res++;
                 return res;
             }
         });
@@ -94,28 +94,28 @@ public class AdapterChooseLanguage extends BaseAdapter {
         final ImageView flag = holder.languageFlag;
         final ImageView status = holder.languagePackageStatus;
         final TextView language = holder.languageName;
-        final DictionarySchema currentItem = dictionaries.get( i );
+        final DictionaryModel currentItem = dictionaries.get( i );
 
-        if( tobeDownloadedLocales.contains( currentItem.locale ) )      { status.setImageResource( R.drawable.ic_download ); }
-        else if( tobeRemovedLocales.contains( currentItem.locale ) )    { status.setImageResource( R.drawable.ic_remove ); }
-        else if( savedLocales.contains( currentItem.locale ) )          { status.setImageResource( R.drawable.ic_supported ); }
+        if( tobeDownloadedLocales.contains( currentItem.getLocale() ) )      { status.setImageResource( R.drawable.ic_download ); }
+        else if( tobeRemovedLocales.contains( currentItem.getLocale() ) )    { status.setImageResource( R.drawable.ic_remove ); }
+        else if( savedLocales.contains( currentItem.getLocale() ) )          { status.setImageResource( R.drawable.ic_supported ); }
         else                                                            { status.setImageResource( R.drawable.ic_nothing ); }
 
         Picasso.with(activity)
-                .load(currentItem.logoURL)
+                .load(currentItem.getLogoURL())
                 .placeholder(ContextCompat.getDrawable(activity, R.mipmap.ic_placeholder))
                 .resizeDimen(R.dimen.language_flag_size, R.dimen.language_flag_size)
                 .centerCrop()
                 .into(flag);
 
-        language.setText( currentItem.languageName );
+        language.setText( currentItem.getLanguageName() );
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if( tobeDownloadedLocales.contains( currentItem.locale ) )      { tobeDownloadedLocales.remove( currentItem.locale ); }
-                else if( tobeRemovedLocales.contains( currentItem.locale ) )    { tobeRemovedLocales.remove( currentItem.locale ); }
-                else if( savedLocales.contains( currentItem.locale ) )          { tobeRemovedLocales.add( currentItem.locale ); }
-                else                                                            { tobeDownloadedLocales.add( currentItem.locale ); }
+                if( tobeDownloadedLocales.contains( currentItem.getLocale() ) )      { tobeDownloadedLocales.remove( currentItem.getLocale() ); }
+                else if( tobeRemovedLocales.contains( currentItem.getLocale() ) )    { tobeRemovedLocales.remove( currentItem.getLocale() ); }
+                else if( savedLocales.contains( currentItem.getLocale() ) )          { tobeRemovedLocales.add( currentItem.getLocale() ); }
+                else                                                            { tobeDownloadedLocales.add( currentItem.getLocale() ); }
 
                 notifyDataSetChanged();
             }

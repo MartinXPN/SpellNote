@@ -1,20 +1,36 @@
 package com.xpn.spellnote.fragments;
 
 import android.content.Intent;
+import android.databinding.BindingAdapter;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.daimajia.swipe.SwipeLayout;
+import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
+import com.daimajia.swipe.implments.SwipeItemRecyclerMangerImpl;
+import com.xpn.spellnote.BR;
 import com.xpn.spellnote.R;
-import com.xpn.spellnote.adapters.BaseAdapterDocumentList.DocumentMoveListener;
+import com.xpn.spellnote.databasehelpers.CreatedDocuments;
+import com.xpn.spellnote.entities.document.DocumentModel;
+import com.xpn.spellnote.entities.document.DocumentViewModel;
+import com.xpn.spellnote.util.BindingHolder;
 import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.TagsUtil;
 
+import java.util.ArrayList;
+
 
 public abstract class BaseFragmentDocumentList
-        extends BaseSortableFragment
-        implements DocumentMoveListener {
+        extends BaseSortableFragment  {
+
+    ArrayList<DocumentModel> documentList = new ArrayList<>();
+    DocumentListAdapter adapter = new DocumentListAdapter();
 
     /// empty public constructor ( documentation-required )
     public BaseFragmentDocumentList() {}
@@ -23,13 +39,15 @@ public abstract class BaseFragmentDocumentList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu( true );
+
+        documentList = (ArrayList<DocumentModel>) CreatedDocuments.getAllDocuments( getCategory(), getSortingOrder(), getAscending() );
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if( requestCode == Codes.EDIT_DOCUMENT_CODE ) {
-            updateDocumentList();
+            adapter.notifyDataSetChanged();
         }
     }
 
@@ -63,7 +81,60 @@ public abstract class BaseFragmentDocumentList
     }
 
     @Override
-    public void onDocumentMoved() {
-        updateDocumentList();
+    public void updateDocumentList() {
+        adapter.notifyDataSetChanged();
+    }
+
+
+
+    @BindingAdapter("android:src")
+    public static void setImageResource(ImageView imageView, int resource){
+        imageView.setImageResource(resource);
+    }
+
+
+    protected class DocumentListAdapter extends RecyclerSwipeAdapter<BindingHolder> {
+
+        @Override
+        public BindingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from( parent.getContext() ).inflate(R.layout.item_document_list, parent, false);
+            return new BindingHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(final BindingHolder holder, int position) {
+            final DocumentViewModel documentViewModel = new DocumentViewModel( documentList.get( position ), BaseFragmentDocumentList.this.getActivity() );
+            holder.getBinding().setVariable(BR.document, documentViewModel);
+            holder.getBinding().executePendingBindings();
+
+
+            mItemManger.bindView(holder.itemView, position);
+            ((SwipeLayout)holder.getBinding().getRoot().findViewById(R.id.swipe)).addSwipeListener(new SwipeLayout.SwipeListener() {
+                @Override
+                public void onStartOpen(SwipeLayout layout) {
+                    closeAllExcept( layout );
+                }
+                @Override
+                public void onOpen(SwipeLayout layout) {}
+                @Override
+                public void onStartClose(SwipeLayout layout) {}
+                @Override
+                public void onClose(SwipeLayout layout) {}
+                @Override
+                public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {}
+                @Override
+                public void onHandRelease(SwipeLayout layout, float xvel, float yvel) {}
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return documentList.size();
+        }
+
+        @Override
+        public int getSwipeLayoutResourceId(int position) {
+            return R.id.swipe;
+        }
     }
 }

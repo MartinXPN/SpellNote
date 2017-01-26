@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -12,7 +11,7 @@ import android.widget.Toast;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.adapters.AdapterChooseLanguage;
 import com.xpn.spellnote.databasehelpers.SavedDictionaries;
-import com.xpn.spellnote.models.DictionarySchema;
+import com.xpn.spellnote.entities.dictionary.DictionaryModel;
 import com.xpn.spellnote.services.DictionaryGetterService;
 
 import org.greenrobot.eventbus.EventBus;
@@ -23,7 +22,7 @@ import java.util.ArrayList;
 public class ActivitySelectLanguages extends AppCompatActivity implements AdapterChooseLanguage.ItemGetter {
 
     AdapterChooseLanguage adapter;
-    ArrayList <DictionarySchema> dictionaries = new ArrayList<>();
+    ArrayList <DictionaryModel> dictionaries = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +80,7 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Adapte
     }
 
     @Subscribe
-    public void onDictionariesLoaded( ArrayList <DictionarySchema> dictionaries ) {
+    public void onDictionariesLoaded( ArrayList <DictionaryModel> dictionaries ) {
         this.dictionaries = dictionaries;
         Toast.makeText( this, "Success", Toast.LENGTH_SHORT ).show();
 
@@ -92,7 +91,7 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Adapte
     }
 
     @Override
-    public ArrayList<DictionarySchema> getAllDictionaries() {
+    public ArrayList<DictionaryModel> getAllDictionaries() {
         return dictionaries;
     }
 

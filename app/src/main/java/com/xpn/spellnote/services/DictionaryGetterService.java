@@ -3,7 +3,7 @@ package com.xpn.spellnote.services;
 
 import android.util.Log;
 
-import com.xpn.spellnote.models.DictionarySchema;
+import com.xpn.spellnote.entities.dictionary.DictionaryModel;
 import com.xpn.spellnote.restapi.DataTransferAPI;
 
 import org.greenrobot.eventbus.EventBus;
@@ -27,18 +27,18 @@ public class DictionaryGetterService {
 
 
         DataTransferAPI api = retrofit.create(DataTransferAPI.class);
-        api.getAllDictionaries().enqueue(new Callback<ArrayList<DictionarySchema>>() {
+        api.getAllDictionaries().enqueue(new Callback<ArrayList<DictionaryModel>>() {
             @Override
-            public void onResponse(Call<ArrayList<DictionarySchema>> call, Response<ArrayList<DictionarySchema>> response) {
+            public void onResponse(Call<ArrayList<DictionaryModel>> call, Response<ArrayList<DictionaryModel>> response) {
 
-                Log.d( "Response", String.valueOf(response.body().get( 0 ).languageName));
+                Log.d( "Response", String.valueOf(response.body().get( 0 ).getLanguageName()));
                 if( response.body() == null )
                     return;
                 EventBus.getDefault().post( response.body() );
             }
 
             @Override
-            public void onFailure(Call<ArrayList<DictionarySchema>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<DictionaryModel>> call, Throwable t) {
                 Log.d( "Failure", "failed to get all dictionaries" );
             }
         });

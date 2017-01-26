@@ -1,8 +1,8 @@
 package com.xpn.spellnote.restapi;
 
 
-import com.xpn.spellnote.models.DictionarySchema;
-import com.xpn.spellnote.models.WordSchema;
+import com.xpn.spellnote.entities.dictionary.DictionaryModel;
+import com.xpn.spellnote.entities.word.WordModel;
 
 import java.util.ArrayList;
 
@@ -18,8 +18,8 @@ public interface DataTransferAPI {
 
 
     @GET( "/dictionaries" )
-    Call<ArrayList<DictionarySchema>> getAllDictionaries();
+    Call<ArrayList<DictionaryModel>> getAllDictionaries();
 
     @GET( "/getWords" )
-    Call <ArrayList <WordSchema> > getWords( @Query("locales") ArrayList <String> locales );
+    Call <ArrayList <WordModel> > getWords(@Query("locales") ArrayList <String> locales );
 }

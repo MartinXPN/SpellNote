@@ -3,16 +3,13 @@ package com.xpn.spellnote.fragments;
 
 import android.app.Fragment;
 
-import com.xpn.spellnote.adapters.BaseAdapterDocumentList;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.TagsUtil;
 
 public abstract class BaseSortableFragment extends Fragment {
 
-    protected BaseAdapterDocumentList adapter;
-    public void updateDocumentList() {
-        adapter.notifyDataSetChanged();
-    }
+
+    public abstract void updateDocumentList();
 
     public abstract String getCategory();
     public String getSortingOrder() {

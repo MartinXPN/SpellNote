@@ -1,9 +1,10 @@
-package com.xpn.spellnote.models;
+package com.xpn.spellnote.entities;
 
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.xpn.spellnote.entities.dictionary.DictionaryModel;
 
 @Table( name = "SavedDictionarySchema" )
 public class SavedDictionarySchema extends Model {
@@ -17,11 +18,11 @@ public class SavedDictionarySchema extends Model {
         super();
     }
 
-    public SavedDictionarySchema( DictionarySchema dictionary ) {
+    public SavedDictionarySchema( DictionaryModel dictionary ) {
         super();
-        locale = dictionary.locale;
-        languageName = dictionary.languageName;
-        logoURL = dictionary.logoURL;
-        version = dictionary.version;
+        locale = dictionary.getLocale();
+        languageName = dictionary.getLanguageName();
+        logoURL = dictionary.getLogoURL();
+        version = dictionary.getVersion();
     }
 }
