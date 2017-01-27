@@ -13,7 +13,6 @@ import android.widget.ImageView;
 
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
-import com.daimajia.swipe.implments.SwipeItemRecyclerMangerImpl;
 import com.xpn.spellnote.BR;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databasehelpers.CreatedDocuments;
@@ -27,7 +26,7 @@ import java.util.ArrayList;
 
 
 public abstract class BaseFragmentDocumentList
-        extends BaseSortableFragment  {
+        extends BaseSortableFragment implements DocumentViewModel.OnModifyDocumentListener {
 
     ArrayList<DocumentModel> documentList = new ArrayList<>();
     DocumentListAdapter adapter = new DocumentListAdapter();
@@ -82,9 +81,34 @@ public abstract class BaseFragmentDocumentList
 
     @Override
     public void updateDocumentList() {
+        documentList = (ArrayList<DocumentModel>) CreatedDocuments.getAllDocuments( getCategory(), getSortingOrder(), getAscending() );
         adapter.notifyDataSetChanged();
     }
 
+
+    public void onRemoveItemFromShownList( DocumentModel document ) {
+        int documentIndex = documentList.indexOf( document );
+        documentList.remove( document );
+        adapter.notifyItemRemoved( documentIndex );
+    }
+
+    @Override
+    public void onMoveToArchive(DocumentModel document) {
+        onRemoveItemFromShownList( document );
+        CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_ARCHIVE);
+    }
+
+    @Override
+    public void onMoveToDocuments(DocumentModel document) {
+        onRemoveItemFromShownList( document );
+        CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_DOCUMENTS);
+    }
+
+    @Override
+    public void onMoveToTrash(DocumentModel document) {
+        onRemoveItemFromShownList( document );
+        CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_TRASH);
+    }
 
 
     @BindingAdapter("android:src")
@@ -103,7 +127,7 @@ public abstract class BaseFragmentDocumentList
 
         @Override
         public void onBindViewHolder(final BindingHolder holder, int position) {
-            final DocumentViewModel documentViewModel = new DocumentViewModel( documentList.get( position ), BaseFragmentDocumentList.this.getActivity() );
+            final DocumentViewModel documentViewModel = new DocumentViewModel( documentList.get( position ), BaseFragmentDocumentList.this.getActivity(), BaseFragmentDocumentList.this);
             holder.getBinding().setVariable(BR.document, documentViewModel);
             holder.getBinding().executePendingBindings();
 

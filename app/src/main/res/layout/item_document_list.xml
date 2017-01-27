@@ -44,8 +44,8 @@
                 android:longClickable="true"
                 android:scaleType="centerInside"
                 android:src="@{document.firstItemDrawable}"
-                android:onClick="@{document.onFirstItemClicked()}"
-                android:onLongClick="@{document.onFirstItemLongClicked()}"
+                android:onClick="@{() -> document.onFirstItemClicked()}"
+                android:onLongClick="@{() -> document.onFirstItemLongClicked()}"
                 android:contentDescription="@null" />
             <ImageView
                 android:layout_width="0dp"
@@ -57,8 +57,8 @@
                 android:longClickable="true"
                 android:scaleType="centerInside"
                 android:src="@{document.secondItemDrawable}"
-                android:onClick="@{document.onSecondItemClicked()}"
-                android:onLongClick="@{document.onSecondItemLongClicked()}"
+                android:onClick="@{() -> document.onSecondItemClicked()}"
+                android:onLongClick="@{() -> document.onSecondItemLongClicked()}"
                 android:contentDescription="@null" />
             <ImageView
                 android:layout_width="0dp"
@@ -70,8 +70,8 @@
                 android:longClickable="true"
                 android:scaleType="centerInside"
                 android:src="@{document.thirdItemDrawable}"
-                android:onClick="@{document.onThirdItemClicked()}"
-                android:onLongClick="@{document.onThirdItemLongClicked()}"
+                android:onClick="@{() -> document.onThirdItemClicked()}"
+                android:onLongClick="@{() -> document.onThirdItemLongClicked()}"
                 android:contentDescription="@null" />
         </LinearLayout>
 
@@ -85,7 +85,7 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:background="?attr/selectableItemBackground"
-            android:onClick="@{document.onContentClicked()}">
+            android:onClick="@{() -> document.onContentClicked()}">
 
             <LinearLayout
                 android:layout_width="match_parent"

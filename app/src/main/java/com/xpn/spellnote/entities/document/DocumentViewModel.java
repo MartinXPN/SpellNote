@@ -1,31 +1,36 @@
 package com.xpn.spellnote.entities.document;
 
-import android.content.Context;
+import android.app.Activity;
 import android.databinding.BaseObservable;
-import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.xpn.spellnote.R;
+import com.xpn.spellnote.activities.ActivityEditDocument;
+import com.xpn.spellnote.util.TagsUtil;
+import com.xpn.spellnote.util.Util;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 
 public class DocumentViewModel extends BaseObservable {
 
-    private DocumentModel document;
-    private Context context;
+    protected DocumentModel document;
+    protected Activity activity;
+    protected OnModifyDocumentListener listener;
 
-    public DocumentViewModel( DocumentModel document, Context context ) {
+    public interface OnModifyDocumentListener {
+        void onMoveToArchive( DocumentModel document );
+        void onMoveToDocuments( DocumentModel document );
+        void onMoveToTrash( DocumentModel document );
+    }
+
+    public DocumentViewModel( DocumentModel document, Activity context, OnModifyDocumentListener listener ) {
         this.document = document;
-        this.context = context;
+        this.activity = context;
+        this.listener = listener;
     }
 
 
-    private String getFormattedDate(Date date) {
-        return new SimpleDateFormat( "MMM d\nHH:mm", Locale.US ).format( date );
-    }
     public String getTitle() {
         return document.getTitle();
     }
@@ -33,19 +38,12 @@ public class DocumentViewModel extends BaseObservable {
         return document.getContent();
     }
     public String getDate() {
-        return getFormattedDate( document.getDateModified() );
+        return new SimpleDateFormat( "MMM d\nHH:mm", Locale.US ).format( document.getDateModified() );
     }
 
 
-
-
-    public View.OnClickListener onContentClicked() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText( context, "Document clicked", Toast.LENGTH_SHORT ).show();
-            }
-        };
+    public void onContentClicked() {
+        ActivityEditDocument.launch( activity, document.getId() );
     }
 
 
@@ -53,22 +51,14 @@ public class DocumentViewModel extends BaseObservable {
     public int getFirstItemDrawable() {
         return R.drawable.ic_archive;
     }
-    public View.OnClickListener onFirstItemClicked() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d( "DocumentVM", "On first item clicked" );
-            }
-        };
+    public void onFirstItemClicked() {
+        document.setCategory(TagsUtil.CATEGORY_ARCHIVE);
+        document.save();
+        listener.onMoveToArchive( document );
     }
-    public View.OnLongClickListener onFirstItemLongClicked() {
-        return new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Toast.makeText( context, "First item long clicked", Toast.LENGTH_SHORT ).show();
-                return true;
-            }
-        };
+    public boolean onFirstItemLongClicked() {
+        Toast.makeText(activity, activity.getString(R.string.hint_move_to_archive), Toast.LENGTH_SHORT ).show();
+        return true;
     }
 
 
@@ -76,22 +66,14 @@ public class DocumentViewModel extends BaseObservable {
     public int getSecondItemDrawable() {
         return R.drawable.ic_trash;
     }
-    public View.OnClickListener onSecondItemClicked() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d( "DocumentVM", "On second item clicked" );
-            }
-        };
+    public void onSecondItemClicked() {
+        document.setCategory(TagsUtil.CATEGORY_TRASH);
+        document.save();
+        listener.onMoveToTrash( document );
     }
-    public View.OnLongClickListener onSecondItemLongClicked() {
-        return new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Toast.makeText( context, "Second item long clicked", Toast.LENGTH_SHORT ).show();
-                return true;
-            }
-        };
+    public boolean onSecondItemLongClicked() {
+        Toast.makeText(activity, activity.getString(R.string.hint_move_to_trash), Toast.LENGTH_SHORT ).show();
+        return true;
     }
 
 
@@ -99,21 +81,11 @@ public class DocumentViewModel extends BaseObservable {
     public int getThirdItemDrawable() {
         return R.drawable.ic_send;
     }
-    public View.OnClickListener onThirdItemClicked() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d( "DocumentVM", "On third item clicked" );
-            }
-        };
+    public void onThirdItemClicked() {
+        Util.sendDocument( activity, document.getTitle(), document.getCategory() );
     }
-    public View.OnLongClickListener onThirdItemLongClicked() {
-        return new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Toast.makeText( context, "Third item long clicked", Toast.LENGTH_SHORT ).show();
-                return true;
-            }
-        };
+    public boolean onThirdItemLongClicked() {
+        Toast.makeText(activity, activity.getString(R.string.hint_send), Toast.LENGTH_SHORT ).show();
+        return true;
     }
 }

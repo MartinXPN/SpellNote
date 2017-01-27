@@ -1,5 +1,6 @@
 package com.xpn.spellnote.activities;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import com.xpn.spellnote.databasehelpers.CreatedDocuments;
 import com.xpn.spellnote.entities.document.DocumentModel;
 import com.xpn.spellnote.fragments.FragmentEditCorrectText;
 import com.xpn.spellnote.util.CacheUtil;
+import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
@@ -24,11 +26,24 @@ import java.util.Date;
 
 public class ActivityEditDocument extends AppCompatActivity implements FragmentEditCorrectText.OnTextChangedListener {
 
+    private static final String EXTRA_DOCUMENT_ID = "doc_id";
     private static final Integer SPEECH_RECOGNIZER_CODE = 1;
     private FragmentEditCorrectText fragmentContent;
     private DocumentModel document;
     private boolean showSuggestions;
     private boolean checkSpelling;
+
+    public static void launch(Activity context, Long documentId) {
+        Intent i = new Intent( context, ActivityEditDocument.class );
+        i.putExtra( EXTRA_DOCUMENT_ID, documentId );
+        context.startActivityForResult( i, Codes.EDIT_DOCUMENT_CODE );
+    }
+
+    public static void launch(Activity context, String category) {
+        DocumentModel document = new DocumentModel( "", "", new Date(), "en", "#FFFFFF", category );
+        document.save();
+        launch(context, document.getId() );
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +52,7 @@ public class ActivityEditDocument extends AppCompatActivity implements FragmentE
         setContentView(R.layout.activity_edit_document);
 
         /// document was already created in the database
-        Bundle extras = getIntent().getExtras();
-        if( extras.containsKey( TagsUtil.EXTRA_DOCUMENT_ID ) ) {
-            Long documentId = extras.getLong( TagsUtil.EXTRA_DOCUMENT_ID);
-            document = CreatedDocuments.getDocument( documentId );
-        }
-        /// create a new document
-        else {
-            String category = extras.getString( TagsUtil.EXTRA_CATEGORY );
-            document = new DocumentModel( "", "", new Date(), "en", "#FFFFFF", category );
-        }
+        document = CreatedDocuments.getDocument( getIntent().getExtras().getLong( EXTRA_DOCUMENT_ID) );
 
         /// set-up the actionbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
