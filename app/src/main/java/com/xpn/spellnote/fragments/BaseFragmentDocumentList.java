@@ -26,7 +26,8 @@ import java.util.ArrayList;
 
 
 public abstract class BaseFragmentDocumentList
-        extends BaseSortableFragment implements DocumentViewModel.OnModifyDocumentListener {
+        extends BaseSortableFragment
+        implements DocumentViewModel.OnModifyDocumentListener {
 
     ArrayList<DocumentModel> documentList = new ArrayList<>();
     DocumentListAdapter adapter = new DocumentListAdapter();
@@ -86,28 +87,15 @@ public abstract class BaseFragmentDocumentList
     }
 
 
-    public void onRemoveItemFromShownList( DocumentModel document ) {
+    public void onRemoveDocumentFromShownList(DocumentModel document ) {
         int documentIndex = documentList.indexOf( document );
         documentList.remove( document );
         adapter.notifyItemRemoved( documentIndex );
     }
 
     @Override
-    public void onMoveToArchive(DocumentModel document) {
-        onRemoveItemFromShownList( document );
-        CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_ARCHIVE);
-    }
-
-    @Override
-    public void onMoveToDocuments(DocumentModel document) {
-        onRemoveItemFromShownList( document );
-        CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_DOCUMENTS);
-    }
-
-    @Override
-    public void onMoveToTrash(DocumentModel document) {
-        onRemoveItemFromShownList( document );
-        CreatedDocuments.moveDocument( document, TagsUtil.CATEGORY_TRASH);
+    public void onPrepareDocumentToMove(DocumentModel document) {
+        onRemoveDocumentFromShownList( document );
     }
 
 

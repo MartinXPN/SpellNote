@@ -19,9 +19,7 @@ public class DocumentViewModel extends BaseObservable {
     protected OnModifyDocumentListener listener;
 
     public interface OnModifyDocumentListener {
-        void onMoveToArchive( DocumentModel document );
-        void onMoveToDocuments( DocumentModel document );
-        void onMoveToTrash( DocumentModel document );
+        void onPrepareDocumentToMove(DocumentModel document);
     }
 
     public DocumentViewModel( DocumentModel document, Activity context, OnModifyDocumentListener listener ) {
@@ -52,9 +50,9 @@ public class DocumentViewModel extends BaseObservable {
         return R.drawable.ic_archive;
     }
     public void onFirstItemClicked() {
+        listener.onPrepareDocumentToMove( document );
         document.setCategory(TagsUtil.CATEGORY_ARCHIVE);
         document.save();
-        listener.onMoveToArchive( document );
     }
     public boolean onFirstItemLongClicked() {
         Toast.makeText(activity, activity.getString(R.string.hint_move_to_archive), Toast.LENGTH_SHORT ).show();
@@ -67,9 +65,9 @@ public class DocumentViewModel extends BaseObservable {
         return R.drawable.ic_trash;
     }
     public void onSecondItemClicked() {
-        document.setCategory(TagsUtil.CATEGORY_TRASH);
+        listener.onPrepareDocumentToMove( document );
+        document.setCategory( TagsUtil.CATEGORY_TRASH );
         document.save();
-        listener.onMoveToTrash( document );
     }
     public boolean onSecondItemLongClicked() {
         Toast.makeText(activity, activity.getString(R.string.hint_move_to_trash), Toast.LENGTH_SHORT ).show();
