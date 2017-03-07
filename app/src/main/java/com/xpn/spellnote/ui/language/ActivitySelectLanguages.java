@@ -11,10 +11,6 @@ import android.widget.Toast;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.adapters.AdapterChooseLanguage;
 import com.xpn.spellnote.models.DictionaryModel;
-import com.xpn.spellnote.services.restapi.DictionaryGetterService;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 
@@ -41,7 +37,7 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Adapte
 
 
         /// get list of all dictionaries available on a server
-        DictionaryGetterService.loadDictionaries();
+//        DictionaryGetterService.loadDictionaries();
 
         if( adapter == null ) {
             adapter = new AdapterChooseLanguage( this );
@@ -67,19 +63,7 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Adapte
 //        Log.d( "Saved dictionaries", "" + SavedDictionaries.getSavedDictionaries().size() );
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe
     public void onDictionariesLoaded( ArrayList <DictionaryModel> dictionaries ) {
         this.dictionaries = dictionaries;
         Toast.makeText( this, "Success", Toast.LENGTH_SHORT ).show();

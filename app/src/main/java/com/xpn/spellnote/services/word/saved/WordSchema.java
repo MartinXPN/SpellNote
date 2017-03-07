@@ -1,4 +1,4 @@
-package com.xpn.spellnote.services.word.savedwords;
+package com.xpn.spellnote.services.word.saved;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;

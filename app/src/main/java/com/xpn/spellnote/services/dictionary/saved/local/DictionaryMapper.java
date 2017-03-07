@@ -1,4 +1,4 @@
-package com.xpn.spellnote.services.dictionary.saveddictionaries.local;
+package com.xpn.spellnote.services.dictionary.saved.local;
 
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.services.BeanMapper;
