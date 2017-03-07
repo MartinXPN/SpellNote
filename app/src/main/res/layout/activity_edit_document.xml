@@ -7,7 +7,7 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ActivityEditDocument">
+    tools:context=".ui.document.edit.ActivityEditDocument">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/toolbar_box"
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar_box"
-        android:name="com.xpn.spellnote.fragments.FragmentEditCorrectText"
+        android:name="com.xpn.spellnote.ui.fragments.FragmentEditCorrectText"
         tools:layout="@layout/fragment_edit_correct_text" />
 
 
@@ -41,7 +41,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:name="com.xpn.spellnote.fragments.FragmentChooseEditingLanguage"
+        android:name="com.xpn.spellnote.ui.fragments.FragmentChooseEditingLanguage"
         tools:layout="@layout/fragment_choose_editing_language" />
 
 

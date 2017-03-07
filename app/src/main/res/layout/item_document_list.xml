@@ -5,7 +5,7 @@
     xmlns:swipe="http://schemas.android.com/apk/res-auto" >
 
     <data>
-        <variable name="document" type="com.xpn.spellnote.entities.document.DocumentViewModel" />
+        <variable name="document" type="com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM" />
     </data>
 
     <com.daimajia.swipe.SwipeLayout

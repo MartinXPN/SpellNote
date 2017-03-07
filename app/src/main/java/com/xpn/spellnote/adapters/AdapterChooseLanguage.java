@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.xpn.spellnote.R;
-import com.xpn.spellnote.entities.dictionary.DictionaryModel;
+import com.xpn.spellnote.models.DictionaryModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
