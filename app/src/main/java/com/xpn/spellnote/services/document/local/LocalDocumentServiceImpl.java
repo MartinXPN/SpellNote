@@ -31,7 +31,7 @@ public class LocalDocumentServiceImpl implements DocumentService {
             /// delete the document if it's present
             /// to avoid conflicts with ID
             if( document.getId() != -1 ) {
-                new Delete().from(DocumentSchema.class).where("id = ?", document.getId()).executeSingle();
+                new Delete().from(DocumentSchema.class).where("id = ?", document.getId()).execute();
             }
 
             DocumentSchema documentSchema = mapper.mapTo(document);

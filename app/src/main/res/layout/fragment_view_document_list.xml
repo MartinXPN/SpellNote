@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+    <data/>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -14,7 +17,7 @@
         app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_document"
+        android:id="@+id/add_document"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
@@ -24,3 +27,4 @@
         app:fabSize="normal" />
 
 </android.support.design.widget.CoordinatorLayout>
+</layout>

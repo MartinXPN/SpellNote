@@ -9,39 +9,44 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.Toast;
 
+import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
+import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.models.DocumentModel;
+import com.xpn.spellnote.services.document.local.DocumentMapper;
+import com.xpn.spellnote.services.document.local.LocalDocumentServiceImpl;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 
-public class ActivityEditDocument extends AppCompatActivity implements FragmentEditCorrectText.OnTextChangedListener {
+public class ActivityEditDocument extends AppCompatActivity implements FragmentEditCorrectText.OnTextChangedListener, EditDocumentVM.ViewContract {
 
     private static final String EXTRA_DOCUMENT_ID = "doc_id";
     private static final Integer SPEECH_RECOGNIZER_CODE = 1;
     private FragmentEditCorrectText fragmentContent;
-    private DocumentModel document;
     private boolean showSuggestions;
     private boolean checkSpelling;
 
-    public static void launch(Activity context, Long documentId) {
+    private EditDocumentVM viewModel;
+
+    public static void launchForResult(Activity context, Long documentId, int requestCode) {
         Intent i = new Intent( context, ActivityEditDocument.class );
         i.putExtra( EXTRA_DOCUMENT_ID, documentId );
-        context.startActivityForResult( i, Codes.EDIT_DOCUMENT_CODE );
+        context.startActivityForResult( i, requestCode );
     }
 
-    public static void launch(Activity context, String category) {
+    public static void launchForResult(Activity context, String category, int requestCode) {
         DocumentModel document = new DocumentModel();
         document.setCategory(category);
-//        document.save();
-        launch(context, document.getId() );
+        // bad way
+        new LocalDocumentServiceImpl(new DocumentMapper()).saveDocument(document).subscribe();
+        launchForResult(context, document.getId(), requestCode );
     }
 
     @Override
@@ -50,18 +55,16 @@ public class ActivityEditDocument extends AppCompatActivity implements FragmentE
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_document);
 
-        /// document was already created in the database
-        document = new DocumentModel(); //CreatedDocuments.getDocument( getIntent().getExtras().getLong( EXTRA_DOCUMENT_ID) );
+        DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
+        viewModel = new EditDocumentVM(
+                this,
+                getIntent().getExtras().getLong( EXTRA_DOCUMENT_ID),
+                diContext.getDocumentService());
 
         /// set-up the actionbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         /// get fragments
         FragmentManager fm = getFragmentManager();
@@ -70,11 +73,16 @@ public class ActivityEditDocument extends AppCompatActivity implements FragmentE
     }
 
     @Override
-    public void finish() {
-        /// we just modified the document so we have to update the date
-        document.setDateModified( new Date() );
-//        document.save();
-        super.finish();
+    protected void onStart() {
+        viewModel.onStart();
+        super.onStart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        viewModel.onSaveDocument();
+        viewModel.onDestroy();
+        super.onDestroy();
     }
 
 
@@ -120,7 +128,7 @@ public class ActivityEditDocument extends AppCompatActivity implements FragmentE
 
     @Override
     public void onTextChanged(String text) {
-        document.setContent( text );
+        viewModel.setContent( text );
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -131,5 +139,10 @@ public class ActivityEditDocument extends AppCompatActivity implements FragmentE
             fragmentContent.replaceSelection( spokenText );
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onDocumentAvailable(DocumentModel document) {
+        Toast.makeText(this, "Document Available", Toast.LENGTH_SHORT).show();
     }
 }

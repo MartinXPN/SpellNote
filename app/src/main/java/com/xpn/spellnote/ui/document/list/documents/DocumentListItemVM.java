@@ -1,32 +1,23 @@
 package com.xpn.spellnote.ui.document.list.documents;
 
-import android.app.Activity;
 import android.databinding.BaseObservable;
-import android.widget.Toast;
 
 import com.xpn.spellnote.R;
-import com.xpn.spellnote.ui.document.edit.ActivityEditDocument;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.util.TagsUtil;
-import com.xpn.spellnote.util.Util;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+
 public class DocumentListItemVM extends BaseObservable {
 
     protected DocumentModel document;
-    protected Activity activity;
     protected ViewContract viewContract;
 
-    public interface ViewContract {
-        void onPrepareDocumentToMove(DocumentModel document);
-    }
-
-    public DocumentListItemVM(DocumentModel document, Activity context, ViewContract listener ) {
+    public DocumentListItemVM(DocumentModel document, ViewContract viewContract ) {
         this.document = document;
-        this.activity = context;
-        this.viewContract = listener;
+        this.viewContract = viewContract;
     }
 
 
@@ -42,7 +33,7 @@ public class DocumentListItemVM extends BaseObservable {
 
 
     public void onContentClicked() {
-        ActivityEditDocument.launch( activity, document.getId() );
+        viewContract.onEditDocument(document.getId());
     }
 
 
@@ -56,7 +47,7 @@ public class DocumentListItemVM extends BaseObservable {
 //        document.save();
     }
     public boolean onFirstItemLongClicked() {
-        Toast.makeText(activity, activity.getString(R.string.hint_move_to_archive), Toast.LENGTH_SHORT ).show();
+        viewContract.onShowExplanation(R.string.hint_move_to_archive);
         return true;
     }
 
@@ -71,7 +62,7 @@ public class DocumentListItemVM extends BaseObservable {
 //        document.save();
     }
     public boolean onSecondItemLongClicked() {
-        Toast.makeText(activity, activity.getString(R.string.hint_move_to_trash), Toast.LENGTH_SHORT ).show();
+        viewContract.onShowExplanation(R.string.hint_move_to_trash);
         return true;
     }
 
@@ -81,10 +72,17 @@ public class DocumentListItemVM extends BaseObservable {
         return R.drawable.ic_send;
     }
     public void onThirdItemClicked() {
-        Util.sendDocument( activity, document.getTitle(), document.getCategory() );
+        viewContract.onSendDocument(document.getTitle(), document.getContent());
     }
     public boolean onThirdItemLongClicked() {
-        Toast.makeText(activity, activity.getString(R.string.hint_send), Toast.LENGTH_SHORT ).show();
+        viewContract.onShowExplanation(R.string.hint_send);
         return true;
+    }
+
+    public interface ViewContract {
+        void onPrepareDocumentToMove(DocumentModel document);
+        void onEditDocument(Long documentId);
+        void onShowExplanation(int resourceId);
+        void onSendDocument(String title, String content);
     }
 }

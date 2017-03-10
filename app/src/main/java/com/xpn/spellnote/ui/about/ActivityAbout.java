@@ -1,4 +1,4 @@
-package com.xpn.spellnote.ui;
+package com.xpn.spellnote.ui.about;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

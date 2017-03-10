@@ -1,18 +1,15 @@
 package com.xpn.spellnote.ui.document.list.trash;
 
-
-import android.app.Activity;
-import android.widget.Toast;
-
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM;
 import com.xpn.spellnote.util.TagsUtil;
 
+
 public class TrashListItemVM extends DocumentListItemVM {
 
-    public TrashListItemVM(DocumentModel document, Activity context, ViewContract listener) {
-        super(document, context, listener);
+    public TrashListItemVM(DocumentModel document, ViewContract listener) {
+        super(document, listener);
     }
 
 
@@ -30,7 +27,7 @@ public class TrashListItemVM extends DocumentListItemVM {
 
     @Override
     public boolean onFirstItemLongClicked() {
-        Toast.makeText(activity, activity.getString(R.string.hint_restore), Toast.LENGTH_SHORT ).show();
+        viewContract.onShowExplanation(R.string.hint_restore);
         return true;
     }
 
@@ -44,12 +41,12 @@ public class TrashListItemVM extends DocumentListItemVM {
     public void onThirdItemClicked() {
         viewContract.onPrepareDocumentToMove(document);
 //        document.delete();
-        Toast.makeText( activity, "Document deleted", Toast.LENGTH_SHORT ).show();
+        viewContract.onShowExplanation(R.string.explanation_removed);
     }
 
     @Override
     public boolean onThirdItemLongClicked() {
-        Toast.makeText(activity, activity.getString(R.string.hint_remove_forever), Toast.LENGTH_SHORT ).show();
+        viewContract.onShowExplanation(R.string.hint_remove_forever);
         return true;
     }
 }

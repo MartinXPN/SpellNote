@@ -13,12 +13,11 @@ import android.view.MenuItem;
 
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databinding.ActivityViewDocumentsBinding;
-import com.xpn.spellnote.ui.ActivityAbout;
+import com.xpn.spellnote.ui.about.ActivityAbout;
 import com.xpn.spellnote.ui.document.list.archive.FragmentViewArchive;
 import com.xpn.spellnote.ui.document.list.documents.FragmentViewDocumentList;
 import com.xpn.spellnote.ui.document.list.trash.FragmentViewTrash;
 import com.xpn.spellnote.ui.language.ActivitySelectLanguages;
-import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.Util;
 
 
@@ -50,16 +49,6 @@ public class ActivityViewDocuments extends AppCompatActivity
         onNavigationItemSelected( binding.navigation.getMenu().findItem(navigationId));
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if( requestCode == Codes.EDIT_DOCUMENT_CODE ) {
-            documentFragment = (BaseFragmentDocumentList) getFragmentManager().findFragmentById( R.id.list_of_documents );
-            documentFragment.updateDocumentList();
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -88,27 +77,23 @@ public class ActivityViewDocuments extends AppCompatActivity
 
     public void showFragment( Integer navigationId, BaseFragmentDocumentList documentFragment ) {
 
-        /// use navigation id as fragment tag
+        /// use navigation id as fragment tag, show category in toolbar
         String fragmentTag = navigationId.toString();
+        binding.toolbar.setTitle(documentFragment.getCategory());
+        binding.navigation.setCheckedItem(navigationId);
 
         // get fragment manager, Make sure the current transaction finishes first
         FragmentManager fm = getFragmentManager();
         fm.executePendingTransactions();
         assert getSupportActionBar() != null;
 
-        // If there is a fragment with this tag...
+        // Don't make new transaction if it's already present
         if( fm.findFragmentByTag( fragmentTag ) != null ) {
             this.documentFragment = (BaseFragmentDocumentList) fm.findFragmentById( R.id.list_of_documents );
-            getSupportActionBar().setTitle( documentFragment.getCategory() );
-            return;
         }
-
-        /// set up navigation drawer
-        binding.navigation.setCheckedItem(navigationId);
-        this.documentFragment = documentFragment;
-
-        /// Add the fragment and Show category name in actionbar
-        fm.beginTransaction().replace( R.id.list_of_documents, documentFragment, fragmentTag ).commit();
-        getSupportActionBar().setTitle( documentFragment.getCategory() );
+        else {
+            this.documentFragment = documentFragment;
+            fm.beginTransaction().replace(R.id.list_of_documents, documentFragment, fragmentTag).commit();
+        }
     }
 }

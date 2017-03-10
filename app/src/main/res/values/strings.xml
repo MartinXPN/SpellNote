@@ -34,6 +34,7 @@
     <string name="hint_unarchive">Unarchive</string>
     <string name="hint_remove_forever">Remove Forever</string>
     <string name="hint_send">Send</string>
+    <string name="explanation_removed">Document removed</string>
 
 
     <string name="about_app">
