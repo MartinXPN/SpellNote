@@ -1,4 +1,4 @@
-package com.xpn.spellnote.ui.fragments;
+package com.xpn.spellnote.ui.language;
 
 import android.app.Fragment;
 import android.os.Bundle;

@@ -13,7 +13,6 @@ import android.view.View;
 
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.models.DocumentModel;
-import com.xpn.spellnote.ui.fragments.FragmentEditCorrectText;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.TagsUtil;

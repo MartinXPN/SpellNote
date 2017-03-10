@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -28,12 +27,7 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Adapte
         /// setup the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ActivitySelectLanguages.this.finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(view -> finish());
 
 
         /// get list of all dictionaries available on a server
@@ -47,17 +41,13 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Adapte
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_done);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /// call to EventBus
-                /// TODO Download dictionaries
-                Toast.makeText( ActivitySelectLanguages.this, "Started downloading dictionaries", Toast.LENGTH_LONG ).show();
+        fab.setOnClickListener(view -> {
+            /// TODO Download dictionaries
+            Toast.makeText( ActivitySelectLanguages.this, "Started downloading dictionaries", Toast.LENGTH_LONG ).show();
 
-                /// TODO Remove redundant ones
-                /// TODO Update obsolete ones
-                ActivitySelectLanguages.this.finish();
-            }
+            /// TODO Remove redundant ones
+            /// TODO Update obsolete ones
+            finish();
         });
 
 //        Log.d( "Saved dictionaries", "" + SavedDictionaries.getSavedDictionaries().size() );
