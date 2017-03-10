@@ -31,7 +31,7 @@ public class DocumentModel {
         this.category = category;
     }
     public DocumentModel() {
-        this(-1L, "", "", new Date(0), "", "", "");
+        this(-1L, "", "", new Date(), "", "", "");
     }
 
     public Long getId() {
