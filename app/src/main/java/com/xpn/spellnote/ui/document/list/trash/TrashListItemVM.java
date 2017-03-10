@@ -2,14 +2,15 @@ package com.xpn.spellnote.ui.document.list.trash;
 
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.models.DocumentModel;
+import com.xpn.spellnote.services.document.DocumentService;
 import com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM;
 import com.xpn.spellnote.util.TagsUtil;
 
 
-public class TrashListItemVM extends DocumentListItemVM {
+class TrashListItemVM extends DocumentListItemVM {
 
-    public TrashListItemVM(DocumentModel document, ViewContract listener) {
-        super(document, listener);
+    TrashListItemVM(DocumentModel document, DocumentService documentService, ViewContract listener) {
+        super(document, documentService, listener);
     }
 
 
@@ -19,14 +20,13 @@ public class TrashListItemVM extends DocumentListItemVM {
     }
 
     @Override
-    public void onFirstItemClicked() {
-        viewContract.onPrepareDocumentToMove(document);
-        document.setCategory( TagsUtil.CATEGORY_DOCUMENTS );
-//        document.save();
+    public void onSecondItemClicked() {
+        viewContract.onRemoveDocumentFromShownList(document);
+        addSubscription(documentService.moveDocument(document, TagsUtil.CATEGORY_DOCUMENTS).subscribe());
     }
 
     @Override
-    public boolean onFirstItemLongClicked() {
+    public boolean onSecondItemLongClicked() {
         viewContract.onShowExplanation(R.string.hint_restore);
         return true;
     }
@@ -39,8 +39,8 @@ public class TrashListItemVM extends DocumentListItemVM {
 
     @Override
     public void onThirdItemClicked() {
-        viewContract.onPrepareDocumentToMove(document);
-//        document.delete();
+        viewContract.onRemoveDocumentFromShownList(document);
+        addSubscription(documentService.removeDocument(document).subscribe());
         viewContract.onShowExplanation(R.string.explanation_removed);
     }
 

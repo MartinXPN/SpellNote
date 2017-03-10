@@ -2,14 +2,15 @@ package com.xpn.spellnote.ui.document.list.archive;
 
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.models.DocumentModel;
+import com.xpn.spellnote.services.document.DocumentService;
 import com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM;
 import com.xpn.spellnote.util.TagsUtil;
 
 
-public class ArchiveListItemVM extends DocumentListItemVM {
+class ArchiveListItemVM extends DocumentListItemVM {
 
-    public ArchiveListItemVM(DocumentModel document, ViewContract listener) {
-        super(document, listener);
+    ArchiveListItemVM(DocumentModel document, DocumentService documentService, ViewContract listener) {
+        super(document, documentService, listener);
     }
 
 
@@ -20,9 +21,8 @@ public class ArchiveListItemVM extends DocumentListItemVM {
 
     @Override
     public void onFirstItemClicked() {
-        viewContract.onPrepareDocumentToMove(document);
-        document.setCategory( TagsUtil.CATEGORY_DOCUMENTS );
-//        document.save();
+        viewContract.onRemoveDocumentFromShownList(document);
+        addSubscription(documentService.moveDocument(document, TagsUtil.CATEGORY_DOCUMENTS).subscribe());
     }
 
     @Override

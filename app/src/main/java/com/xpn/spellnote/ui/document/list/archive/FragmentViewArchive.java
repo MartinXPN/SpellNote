@@ -7,12 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.xpn.spellnote.R;
+import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.FragmentViewArchiveBinding;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.ui.document.edit.ActivityEditDocument;
 import com.xpn.spellnote.ui.document.list.BaseFragmentDocumentList;
 import com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM;
-import com.xpn.spellnote.ui.document.list.trash.TrashListItemVM;
 import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.TagsUtil;
 
@@ -36,6 +36,8 @@ public class FragmentViewArchive extends BaseFragmentDocumentList {
 
     @Override
     public DocumentListItemVM getListItemVM(DocumentModel model, DocumentListItemVM.ViewContract viewContract) {
-        return new TrashListItemVM(model, viewContract);
+        return new ArchiveListItemVM(model,
+                ((SpellNoteApp)getActivity().getApplication()).getDiContext().getDocumentService(),
+                viewContract);
     }
 }

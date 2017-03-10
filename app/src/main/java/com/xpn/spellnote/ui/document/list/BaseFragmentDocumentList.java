@@ -3,6 +3,7 @@ package com.xpn.spellnote.ui.document.list;
 import android.content.Intent;
 import android.databinding.BindingAdapter;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,10 +19,11 @@ import com.xpn.spellnote.BR;
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.SpellNoteApp;
+import com.xpn.spellnote.databinding.ItemDocumentListBinding;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.ui.document.edit.ActivityEditDocument;
 import com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM;
-import com.xpn.spellnote.util.BindingHolder;
+import com.xpn.spellnote.ui.util.BindingHolder;
 import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
@@ -95,7 +97,6 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         if( id == R.id.action_sort_by_color )           { item.setChecked( true );  setSortingOrder(TagsUtil.ORDER_COLOR);            return true; }
 
         if( id == R.id.action_sort_ascending )          { item.setChecked( !item.isChecked() );  setAscending( !getAscending() );     return true; }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -105,15 +106,11 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
     }
 
 
+    @Override
     public void onRemoveDocumentFromShownList(DocumentModel document ) {
         int documentIndex = documentList.indexOf( document );
         documentList.remove( document );
         adapter.notifyItemRemoved( documentIndex );
-    }
-
-    @Override
-    public void onPrepareDocumentToMove(DocumentModel document) {
-        onRemoveDocumentFromShownList( document );
     }
 
     @Override
@@ -122,7 +119,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
     }
 
     @Override
-    public void onShowExplanation(int resourceId) {
+    public void onShowExplanation(@StringRes int resourceId) {
         Toast.makeText(getActivity(), getString(resourceId), Toast.LENGTH_SHORT).show();
     }
 
@@ -154,13 +151,12 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
         @Override
         public void onBindViewHolder(final BindingHolder holder, int position) {
-            final DocumentListItemVM documentViewModel = getListItemVM( documentList.get( position ), BaseFragmentDocumentList.this);
-            holder.getBinding().setVariable(BR.document, documentViewModel);
+            holder.getBinding().setVariable(BR.document, getListItemVM( documentList.get( position ), BaseFragmentDocumentList.this));
             holder.getBinding().executePendingBindings();
 
 
             mItemManger.bindView(holder.itemView, position);
-            ((SwipeLayout)holder.getBinding().getRoot().findViewById(R.id.swipe)).addSwipeListener(new SwipeLayout.SwipeListener() {
+            ((ItemDocumentListBinding)holder.getBinding()).swipe.addSwipeListener(new SwipeLayout.SwipeListener() {
                 @Override public void onStartOpen(SwipeLayout layout) {
                     closeAllExcept( layout );
                 }

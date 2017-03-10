@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.xpn.spellnote.R;
+import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.FragmentViewTrashBinding;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.ui.document.list.BaseFragmentDocumentList;
@@ -31,6 +32,8 @@ public class FragmentViewTrash extends BaseFragmentDocumentList {
 
     @Override
     public DocumentListItemVM getListItemVM(DocumentModel model, DocumentListItemVM.ViewContract viewContract) {
-        return new TrashListItemVM(model, viewContract);
+        return new TrashListItemVM(model,
+                ((SpellNoteApp)getActivity().getApplication()).getDiContext().getDocumentService(),
+                viewContract);
     }
 }

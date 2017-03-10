@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.xpn.spellnote.R;
+import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.FragmentViewDocumentListBinding;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.ui.document.edit.ActivityEditDocument;
@@ -34,6 +35,8 @@ public class FragmentViewDocumentList extends BaseFragmentDocumentList {
 
     @Override
     public DocumentListItemVM getListItemVM(DocumentModel model, DocumentListItemVM.ViewContract viewContract) {
-        return new DocumentListItemVM(model, viewContract);
+        return new DocumentListItemVM(model,
+                ((SpellNoteApp)getActivity().getApplication()).getDiContext().getDocumentService(),
+                viewContract);
     }
 }

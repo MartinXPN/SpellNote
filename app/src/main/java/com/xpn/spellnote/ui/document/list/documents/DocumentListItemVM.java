@@ -1,22 +1,26 @@
 package com.xpn.spellnote.ui.document.list.documents;
 
-import android.databinding.BaseObservable;
+import android.support.annotation.StringRes;
 
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.models.DocumentModel;
+import com.xpn.spellnote.services.document.DocumentService;
+import com.xpn.spellnote.ui.BaseViewModel;
 import com.xpn.spellnote.util.TagsUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 
-public class DocumentListItemVM extends BaseObservable {
+public class DocumentListItemVM extends BaseViewModel {
 
     protected DocumentModel document;
     protected ViewContract viewContract;
+    protected DocumentService documentService;
 
-    public DocumentListItemVM(DocumentModel document, ViewContract viewContract ) {
+    public DocumentListItemVM(DocumentModel document, DocumentService documentService, ViewContract viewContract ) {
         this.document = document;
+        this.documentService = documentService;
         this.viewContract = viewContract;
     }
 
@@ -42,9 +46,8 @@ public class DocumentListItemVM extends BaseObservable {
         return R.drawable.ic_archive;
     }
     public void onFirstItemClicked() {
-        viewContract.onPrepareDocumentToMove( document );
-        document.setCategory(TagsUtil.CATEGORY_ARCHIVE);
-//        document.save();
+        viewContract.onRemoveDocumentFromShownList( document );
+        addSubscription(documentService.moveDocument(document, TagsUtil.CATEGORY_ARCHIVE).subscribe());
     }
     public boolean onFirstItemLongClicked() {
         viewContract.onShowExplanation(R.string.hint_move_to_archive);
@@ -57,9 +60,9 @@ public class DocumentListItemVM extends BaseObservable {
         return R.drawable.ic_trash;
     }
     public void onSecondItemClicked() {
-        viewContract.onPrepareDocumentToMove( document );
-        document.setCategory( TagsUtil.CATEGORY_TRASH );
-//        document.save();
+        viewContract.onRemoveDocumentFromShownList( document );
+        addSubscription(documentService.moveDocument(document, TagsUtil.CATEGORY_TRASH).subscribe());
+
     }
     public boolean onSecondItemLongClicked() {
         viewContract.onShowExplanation(R.string.hint_move_to_trash);
@@ -80,9 +83,9 @@ public class DocumentListItemVM extends BaseObservable {
     }
 
     public interface ViewContract {
-        void onPrepareDocumentToMove(DocumentModel document);
+        void onRemoveDocumentFromShownList(DocumentModel document);
         void onEditDocument(Long documentId);
-        void onShowExplanation(int resourceId);
+        void onShowExplanation(@StringRes int resourceId);
         void onSendDocument(String title, String content);
     }
 }

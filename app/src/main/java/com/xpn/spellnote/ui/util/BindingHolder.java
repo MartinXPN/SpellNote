@@ -1,4 +1,4 @@
-package com.xpn.spellnote.util;
+package com.xpn.spellnote.ui.util;
 
 
 import android.databinding.DataBindingUtil;
