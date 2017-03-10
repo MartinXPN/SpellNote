@@ -2,17 +2,17 @@ package com.xpn.spellnote.ui.document.list;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.xpn.spellnote.R;
+import com.xpn.spellnote.databinding.ActivityViewDocumentsBinding;
 import com.xpn.spellnote.ui.ActivityAbout;
 import com.xpn.spellnote.ui.document.list.archive.FragmentViewArchive;
 import com.xpn.spellnote.ui.document.list.documents.FragmentViewDocumentList;
@@ -28,30 +28,26 @@ public class ActivityViewDocuments extends AppCompatActivity
 
     private static final String SAVED_STATE_FRAGMENT_TAG = "curr_f";
     BaseFragmentDocumentList documentFragment = null;
+    ActivityViewDocumentsBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate( savedInstanceState );
-        setContentView(R.layout.activity_view_documents);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_view_documents);
+        setSupportActionBar(binding.toolbar);
 
         /// set up navigation-toggle
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        assert drawer != null;
-        drawer.addDrawerListener(toggle);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawer, binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        binding.drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         /// set up navigation drawer
-        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        assert navigationView != null;
-        navigationView.setNavigationItemSelectedListener(this);
+        binding.navigation.setNavigationItemSelectedListener(this);
 
         /// show the latest chosen fragment
         Integer navigationId = savedInstanceState == null ? R.id.nav_documents : savedInstanceState.getInt(SAVED_STATE_FRAGMENT_TAG);
-        onNavigationItemSelected( navigationView.getMenu().findItem(navigationId));
+        onNavigationItemSelected( binding.navigation.getMenu().findItem(navigationId));
     }
 
 
@@ -85,7 +81,7 @@ public class ActivityViewDocuments extends AppCompatActivity
         else if( id == R.id.nav_about )         startActivity( new Intent( this, ActivityAbout.class ) );
 
         /// close the drawer
-        ((DrawerLayout) findViewById(R.id.drawer_layout)).closeDrawer(GravityCompat.START);
+        binding.drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -108,7 +104,7 @@ public class ActivityViewDocuments extends AppCompatActivity
         }
 
         /// set up navigation drawer
-        ((NavigationView) findViewById(R.id.nav_view)).setCheckedItem(navigationId);
+        binding.navigation.setCheckedItem(navigationId);
         this.documentFragment = documentFragment;
 
         /// Add the fragment and Show category name in actionbar
