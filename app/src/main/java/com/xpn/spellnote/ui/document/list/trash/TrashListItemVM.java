@@ -21,7 +21,8 @@ class TrashListItemVM extends DocumentListItemVM {
 
     @Override
     public void onSecondItemClicked() {
-        viewContract.onRemoveDocumentFromShownList(document);
+        viewContract.onRemoveDocumentFromShownList( document );
+        viewContract.onShowUndoOption(document.clone(), "Restored");
         addSubscription(documentService.moveDocument(document, TagsUtil.CATEGORY_DOCUMENTS).subscribe());
     }
 
@@ -40,8 +41,8 @@ class TrashListItemVM extends DocumentListItemVM {
     @Override
     public void onThirdItemClicked() {
         viewContract.onRemoveDocumentFromShownList(document);
+        viewContract.onShowUndoOption(document.clone(), "Removed Forever");
         addSubscription(documentService.removeDocument(document).subscribe());
-        viewContract.onShowExplanation(R.string.explanation_removed);
     }
 
     @Override

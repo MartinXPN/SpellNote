@@ -47,6 +47,7 @@ public class DocumentListItemVM extends BaseViewModel {
     }
     public void onFirstItemClicked() {
         viewContract.onRemoveDocumentFromShownList( document );
+        viewContract.onShowUndoOption(document.clone(), "Archived");
         addSubscription(documentService.moveDocument(document, TagsUtil.CATEGORY_ARCHIVE).subscribe());
     }
     public boolean onFirstItemLongClicked() {
@@ -61,8 +62,8 @@ public class DocumentListItemVM extends BaseViewModel {
     }
     public void onSecondItemClicked() {
         viewContract.onRemoveDocumentFromShownList( document );
+        viewContract.onShowUndoOption(document.clone(), "Moved to Trash");
         addSubscription(documentService.moveDocument(document, TagsUtil.CATEGORY_TRASH).subscribe());
-
     }
     public boolean onSecondItemLongClicked() {
         viewContract.onShowExplanation(R.string.hint_move_to_trash);
@@ -84,6 +85,7 @@ public class DocumentListItemVM extends BaseViewModel {
 
     public interface ViewContract {
         void onRemoveDocumentFromShownList(DocumentModel document);
+        void onShowUndoOption(DocumentModel previousDocument, String message);
         void onEditDocument(Long documentId);
         void onShowExplanation(@StringRes int resourceId);
         void onSendDocument(String title, String content);

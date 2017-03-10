@@ -22,6 +22,7 @@ class ArchiveListItemVM extends DocumentListItemVM {
     @Override
     public void onFirstItemClicked() {
         viewContract.onRemoveDocumentFromShownList(document);
+        viewContract.onShowUndoOption(document.clone(), "Unarchived");
         addSubscription(documentService.moveDocument(document, TagsUtil.CATEGORY_DOCUMENTS).subscribe());
     }
 

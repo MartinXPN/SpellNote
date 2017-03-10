@@ -92,4 +92,16 @@ public class DocumentModel {
                 color + '\n' +
                 category + '\n';
     }
+
+    @Override
+    public DocumentModel clone() {
+        return new DocumentModel(
+                this.id,
+                this.title,
+                this.content,
+                this.dateModified,
+                this.languageLocale,
+                this.color,
+                this.category);
+    }
 }

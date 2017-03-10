@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.BindingAdapter;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,7 +36,7 @@ import java.util.List;
 public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         implements DocumentListItemVM.ViewContract, DocumentListVM.ViewContract {
 
-    protected DocumentListVM documentListVM;
+    protected DocumentListVM viewModel;
     protected ArrayList<DocumentModel> documentList = new ArrayList<>();
     protected DocumentListAdapter adapter = new DocumentListAdapter();
 
@@ -48,20 +49,20 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         setHasOptionsMenu( true );
 
         DiContext diContext = ((SpellNoteApp) getActivity().getApplication()).getDiContext();
-        documentListVM = new DocumentListVM(this, diContext.getDocumentService());
+        viewModel = new DocumentListVM(this, diContext.getDocumentService());
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        documentListVM.onStart();
+        viewModel.onStart();
         updateDocumentList();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        documentListVM.onDestroy();
+        viewModel.onDestroy();
     }
 
     @Override
@@ -102,7 +103,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
     @Override
     public void updateDocumentList() {
-        documentListVM.loadDocuments(getCategory(), getSortingOrder(), getAscending());
+        viewModel.loadDocuments(getCategory(), getSortingOrder(), getAscending());
     }
 
 
@@ -111,6 +112,16 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         int documentIndex = documentList.indexOf( document );
         documentList.remove( document );
         adapter.notifyItemRemoved( documentIndex );
+    }
+
+    @Override
+    public void onShowUndoOption(DocumentModel previousDocument, String message) {
+        /// Show UNDO snack-bar
+        Snackbar.make( getView(), message, Snackbar.LENGTH_LONG )
+                .setAction( "UNDO", view -> {
+                    viewModel.restoreDocument(previousDocument);
+                    updateDocumentList();
+                }).show();
     }
 
     @Override

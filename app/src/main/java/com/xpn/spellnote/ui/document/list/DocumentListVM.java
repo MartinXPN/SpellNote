@@ -29,6 +29,12 @@ class DocumentListVM extends BaseViewModel {
                 .subscribe(viewContract::onDocumentsAvailable, Timber::e));
     }
 
+    void restoreDocument(DocumentModel documentModel) {
+        addSubscription(documentService
+                .saveDocument(documentModel)
+                .subscribe());
+    }
+
 
     interface ViewContract {
         void onDocumentsAvailable(List<DocumentModel> documents);
