@@ -1,40 +1,35 @@
 package com.xpn.spellnote.ui.about;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.xpn.spellnote.R;
+import com.xpn.spellnote.databinding.ActivityAboutBinding;
+
 
 public class ActivityAbout extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
+        ActivityAboutBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_about);
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbar);
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        TextView about_author = (TextView) findViewById( R.id.about_author );
-        about_author.setMovementMethod(LinkMovementMethod.getInstance());
-
-        TextView about_app = (TextView) findViewById( R.id.about_app );
-        about_app.setMovementMethod( LinkMovementMethod.getInstance() );
+        binding.aboutAuthor.setMovementMethod( LinkMovementMethod.getInstance() );
+        binding.aboutApp.setMovementMethod( LinkMovementMethod.getInstance() );
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        int id = item.getItemId();
-        if( id == android.R.id.home )   { finish();     return true; }
-
+        if( item.getItemId() == android.R.id.home )
+            finish();
         return super.onOptionsItemSelected(item);
     }
 }
