@@ -1,7 +1,6 @@
 package com.xpn.spellnote.ui.document.edit;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -14,9 +13,11 @@ import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.ActivityEditDocumentBinding;
+import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.services.document.local.DocumentMapper;
 import com.xpn.spellnote.services.document.local.LocalDocumentServiceImpl;
+import com.xpn.spellnote.ui.document.edit.options.FragmentChooseEditingLanguage;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
@@ -24,7 +25,7 @@ import com.xpn.spellnote.util.Util;
 import java.util.ArrayList;
 
 
-public class ActivityEditDocument extends AppCompatActivity implements EditDocumentVM.ViewContract {
+public class ActivityEditDocument extends AppCompatActivity implements EditDocumentVM.ViewContract, FragmentChooseEditingLanguage.OnLanguageSelectedListener {
 
     private static final String EXTRA_DOCUMENT_ID = "doc_id";
     private static final Integer SPEECH_RECOGNIZER_CODE = 1;
@@ -60,14 +61,11 @@ public class ActivityEditDocument extends AppCompatActivity implements EditDocum
                 this,
                 getIntent().getExtras().getLong(EXTRA_DOCUMENT_ID),
                 diContext.getDocumentService());
+        binding.setModel(viewModel);
 
         /// set-up the actionbar
         setSupportActionBar(binding.toolbar);
         binding.toolbar.setNavigationOnClickListener(v -> finish());
-
-        /// get fragments
-        FragmentManager fm = getFragmentManager();
-        fm.executePendingTransactions();
     }
 
     @Override
@@ -135,5 +133,10 @@ public class ActivityEditDocument extends AppCompatActivity implements EditDocum
 
     @Override
     public void onDocumentAvailable(DocumentModel document) {
+    }
+
+    @Override
+    public void onLanguageSelected(DictionaryModel dictionary) {
+
     }
 }

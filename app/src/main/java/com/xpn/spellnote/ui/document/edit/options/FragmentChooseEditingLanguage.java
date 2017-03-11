@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 public class FragmentChooseEditingLanguage extends Fragment implements EditingLanguageListItemVM.ViewContract {
 
+    OnLanguageSelectedListener listener;
     ArrayList<DictionaryModel> supportedDictionaries = new ArrayList<>();
     ChooseEditingLanguageAdapter adapter = new ChooseEditingLanguageAdapter();
     FragmentChooseEditingLanguageBinding binding;
@@ -28,6 +29,7 @@ public class FragmentChooseEditingLanguage extends Fragment implements EditingLa
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        listener = (OnLanguageSelectedListener) getActivity();
     }
 
     @Override
@@ -70,6 +72,7 @@ public class FragmentChooseEditingLanguage extends Fragment implements EditingLa
     @Override
     public void onLanguageSelected(DictionaryModel dictionary) {
         hideAvailableLanguages();
+        listener.onLanguageSelected(dictionary);
     }
 
 
@@ -83,7 +86,7 @@ public class FragmentChooseEditingLanguage extends Fragment implements EditingLa
         @Override
         public void onBindViewHolder(BindingHolder holder, int position) {
             EditingLanguageListItemVM listItemVM = new EditingLanguageListItemVM(FragmentChooseEditingLanguage.this, supportedDictionaries.get(position));
-            holder.getBinding().setVariable(BR.model, listItemVM );
+            holder.getBinding().setVariable( BR.model, listItemVM );
             holder.getBinding().executePendingBindings();
         }
 
@@ -91,5 +94,10 @@ public class FragmentChooseEditingLanguage extends Fragment implements EditingLa
         public int getItemCount() {
             return supportedDictionaries.size();
         }
+    }
+
+
+    public interface OnLanguageSelectedListener {
+        void onLanguageSelected(DictionaryModel dictionary);
     }
 }

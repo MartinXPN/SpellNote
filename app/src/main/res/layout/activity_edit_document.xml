@@ -58,7 +58,7 @@
 
 
         <fragment
-            android:id="@+id/fragment_supported_languages"
+            android:id="@+id/choose_editing_language"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
