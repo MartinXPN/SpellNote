@@ -8,7 +8,6 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.xpn.spellnote.R;
-import com.xpn.spellnote.adapters.AdapterChooseLanguage;
 import com.xpn.spellnote.models.DictionaryModel;
 
 import java.util.ArrayList;

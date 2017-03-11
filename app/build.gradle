@@ -57,6 +57,6 @@ dependencies {
     compile 'com.jakewharton.timber:timber:4.5.1'           // Logger
     compile 'com.annimon:stream:1.1.5'                      // Stream API
 
-    compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'com.daimajia.swipelayout:library:1.2.0@aar'
+    compile 'de.hdodenhof:circleimageview:2.1.0'            // Circle ImageView
+    compile 'com.daimajia.swipelayout:library:1.2.0@aar'    // Swipe layout (swipe items in document list)
 }

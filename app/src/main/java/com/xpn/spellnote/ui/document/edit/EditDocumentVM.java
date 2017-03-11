@@ -1,5 +1,8 @@
 package com.xpn.spellnote.ui.document.edit;
 
+import android.databinding.Bindable;
+
+import com.xpn.spellnote.BR;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.services.document.DocumentService;
 import com.xpn.spellnote.ui.BaseViewModel;
@@ -9,7 +12,7 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 
-class EditDocumentVM extends BaseViewModel {
+public class EditDocumentVM extends BaseViewModel {
 
     private ViewContract viewContract;
     private DocumentService documentService;
@@ -37,6 +40,7 @@ class EditDocumentVM extends BaseViewModel {
                         document -> {
                             this.document = document;
                             viewContract.onDocumentAvailable(document);
+                            notifyChange();
                         },
                         Timber::e
                 ));
@@ -46,8 +50,24 @@ class EditDocumentVM extends BaseViewModel {
         addSubscription(documentService.saveDocument(document).subscribe());
     }
 
-    void setContent(String content) {
+
+    @Bindable
+    public String getTitle() {
+        return document.getTitle();
+    }
+    public void setTitle(String title) {
+        document.setTitle(title);
+        notifyPropertyChanged(BR.title);
+    }
+
+
+    @Bindable
+    public String getContent() {
+        return document.getContent();
+    }
+    public void setContent(String content) {
         document.setContent(content);
+        notifyPropertyChanged(BR.content);
     }
 
     public interface ViewContract {

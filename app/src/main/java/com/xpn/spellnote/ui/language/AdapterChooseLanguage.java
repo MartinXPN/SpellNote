@@ -1,4 +1,4 @@
-package com.xpn.spellnote.adapters;
+package com.xpn.spellnote.ui.language;
 
 
 import android.app.Activity;

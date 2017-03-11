@@ -3,37 +3,37 @@ package com.xpn.spellnote.ui.document.edit;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.SpellNoteApp;
+import com.xpn.spellnote.databinding.ActivityEditDocumentBinding;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.services.document.local.DocumentMapper;
 import com.xpn.spellnote.services.document.local.LocalDocumentServiceImpl;
 import com.xpn.spellnote.util.CacheUtil;
-import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
 import java.util.ArrayList;
 
 
-public class ActivityEditDocument extends AppCompatActivity implements FragmentEditCorrectText.OnTextChangedListener, EditDocumentVM.ViewContract {
+public class ActivityEditDocument extends AppCompatActivity implements EditDocumentVM.ViewContract {
 
     private static final String EXTRA_DOCUMENT_ID = "doc_id";
     private static final Integer SPEECH_RECOGNIZER_CODE = 1;
-    private FragmentEditCorrectText fragmentContent;
     private boolean showSuggestions;
     private boolean checkSpelling;
 
+    private ActivityEditDocumentBinding binding;
     private EditDocumentVM viewModel;
+
 
     public static void launchForResult(Activity context, Long documentId, int requestCode) {
         Intent i = new Intent( context, ActivityEditDocument.class );
@@ -53,23 +53,21 @@ public class ActivityEditDocument extends AppCompatActivity implements FragmentE
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_document);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_document);
 
         DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
         viewModel = new EditDocumentVM(
                 this,
-                getIntent().getExtras().getLong( EXTRA_DOCUMENT_ID),
+                getIntent().getExtras().getLong(EXTRA_DOCUMENT_ID),
                 diContext.getDocumentService());
 
         /// set-up the actionbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(v -> finish());
+        setSupportActionBar(binding.toolbar);
+        binding.toolbar.setNavigationOnClickListener(v -> finish());
 
         /// get fragments
         FragmentManager fm = getFragmentManager();
         fm.executePendingTransactions();
-        fragmentContent = (FragmentEditCorrectText) fm.findFragmentById( R.id.fragment_content);
     }
 
     @Override
@@ -99,11 +97,11 @@ public class ActivityEditDocument extends AppCompatActivity implements FragmentE
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if( id == R.id.action_show_suggestions )    { updateShowSuggestions( !showSuggestions, item );              return true; }
-        else if( id == R.id.action_record )         { Util.displaySpeechRecognizer( this, SPEECH_RECOGNIZER_CODE ); return true; }
-        else if( id == R.id.action_send )           { Util.sendDocument( this, "", fragmentContent.getText() );     return true; }
-        else if( id == R.id.action_copy )           { Util.copyTextToClipboard( this, fragmentContent.getText() );  return true; }
-        else if( id == R.id.action_check_spelling ) { updateSpellChecking( !checkSpelling, item );                  return true; }
+        if( id == R.id.action_show_suggestions )    { updateShowSuggestions( !showSuggestions, item );                          return true; }
+        else if( id == R.id.action_record )         { Util.displaySpeechRecognizer( this, SPEECH_RECOGNIZER_CODE );             return true; }
+        else if( id == R.id.action_send )           { Util.sendDocument( this, "", binding.content.getText().toString() );      return true; }
+        else if( id == R.id.action_copy )           { Util.copyTextToClipboard( this, binding.content.getText().toString() );   return true; }
+        else if( id == R.id.action_check_spelling ) { updateSpellChecking( !checkSpelling, item );                              return true; }
 
         return super.onOptionsItemSelected(item);
     }
@@ -121,28 +119,21 @@ public class ActivityEditDocument extends AppCompatActivity implements FragmentE
         CacheUtil.setCache( this, TagsUtil.USER_PREFERENCE_CHECK_SPELLING, checkSpelling );
 
         item.setChecked( checkSpelling );
-        fragmentContent.setSpellCheckingEnabled( checkSpelling );
+        binding.content.setSpellCheckingEnabled(checkSpelling);
     }
 
-
-
-    @Override
-    public void onTextChanged(String text) {
-        viewModel.setContent( text );
-    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == SPEECH_RECOGNIZER_CODE && resultCode == RESULT_OK && data != null) {
             ArrayList <String> results = data.getStringArrayListExtra( RecognizerIntent.EXTRA_RESULTS );
             String spokenText = results.get(0);
-            fragmentContent.replaceSelection( spokenText );
+            binding.content.replaceSelection(spokenText);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     public void onDocumentAvailable(DocumentModel document) {
-        Toast.makeText(this, "Document Available", Toast.LENGTH_SHORT).show();
     }
 }
