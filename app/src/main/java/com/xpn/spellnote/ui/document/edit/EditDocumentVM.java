@@ -16,7 +16,7 @@ public class EditDocumentVM extends BaseViewModel {
 
     private ViewContract viewContract;
     private DocumentService documentService;
-    private DocumentModel document;
+    private DocumentModel document = new DocumentModel();
     private Long documentId;
 
     EditDocumentVM(ViewContract viewContract, Long documentId, DocumentService documentService) {

@@ -32,6 +32,8 @@ import com.xpn.spellnote.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 
 public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         implements DocumentListItemVM.ViewContract, DocumentListVM.ViewContract {
@@ -67,8 +69,10 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Timber.d("onActivityResult()");
         if( requestCode == Codes.EDIT_DOCUMENT_CODE ) {
             adapter.notifyDataSetChanged();
+            Timber.d("Document Edited Adapter notified about changes");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

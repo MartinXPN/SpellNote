@@ -50,4 +50,10 @@ class TrashListItemVM extends DocumentListItemVM {
         viewContract.onShowExplanation(R.string.hint_remove_forever);
         return true;
     }
+
+
+    @Override
+    public void onContentClicked() {
+        viewContract.onShowExplanation(R.string.explanation_document_not_editable);
+    }
 }
