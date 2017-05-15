@@ -1,7 +1,9 @@
 package com.xpn.spellnote.ui.language;
 
+import android.databinding.Bindable;
 import android.util.Pair;
 
+import com.xpn.spellnote.BR;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.services.dictionary.all.DictionariesService;
 import com.xpn.spellnote.services.dictionary.saved.SavedDictionaryService;
@@ -20,8 +22,7 @@ public class SelectLanguagesVM extends BaseViewModel {
     private final ViewContract viewContract;
     private final DictionariesService dictionariesService;
     private final SavedDictionaryService savedDictionaryService;
-    private ArrayList <DictionaryModel> allDictionaries;
-    private ArrayList <DictionaryModel> savedDictionaries;
+    private ArrayList <LanguageItemVM> listViewModels = new ArrayList<>();
 
     SelectLanguagesVM(ViewContract viewContract, DictionariesService dictionariesService, SavedDictionaryService savedDictionaryService) {
         this.viewContract = viewContract;
@@ -37,17 +38,32 @@ public class SelectLanguagesVM extends BaseViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        result -> {
-                            allDictionaries = new ArrayList<>(result.first.values());
-                            savedDictionaries = result.second;
-                            viewContract.onDictionariesLoaded(allDictionaries, savedDictionaries);
-                        },
+                        result -> populateViewModelList(new ArrayList<>(result.first.values()), result.second),
                         Timber::e
                 ));
     }
 
+    private void populateViewModelList(ArrayList <DictionaryModel> allDictionaries, ArrayList <DictionaryModel> savedDictionaries) {
+
+        listViewModels.clear();
+        for( DictionaryModel dictionary : savedDictionaries ) {
+            listViewModels.add( new LanguageItemVM(dictionary, true));
+        }
+
+        for(DictionaryModel dictionary : allDictionaries) {
+            if( !listViewModels.contains( new LanguageItemVM(dictionary, true)))
+                listViewModels.add( new LanguageItemVM(dictionary, false));
+        }
+
+        notifyPropertyChanged(BR.listViewModels);
+    }
+
+    @Bindable
+    public ArrayList<LanguageItemVM> getListViewModels() {
+        return listViewModels;
+    }
+
 
     interface ViewContract {
-        void onDictionariesLoaded(ArrayList <DictionaryModel> allDictionaries, ArrayList <DictionaryModel> savedDictionaries);
     }
 }

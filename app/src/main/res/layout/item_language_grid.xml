@@ -1,45 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.xpn.spellnote.ui.language.LanguageItemVM" />
+    </data>
 
-    android:id="@+id/language_item"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:orientation="vertical"
-    android:background="?attr/selectableItemBackgroundBorderless">
 
-    <ImageView
-        android:id="@+id/language_flag"
-        android:layout_width="@dimen/language_flag_size"
-        android:layout_height="@dimen/language_flag_size"
-        android:src="@mipmap/ic_flag_arm"
-        android:contentDescription="@null" />
-
-    <ImageView
-        android:id="@+id/language_package_status"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_nothing"
-        android:layout_alignRight="@+id/language_flag"
-        android:layout_alignEnd="@+id/language_flag"
-        android:layout_alignBottom="@+id/language_flag"
-        android:contentDescription="@null" />
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:gravity="center_horizontal"
+        android:background="?attr/selectableItemBackgroundBorderless">
 
-    <TextView
-        android:id="@+id/language_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="top|center_horizontal"
-        android:textSize="15sp"
-        android:textColor="#aa000000"
-        android:lines="2"
-        android:ellipsize="end"
-        android:text="Armenian"
-        android:layout_below="@+id/language_flag"
-        android:layout_alignRight="@+id/language_flag"
-        android:layout_alignEnd="@+id/language_flag"
-        android:layout_alignLeft="@+id/language_flag"
-        android:layout_alignStart="@+id/language_flag"/>
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/language_flag"
+            android:layout_width="@dimen/language_flag_size"
+            android:layout_height="@dimen/language_flag_size"
+            app:imageUrl="@{viewModel.logoUrl}"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="top|center_horizontal"
+            android:textSize="15sp"
+            android:textColor="#aa000000"
+            android:lines="2"
+            android:ellipsize="end"
+            android:text="@{viewModel.languageName}" />
+    </LinearLayout>
+</layout>

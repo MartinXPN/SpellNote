@@ -1,29 +1,30 @@
 package com.xpn.spellnote.ui.language;
 
+import android.databinding.BindingAdapter;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.widget.GridView;
-import android.widget.Toast;
+import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.SpellNoteApp;
-import com.xpn.spellnote.models.DictionaryModel;
-
-import java.util.ArrayList;
+import com.xpn.spellnote.databinding.ActivitySelectLanguagesBinding;
 
 
-public class ActivitySelectLanguages extends AppCompatActivity implements AdapterChooseLanguage.ItemGetter, SelectLanguagesVM.ViewContract {
+public class ActivitySelectLanguages extends AppCompatActivity implements SelectLanguagesVM.ViewContract {
 
-    private AdapterChooseLanguage adapter;
+    private ActivitySelectLanguagesBinding binding;
     private SelectLanguagesVM viewModel;
-    private ArrayList <DictionaryModel> dictionaries = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_languages);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_select_languages);
 
         /// setup the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -35,11 +36,8 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Adapte
                 diContext.getDictionariesService(),
                 diContext.getSavedDictionaryService());
 
-        if( adapter == null ) {
-            adapter = new AdapterChooseLanguage( this );
-        }
-        GridView restaurantGrid = (GridView) findViewById( R.id.language_grid );
-        restaurantGrid.setAdapter( adapter );
+        binding.setViewModel(viewModel);
+        binding.languagesGrid.setLayoutManager(new GridLayoutManager(this, 3));
     }
 
     @Override
@@ -55,21 +53,14 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Adapte
         viewModel.onDestroy();
     }
 
-    @Override
-    public ArrayList<DictionaryModel> getAllDictionaries() {
-        return dictionaries;
-    }
 
-    @Override
-    public ArrayList<String> getSavedLocales() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public void onDictionariesLoaded(ArrayList<DictionaryModel> allDictionaries, ArrayList<DictionaryModel> savedDictionaries) {
-        this.dictionaries = allDictionaries;
-        adapter.notifyDataSetChanged();
-
-        Toast.makeText(this, "There are " + allDictionaries.size() + " dictionaries", Toast.LENGTH_SHORT).show();
+    @BindingAdapter({"bind:imageUrl"})
+    public static void loadImage(ImageView view, String url) {
+        Picasso.with(view.getContext())
+                .load(url)
+                .placeholder(ContextCompat.getDrawable(view.getContext(), R.mipmap.ic_placeholder))
+                .resizeDimen(R.dimen.language_flag_size, R.dimen.language_flag_size)
+                .centerCrop()
+                .into(view);
     }
 }

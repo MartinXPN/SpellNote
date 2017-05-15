@@ -41,4 +41,12 @@ public class DictionaryModel {
     public Integer getVersion() {
         return version;
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof DictionaryModel &&
+                ((DictionaryModel) obj).getLocale().equals(getLocale()) &&
+                ((DictionaryModel) obj).getLanguageName().equals(getLanguageName());
+    }
 }
