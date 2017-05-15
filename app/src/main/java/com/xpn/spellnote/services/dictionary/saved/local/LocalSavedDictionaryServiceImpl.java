@@ -35,16 +35,6 @@ public class LocalSavedDictionaryServiceImpl implements SavedDictionaryService {
     }
 
     @Override
-    public Single<ArrayList<String>> getSavedLocales() {
-        return Single.defer(() -> {
-            List<DictionarySchema> dictionaries = new Select().from(DictionarySchema.class).execute();
-            return Single.just( Stream.of(dictionaries)
-                    .map(dictionary -> dictionary.locale)
-                    .collect(Collectors.toCollection(ArrayList::new)));
-        });
-    }
-
-    @Override
     public Completable saveDictionaries(ArrayList<DictionaryModel> dictionaries) {
         return Completable.fromAction(() -> {
             ActiveAndroid.beginTransaction();

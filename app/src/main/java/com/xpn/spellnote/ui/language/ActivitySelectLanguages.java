@@ -1,22 +1,24 @@
 package com.xpn.spellnote.ui.language;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
+import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.models.DictionaryModel;
 
 import java.util.ArrayList;
 
 
-public class ActivitySelectLanguages extends AppCompatActivity implements AdapterChooseLanguage.ItemGetter {
+public class ActivitySelectLanguages extends AppCompatActivity implements AdapterChooseLanguage.ItemGetter, SelectLanguagesVM.ViewContract {
 
-    AdapterChooseLanguage adapter;
-    ArrayList <DictionaryModel> dictionaries = new ArrayList<>();
+    private AdapterChooseLanguage adapter;
+    private SelectLanguagesVM viewModel;
+    private ArrayList <DictionaryModel> dictionaries = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,39 +30,29 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Adapte
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(view -> finish());
 
-
-        /// get list of all dictionaries available on a server
-//        DictionaryGetterService.loadDictionaries();
+        DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
+        viewModel = new SelectLanguagesVM(this,
+                diContext.getDictionariesService(),
+                diContext.getSavedDictionaryService());
 
         if( adapter == null ) {
             adapter = new AdapterChooseLanguage( this );
         }
         GridView restaurantGrid = (GridView) findViewById( R.id.language_grid );
         restaurantGrid.setAdapter( adapter );
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_done);
-        fab.setOnClickListener(view -> {
-            /// TODO Download dictionaries
-            Toast.makeText( ActivitySelectLanguages.this, "Started downloading dictionaries", Toast.LENGTH_LONG ).show();
-
-            /// TODO Remove redundant ones
-            /// TODO Update obsolete ones
-            finish();
-        });
-
-//        Log.d( "Saved dictionaries", "" + SavedDictionaries.getSavedDictionaries().size() );
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        viewModel.onStart();
+        viewModel.loadDictionaries();
+    }
 
-    public void onDictionariesLoaded( ArrayList <DictionaryModel> dictionaries ) {
-        this.dictionaries = dictionaries;
-        Toast.makeText( this, "Success", Toast.LENGTH_SHORT ).show();
-
-        if( adapter != null )
-            adapter.notifyDataSetChanged();
-        else
-            Toast.makeText(this, "Adapter is null", Toast.LENGTH_SHORT ).show();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        viewModel.onDestroy();
     }
 
     @Override
@@ -71,5 +63,13 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Adapte
     @Override
     public ArrayList<String> getSavedLocales() {
         return new ArrayList<>();
+    }
+
+    @Override
+    public void onDictionariesLoaded(ArrayList<DictionaryModel> allDictionaries, ArrayList<DictionaryModel> savedDictionaries) {
+        this.dictionaries = allDictionaries;
+        adapter.notifyDataSetChanged();
+
+        Toast.makeText(this, "There are " + allDictionaries.size() + " dictionaries", Toast.LENGTH_SHORT).show();
     }
 }

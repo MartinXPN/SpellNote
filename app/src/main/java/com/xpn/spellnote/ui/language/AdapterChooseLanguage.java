@@ -1,6 +1,5 @@
 package com.xpn.spellnote.ui.language;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -18,7 +17,7 @@ import com.xpn.spellnote.models.DictionaryModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
+
 
 public class AdapterChooseLanguage extends BaseAdapter {
 
@@ -53,14 +52,11 @@ public class AdapterChooseLanguage extends BaseAdapter {
     public void notifyDataSetChanged() {
         dictionaries = listener.getAllDictionaries();
         savedLocales = listener.getSavedLocales();
-        Collections.sort(dictionaries, new Comparator<DictionaryModel>() {
-            @Override
-            public int compare(DictionaryModel a, DictionaryModel b) {    /// first show downloaded dictionaries
-                int res = 0;
-                if( savedLocales.contains( a.getLocale() ) )   res--;
-                if( savedLocales.contains( b.getLocale() ) )   res++;
-                return res;
-            }
+        Collections.sort(dictionaries, (a, b) -> {    /// first show downloaded dictionaries
+            int res = 0;
+            if( savedLocales.contains( a.getLocale() ) )   res--;
+            if( savedLocales.contains( b.getLocale() ) )   res++;
+            return res;
         });
         super.notifyDataSetChanged();
     }
@@ -109,16 +105,13 @@ public class AdapterChooseLanguage extends BaseAdapter {
                 .into(flag);
 
         language.setText( currentItem.getLanguageName() );
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if( tobeDownloadedLocales.contains( currentItem.getLocale() ) )      { tobeDownloadedLocales.remove( currentItem.getLocale() ); }
-                else if( tobeRemovedLocales.contains( currentItem.getLocale() ) )    { tobeRemovedLocales.remove( currentItem.getLocale() ); }
-                else if( savedLocales.contains( currentItem.getLocale() ) )          { tobeRemovedLocales.add( currentItem.getLocale() ); }
-                else                                                            { tobeDownloadedLocales.add( currentItem.getLocale() ); }
+        view.setOnClickListener(view1 -> {
+            if( tobeDownloadedLocales.contains( currentItem.getLocale() ) )      { tobeDownloadedLocales.remove( currentItem.getLocale() ); }
+            else if( tobeRemovedLocales.contains( currentItem.getLocale() ) )    { tobeRemovedLocales.remove( currentItem.getLocale() ); }
+            else if( savedLocales.contains( currentItem.getLocale() ) )          { tobeRemovedLocales.add( currentItem.getLocale() ); }
+            else                                                                 { tobeDownloadedLocales.add( currentItem.getLocale() ); }
 
-                notifyDataSetChanged();
-            }
+            notifyDataSetChanged();
         });
 
         return view;

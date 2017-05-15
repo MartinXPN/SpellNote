@@ -26,7 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class DiContext {
 
-    private static final String BASE_URL = "https://spellnote.herokuapp.com";
+    private static final String BASE_URL = "https://spellnote-83543.firebaseio.com";
     private static final Retrofit retrofit = new Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())

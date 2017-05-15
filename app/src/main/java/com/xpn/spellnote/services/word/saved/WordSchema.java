@@ -10,7 +10,7 @@ import com.xpn.spellnote.models.WordModel;
 public class WordSchema extends Model {
 
     @Column(index = true) private String word;
-    @Column(index = true) private Integer usage;
+    @Column(index = true) private Float usage;
     @Column(index = true) private String locale;
     @Column private Boolean isUserDefined = false;
 
@@ -35,10 +35,10 @@ public class WordSchema extends Model {
         this.word = word;
     }
 
-    public Integer getUsage() {
+    public Float getUsage() {
         return usage;
     }
-    public void setUsage(Integer usage) {
+    public void setUsage(Float usage) {
         this.usage = usage;
     }
 
