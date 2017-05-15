@@ -85,7 +85,6 @@ public class ActivityViewDocuments extends AppCompatActivity
         // get fragment manager, Make sure the current transaction finishes first
         FragmentManager fm = getFragmentManager();
         fm.executePendingTransactions();
-        assert getSupportActionBar() != null;
 
         // Don't make new transaction if it's already present
         if( fm.findFragmentByTag( fragmentTag ) != null ) {
