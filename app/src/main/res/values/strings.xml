@@ -27,6 +27,17 @@
     <string name="action_sort_by_ascending">Ascending</string>
 
 
+    <string name="hint_move_to_documents">Move to Documents</string>
+    <string name="hint_move_to_archive">Move to Archive</string>
+    <string name="hint_move_to_trash">Move to Trash</string>
+    <string name="hint_restore">Restore</string>
+    <string name="hint_unarchive">Unarchive</string>
+    <string name="hint_remove_forever">Remove Forever</string>
+    <string name="hint_send">Send</string>
+    <string name="explanation_removed">Document removed</string>
+    <string name="explanation_document_not_editable">Restore document to edit…</string>
+
+
     <string name="about_app">
         \tSpell Checker is an app designed for creating texts, taking notes, editing and correcting essays, etc. It can be used any time even without an internet access.\n
         \tIt will find any spelling mistake and offer suggestions from its dictionary, which is created from Wikipedia’s most widely used words.\n

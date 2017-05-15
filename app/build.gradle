@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 repositories {
     mavenCentral()
@@ -7,11 +8,11 @@ repositories {
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.1"
 
     defaultConfig {
         applicationId 'com.xpn.spellnote'
-        minSdkVersion 11
+        minSdkVersion 14 // used to be 11
         targetSdkVersion 25
         versionCode 5
         versionName '2.0.0'
@@ -24,24 +25,40 @@ android {
     }
     productFlavors {
     }
+
+    dataBinding {
+        enabled = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:design:25.1.0'
-    compile 'com.android.support:support-v4:25.1.0'
-    compile 'com.android.support:recyclerview-v7:25.1.0'
-    compile 'com.android.support:cardview-v7:25.1.0'
+    // Android Support libraries
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support:cardview-v7:25.3.1'
 
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+    compile 'com.squareup.picasso:picasso:2.5.2'            // Picasso - Image loader
+    compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT' // Active Android - local DB ORM
 
-    compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'com.daimajia.swipelayout:library:1.2.0@aar'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'          // RxAndroid
+    compile 'io.reactivex.rxjava2:rxjava:2.0.1'             // RxJAVA
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'         // Retrofit for HTTP requests
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'   // Retrofit Gson for parsing json
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'  // Retrofit adapter for Rx
+    compile 'com.jakewharton.timber:timber:4.5.1'           // Logger
+    compile 'com.annimon:stream:1.1.5'                      // Stream API
+
+    compile 'de.hdodenhof:circleimageview:2.1.0'            // Circle ImageView
+    compile 'com.daimajia.swipelayout:library:1.2.0@aar'    // Swipe layout (swipe items in document list)
+    compile 'com.samvel1024.databindingrv:data-binding-recyclerview:0.0.3' // binding RecyclerVew for easy manipulations with lists
 }

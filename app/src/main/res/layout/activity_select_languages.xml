@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".activities.ActivitySelectLanguages">
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.xpn.spellnote.ui.language.SelectLanguagesVM" />
+    </data>
 
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.language.ActivitySelectLanguages">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/toolbar_box"
@@ -28,32 +32,12 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
         </android.support.design.widget.AppBarLayout>
 
-        <GridView
-            android:id="@+id/language_grid"
+        <com.samvel1024.databindingrv.BindingRecyclerView
+            android:id="@+id/languages_grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
-            android:layout_below="@+id/toolbar_box"
-            android:stretchMode="spacingWidthUniform"
-            android:overScrollMode="ifContentScrolls"
-            android:numColumns="auto_fit"
-            android:columnWidth="@dimen/language_grid_column_width" />
-
-        <View
-            android:id="@+id/toolbar_shadow"
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:layout_below="@id/toolbar_box"
-            android:background="@drawable/shadow" />
-    </RelativeLayout>
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_done"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_done"
-        app:fabSize="normal" />
-</android.support.design.widget.CoordinatorLayout>
+            app:bindingVarPath="com.xpn.spellnote.BR.viewModel"
+            app:itemLayoutResId="@layout/item_language_grid"
+            app:viewModelList="@{viewModel.listViewModels}" />
+    </LinearLayout>
+</layout>

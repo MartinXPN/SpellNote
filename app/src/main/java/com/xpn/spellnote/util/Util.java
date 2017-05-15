@@ -19,7 +19,7 @@ public class Util {
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("message/rfc822");
         i.putExtra( Intent.EXTRA_SUBJECT, subject );
-        i.putExtra( Intent.EXTRA_EMAIL, new String[]{"XPNInc@gmail.com"} );
+        i.putExtra( Intent.EXTRA_EMAIL, receivers );
         i.putExtra( Intent.EXTRA_TEXT, messageBody );
         try {
             context.startActivity(Intent.createChooser(i, "Choose an Email client:"));
