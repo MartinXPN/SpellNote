@@ -35,7 +35,8 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
         DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
         viewModel = new SelectLanguagesVM(this,
                 diContext.getDictionariesService(),
-                diContext.getSavedDictionaryService());
+                diContext.getSavedDictionaryService(),
+                diContext.getWordsService());
 
         binding.setViewModel(viewModel);
         int numberOfColumns = (int) (Util.getWindowWidth(this) / getResources().getDimension(R.dimen.language_grid_column_width));
