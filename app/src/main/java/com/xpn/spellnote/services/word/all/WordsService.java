@@ -6,11 +6,11 @@ import java.util.Map;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
-import retrofit2.http.Query;
+import retrofit2.http.Path;
 
 
 public interface WordsService {
 
-    @GET( "words.json" )
-    Observable<Map<String, WordModel>> getWords(@Query("locale") String locale );
+    @GET( "words/{locale}.json" )
+    Observable<Map<String, WordModel>> getWords(@Path("locale") String locale );
 }
