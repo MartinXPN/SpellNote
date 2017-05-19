@@ -8,9 +8,12 @@ import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.services.dictionary.all.DictionariesService;
 import com.xpn.spellnote.services.dictionary.saved.SavedDictionaryService;
 import com.xpn.spellnote.services.word.all.WordsService;
+import com.xpn.spellnote.services.word.saved.SavedWordsService;
 import com.xpn.spellnote.ui.BaseViewModel;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -24,13 +27,15 @@ public class SelectLanguagesVM extends BaseViewModel {
     private final DictionariesService dictionariesService;
     private final WordsService wordsService;
     private final SavedDictionaryService savedDictionaryService;
+    private final SavedWordsService savedWordsService;
     private ArrayList <LanguageItemVM> listViewModels = new ArrayList<>();
 
-    SelectLanguagesVM(ViewContract viewContract, DictionariesService dictionariesService, SavedDictionaryService savedDictionaryService, WordsService wordsService) {
+    SelectLanguagesVM(ViewContract viewContract, DictionariesService dictionariesService, SavedDictionaryService savedDictionaryService, WordsService wordsService, SavedWordsService savedWordsService) {
         this.viewContract = viewContract;
         this.dictionariesService = dictionariesService;
         this.savedDictionaryService = savedDictionaryService;
         this.wordsService = wordsService;
+        this.savedWordsService = savedWordsService;
     }
 
     void loadDictionaries() {
@@ -48,16 +53,12 @@ public class SelectLanguagesVM extends BaseViewModel {
 
     private void populateViewModelList(ArrayList <DictionaryModel> allDictionaries, ArrayList <DictionaryModel> savedDictionaries) {
 
-        listViewModels.clear();
-        for( DictionaryModel dictionary : savedDictionaries ) {
-            listViewModels.add( new LanguageItemVM(dictionary, true, wordsService));
-        }
+        //  Locale -> ItemVM
+        Map<String, LanguageItemVM> viewModels = new TreeMap<>();
+        for(DictionaryModel dictionary : allDictionaries)       viewModels.put( dictionary.getLocale(), new LanguageItemVM(dictionary, LanguageItemVM.Status.NOT_PRESENT, wordsService, savedWordsService) );
+        for(DictionaryModel dictionary : savedDictionaries)     viewModels.put( dictionary.getLocale(), new LanguageItemVM(dictionary, LanguageItemVM.Status.SAVED,       wordsService, savedWordsService) );
 
-        for(DictionaryModel dictionary : allDictionaries) {
-            if( !listViewModels.contains( new LanguageItemVM(dictionary, true, wordsService)))
-                listViewModels.add( new LanguageItemVM(dictionary, false, wordsService));
-        }
-
+        listViewModels = new ArrayList<>(viewModels.values());
         notifyPropertyChanged(BR.listViewModels);
     }
 

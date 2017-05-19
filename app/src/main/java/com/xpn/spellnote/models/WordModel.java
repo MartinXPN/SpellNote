@@ -4,11 +4,11 @@ package com.xpn.spellnote.models;
 public class WordModel {
 
     private String word;
-    private Float usage;
+    private int usage;
     private String locale;
-    private Boolean isUserDefined = false;
+    private boolean isUserDefined = false;
 
-    public WordModel( String word, Float usage, String locale, Boolean isUserDefined ) {
+    public WordModel( String word, int usage, String locale, boolean isUserDefined ) {
         this.word = word;
         this.usage = usage;
         this.locale = locale;
@@ -16,20 +16,20 @@ public class WordModel {
     }
 
 
-    public WordModel( String word, Float usage, String locale ) {
+    public WordModel( String word, int usage, String locale ) {
         this(word, usage, locale, false);
     }
 
     public String getWord() {
         return word;
     }
-    public Float getUsage() {
+    public int getUsage() {
         return usage;
     }
     public String getLocale() {
         return locale;
     }
-    public Boolean getUserDefined() {
+    public boolean getUserDefined() {
         return isUserDefined;
     }
 }
