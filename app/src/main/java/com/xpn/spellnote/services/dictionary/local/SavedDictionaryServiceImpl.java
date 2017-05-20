@@ -1,10 +1,10 @@
-package com.xpn.spellnote.services.dictionary.saved.local;
+package com.xpn.spellnote.services.dictionary.local;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.services.BeanMapper;
-import com.xpn.spellnote.services.dictionary.saved.SavedDictionaryService;
+import com.xpn.spellnote.services.dictionary.SavedDictionaryService;
 
 import java.util.ArrayList;
 

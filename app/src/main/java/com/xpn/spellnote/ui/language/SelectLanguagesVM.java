@@ -5,10 +5,10 @@ import android.util.Pair;
 
 import com.xpn.spellnote.BR;
 import com.xpn.spellnote.models.DictionaryModel;
-import com.xpn.spellnote.services.dictionary.all.DictionariesService;
-import com.xpn.spellnote.services.dictionary.saved.SavedDictionaryService;
-import com.xpn.spellnote.services.word.all.WordsService;
-import com.xpn.spellnote.services.word.saved.SavedWordsService;
+import com.xpn.spellnote.services.dictionary.AvailableDictionariesService;
+import com.xpn.spellnote.services.dictionary.SavedDictionaryService;
+import com.xpn.spellnote.services.word.SavedWordsService;
+import com.xpn.spellnote.services.word.WordsService;
 import com.xpn.spellnote.ui.BaseViewModel;
 
 import java.util.ArrayList;
@@ -24,15 +24,15 @@ import timber.log.Timber;
 public class SelectLanguagesVM extends BaseViewModel {
 
     private final ViewContract viewContract;
-    private final DictionariesService dictionariesService;
+    private final AvailableDictionariesService availableDictionariesService;
     private final WordsService wordsService;
     private final SavedDictionaryService savedDictionaryService;
     private final SavedWordsService savedWordsService;
     private ArrayList <LanguageItemVM> listViewModels = new ArrayList<>();
 
-    SelectLanguagesVM(ViewContract viewContract, DictionariesService dictionariesService, SavedDictionaryService savedDictionaryService, WordsService wordsService, SavedWordsService savedWordsService) {
+    SelectLanguagesVM(ViewContract viewContract, AvailableDictionariesService availableDictionariesService, SavedDictionaryService savedDictionaryService, WordsService wordsService, SavedWordsService savedWordsService) {
         this.viewContract = viewContract;
-        this.dictionariesService = dictionariesService;
+        this.availableDictionariesService = availableDictionariesService;
         this.savedDictionaryService = savedDictionaryService;
         this.wordsService = wordsService;
         this.savedWordsService = savedWordsService;
@@ -40,7 +40,7 @@ public class SelectLanguagesVM extends BaseViewModel {
 
     void loadDictionaries() {
         addSubscription(Observable.zip(
-                dictionariesService.getAllDictionaries(),
+                availableDictionariesService.getAllDictionaries(),
                 savedDictionaryService.getSavedDictionaries().toObservable(),
                 Pair::new)
                 .subscribeOn(Schedulers.io())

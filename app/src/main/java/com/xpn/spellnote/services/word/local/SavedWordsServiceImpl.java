@@ -1,8 +1,8 @@
-package com.xpn.spellnote.services.word.saved.local;
+package com.xpn.spellnote.services.word.local;
 
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.BeanMapper;
-import com.xpn.spellnote.services.word.saved.SavedWordsService;
+import com.xpn.spellnote.services.word.SavedWordsService;
 
 import java.util.ArrayList;
 

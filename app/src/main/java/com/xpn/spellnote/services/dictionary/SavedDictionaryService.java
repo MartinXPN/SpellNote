@@ -1,4 +1,4 @@
-package com.xpn.spellnote.services.dictionary.saved;
+package com.xpn.spellnote.services.dictionary;
 
 import com.xpn.spellnote.models.DictionaryModel;
 
