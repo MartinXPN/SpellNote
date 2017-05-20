@@ -5,8 +5,8 @@ import android.databinding.Bindable;
 import com.xpn.spellnote.BR;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.WordModel;
-import com.xpn.spellnote.services.word.all.WordsService;
-import com.xpn.spellnote.services.word.saved.SavedWordsService;
+import com.xpn.spellnote.services.word.SavedWordsService;
+import com.xpn.spellnote.services.word.WordsService;
 import com.xpn.spellnote.ui.BaseViewModel;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import timber.log.Timber;
 public class LanguageItemVM extends BaseViewModel {
 
     private DictionaryModel dictionaryModel;
-    private Status status; /// what part of the dictionary is present (0 = none, 1 = whole)
+    private Status status;
     private final WordsService wordsService;
     private final SavedWordsService savedWordsService;
 

@@ -1,8 +1,8 @@
-package com.xpn.spellnote.services.word.saved.realm;
+package com.xpn.spellnote.services.word.local;
 
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.BeanMapper;
-import com.xpn.spellnote.services.word.saved.SavedWordsService;
+import com.xpn.spellnote.services.word.SavedWordsService;
 
 import java.util.ArrayList;
 
@@ -25,12 +25,12 @@ public class SavedWordsServiceImpl implements SavedWordsService {
     @Override
     public Completable saveAllWords(ArrayList<WordModel> words) {
         return Completable.fromAction(() -> {
-            Realm realm = Realm.getInstance(realmConfiguration);
-            realm.executeTransaction(realmInstance -> {
-                        for( WordModel word : words )
-                            realmInstance.copyToRealmOrUpdate( mapper.mapTo(word) );
-                    });
-            realm.close();
+            Realm realmInstance = Realm.getInstance(realmConfiguration);
+            realmInstance.executeTransaction(realm -> {
+                for( WordModel word : words )
+                    realm.copyToRealmOrUpdate( mapper.mapTo(word) );
+            });
+            realmInstance.refresh();
         });
     }
 }

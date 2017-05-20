@@ -1,4 +1,4 @@
-package com.xpn.spellnote.services.word.saved.realm;
+package com.xpn.spellnote.services.word.local;
 
 import com.xpn.spellnote.models.WordModel;
 

@@ -1,4 +1,4 @@
-package com.xpn.spellnote.services.dictionary.saved.local;
+package com.xpn.spellnote.services.dictionary.local;
 
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.services.BeanMapper;
@@ -9,7 +9,6 @@ public class DictionaryMapper implements BeanMapper<DictionaryModel, DictionaryS
     @Override
     public DictionaryModel mapFrom(DictionarySchema source) {
         return new DictionaryModel(
-                source.getId(),
                 source.locale,
                 source.languageName,
                 source.logoURL,

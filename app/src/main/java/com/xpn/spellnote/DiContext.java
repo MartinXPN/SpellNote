@@ -6,20 +6,20 @@ import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.BeanMapper;
-import com.xpn.spellnote.services.dictionary.all.DictionariesService;
-import com.xpn.spellnote.services.dictionary.saved.SavedDictionaryService;
-import com.xpn.spellnote.services.dictionary.saved.local.DictionaryMapper;
-import com.xpn.spellnote.services.dictionary.saved.local.DictionarySchema;
-import com.xpn.spellnote.services.dictionary.saved.local.LocalSavedDictionaryServiceImpl;
+import com.xpn.spellnote.services.dictionary.AvailableDictionariesService;
+import com.xpn.spellnote.services.dictionary.SavedDictionaryService;
+import com.xpn.spellnote.services.dictionary.local.DictionaryMapper;
+import com.xpn.spellnote.services.dictionary.local.DictionarySchema;
+import com.xpn.spellnote.services.dictionary.local.SavedDictionaryServiceImpl;
 import com.xpn.spellnote.services.document.DocumentService;
 import com.xpn.spellnote.services.document.local.DocumentMapper;
 import com.xpn.spellnote.services.document.local.DocumentSchema;
 import com.xpn.spellnote.services.document.local.LocalDocumentServiceImpl;
-import com.xpn.spellnote.services.word.all.WordsService;
-import com.xpn.spellnote.services.word.saved.SavedWordsService;
-import com.xpn.spellnote.services.word.saved.realm.SavedWordsServiceImpl;
-import com.xpn.spellnote.services.word.saved.realm.WordMapper;
-import com.xpn.spellnote.services.word.saved.realm.WordSchema;
+import com.xpn.spellnote.services.word.SavedWordsService;
+import com.xpn.spellnote.services.word.WordsService;
+import com.xpn.spellnote.services.word.local.SavedWordsServiceImpl;
+import com.xpn.spellnote.services.word.local.WordMapper;
+import com.xpn.spellnote.services.word.local.WordSchema;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -42,12 +42,12 @@ public class DiContext {
 
     private final DocumentService documentService;
     private final SavedDictionaryService savedDictionaryService;
-    private final DictionariesService dictionariesService;
+    private final AvailableDictionariesService availableDictionariesService;
     private final WordsService wordsService;
     private final SavedWordsService savedWordsService;
 
 
-    public DiContext(Context context) {
+    DiContext(Context context) {
 
         // Mappers
         BeanMapper <DictionaryModel, DictionarySchema> dictionaryMapper = new DictionaryMapper();
@@ -57,12 +57,12 @@ public class DiContext {
         // Local DB services
         Realm.init(context);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
-        documentService = new LocalDocumentServiceImpl(documentMapper);
-        savedDictionaryService = new LocalSavedDictionaryServiceImpl(dictionaryMapper);
+        documentService = new LocalDocumentServiceImpl(realmConfiguration, documentMapper);
+        savedDictionaryService = new SavedDictionaryServiceImpl(realmConfiguration, dictionaryMapper);
         savedWordsService = new SavedWordsServiceImpl(realmConfiguration, wordMapper);
 
         // REST services
-        dictionariesService = retrofit.create(DictionariesService.class);
+        availableDictionariesService = retrofit.create(AvailableDictionariesService.class);
         wordsService = retrofit.create(WordsService.class);
     }
 
@@ -73,8 +73,8 @@ public class DiContext {
     public SavedDictionaryService getSavedDictionaryService() {
         return savedDictionaryService;
     }
-    public DictionariesService getDictionariesService() {
-        return dictionariesService;
+    public AvailableDictionariesService getAvailableDictionariesService() {
+        return availableDictionariesService;
     }
     public WordsService getWordsService() {
         return wordsService;

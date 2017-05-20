@@ -1,4 +1,4 @@
-package com.xpn.spellnote.services.dictionary.saved;
+package com.xpn.spellnote.services.dictionary;
 
 import com.xpn.spellnote.models.DictionaryModel;
 
@@ -11,5 +11,5 @@ import io.reactivex.Single;
 public interface SavedDictionaryService {
 
     Single<ArrayList<DictionaryModel>> getSavedDictionaries();
-    Completable saveDictionaries(ArrayList <DictionaryModel> dictionaries );
+    Completable saveDictionary( DictionaryModel dictionary );
 }

@@ -34,7 +34,7 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
 
         DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
         viewModel = new SelectLanguagesVM(this,
-                diContext.getDictionariesService(),
+                diContext.getAvailableDictionariesService(),
                 diContext.getSavedDictionaryService(),
                 diContext.getWordsService(),
                 diContext.getSavedWordsService());

@@ -15,8 +15,6 @@ import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.ActivityEditDocumentBinding;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
-import com.xpn.spellnote.services.document.local.DocumentMapper;
-import com.xpn.spellnote.services.document.local.LocalDocumentServiceImpl;
 import com.xpn.spellnote.ui.document.edit.options.FragmentChooseEditingLanguage;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.TagsUtil;
@@ -45,8 +43,9 @@ public class ActivityEditDocument extends AppCompatActivity implements EditDocum
     public static void launchForResult(Activity context, String category, int requestCode) {
         DocumentModel document = new DocumentModel();
         document.setCategory(category);
-        // bad way
-        new LocalDocumentServiceImpl(new DocumentMapper()).saveDocument(document).subscribe();
+
+        DiContext diContext = ((SpellNoteApp) context.getApplication()).getDiContext();
+        diContext.getDocumentService().saveDocument(document).subscribe();
         launchForResult(context, document.getId(), requestCode );
     }
 
