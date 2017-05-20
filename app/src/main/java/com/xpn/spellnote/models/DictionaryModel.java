@@ -8,17 +8,19 @@ public class DictionaryModel {
     private String languageName;
     private String logoURL;
     private Integer version;
+    private int chunks;
 
-    public DictionaryModel(Long id,
-                           String locale,
-                           String languageName,
-                           String logoURL,
-                           Integer version ) {
+    public DictionaryModel(Long id, String locale, String languageName, String logoURL, Integer version ) {
+        this(id, locale, languageName, logoURL, version, 1);
+    }
+
+    public DictionaryModel(Long id, String locale, String languageName, String logoURL, Integer version, int chunks) {
         this.id = id;
         this.locale = locale;
         this.languageName = languageName;
         this.logoURL = logoURL;
         this.version = version;
+        this.chunks = chunks;
     }
 
 
@@ -40,6 +42,9 @@ public class DictionaryModel {
     }
     public Integer getVersion() {
         return version;
+    }
+    public Integer getChunks() {
+        return chunks;
     }
 
 

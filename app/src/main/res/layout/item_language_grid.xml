@@ -9,13 +9,12 @@
             type="com.xpn.spellnote.ui.language.LanguageItemVM" />
     </data>
 
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:orientation="vertical"
-        android:padding="8dp"
-        android:gravity="center_horizontal"
+        android:onClick="@{() -> viewModel.onClick()}"
         android:background="?attr/selectableItemBackgroundBorderless">
 
         <ImageView
@@ -25,7 +24,18 @@
             app:imageUrl="@{viewModel.logoUrl}"
             android:contentDescription="@null" />
 
+        <ImageView
+            android:id="@+id/language_package_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_nothing"
+            android:layout_alignRight="@+id/language_flag"
+            android:layout_alignEnd="@+id/language_flag"
+            android:layout_alignBottom="@+id/language_flag"
+            android:contentDescription="@null" />
+
         <TextView
+            android:id="@+id/language_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -34,6 +44,11 @@
             android:textColor="#aa000000"
             android:lines="2"
             android:ellipsize="end"
-            android:text="@{viewModel.languageName}" />
-    </LinearLayout>
+            android:text="@{viewModel.languageName}"
+            android:layout_below="@+id/language_flag"
+            android:layout_alignRight="@+id/language_flag"
+            android:layout_alignEnd="@+id/language_flag"
+            android:layout_alignLeft="@+id/language_flag"
+            android:layout_alignStart="@+id/language_flag"/>
+    </RelativeLayout>
 </layout>

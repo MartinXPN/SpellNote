@@ -14,6 +14,7 @@ import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.ActivitySelectLanguagesBinding;
+import com.xpn.spellnote.ui.util.Util;
 
 
 public class ActivitySelectLanguages extends AppCompatActivity implements SelectLanguagesVM.ViewContract {
@@ -34,10 +35,13 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
         DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
         viewModel = new SelectLanguagesVM(this,
                 diContext.getDictionariesService(),
-                diContext.getSavedDictionaryService());
+                diContext.getSavedDictionaryService(),
+                diContext.getWordsService(),
+                diContext.getSavedWordsService());
 
         binding.setViewModel(viewModel);
-        binding.languagesGrid.setLayoutManager(new GridLayoutManager(this, 3));
+        int numberOfColumns = (int) (Util.getWindowWidth(this) / getResources().getDimension(R.dimen.language_grid_column_width));
+        binding.languagesGrid.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
     }
 
     @Override
