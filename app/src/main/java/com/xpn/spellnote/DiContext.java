@@ -10,16 +10,16 @@ import com.xpn.spellnote.services.dictionary.all.DictionariesService;
 import com.xpn.spellnote.services.dictionary.saved.SavedDictionaryService;
 import com.xpn.spellnote.services.dictionary.saved.local.DictionaryMapper;
 import com.xpn.spellnote.services.dictionary.saved.local.DictionarySchema;
-import com.xpn.spellnote.services.dictionary.saved.local.LocalSavedDictionaryServiceImpl;
+import com.xpn.spellnote.services.dictionary.saved.local.SavedDictionaryServiceImpl;
 import com.xpn.spellnote.services.document.DocumentService;
 import com.xpn.spellnote.services.document.local.DocumentMapper;
 import com.xpn.spellnote.services.document.local.DocumentSchema;
 import com.xpn.spellnote.services.document.local.LocalDocumentServiceImpl;
 import com.xpn.spellnote.services.word.all.WordsService;
 import com.xpn.spellnote.services.word.saved.SavedWordsService;
-import com.xpn.spellnote.services.word.saved.realm.SavedWordsServiceImpl;
-import com.xpn.spellnote.services.word.saved.realm.WordMapper;
-import com.xpn.spellnote.services.word.saved.realm.WordSchema;
+import com.xpn.spellnote.services.word.saved.local.SavedWordsServiceImpl;
+import com.xpn.spellnote.services.word.saved.local.WordMapper;
+import com.xpn.spellnote.services.word.saved.local.WordSchema;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -47,7 +47,7 @@ public class DiContext {
     private final SavedWordsService savedWordsService;
 
 
-    public DiContext(Context context) {
+    DiContext(Context context) {
 
         // Mappers
         BeanMapper <DictionaryModel, DictionarySchema> dictionaryMapper = new DictionaryMapper();
@@ -57,8 +57,8 @@ public class DiContext {
         // Local DB services
         Realm.init(context);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
-        documentService = new LocalDocumentServiceImpl(documentMapper);
-        savedDictionaryService = new LocalSavedDictionaryServiceImpl(dictionaryMapper);
+        documentService = new LocalDocumentServiceImpl(realmConfiguration, documentMapper);
+        savedDictionaryService = new SavedDictionaryServiceImpl(realmConfiguration, dictionaryMapper);
         savedWordsService = new SavedWordsServiceImpl(realmConfiguration, wordMapper);
 
         // REST services

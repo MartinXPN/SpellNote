@@ -9,7 +9,6 @@ public class DictionaryMapper implements BeanMapper<DictionaryModel, DictionaryS
     @Override
     public DictionaryModel mapFrom(DictionarySchema source) {
         return new DictionaryModel(
-                source.getId(),
                 source.locale,
                 source.languageName,
                 source.logoURL,

@@ -19,7 +19,7 @@ import timber.log.Timber;
 public class LanguageItemVM extends BaseViewModel {
 
     private DictionaryModel dictionaryModel;
-    private Status status; /// what part of the dictionary is present (0 = none, 1 = whole)
+    private Status status;
     private final WordsService wordsService;
     private final SavedWordsService savedWordsService;
 

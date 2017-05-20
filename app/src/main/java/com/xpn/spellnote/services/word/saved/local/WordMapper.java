@@ -3,6 +3,7 @@ package com.xpn.spellnote.services.word.saved.local;
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.BeanMapper;
 
+
 public class WordMapper implements BeanMapper <WordModel, WordSchema> {
 
     @Override

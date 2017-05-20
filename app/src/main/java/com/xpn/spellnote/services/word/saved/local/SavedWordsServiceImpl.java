@@ -1,6 +1,5 @@
 package com.xpn.spellnote.services.word.saved.local;
 
-import com.activeandroid.ActiveAndroid;
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.BeanMapper;
 import com.xpn.spellnote.services.word.saved.SavedWordsService;
@@ -8,14 +7,17 @@ import com.xpn.spellnote.services.word.saved.SavedWordsService;
 import java.util.ArrayList;
 
 import io.reactivex.Completable;
-import timber.log.Timber;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 
 public class SavedWordsServiceImpl implements SavedWordsService {
 
     private final BeanMapper<WordModel, WordSchema> mapper;
+    private final RealmConfiguration realmConfiguration;
 
-    public SavedWordsServiceImpl(BeanMapper<WordModel, WordSchema> mapper) {
+    public SavedWordsServiceImpl(RealmConfiguration realmConfiguration, BeanMapper<WordModel, WordSchema> mapper) {
+        this.realmConfiguration = realmConfiguration;
         this.mapper = mapper;
     }
 
@@ -23,21 +25,12 @@ public class SavedWordsServiceImpl implements SavedWordsService {
     @Override
     public Completable saveAllWords(ArrayList<WordModel> words) {
         return Completable.fromAction(() -> {
-            ActiveAndroid.beginTransaction();
-            try {
-                int i = 0;
-                for (WordModel word : words ) {
-                    WordSchema schema = mapper.mapTo(word);
-                    schema.save();
-                    if( ++i % 1000 == 0 ) {
-                        Timber.d("Saved 1000 words");
-                    }
-                }
-                ActiveAndroid.setTransactionSuccessful();
-            }
-            finally {
-                ActiveAndroid.endTransaction();
-            }
+            Realm realmInstance = Realm.getInstance(realmConfiguration);
+            realmInstance.executeTransaction(realm -> {
+                for( WordModel word : words )
+                    realm.copyToRealmOrUpdate( mapper.mapTo(word) );
+            });
+            realmInstance.refresh();
         });
     }
 }

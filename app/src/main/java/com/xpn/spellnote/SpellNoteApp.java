@@ -1,6 +1,6 @@
 package com.xpn.spellnote;
 
-import com.activeandroid.app.Application;
+import android.app.Application;
 
 import timber.log.Timber;
 

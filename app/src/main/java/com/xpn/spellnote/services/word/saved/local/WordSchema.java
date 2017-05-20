@@ -1,18 +1,18 @@
 package com.xpn.spellnote.services.word.saved.local;
 
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
 import com.xpn.spellnote.models.WordModel;
 
+import io.realm.RealmObject;
+import io.realm.annotations.Index;
+import io.realm.annotations.PrimaryKey;
 
-@Table(name = "SavedWords")
-public class WordSchema extends Model {
 
-    @Column(index = true) private String word;
-    @Column(index = true) private Integer usage;
-    @Column(index = true) private String locale;
-    @Column private Boolean isUserDefined;
+public class WordSchema extends RealmObject {
+
+    @PrimaryKey private String word;
+    @Index private int usage;
+    @Index private String locale;
+    private boolean isUserDefined;
 
 
     public WordSchema() {
@@ -35,10 +35,10 @@ public class WordSchema extends Model {
         this.word = word;
     }
 
-    public Integer getUsage() {
+    public int getUsage() {
         return usage;
     }
-    public void setUsage(Integer usage) {
+    public void setUsage(int usage) {
         this.usage = usage;
     }
 
@@ -49,10 +49,10 @@ public class WordSchema extends Model {
         this.locale = locale;
     }
 
-    public Boolean getUserDefined() {
+    public boolean getUserDefined() {
         return isUserDefined;
     }
-    public void setUserDefined(Boolean userDefined) {
+    public void setUserDefined(boolean userDefined) {
         isUserDefined = userDefined;
     }
 }
