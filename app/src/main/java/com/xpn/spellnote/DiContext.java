@@ -22,6 +22,7 @@ import com.xpn.spellnote.services.word.saved.realm.WordMapper;
 import com.xpn.spellnote.services.word.saved.realm.WordSchema;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -55,10 +56,10 @@ public class DiContext {
 
         // Local DB services
         Realm.init(context);
-        Realm realm = Realm.getDefaultInstance();
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
         documentService = new LocalDocumentServiceImpl(documentMapper);
         savedDictionaryService = new LocalSavedDictionaryServiceImpl(dictionaryMapper);
-        savedWordsService = new SavedWordsServiceImpl(wordMapper);
+        savedWordsService = new SavedWordsServiceImpl(realmConfiguration, wordMapper);
 
         // REST services
         dictionariesService = retrofit.create(DictionariesService.class);

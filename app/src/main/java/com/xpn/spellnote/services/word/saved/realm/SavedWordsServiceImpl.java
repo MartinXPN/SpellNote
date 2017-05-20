@@ -14,19 +14,23 @@ import io.realm.RealmConfiguration;
 public class SavedWordsServiceImpl implements SavedWordsService {
 
     private final BeanMapper<WordModel, WordSchema> mapper;
+    private final RealmConfiguration realmConfiguration;
 
-    public SavedWordsServiceImpl(BeanMapper<WordModel, WordSchema> mapper) {
+    public SavedWordsServiceImpl(RealmConfiguration realmConfiguration, BeanMapper<WordModel, WordSchema> mapper) {
+        this.realmConfiguration = realmConfiguration;
         this.mapper = mapper;
     }
 
 
     @Override
     public Completable saveAllWords(ArrayList<WordModel> words) {
-        return Completable.fromAction(() -> Realm
-                .getInstance( new RealmConfiguration.Builder().build() )
-                .executeTransaction(realm -> {
-                    for( WordModel word : words )
-                        realm.copyToRealmOrUpdate( mapper.mapTo(word) );
-                }));
+        return Completable.fromAction(() -> {
+            Realm realm = Realm.getInstance(realmConfiguration);
+            realm.executeTransaction(realmInstance -> {
+                        for( WordModel word : words )
+                            realmInstance.copyToRealmOrUpdate( mapper.mapTo(word) );
+                    });
+            realm.close();
+        });
     }
 }

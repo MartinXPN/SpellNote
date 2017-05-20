@@ -19,11 +19,11 @@ import timber.log.Timber;
 public class LanguageItemVM extends BaseViewModel {
 
     private DictionaryModel dictionaryModel;
-    private Status status;
+    private Status status; /// what part of the dictionary is present (0 = none, 1 = whole)
     private final WordsService wordsService;
     private final SavedWordsService savedWordsService;
 
-    public enum Status {SAVED, PENDING_SAVING, DOWNLOADED, PENDING_DOWNLOAD, PENDING_REMOVAL, NOT_PRESENT}
+    enum Status {SAVED, IN_PROGRESS, NOT_PRESENT}
 
     LanguageItemVM(DictionaryModel dictionaryModel, Status status, WordsService wordsService, SavedWordsService savedWordsService) {
         this.dictionaryModel = dictionaryModel;
@@ -44,8 +44,9 @@ public class LanguageItemVM extends BaseViewModel {
         downloadLanguage();
     }
 
+
     private void downloadLanguage() {
-        status = Status.PENDING_DOWNLOAD;
+        status = Status.IN_PROGRESS;
         notifyPropertyChanged(BR.status);
 
         addSubscription(wordsService
@@ -55,11 +56,8 @@ public class LanguageItemVM extends BaseViewModel {
                 .subscribe(
                         words -> {
                             Timber.d("Loaded " + words.size() + " words!");
-                            status = Status.DOWNLOADED;
-                            notifyPropertyChanged(BR.status);
                             ArrayList <WordModel> resultWords = new ArrayList<>(words.values());
-                            words = null;   /// leave for a garbage collector
-                            System.gc();    /// collect garbage
+                            words.clear();  // free up memory
                             saveLanguage(resultWords);
                         },
                         throwable -> {
@@ -71,8 +69,6 @@ public class LanguageItemVM extends BaseViewModel {
     }
 
     private void saveLanguage(ArrayList <WordModel> words) {
-        status = Status.PENDING_SAVING;
-        notifyPropertyChanged(BR.status);
 
         addSubscription( savedWordsService
                 .saveAllWords(words)
@@ -81,6 +77,7 @@ public class LanguageItemVM extends BaseViewModel {
                 .subscribe(
                         () -> {
                             status = Status.SAVED;
+                            words.clear();
                             notifyPropertyChanged(BR.status);
                             Timber.d("SAVED ALL WORDS!!!");
                         },

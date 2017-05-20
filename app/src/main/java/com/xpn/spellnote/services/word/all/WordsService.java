@@ -12,5 +12,5 @@ import retrofit2.http.Path;
 public interface WordsService {
 
     @GET( "words/{locale}.json" )
-    Observable<Map<String, WordModel>> getWords(@Path("locale") String locale );
+    Observable<Map<String, WordModel>> getWords(@Path("locale") String locale);
 }
