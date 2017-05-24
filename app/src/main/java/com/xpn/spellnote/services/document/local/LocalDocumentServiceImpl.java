@@ -62,8 +62,8 @@ public class LocalDocumentServiceImpl implements DocumentService {
     public Single<DocumentModel> getDocument(Long id) {
         return Single.defer(() -> {
             Realm realmInstance = Realm.getInstance(realmConfiguration);
-            DocumentSchema document = realmInstance.where(DocumentSchema.class).equalTo("id", id).findFirst();
             realmInstance.refresh();
+            DocumentSchema document = realmInstance.where(DocumentSchema.class).equalTo("id", id).findFirst();
             return Single.just(mapper.mapFrom(document));
         });
     }
@@ -73,11 +73,11 @@ public class LocalDocumentServiceImpl implements DocumentService {
 
         return Single.defer(() -> {
             Realm realmInstance = Realm.getInstance(realmConfiguration);
+            realmInstance.refresh();
             RealmResults<DocumentSchema> documents = realmInstance.where(DocumentSchema.class)
                     .equalTo("category", category)
                     .findAllSorted(orderField, ascending ? Sort.ASCENDING : Sort.DESCENDING);
 
-            realmInstance.refresh();
             return Single.just( Stream.of(documents)
                     .map(mapper::mapFrom)
                     .collect(Collectors.toCollection(ArrayList::new)));
