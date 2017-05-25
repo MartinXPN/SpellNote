@@ -7,7 +7,7 @@ import io.reactivex.disposables.Disposable;
 
 public abstract class BaseViewModel extends BaseObservable implements ViewModelLifecycle {
 
-    private CompositeDisposable subscriptions = new CompositeDisposable();
+    protected CompositeDisposable subscriptions = new CompositeDisposable();
 
     @Override
     public void onStart() {

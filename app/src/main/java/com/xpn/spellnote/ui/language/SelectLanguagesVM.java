@@ -55,8 +55,8 @@ public class SelectLanguagesVM extends BaseViewModel {
 
         //  Locale -> ItemVM
         Map<String, LanguageItemVM> viewModels = new TreeMap<>();
-        for(DictionaryModel dictionary : allDictionaries)       viewModels.put( dictionary.getLocale(), new LanguageItemVM(dictionary, LanguageItemVM.Status.NOT_PRESENT, wordsService, savedWordsService) );
-        for(DictionaryModel dictionary : savedDictionaries)     viewModels.put( dictionary.getLocale(), new LanguageItemVM(dictionary, LanguageItemVM.Status.SAVED,       wordsService, savedWordsService) );
+        for(DictionaryModel dictionary : allDictionaries)       viewModels.put( dictionary.getLocale(), new LanguageItemVM(viewContract, dictionary, LanguageItemVM.Status.NOT_PRESENT, wordsService, savedWordsService, savedDictionaryService) );
+        for(DictionaryModel dictionary : savedDictionaries)     viewModels.put( dictionary.getLocale(), new LanguageItemVM(viewContract, dictionary, LanguageItemVM.Status.SAVED,       wordsService, savedWordsService, savedDictionaryService) );
 
         listViewModels = new ArrayList<>(viewModels.values());
         notifyPropertyChanged(BR.listViewModels);
@@ -68,6 +68,6 @@ public class SelectLanguagesVM extends BaseViewModel {
     }
 
 
-    interface ViewContract {
+    interface ViewContract extends LanguageItemVM.ViewContract {
     }
 }
