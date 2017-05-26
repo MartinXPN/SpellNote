@@ -41,7 +41,7 @@
         <ProgressBar
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:visibility="@{viewModel.status == Status.IN_PROGRESS ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.status == Status.SAVE_IN_PROGRESS || viewModel.status == Status.DELETE_IN_PROGRESS ? View.VISIBLE : View.GONE}"
             android:layout_alignRight="@+id/language_flag"
             android:layout_alignEnd="@+id/language_flag"
             android:layout_alignBottom="@+id/language_flag" />

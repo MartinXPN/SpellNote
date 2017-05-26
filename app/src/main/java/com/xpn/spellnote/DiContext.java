@@ -58,7 +58,7 @@ public class DiContext {
         Realm.init(context);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
         documentService = new LocalDocumentServiceImpl(realmConfiguration, documentMapper);
-        savedDictionaryService = new SavedDictionaryServiceImpl(realmConfiguration, dictionaryMapper);
+        savedDictionaryService = new SavedDictionaryServiceImpl(realmConfiguration, dictionaryMapper, wordMapper);
         savedWordsService = new SavedWordsServiceImpl(realmConfiguration, wordMapper);
 
         // REST services

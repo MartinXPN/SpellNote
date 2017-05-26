@@ -7,15 +7,16 @@ import java.util.Date;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 
 public class DocumentSchema extends RealmObject {
 
-    @PrimaryKey Long id;
+    @PrimaryKey @Required Long id;
     String title;
     String content;
-    Date dateModified;
-    String languageLocale;
+    @Index @Required Date dateModified;
+    @Index @Required String languageLocale;
     String color;
     @Index String category;
 

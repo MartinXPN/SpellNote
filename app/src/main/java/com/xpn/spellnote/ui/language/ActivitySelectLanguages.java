@@ -36,8 +36,7 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
         viewModel = new SelectLanguagesVM(this,
                 diContext.getAvailableDictionariesService(),
                 diContext.getSavedDictionaryService(),
-                diContext.getWordsService(),
-                diContext.getSavedWordsService());
+                diContext.getWordsService());
 
         binding.setViewModel(viewModel);
         int numberOfColumns = (int) (Util.getWindowWidth(this) / getResources().getDimension(R.dimen.language_grid_column_width));
