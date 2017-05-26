@@ -7,6 +7,9 @@
         <variable
             name="viewModel"
             type="com.xpn.spellnote.ui.language.LanguageItemVM" />
+
+        <import type="com.xpn.spellnote.ui.language.LanguageItemVM.Status"/>
+        <import type="android.view.View"/>
     </data>
 
     <RelativeLayout
@@ -25,14 +28,23 @@
             android:contentDescription="@null" />
 
         <ImageView
-            android:id="@+id/language_package_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_nothing"
+            android:src="@drawable/ic_supported"
+            android:visibility="@{viewModel.status == Status.SAVED ? View.VISIBLE : View.GONE}"
             android:layout_alignRight="@+id/language_flag"
             android:layout_alignEnd="@+id/language_flag"
             android:layout_alignBottom="@+id/language_flag"
             android:contentDescription="@null" />
+
+
+        <ProgressBar
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="@{viewModel.status == Status.SAVE_IN_PROGRESS || viewModel.status == Status.DELETE_IN_PROGRESS ? View.VISIBLE : View.GONE}"
+            android:layout_alignRight="@+id/language_flag"
+            android:layout_alignEnd="@+id/language_flag"
+            android:layout_alignBottom="@+id/language_flag" />
 
         <TextView
             android:id="@+id/language_name"

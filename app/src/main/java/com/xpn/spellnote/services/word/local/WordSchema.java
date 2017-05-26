@@ -5,13 +5,14 @@ import com.xpn.spellnote.models.WordModel;
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 
 public class WordSchema extends RealmObject {
 
-    @PrimaryKey private String word;
+    @PrimaryKey @Required private String word;
     @Index private int usage;
-    @Index private String locale;
+    @Index @Required private String locale;
     private boolean isUserDefined;
 
 

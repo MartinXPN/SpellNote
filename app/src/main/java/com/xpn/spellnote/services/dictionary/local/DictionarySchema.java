@@ -4,13 +4,14 @@ import com.xpn.spellnote.models.DictionaryModel;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 
 public class DictionarySchema extends RealmObject {
 
-    @PrimaryKey String locale;
-    String languageName;
-    String logoURL;
+    @PrimaryKey @Required String locale;
+    @Required String languageName;
+    @Required String logoURL;
     Integer version;
 
     public DictionarySchema() {

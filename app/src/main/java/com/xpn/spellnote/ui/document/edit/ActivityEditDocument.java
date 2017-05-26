@@ -1,6 +1,6 @@
 package com.xpn.spellnote.ui.document.edit;
 
-import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
@@ -22,6 +23,8 @@ import com.xpn.spellnote.util.Util;
 
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
 
 public class ActivityEditDocument extends AppCompatActivity implements EditDocumentVM.ViewContract, FragmentChooseEditingLanguage.OnLanguageSelectedListener {
 
@@ -34,19 +37,26 @@ public class ActivityEditDocument extends AppCompatActivity implements EditDocum
     private EditDocumentVM viewModel;
 
 
-    public static void launchForResult(Activity context, Long documentId, int requestCode) {
-        Intent i = new Intent( context, ActivityEditDocument.class );
+    public static void launchForResult(Fragment fragment, Long documentId, int requestCode) {
+        Intent i = new Intent( fragment.getActivity(), ActivityEditDocument.class );
         i.putExtra( EXTRA_DOCUMENT_ID, documentId );
-        context.startActivityForResult( i, requestCode );
+        Timber.d("Starting activity for result with request code: " + requestCode);
+        fragment.startActivityForResult( i, requestCode );
     }
 
-    public static void launchForResult(Activity context, String category, int requestCode) {
+    public static void launchForResult(Fragment fragment, String category, int requestCode) {
         DocumentModel document = new DocumentModel();
         document.setCategory(category);
 
-        DiContext diContext = ((SpellNoteApp) context.getApplication()).getDiContext();
-        diContext.getDocumentService().saveDocument(document).subscribe();
-        launchForResult(context, document.getId(), requestCode );
+        DiContext diContext = ((SpellNoteApp) fragment.getActivity().getApplication()).getDiContext();
+        diContext.getDocumentService()
+                .saveDocument(document)
+                .subscribe(
+                        () -> launchForResult(fragment, document.getId(), requestCode ),
+                        throwable -> {
+                            Toast.makeText(fragment.getActivity(), "Couldn't create document", Toast.LENGTH_SHORT).show();
+                            Timber.e(throwable);
+                        });
     }
 
     @Override

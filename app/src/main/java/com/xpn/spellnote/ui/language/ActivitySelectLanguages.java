@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.xpn.spellnote.DiContext;
@@ -19,13 +20,12 @@ import com.xpn.spellnote.ui.util.Util;
 
 public class ActivitySelectLanguages extends AppCompatActivity implements SelectLanguagesVM.ViewContract {
 
-    private ActivitySelectLanguagesBinding binding;
     private SelectLanguagesVM viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_select_languages);
+        ActivitySelectLanguagesBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_select_languages);
 
         /// setup the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -36,8 +36,7 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
         viewModel = new SelectLanguagesVM(this,
                 diContext.getAvailableDictionariesService(),
                 diContext.getSavedDictionaryService(),
-                diContext.getWordsService(),
-                diContext.getSavedWordsService());
+                diContext.getWordsService());
 
         binding.setViewModel(viewModel);
         int numberOfColumns = (int) (Util.getWindowWidth(this) / getResources().getDimension(R.dimen.language_grid_column_width));
@@ -66,5 +65,15 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
                 .resizeDimen(R.dimen.language_flag_size, R.dimen.language_flag_size)
                 .centerCrop()
                 .into(view);
+    }
+
+    @Override
+    public void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

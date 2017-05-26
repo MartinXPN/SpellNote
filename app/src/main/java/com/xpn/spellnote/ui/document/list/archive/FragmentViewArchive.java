@@ -25,7 +25,7 @@ public class FragmentViewArchive extends BaseFragmentDocumentList {
         FragmentViewArchiveBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_archive, container, false);
         binding.list.setAdapter(adapter);
 
-        binding.addDocument.setOnClickListener(view -> ActivityEditDocument.launchForResult(getActivity(), getCategory(), Codes.EDIT_DOCUMENT_CODE));
+        binding.addDocument.setOnClickListener(view -> ActivityEditDocument.launchForResult(this, getCategory(), Codes.EDIT_DOCUMENT_CODE));
         return binding.getRoot();
     }
 
