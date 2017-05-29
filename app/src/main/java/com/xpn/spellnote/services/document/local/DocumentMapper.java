@@ -21,15 +21,7 @@ public class DocumentMapper implements BeanMapper<DocumentModel, DocumentSchema>
 
     @Override
     public DocumentSchema mapTo(DocumentModel source) {
-        DocumentSchema result = new DocumentSchema(
-                source.getId(),
-                source.getTitle(),
-                source.getContent(),
-                source.getDateModified(),
-                source.getLanguageLocale(),
-                source.getColor(),
-                source.getCategory()
-        );
+        DocumentSchema result = new DocumentSchema(source);
 
         // update model
         if( source.getId() == -1 )
