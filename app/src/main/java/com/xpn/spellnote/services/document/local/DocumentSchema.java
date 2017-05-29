@@ -12,7 +12,7 @@ import io.realm.annotations.Required;
 
 public class DocumentSchema extends RealmObject {
 
-    @PrimaryKey @Required Long id;
+    @PrimaryKey long id;
     String title;
     String content;
     @Index @Required Date dateModified;
