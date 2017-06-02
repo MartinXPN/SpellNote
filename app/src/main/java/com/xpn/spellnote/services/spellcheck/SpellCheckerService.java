@@ -1,11 +1,14 @@
 package com.xpn.spellnote.services.spellcheck;
 
+import com.xpn.spellnote.models.WordModel;
+
 import java.util.List;
-import java.util.Map;
+
+import io.reactivex.Single;
 
 
 public interface SpellCheckerService {
 
-    boolean isWordCorrect(String word, String locale);
-    Map <String, Boolean> areWordsCorrect(List <String> words, String locale);
+    Single<Boolean> isWordCorrect(String word, String locale);
+    Single<List<WordModel>> getCorrectWords(List <String> words, String locale);
 }

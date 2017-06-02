@@ -17,6 +17,10 @@ import com.xpn.spellnote.services.document.DocumentService;
 import com.xpn.spellnote.services.document.local.DocumentMapper;
 import com.xpn.spellnote.services.document.local.DocumentSchema;
 import com.xpn.spellnote.services.document.local.LocalDocumentServiceImpl;
+import com.xpn.spellnote.services.spellcheck.SpellCheckerService;
+import com.xpn.spellnote.services.spellcheck.SuggestionService;
+import com.xpn.spellnote.services.spellcheck.local.SpellCheckerServiceImpl;
+import com.xpn.spellnote.services.spellcheck.local.SuggestionServiceImpl;
 import com.xpn.spellnote.services.word.WordsService;
 
 import io.realm.Realm;
@@ -42,6 +46,8 @@ public class DiContext {
     private final SavedDictionaryService savedDictionaryService;
     private final AvailableDictionariesService availableDictionariesService;
     private final WordsService wordsService;
+    private final SpellCheckerService spellCheckerService;
+    private final SuggestionService suggestionService;
 
 
     DiContext(Context context) {
@@ -56,6 +62,8 @@ public class DiContext {
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
         documentService = new LocalDocumentServiceImpl(realmConfiguration, documentMapper);
         savedDictionaryService = new SavedDictionaryServiceImpl(realmConfiguration, dictionaryMapper, wordMapper);
+        spellCheckerService = new SpellCheckerServiceImpl(realmConfiguration, wordMapper);
+        suggestionService = new SuggestionServiceImpl(realmConfiguration, wordMapper);
 
         // REST services
         availableDictionariesService = retrofit.create(AvailableDictionariesService.class);
@@ -74,5 +82,11 @@ public class DiContext {
     }
     public WordsService getWordsService() {
         return wordsService;
+    }
+    public SpellCheckerService getSpellCheckerService() {
+        return spellCheckerService;
+    }
+    public SuggestionService getSuggestionService() {
+        return suggestionService;
     }
 }
