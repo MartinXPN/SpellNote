@@ -1,4 +1,4 @@
-package com.xpn.spellnote.services.word.local;
+package com.xpn.spellnote.services.dictionary.local;
 
 import com.xpn.spellnote.models.WordModel;
 

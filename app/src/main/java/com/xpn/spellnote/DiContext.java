@@ -11,15 +11,13 @@ import com.xpn.spellnote.services.dictionary.SavedDictionaryService;
 import com.xpn.spellnote.services.dictionary.local.DictionaryMapper;
 import com.xpn.spellnote.services.dictionary.local.DictionarySchema;
 import com.xpn.spellnote.services.dictionary.local.SavedDictionaryServiceImpl;
+import com.xpn.spellnote.services.dictionary.local.WordMapper;
+import com.xpn.spellnote.services.dictionary.local.WordSchema;
 import com.xpn.spellnote.services.document.DocumentService;
 import com.xpn.spellnote.services.document.local.DocumentMapper;
 import com.xpn.spellnote.services.document.local.DocumentSchema;
 import com.xpn.spellnote.services.document.local.LocalDocumentServiceImpl;
-import com.xpn.spellnote.services.word.SavedWordsService;
 import com.xpn.spellnote.services.word.WordsService;
-import com.xpn.spellnote.services.word.local.SavedWordsServiceImpl;
-import com.xpn.spellnote.services.word.local.WordMapper;
-import com.xpn.spellnote.services.word.local.WordSchema;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -44,7 +42,6 @@ public class DiContext {
     private final SavedDictionaryService savedDictionaryService;
     private final AvailableDictionariesService availableDictionariesService;
     private final WordsService wordsService;
-    private final SavedWordsService savedWordsService;
 
 
     DiContext(Context context) {
@@ -59,7 +56,6 @@ public class DiContext {
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
         documentService = new LocalDocumentServiceImpl(realmConfiguration, documentMapper);
         savedDictionaryService = new SavedDictionaryServiceImpl(realmConfiguration, dictionaryMapper, wordMapper);
-        savedWordsService = new SavedWordsServiceImpl(realmConfiguration, wordMapper);
 
         // REST services
         availableDictionariesService = retrofit.create(AvailableDictionariesService.class);
@@ -78,8 +74,5 @@ public class DiContext {
     }
     public WordsService getWordsService() {
         return wordsService;
-    }
-    public SavedWordsService getSavedWordsService() {
-        return savedWordsService;
     }
 }
