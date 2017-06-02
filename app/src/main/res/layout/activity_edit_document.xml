@@ -5,6 +5,10 @@
         <variable
             name="model"
             type="com.xpn.spellnote.ui.document.edit.EditDocumentVM" />
+
+        <variable
+            name="editingLanguageChooserVM"
+            type="com.xpn.spellnote.ui.document.edit.options.EditingLanguageChooserVM" />
     </data>
 
     <RelativeLayout
@@ -38,7 +42,7 @@
             android:layout_below="@id/toolbar_box"
             android:overScrollMode="ifContentScrolls" >
 
-            <com.xpn.spellnote.ui.document.edit.content.EditCorrectText
+            <com.xpn.spellnote.ui.document.edit.EditCorrectText
                 android:id="@+id/content"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -57,15 +61,12 @@
         </ScrollView>
 
 
-        <fragment
-            android:id="@+id/choose_editing_language"
+        <include
+            android:id="@+id/editing_language_chooser"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:name="com.xpn.spellnote.ui.document.edit.options.FragmentChooseEditingLanguage"
-            tools:layout="@layout/fragment_choose_editing_language" />
+            layout="@layout/editing_language_chooser"
+            app:viewModel="@{editingLanguageChooserVM}"/>
 
 
         <View

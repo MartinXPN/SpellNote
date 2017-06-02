@@ -6,8 +6,10 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.xpn.spellnote.DiContext;
@@ -16,7 +18,7 @@ import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.ActivityEditDocumentBinding;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
-import com.xpn.spellnote.ui.document.edit.options.FragmentChooseEditingLanguage;
+import com.xpn.spellnote.ui.document.edit.options.EditingLanguageChooserVM;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
@@ -26,7 +28,9 @@ import java.util.ArrayList;
 import timber.log.Timber;
 
 
-public class ActivityEditDocument extends AppCompatActivity implements EditDocumentVM.ViewContract, FragmentChooseEditingLanguage.OnLanguageSelectedListener {
+public class ActivityEditDocument extends AppCompatActivity
+        implements EditDocumentVM.ViewContract,
+        EditingLanguageChooserVM.ViewContract {
 
     private static final String EXTRA_DOCUMENT_ID = "doc_id";
     private static final Integer SPEECH_RECOGNIZER_CODE = 1;
@@ -35,6 +39,7 @@ public class ActivityEditDocument extends AppCompatActivity implements EditDocum
 
     private ActivityEditDocumentBinding binding;
     private EditDocumentVM viewModel;
+    private EditingLanguageChooserVM editingLanguageChooserVM;
 
 
     public static void launchForResult(Fragment fragment, Long documentId, int requestCode) {
@@ -65,21 +70,36 @@ public class ActivityEditDocument extends AppCompatActivity implements EditDocum
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_document);
 
+        /// set-up view-models
         DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
-        viewModel = new EditDocumentVM(
-                this,
+        viewModel = new EditDocumentVM(this,
                 getIntent().getExtras().getLong(EXTRA_DOCUMENT_ID),
                 diContext.getDocumentService());
+
+        editingLanguageChooserVM = new EditingLanguageChooserVM(this,
+                diContext.getSavedDictionaryService());
+
         binding.setModel(viewModel);
+        binding.setEditingLanguageChooserVM(editingLanguageChooserVM);
 
         /// set-up the actionbar
         setSupportActionBar(binding.toolbar);
         binding.toolbar.setNavigationOnClickListener(v -> finish());
+
+
+        /// set-up editing language chooser
+        int numberOfItems = 3; /// number of dictionaries shown in one row
+        GridLayoutManager layoutManager = new GridLayoutManager(this, numberOfItems);
+        layoutManager.setAutoMeasureEnabled(true);
+        binding.editingLanguageChooser.supportedLanguagesGrid.setHasFixedSize(true);
+        binding.editingLanguageChooser.supportedLanguagesGrid.setNestedScrollingEnabled(false);
+        binding.editingLanguageChooser.supportedLanguagesGrid.setLayoutManager(layoutManager);
     }
 
     @Override
     protected void onStart() {
         viewModel.onStart();
+        editingLanguageChooserVM.onStart();
         super.onStart();
     }
 
@@ -87,6 +107,7 @@ public class ActivityEditDocument extends AppCompatActivity implements EditDocum
     protected void onDestroy() {
         viewModel.onSaveDocument();
         viewModel.onDestroy();
+        editingLanguageChooserVM.onDestroy();
         super.onDestroy();
     }
 
@@ -130,6 +151,7 @@ public class ActivityEditDocument extends AppCompatActivity implements EditDocum
     }
 
 
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == SPEECH_RECOGNIZER_CODE && resultCode == RESULT_OK && data != null) {
@@ -146,6 +168,24 @@ public class ActivityEditDocument extends AppCompatActivity implements EditDocum
 
     @Override
     public void onLanguageSelected(DictionaryModel dictionary) {
+        hideAvailableLanguages();
+        editingLanguageChooserVM.setCurrentLanguage(dictionary);
+    }
 
+    @Override
+    public void showAvailableLanguages() {
+        binding.editingLanguageChooser.currentLanguage.setVisibility( View.GONE );
+        binding.editingLanguageChooser.supportedLanguagesCard.setVisibility( View.VISIBLE );
+    }
+
+    @Override
+    public void hideAvailableLanguages() {
+        binding.editingLanguageChooser.supportedLanguagesCard.setVisibility( View.GONE );
+        binding.editingLanguageChooser.currentLanguage.setVisibility( View.VISIBLE );
+    }
+
+    @Override
+    public boolean isLanguageListOpen() {
+        return binding.editingLanguageChooser.supportedLanguagesCard.getVisibility() == View.VISIBLE;
     }
 }

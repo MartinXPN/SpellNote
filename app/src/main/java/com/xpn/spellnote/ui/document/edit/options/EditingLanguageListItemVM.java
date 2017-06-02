@@ -14,6 +14,10 @@ public class EditingLanguageListItemVM extends BaseViewModel {
         this.dictionary = dictionary;
     }
 
+    public String getLogoUrl() {
+        return dictionary.getLogoURL();
+    }
+
     public String getLanguageName() {
         return dictionary.getLanguageName();
     }

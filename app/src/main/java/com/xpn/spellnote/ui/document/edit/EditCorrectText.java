@@ -1,4 +1,4 @@
-package com.xpn.spellnote.ui.document.edit.content;
+package com.xpn.spellnote.ui.document.edit;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatEditText;
