@@ -8,7 +8,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.xpn.spellnote.ui.document.edit.options.EditingLanguageChooserVM" />
+            type="com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserVM" />
     </data>
 
     <RelativeLayout

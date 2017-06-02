@@ -1,4 +1,4 @@
-package com.xpn.spellnote.ui.document.edit.options;
+package com.xpn.spellnote.ui.document.edit.editinglanguage;
 
 import android.databinding.Bindable;
 
