@@ -58,6 +58,21 @@ public class EditCorrectText extends AppCompatEditText {
         getText().setSpan( new ForegroundColorSpan(color), left, right, 0 );
     }
 
+
+    /**
+     * Mark all occurrences of a word with a specified color
+     * in the range [left, right]
+     */
+    public void markWord(String word, int left, int right, int color) {
+        String text = getText().toString();
+        int index = text.indexOf(word, left);
+
+        while(index >= 0 && index < right) {
+            markText(index, index + text.length(), color);
+            index = text.indexOf(word, index + 1);
+        }
+    }
+
     /**
      * Removes all punctuation marks and splits by ' '
      * @return all nonempty strings found after that operation
@@ -95,6 +110,10 @@ public class EditCorrectText extends AppCompatEditText {
         while( index > 0 && isWordCharacter(text.charAt(index-1))) {
             --index;
         }
+
+        /// words contain '-' but they don't start with it
+        while( index < text.length() && text.charAt(index) == '-')
+            ++index;
         return index;
     }
 
