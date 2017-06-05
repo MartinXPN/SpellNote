@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +27,7 @@ import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -74,7 +78,9 @@ public class ActivityEditDocument extends AppCompatActivity
         DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
         viewModel = new EditDocumentVM(this,
                 getIntent().getExtras().getLong(EXTRA_DOCUMENT_ID),
-                diContext.getDocumentService());
+                diContext.getDocumentService(),
+                diContext.getSpellCheckerService(),
+                diContext.getSuggestionService());
 
         editingLanguageChooserVM = new EditingLanguageChooserVM(this,
                 diContext.getSavedDictionaryService());
@@ -94,6 +100,29 @@ public class ActivityEditDocument extends AppCompatActivity
         binding.editingLanguageChooser.supportedLanguagesGrid.setHasFixedSize(true);
         binding.editingLanguageChooser.supportedLanguagesGrid.setNestedScrollingEnabled(false);
         binding.editingLanguageChooser.supportedLanguagesGrid.setLayoutManager(layoutManager);
+
+
+        /// set-up edit-correct text
+        binding.content.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                int left = start - 10;
+                int right = start + count + 10;
+                List<String> words = binding.content.getWords(
+                        binding.content.getWordStart(left),
+                        binding.content.getWordEnd(right)
+                );
+
+                viewModel.checkSpelling(left, right, words);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
     }
 
     @Override
@@ -164,6 +193,25 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     public void onDocumentAvailable(DocumentModel document) {
+    }
+
+    @Override
+    public DictionaryModel getCurrentDictionary() {
+        return editingLanguageChooserVM.getCurrentLanguage();
+    }
+
+    @Override
+    public void markIncorrect(int left, int right, List<String> incorrectWords) {
+        for( String word : incorrectWords ) {
+            binding.content.markWord( word, left, right, ContextCompat.getColor(this, R.color.text_wrong));
+        }
+    }
+
+    @Override
+    public void markCorrect(int left, int right, List<String> correctWords) {
+        for( String word : correctWords ) {
+            binding.content.markWord( word, left, right, ContextCompat.getColor(this, R.color.text_correct));
+        }
     }
 
     @Override

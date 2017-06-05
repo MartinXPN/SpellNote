@@ -55,16 +55,20 @@ public class EditCorrectText extends AppCompatEditText {
 
     public void markText(int left, int right, int color) {
         // color = Color.parseColor("#D20000")
+        left = Math.max( left, 0 );
+        right = Math.min( right, getText().length() );
         getText().setSpan( new ForegroundColorSpan(color), left, right, 0 );
     }
 
 
     /**
      * Mark all occurrences of a word with a specified color
-     * in the range [left, right]
+     * in the range [left, right)
      */
     public void markWord(String word, int left, int right, int color) {
         String text = getText().toString();
+        left = Math.max( left, 0 );
+        right = Math.min( right, text.length() );
         int index = text.indexOf(word, left);
 
         while(index >= 0 && index < right) {

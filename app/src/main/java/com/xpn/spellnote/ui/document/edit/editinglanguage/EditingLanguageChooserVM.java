@@ -33,6 +33,10 @@ public class EditingLanguageChooserVM extends BaseViewModel {
         loadSupportedDictionaries();
     }
 
+    public DictionaryModel getCurrentLanguage() {
+        return currentLanguage;
+    }
+
     @Bindable
     public String getCurrentLanguageLogoUrl() {
         if( currentLanguage == null )

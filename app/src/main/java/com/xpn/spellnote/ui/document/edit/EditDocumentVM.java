@@ -1,11 +1,21 @@
 package com.xpn.spellnote.ui.document.edit;
 
 import android.databinding.Bindable;
+import android.util.Pair;
 
 import com.xpn.spellnote.BR;
+import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
+import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.document.DocumentService;
+import com.xpn.spellnote.services.spellcheck.SpellCheckerService;
+import com.xpn.spellnote.services.spellcheck.SuggestionService;
 import com.xpn.spellnote.ui.BaseViewModel;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -15,14 +25,25 @@ import timber.log.Timber;
 public class EditDocumentVM extends BaseViewModel {
 
     private ViewContract viewContract;
-    private DocumentService documentService;
+    private final DocumentService documentService;
+    private final SpellCheckerService spellCheckerService;
+    private final SuggestionService suggestionService;
+
     private DocumentModel document = new DocumentModel();
     private Long documentId;
 
-    EditDocumentVM(ViewContract viewContract, Long documentId, DocumentService documentService) {
+
+    EditDocumentVM(ViewContract viewContract,
+                   Long documentId,
+                   DocumentService documentService,
+                   SpellCheckerService spellCheckerService,
+                   SuggestionService suggestionService) {
+
         this.viewContract = viewContract;
         this.documentId = documentId;
         this.documentService = documentService;
+        this.spellCheckerService = spellCheckerService;
+        this.suggestionService = suggestionService;
     }
 
     @Override
@@ -70,7 +91,36 @@ public class EditDocumentVM extends BaseViewModel {
         notifyPropertyChanged(BR.content);
     }
 
+
+    /// check spelling of the text on the interval [left, right]
+    void checkSpelling(int left, int right, List <String> words) {
+        addSubscription(spellCheckerService
+                .getCorrectWords(words, viewContract.getCurrentDictionary().getLocale())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(correctWordModels -> {
+                    Set <String> wrongWords = new HashSet<>(words);
+                    List <String> correctWords = new ArrayList<>();
+                    for(WordModel word : correctWordModels ) {
+                        wrongWords.remove(word.getWord());
+                        correctWords.add(word.getWord());
+                    }
+
+                    return new Pair<>( new ArrayList<>(wrongWords), correctWords );
+                })
+                .subscribe(
+                        wrongCorrectWords -> {
+                            viewContract.markIncorrect(left, right, wrongCorrectWords.first);
+                            viewContract.markCorrect(left, right, wrongCorrectWords.second);
+                        },
+                        Timber::e
+                ));
+    }
+
     public interface ViewContract {
         void onDocumentAvailable(DocumentModel document);
+        DictionaryModel getCurrentDictionary();
+        void markIncorrect(int left, int right, List <String> incorrectWords);
+        void markCorrect(int left, int right, List <String> correctWords);
     }
 }
