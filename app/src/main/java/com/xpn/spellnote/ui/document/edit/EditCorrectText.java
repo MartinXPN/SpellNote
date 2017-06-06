@@ -72,7 +72,15 @@ public class EditCorrectText extends AppCompatEditText {
         int index = text.indexOf(word, left);
 
         while(index >= 0 && index < right) {
-            markText(index, index + text.length(), color);
+            /// define boundaries of the current word that needs to be marked
+            int leftIndex = index - 1;
+            int rightIndex = index + word.length();
+
+            /// check if it's a word not a substring
+            if( ( ( leftIndex >= 0              && !isWordCharacter(text.charAt(leftIndex)) ) || leftIndex == -1 ) &&
+                ( ( rightIndex < text.length()  && !isWordCharacter(text.charAt(rightIndex))) || rightIndex == text.length() ) ) {
+                markText( leftIndex + 1, rightIndex, color );
+            }
             index = text.indexOf(word, index + 1);
         }
     }
@@ -83,10 +91,10 @@ public class EditCorrectText extends AppCompatEditText {
      */
     public List <String> getWords(int left, int right) {
         String[] res = getText()
-                .subSequence(left, right)   // take only the range [left, right)
-                .toString()                 // convert to immuatable string
-                .replaceAll("[.:_,]", " ")  // remove all punctuation marks with a regexp
-                .split(" ");                // split the resulting string into words by ' '
+                .subSequence(left, right)           // take only the range [left, right)
+                .toString()                         // convert to immuatable string
+                .replaceAll("[.:_,\n\t]", " ")      // remove all punctuation marks with a regexp
+                .split(" ");                        // split the resulting string into words by ' '
 
         List<String> words = new ArrayList<>(Arrays.asList(res));
         words.removeAll(Collections.singleton(""));

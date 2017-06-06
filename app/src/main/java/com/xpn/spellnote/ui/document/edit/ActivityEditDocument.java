@@ -191,9 +191,6 @@ public class ActivityEditDocument extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    public void onDocumentAvailable(DocumentModel document) {
-    }
 
     @Override
     public DictionaryModel getCurrentDictionary() {
@@ -202,6 +199,7 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     public void markIncorrect(int left, int right, List<String> incorrectWords) {
+        Timber.d("Mark Incorrect: " + incorrectWords);
         for( String word : incorrectWords ) {
             binding.content.markWord( word, left, right, ContextCompat.getColor(this, R.color.text_wrong));
         }
@@ -209,6 +207,7 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     public void markCorrect(int left, int right, List<String> correctWords) {
+        Timber.d("Mark Correct: " + correctWords);
         for( String word : correctWords ) {
             binding.content.markWord( word, left, right, ContextCompat.getColor(this, R.color.text_correct));
         }

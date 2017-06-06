@@ -60,7 +60,6 @@ public class EditDocumentVM extends BaseViewModel {
                 .subscribe(
                         document -> {
                             this.document = document;
-                            viewContract.onDocumentAvailable(document);
                             notifyChange();
                         },
                         Timber::e
@@ -118,7 +117,6 @@ public class EditDocumentVM extends BaseViewModel {
     }
 
     public interface ViewContract {
-        void onDocumentAvailable(DocumentModel document);
         DictionaryModel getCurrentDictionary();
         void markIncorrect(int left, int right, List <String> incorrectWords);
         void markCorrect(int left, int right, List <String> correctWords);
