@@ -1,4 +1,4 @@
-package com.xpn.spellnote.ui.document.edit.options;
+package com.xpn.spellnote.ui.document.edit.editinglanguage;
 
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.ui.BaseViewModel;
@@ -12,6 +12,10 @@ public class EditingLanguageListItemVM extends BaseViewModel {
     EditingLanguageListItemVM(ViewContract viewContract, DictionaryModel dictionary) {
         this.viewContract = viewContract;
         this.dictionary = dictionary;
+    }
+
+    public String getLogoUrl() {
+        return dictionary.getLogoURL();
     }
 
     public String getLanguageName() {

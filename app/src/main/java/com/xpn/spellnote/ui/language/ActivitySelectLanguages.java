@@ -63,7 +63,7 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
                 .load(url)
                 .placeholder(ContextCompat.getDrawable(view.getContext(), R.mipmap.ic_placeholder))
                 .resizeDimen(R.dimen.language_flag_size, R.dimen.language_flag_size)
-                .centerCrop()
+                .centerInside()
                 .into(view);
     }
 

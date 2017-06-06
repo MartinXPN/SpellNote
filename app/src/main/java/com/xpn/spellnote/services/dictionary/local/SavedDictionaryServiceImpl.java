@@ -6,7 +6,6 @@ import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.BeanMapper;
 import com.xpn.spellnote.services.dictionary.SavedDictionaryService;
-import com.xpn.spellnote.services.word.local.WordSchema;
 
 import org.json.JSONArray;
 
