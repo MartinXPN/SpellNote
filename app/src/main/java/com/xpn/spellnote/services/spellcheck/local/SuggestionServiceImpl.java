@@ -1,7 +1,5 @@
 package com.xpn.spellnote.services.spellcheck.local;
 
-import com.annimon.stream.Collectors;
-import com.annimon.stream.Stream;
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.BeanMapper;
 import com.xpn.spellnote.services.dictionary.local.WordSchema;
@@ -18,6 +16,7 @@ import io.realm.RealmResults;
 
 public class SuggestionServiceImpl implements SuggestionService {
 
+    private static final int SUGGESTION_LIMIT = 100;
     private final BeanMapper<WordModel, WordSchema> wordMapper;
     private final RealmConfiguration realmConfiguration;
 
@@ -30,17 +29,25 @@ public class SuggestionServiceImpl implements SuggestionService {
     @Override
     public Single<List<WordModel>> getSuggestions(String word, String locale) {
         return Single.defer(() -> {
+            if( locale == null || word == null || word.isEmpty() )
+                return Single.just( new ArrayList<>() );
+
             Realm realm = Realm.getInstance(realmConfiguration);
             realm.refresh();
 
-            RealmResults <WordSchema> result = realm.where(WordSchema.class)
+            RealmResults <WordSchema> continuations = realm.where(WordSchema.class)
                     .equalTo("locale", locale)
                     .like("word", word + '*')
                     .findAll();
 
-            return Single.just( Stream.of(result)
-                    .map(wordMapper::mapFrom)
-                    .collect(Collectors.toCollection(ArrayList::new)));
+
+            ArrayList <WordModel> result = new ArrayList<>();
+            for( WordSchema wordSchema : continuations ) {
+                if( !wordSchema.getWord().equals(word) )    result.add( wordMapper.mapFrom(wordSchema) );
+                if( result.size() >= SUGGESTION_LIMIT )     break;
+            }
+
+            return Single.just(result);
         });
     }
 }

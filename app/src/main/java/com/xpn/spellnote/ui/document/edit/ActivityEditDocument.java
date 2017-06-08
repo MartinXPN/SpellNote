@@ -269,8 +269,10 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     public void onShowSuggestions() {
-        if( !showSuggestions )
+        if( !showSuggestions || suggestionsVM.getSuggestionVMs().isEmpty() ) {
+            onHideSuggestions();
             return;
+        }
 
         float h = binding.contentScroll.getScrollY();
         float x = binding.content.getCursorPosition().first;

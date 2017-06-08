@@ -117,7 +117,7 @@ public class EditCorrectText extends AppCompatEditText {
     }
 
     private boolean isWordCharacter(char c) {
-        return Character.isLetter(c) || c == '-';
+        return Character.isLetter(c) || c == '-' || c == '\'';
     }
 
     /**
