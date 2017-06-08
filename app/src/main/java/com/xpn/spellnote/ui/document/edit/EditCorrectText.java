@@ -5,6 +5,7 @@ import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
+import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,6 +52,14 @@ public class EditCorrectText extends AppCompatEditText {
 
     public void replaceSelection( String newText ) {
         replace( getSelectionStart(), getSelectionEnd(), newText );
+    }
+
+    public void replaceCurrentWord( String newWord ) {
+        replace(
+                getWordStart( getSelectionStart() ),
+                getWordEnd( getSelectionEnd() ),
+                newWord
+        );
     }
 
     public void markText(int left, int right, int color) {
@@ -101,10 +110,11 @@ public class EditCorrectText extends AppCompatEditText {
         return words;
     }
 
-    public List <String> getAllWords() {
-        return getWords( 0, getText().length() );
+    public CharSequence getCurrentWord() {
+        return getText().subSequence(
+                getWordStart(getSelectionStart()),
+                getWordEnd(getSelectionEnd()));
     }
-
 
     private boolean isWordCharacter(char c) {
         return Character.isLetter(c) || c == '-';
@@ -143,5 +153,15 @@ public class EditCorrectText extends AppCompatEditText {
             ++index;
         }
         return index;
+    }
+
+
+    public Pair<Float, Float> getCursorPosition() {
+        int pos = getSelectionStart();
+        int line = getLayout().getLineForOffset(pos);
+        float x = getLayout().getPrimaryHorizontal(pos) + getPaddingLeft();
+        float y = getLayout().getLineBottom(line) + getPaddingTop();
+
+        return new Pair<>(x, y);
     }
 }

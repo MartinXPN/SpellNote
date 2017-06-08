@@ -22,6 +22,7 @@ import com.xpn.spellnote.databinding.ActivityEditDocumentBinding;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserVM;
+import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
@@ -34,7 +35,8 @@ import timber.log.Timber;
 
 public class ActivityEditDocument extends AppCompatActivity
         implements EditDocumentVM.ViewContract,
-        EditingLanguageChooserVM.ViewContract {
+        EditingLanguageChooserVM.ViewContract,
+        SuggestionsVM.ViewContract {
 
     private static final String EXTRA_DOCUMENT_ID = "doc_id";
     private static final Integer SPEECH_RECOGNIZER_CODE = 1;
@@ -44,6 +46,7 @@ public class ActivityEditDocument extends AppCompatActivity
     private ActivityEditDocumentBinding binding;
     private EditDocumentVM viewModel;
     private EditingLanguageChooserVM editingLanguageChooserVM;
+    private SuggestionsVM suggestionsVM;
 
 
     public static void launchForResult(Fragment fragment, Long documentId, int requestCode) {
@@ -79,14 +82,14 @@ public class ActivityEditDocument extends AppCompatActivity
         viewModel = new EditDocumentVM(this,
                 getIntent().getExtras().getLong(EXTRA_DOCUMENT_ID),
                 diContext.getDocumentService(),
-                diContext.getSpellCheckerService(),
-                diContext.getSuggestionService());
+                diContext.getSpellCheckerService());
 
-        editingLanguageChooserVM = new EditingLanguageChooserVM(this,
-                diContext.getSavedDictionaryService());
+        editingLanguageChooserVM = new EditingLanguageChooserVM(this, diContext.getSavedDictionaryService());
+        suggestionsVM = new SuggestionsVM(this, diContext.getSuggestionService());
 
         binding.setModel(viewModel);
         binding.setEditingLanguageChooserVM(editingLanguageChooserVM);
+        binding.setSuggestionsVM(suggestionsVM);
 
         /// set-up the actionbar
         setSupportActionBar(binding.toolbar);
@@ -117,11 +120,21 @@ public class ActivityEditDocument extends AppCompatActivity
                         binding.content.getWordEnd(right)
                 );
 
+                /// show suggestions only if the current word has more than one character
+                if( getCurrentWord().length() > 1 ) suggestionsVM.suggest(getCurrentWord());
+                else                                onHideSuggestions();
                 viewModel.checkSpelling(left, right, words);
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+                viewModel.onSaveDocument();
+            }
+        });
+        binding.content.setOnClickListener(v -> {
+            /// show suggestions only if the current word has more than one character
+            if( getCurrentWord().length() > 1 ) suggestionsVM.suggest(getCurrentWord());
+            else                                onHideSuggestions();
         });
     }
 
@@ -129,6 +142,7 @@ public class ActivityEditDocument extends AppCompatActivity
     protected void onStart() {
         viewModel.onStart();
         editingLanguageChooserVM.onStart();
+        suggestionsVM.onStart();
         super.onStart();
     }
 
@@ -137,6 +151,7 @@ public class ActivityEditDocument extends AppCompatActivity
         viewModel.onSaveDocument();
         viewModel.onDestroy();
         editingLanguageChooserVM.onDestroy();
+        suggestionsVM.onDestroy();
         super.onDestroy();
     }
 
@@ -234,5 +249,47 @@ public class ActivityEditDocument extends AppCompatActivity
     @Override
     public boolean isLanguageListOpen() {
         return binding.editingLanguageChooser.supportedLanguagesCard.getVisibility() == View.VISIBLE;
+    }
+
+    @Override
+    public void onSuggestionSelected(String suggestion) {
+        binding.content.replaceCurrentWord(suggestion);
+        onHideSuggestions();
+    }
+
+    @Override
+    public String getCurrentWord() {
+        return binding.content.getCurrentWord().toString();
+    }
+
+    @Override
+    public DictionaryModel getCurrentLanguage() {
+        return editingLanguageChooserVM.getCurrentLanguage();
+    }
+
+    @Override
+    public void onShowSuggestions() {
+        if( !showSuggestions )
+            return;
+
+        float h = binding.contentScroll.getScrollY();
+        float x = binding.content.getCursorPosition().first;
+        float y = binding.content.getCursorPosition().second;
+
+        y -= h + binding.suggestions.getPaddingTop();
+        x -= binding.suggestions.getWidth() / 2;
+
+        x = Math.min( x, binding.content.getWidth() - binding.suggestions.getWidth() );
+        x = Math.max( x, 0 );
+        y = Math.max( y, 0 );
+
+        binding.suggestions.setX(x);
+        binding.suggestions.setY(y);
+        binding.suggestions.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onHideSuggestions() {
+        binding.suggestions.setVisibility(View.GONE);
     }
 }

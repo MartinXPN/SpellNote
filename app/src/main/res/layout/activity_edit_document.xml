@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="model"
@@ -9,16 +12,17 @@
         <variable
             name="editingLanguageChooserVM"
             type="com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserVM" />
+
+        <variable
+            name="suggestionsVM"
+            type="com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM" />
     </data>
 
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
 
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.document.edit.ActivityEditDocument">
+        android:orientation="vertical">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/toolbar_box"
@@ -35,44 +39,68 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
         </android.support.design.widget.AppBarLayout>
 
-
-        <ScrollView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/toolbar_box"
-            android:overScrollMode="ifContentScrolls" >
+            tools:context=".ui.document.edit.ActivityEditDocument">
 
-            <com.xpn.spellnote.ui.document.edit.EditCorrectText
-                android:id="@+id/content"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="flagNoExtractUi"
-                android:inputType="textMultiLine|textNoSuggestions"
-                android:gravity="top|start"
+            <ScrollView
+                android:id="@+id/content_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="ifContentScrolls" >
 
-                android:padding="15dp"
+                <com.xpn.spellnote.ui.document.edit.EditCorrectText
+                    android:id="@+id/content"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="flagNoExtractUi"
+                    android:inputType="textMultiLine|textNoSuggestions"
+                    android:gravity="top|start"
 
-                android:background="@drawable/rectangle_transparent"
-                android:keepScreenOn="true"
-                android:cursorVisible="true"
+                    android:padding="15dp"
 
-                android:hint="Text"
-                android:text="@={model.content}"/>
-        </ScrollView>
+                    android:background="@drawable/rectangle_transparent"
+                    android:keepScreenOn="true"
+                    android:cursorVisible="true"
+
+                    android:hint="Text"
+                    android:text="@={model.content}"/>
+            </ScrollView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/suggestions"
+                android:layout_width="125dp"
+                android:layout_height="190dp"
+                android:visibility="gone"
+                app:cardCornerRadius="2dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <com.samvel1024.databindingrv.BindingRecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layoutManager="LinearLayoutManager"
+                    app:bindingVarPath="com.xpn.spellnote.BR.viewModel"
+                    app:itemLayoutResId="@layout/item_suggestion_list"
+                    app:viewModelList="@{suggestionsVM.suggestionVMs}" />
+            </android.support.v7.widget.CardView>
 
 
-        <include
-            android:id="@+id/editing_language_chooser"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            layout="@layout/editing_language_chooser"
-            app:viewModel="@{editingLanguageChooserVM}"/>
+            <include
+                android:id="@+id/editing_language_chooser"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                layout="@layout/editing_language_chooser"
+                app:viewModel="@{editingLanguageChooserVM}"/>
 
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:layout_below="@id/toolbar_box"
-            android:background="@drawable/shadow" />
-    </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/shadow" />
+        </RelativeLayout>
+
+    </LinearLayout>
 </layout>

@@ -35,7 +35,7 @@ public class SuggestionServiceImpl implements SuggestionService {
 
             RealmResults <WordSchema> result = realm.where(WordSchema.class)
                     .equalTo("locale", locale)
-                    .like("word", word)
+                    .like("word", word + '*')
                     .findAll();
 
             return Single.just( Stream.of(result)
