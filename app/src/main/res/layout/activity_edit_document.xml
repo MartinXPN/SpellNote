@@ -9,6 +9,10 @@
         <variable
             name="editingLanguageChooserVM"
             type="com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserVM" />
+
+        <variable
+            name="suggestionsVM"
+            type="com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM" />
     </data>
 
     <RelativeLayout
@@ -59,6 +63,24 @@
                 android:hint="Text"
                 android:text="@={model.content}"/>
         </ScrollView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/suggestions"
+            android:layout_width="125dp"
+            android:layout_height="190dp"
+            android:visibility="gone"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="true">
+
+            <com.samvel1024.databindingrv.BindingRecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="LinearLayoutManager"
+                app:bindingVarPath="com.xpn.spellnote.BR.viewModel"
+                app:itemLayoutResId="@layout/item_suggestion_list"
+                app:viewModelList="@{suggestionsVM.suggestionVMs}" />
+        </android.support.v7.widget.CardView>
 
 
         <include

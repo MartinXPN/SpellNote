@@ -33,10 +33,6 @@ public class EditingLanguageChooserVM extends BaseViewModel {
         loadSupportedDictionaries();
     }
 
-    public DictionaryModel getCurrentLanguage() {
-        return currentLanguage;
-    }
-
     @Bindable
     public String getCurrentLanguageLogoUrl() {
         if( currentLanguage == null )
@@ -46,6 +42,9 @@ public class EditingLanguageChooserVM extends BaseViewModel {
     public void setCurrentLanguage(DictionaryModel language) {
         currentLanguage = language;
         notifyPropertyChanged(BR.currentLanguageLogoUrl);
+    }
+    public DictionaryModel getCurrentLanguage() {
+        return currentLanguage;
     }
 
     public boolean onHideLanguageList() {

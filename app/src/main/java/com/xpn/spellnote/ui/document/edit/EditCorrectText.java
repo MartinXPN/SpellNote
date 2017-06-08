@@ -53,6 +53,14 @@ public class EditCorrectText extends AppCompatEditText {
         replace( getSelectionStart(), getSelectionEnd(), newText );
     }
 
+    public void replaceCurrentWord( String newWord ) {
+        replace(
+                getWordStart( getSelectionStart() ),
+                getWordEnd( getSelectionEnd() ),
+                newWord
+        );
+    }
+
     public void markText(int left, int right, int color) {
         // color = Color.parseColor("#D20000")
         left = Math.max( left, 0 );
@@ -101,10 +109,11 @@ public class EditCorrectText extends AppCompatEditText {
         return words;
     }
 
-    public List <String> getAllWords() {
-        return getWords( 0, getText().length() );
+    public CharSequence getCurrentWord() {
+        return getText().subSequence(
+                getWordStart(getSelectionStart()),
+                getWordEnd(getSelectionEnd()));
     }
-
 
     private boolean isWordCharacter(char c) {
         return Character.isLetter(c) || c == '-';

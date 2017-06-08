@@ -9,7 +9,6 @@ import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.document.DocumentService;
 import com.xpn.spellnote.services.spellcheck.SpellCheckerService;
-import com.xpn.spellnote.services.spellcheck.SuggestionService;
 import com.xpn.spellnote.ui.BaseViewModel;
 
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ public class EditDocumentVM extends BaseViewModel {
     private ViewContract viewContract;
     private final DocumentService documentService;
     private final SpellCheckerService spellCheckerService;
-    private final SuggestionService suggestionService;
 
     private DocumentModel document = new DocumentModel();
     private Long documentId;
@@ -36,14 +34,12 @@ public class EditDocumentVM extends BaseViewModel {
     EditDocumentVM(ViewContract viewContract,
                    Long documentId,
                    DocumentService documentService,
-                   SpellCheckerService spellCheckerService,
-                   SuggestionService suggestionService) {
+                   SpellCheckerService spellCheckerService) {
 
         this.viewContract = viewContract;
         this.documentId = documentId;
         this.documentService = documentService;
         this.spellCheckerService = spellCheckerService;
-        this.suggestionService = suggestionService;
     }
 
     @Override
