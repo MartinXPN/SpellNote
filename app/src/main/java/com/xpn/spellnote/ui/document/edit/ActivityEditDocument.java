@@ -121,13 +121,20 @@ public class ActivityEditDocument extends AppCompatActivity
                 );
 
                 /// show suggestions only if the current word has more than one character
-                if( getCurrentWord().length() > 1 )
-                    suggestionsVM.suggest(getCurrentWord());
+                if( getCurrentWord().length() > 1 ) suggestionsVM.suggest(getCurrentWord());
+                else                                onHideSuggestions();
                 viewModel.checkSpelling(left, right, words);
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+                viewModel.onSaveDocument();
+            }
+        });
+        binding.content.setOnClickListener(v -> {
+            /// show suggestions only if the current word has more than one character
+            if( getCurrentWord().length() > 1 ) suggestionsVM.suggest(getCurrentWord());
+            else                                onHideSuggestions();
         });
     }
 
@@ -262,6 +269,22 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     public void onShowSuggestions() {
+        if( !showSuggestions )
+            return;
+
+        float h = binding.contentScroll.getScrollY();
+        float x = binding.content.getCursorPosition().first;
+        float y = binding.content.getCursorPosition().second;
+
+        y -= h + binding.suggestions.getPaddingTop();
+        x -= binding.suggestions.getWidth() / 2;
+
+        x = Math.min( x, binding.content.getWidth() - binding.suggestions.getWidth() );
+        x = Math.max( x, 0 );
+        y = Math.max( y, 0 );
+
+        binding.suggestions.setX(x);
+        binding.suggestions.setY(y);
         binding.suggestions.setVisibility(View.VISIBLE);
     }
 

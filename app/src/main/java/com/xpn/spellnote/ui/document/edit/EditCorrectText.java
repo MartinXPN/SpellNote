@@ -5,6 +5,7 @@ import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
+import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -152,5 +153,15 @@ public class EditCorrectText extends AppCompatEditText {
             ++index;
         }
         return index;
+    }
+
+
+    public Pair<Float, Float> getCursorPosition() {
+        int pos = getSelectionStart();
+        int line = getLayout().getLineForOffset(pos);
+        float x = getLayout().getPrimaryHorizontal(pos) + getPaddingLeft();
+        float y = getLayout().getLineBottom(line) + getPaddingTop();
+
+        return new Pair<>(x, y);
     }
 }
