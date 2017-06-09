@@ -22,6 +22,7 @@ import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.ActivityEditDocumentBinding;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
+import com.xpn.spellnote.ui.ads.AdsActivity;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserVM;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
 import com.xpn.spellnote.util.CacheUtil;
@@ -169,7 +170,11 @@ public class ActivityEditDocument extends AppCompatActivity
         super.onDestroy();
     }
 
-
+    @Override
+    public void finish() {
+        AdsActivity.launch(this);
+        super.finish();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

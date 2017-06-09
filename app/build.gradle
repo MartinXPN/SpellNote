@@ -35,6 +35,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
 }
 
 dependencies {
@@ -50,8 +54,9 @@ dependencies {
 
 
     /// Firebase
-    compile 'com.google.firebase:firebase-core:10.0.1'      // Firebase Analytics
-    compile 'com.google.firebase:firebase-crash:10.0.1'     // Firebase Crash reporting
+    compile 'com.google.firebase:firebase-core:11.0.0'      // Firebase Analytics
+    compile 'com.google.firebase:firebase-crash:11.0.0'     // Firebase Crash reporting
+    compile 'com.google.firebase:firebase-ads:11.0.0'       // Firebase Ads
 
     compile 'com.squareup.picasso:picasso:2.5.2'            // Picasso - Image loader
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'          // RxAndroid
