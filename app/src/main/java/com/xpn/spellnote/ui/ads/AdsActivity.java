@@ -43,6 +43,12 @@ public class AdsActivity extends AppCompatActivity {
                 Timber.d("Failed loading the ad");
                 AdsActivity.this.finish();
             }
+
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                ads.show();
+            }
         });
     }
 }
