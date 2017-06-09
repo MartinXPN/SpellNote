@@ -10,22 +10,28 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.ActivitySelectLanguagesBinding;
+import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.ui.util.Util;
 
 
 public class ActivitySelectLanguages extends AppCompatActivity implements SelectLanguagesVM.ViewContract {
 
     private SelectLanguagesVM viewModel;
+    private FirebaseAnalytics analytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivitySelectLanguagesBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_select_languages);
+
+        /// set-up analytics
+        analytics = FirebaseAnalytics.getInstance(this);
 
         /// setup the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -65,6 +71,23 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
                 .resizeDimen(R.dimen.language_flag_size, R.dimen.language_flag_size)
                 .centerInside()
                 .into(view);
+    }
+
+
+    @Override
+    public void onDownloadingDictionary(DictionaryModel dictionary) {
+        Bundle bundle = new Bundle();
+        bundle.putString("languageName", dictionary.getLanguageName());
+        bundle.putString("locale", dictionary.getLocale());
+        analytics.logEvent("download_dictionary", bundle);
+    }
+
+    @Override
+    public void onRemovingDictionary(DictionaryModel dictionary) {
+        Bundle bundle = new Bundle();
+        bundle.putString("languageName", dictionary.getLanguageName());
+        bundle.putString("locale", dictionary.getLocale());
+        analytics.logEvent("remove_dictionary", bundle);
     }
 
     @Override

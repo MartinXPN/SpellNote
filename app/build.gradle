@@ -48,6 +48,10 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support:cardview-v7:25.3.1'
 
+
+    /// Firebase
+    compile 'com.google.firebase:firebase-core:10.0.1'      // Firebase Analytics
+
     compile 'com.squareup.picasso:picasso:2.5.2'            // Picasso - Image loader
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'          // RxAndroid
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'             // RxJAVA
@@ -61,3 +65,5 @@ dependencies {
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'    // Swipe layout (swipe items in document list)
     compile 'com.samvel1024.databindingrv:data-binding-recyclerview:0.0.3' // binding RecyclerVew for easy manipulations with lists
 }
+
+apply plugin: 'com.google.gms.google-services'
