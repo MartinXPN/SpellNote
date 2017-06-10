@@ -11,8 +11,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.xpn.spellnote.R;
 
-import timber.log.Timber;
-
 
 public class AdsActivity extends AppCompatActivity {
 
@@ -33,14 +31,12 @@ public class AdsActivity extends AppCompatActivity {
             @Override
             public void onAdClosed() {
                 super.onAdClosed();
-                Timber.d("Closing the ad");
                 AdsActivity.this.finish();
             }
 
             @Override
             public void onAdFailedToLoad(int i) {
                 super.onAdFailedToLoad(i);
-                Timber.d("Failed loading the ad");
                 AdsActivity.this.finish();
             }
 
