@@ -14,7 +14,6 @@ public class DocumentMapper implements BeanMapper<DocumentModel, DocumentSchema>
                 source.content,
                 source.dateModified,
                 source.languageLocale,
-                source.color,
                 source.category
         );
     }

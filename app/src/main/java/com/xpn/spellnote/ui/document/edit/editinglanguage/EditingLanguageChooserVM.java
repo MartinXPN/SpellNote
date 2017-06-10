@@ -39,6 +39,14 @@ public class EditingLanguageChooserVM extends BaseViewModel {
             return "error";
         return currentLanguage.getLogoURL();
     }
+
+    public void setCurrentLanguage(String locale) {
+        for( DictionaryModel dictionary : supportedDictionaries )
+            if( dictionary.getLocale().equals(locale) ) {
+                setCurrentLanguage(dictionary);
+                break;
+            }
+    }
     public void setCurrentLanguage(DictionaryModel language) {
         currentLanguage = language;
         notifyPropertyChanged(BR.currentLanguageLogoUrl);
@@ -68,6 +76,7 @@ public class EditingLanguageChooserVM extends BaseViewModel {
                         dictionaryModels -> {
                             supportedDictionaries = dictionaryModels;
                             notifyPropertyChanged(BR.listViewModels);
+                            viewContract.onDictionaryListAvailable(supportedDictionaries);
                         },
                         Timber::e
                 ));
@@ -84,6 +93,7 @@ public class EditingLanguageChooserVM extends BaseViewModel {
 
 
     public interface ViewContract extends EditingLanguageListItemVM.ViewContract {
+        void onDictionaryListAvailable(List <DictionaryModel> dictionaries);
         void showAvailableLanguages();
         void hideAvailableLanguages();
         boolean isLanguageListOpen();

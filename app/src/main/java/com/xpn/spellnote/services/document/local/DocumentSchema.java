@@ -17,14 +17,13 @@ public class DocumentSchema extends RealmObject {
     String content;
     @Index @Required Date dateModified;
     @Index @Required String languageLocale;
-    String color;
     @Index String category;
 
     public DocumentSchema() {
         super();
     }
 
-    public DocumentSchema(Long id, String title, String content, Date dateModified, String languageLocale, String color, String category) {
+    public DocumentSchema(Long id, String title, String content, Date dateModified, String languageLocale, String category) {
         super();
         /// generate new id if it's not present yet
         if( id == -1L )
@@ -34,7 +33,6 @@ public class DocumentSchema extends RealmObject {
         this.content = content;
         this.dateModified = dateModified;
         this.languageLocale = languageLocale;
-        this.color = color;
         this.category = category;
     }
 
@@ -44,7 +42,6 @@ public class DocumentSchema extends RealmObject {
                 model.getContent(),
                 model.getDateModified(),
                 model.getLanguageLocale(),
-                model.getColor(),
                 model.getCategory() );
     }
 
@@ -53,7 +50,6 @@ public class DocumentSchema extends RealmObject {
                 content + '\n' +
                 dateModified + '\n' +
                 languageLocale + '\n' +
-                color + '\n' +
                 category + '\n';
     }
 }

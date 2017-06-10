@@ -86,9 +86,16 @@ public class EditDocumentVM extends BaseViewModel {
         notifyPropertyChanged(BR.content);
     }
 
+    public void setLanguageLocale(String locale) {
+        document.setLanguageLocale(locale);
+    }
+
 
     /// check spelling of the text on the interval [left, right]
     void checkSpelling(int left, int right, List <String> words) {
+        if( viewContract.getCurrentDictionary().getLocale() == null )
+            return;
+
         addSubscription(spellCheckerService
                 .getCorrectWords(words, viewContract.getCurrentDictionary().getLocale())
                 .subscribeOn(Schedulers.io())
