@@ -60,6 +60,7 @@ public class LanguageItemVM extends BaseViewModel {
 
 
     private void downloadDictionary() {
+        viewContract.onDownloadingDictionary(dictionaryModel);
         status = Status.SAVE_IN_PROGRESS;
         notifyPropertyChanged(BR.status);
 
@@ -105,6 +106,7 @@ public class LanguageItemVM extends BaseViewModel {
     }
 
     private void removeDictionary() {
+        viewContract.onRemovingDictionary(dictionaryModel);
         status = Status.DELETE_IN_PROGRESS;
         notifyPropertyChanged(BR.status);
 
@@ -138,6 +140,8 @@ public class LanguageItemVM extends BaseViewModel {
 
 
     interface ViewContract {
+        void onDownloadingDictionary(DictionaryModel dictionary);
+        void onRemovingDictionary(DictionaryModel dictionary);
         void showError(String message);
         void showMessage(String message);
     }

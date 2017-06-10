@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databinding.ActivityViewDocumentsBinding;
 import com.xpn.spellnote.ui.about.ActivityAbout;
@@ -26,17 +27,21 @@ public class ActivityViewDocuments extends AppCompatActivity
 
 
     private static final String SAVED_STATE_FRAGMENT_TAG = "curr_f";
+    private ActivityViewDocumentsBinding binding;
     BaseFragmentDocumentList documentFragment = null;
-    ActivityViewDocumentsBinding binding;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate( savedInstanceState );
         binding = DataBindingUtil.setContentView(this, R.layout.activity_view_documents);
-        setSupportActionBar(binding.toolbar);
 
-        /// set up navigation-toggle
+        /// set-up analytics
+        FirebaseAnalytics.getInstance(this);
+
+        /// set up toolbar and navigation-toggle
+        setSupportActionBar(binding.toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawer, binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         binding.drawer.addDrawerListener(toggle);
         toggle.syncState();

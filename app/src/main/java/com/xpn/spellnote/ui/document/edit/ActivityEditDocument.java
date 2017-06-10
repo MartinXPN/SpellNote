@@ -15,12 +15,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.ActivityEditDocumentBinding;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
+import com.xpn.spellnote.ui.ads.AdsActivity;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserVM;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
 import com.xpn.spellnote.util.CacheUtil;
@@ -42,6 +44,8 @@ public class ActivityEditDocument extends AppCompatActivity
     private static final Integer SPEECH_RECOGNIZER_CODE = 1;
     private boolean showSuggestions;
     private boolean checkSpelling;
+
+    private FirebaseAnalytics analytics;
 
     private ActivityEditDocumentBinding binding;
     private EditDocumentVM viewModel;
@@ -76,6 +80,10 @@ public class ActivityEditDocument extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_document);
+
+        /// set-up analytics
+        analytics = FirebaseAnalytics.getInstance(this);
+
 
         /// set-up view-models
         DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
@@ -140,14 +148,21 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     protected void onStart() {
+        super.onStart();
         viewModel.onStart();
         editingLanguageChooserVM.onStart();
         suggestionsVM.onStart();
-        super.onStart();
     }
 
     @Override
     protected void onDestroy() {
+        /// send data to analytics
+        Bundle analyticsBundle = new Bundle();
+        analyticsBundle.putString( "title", viewModel.getTitle() );
+        analyticsBundle.putString( "content", viewModel.getContent() );
+        analytics.logEvent("edit_document", analyticsBundle);
+
+        /// control lifecycle of VMs
         viewModel.onSaveDocument();
         viewModel.onDestroy();
         editingLanguageChooserVM.onDestroy();
@@ -155,7 +170,11 @@ public class ActivityEditDocument extends AppCompatActivity
         super.onDestroy();
     }
 
-
+    @Override
+    public void finish() {
+        AdsActivity.launch(this);
+        super.finish();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
