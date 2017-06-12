@@ -48,7 +48,22 @@ public class EditDocumentVM extends BaseViewModel {
         onLoadDocument();
     }
 
-    void onLoadDocument() {
+    @Override
+    public void onDestroy() {
+        /// synchronously save the document if content or title are not empty
+        if( !document.getTitle().isEmpty() || !document.getContent().isEmpty() ) {
+            onSaveDocument();
+        }
+        else {
+            /// synchronously remove document if both title and content are empty
+            addSubscription(documentService
+                    .removeDocument(document)
+                    .subscribe());
+        }
+        super.onDestroy();
+    }
+
+    private void onLoadDocument() {
         addSubscription(documentService
                 .getDocument(documentId)
                 .subscribeOn(Schedulers.io())
@@ -86,7 +101,7 @@ public class EditDocumentVM extends BaseViewModel {
         notifyPropertyChanged(BR.content);
     }
 
-    public void setLanguageLocale(String locale) {
+    void setLanguageLocale(String locale) {
         document.setLanguageLocale(locale);
     }
 

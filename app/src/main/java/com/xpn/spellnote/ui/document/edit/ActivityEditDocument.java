@@ -164,7 +164,6 @@ public class ActivityEditDocument extends AppCompatActivity
         analytics.logEvent("edit_document", analyticsBundle);
 
         /// control lifecycle of VMs
-        viewModel.onSaveDocument();
         viewModel.onDestroy();
         editingLanguageChooserVM.onDestroy();
         suggestionsVM.onDestroy();
