@@ -41,6 +41,7 @@ public class ActivityEditDocument extends AppCompatActivity
         SuggestionsVM.ViewContract {
 
     private static final String EXTRA_DOCUMENT_ID = "doc_id";
+    private static final String CACHE_DEFAULT_LOCALE = "default_locale";
     private static final Integer SPEECH_RECOGNIZER_CODE = 1;
     private boolean showSuggestions;
     private boolean checkSpelling;
@@ -163,7 +164,6 @@ public class ActivityEditDocument extends AppCompatActivity
         analytics.logEvent("edit_document", analyticsBundle);
 
         /// control lifecycle of VMs
-        viewModel.onSaveDocument();
         viewModel.onDestroy();
         editingLanguageChooserVM.onDestroy();
         suggestionsVM.onDestroy();
@@ -251,6 +251,27 @@ public class ActivityEditDocument extends AppCompatActivity
     public void onLanguageSelected(DictionaryModel dictionary) {
         hideAvailableLanguages();
         editingLanguageChooserVM.setCurrentLanguage(dictionary);
+        viewModel.setLanguageLocale(dictionary.getLocale());
+
+        /// update shared preferences (default locale)
+        CacheUtil.setCache(this, CACHE_DEFAULT_LOCALE, dictionary.getLocale());
+
+        /// run spellchecking on the whole text again because the language was changed
+        viewModel.checkSpelling(
+                0,
+                binding.content.getText().length(),
+                binding.content.getWords(0, binding.content.getText().length())
+        );
+    }
+
+    @Override
+    public void onDictionaryListAvailable(List<DictionaryModel> dictionaries) {
+        String locale = CacheUtil.getCache(this, CACHE_DEFAULT_LOCALE, null);
+        if( locale == null ) {
+            if( dictionaries.isEmpty() )    return;
+            else                            locale = dictionaries.get(0).getLocale();
+        }
+        editingLanguageChooserVM.setCurrentLanguage(locale);
     }
 
     @Override

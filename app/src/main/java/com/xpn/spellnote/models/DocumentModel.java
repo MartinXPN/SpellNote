@@ -10,7 +10,6 @@ public class DocumentModel {
     private String content;
     private Date dateModified;
     private String languageLocale;
-    private String color;
     private String category;
 
 
@@ -19,7 +18,6 @@ public class DocumentModel {
                          String content,
                          Date dateModified,
                          String languageLocale,
-                         String color,
                          String category) {
 
         this.id = id;
@@ -27,11 +25,10 @@ public class DocumentModel {
         this.content = content;
         this.dateModified = dateModified;
         this.languageLocale = languageLocale;
-        this.color = color;
         this.category = category;
     }
     public DocumentModel() {
-        this(-1L, "", "", new Date(), "", "", "");
+        this(-1L, "", "", new Date(), "", "");
     }
 
     public Long getId() {
@@ -69,13 +66,6 @@ public class DocumentModel {
         this.languageLocale = languageLocale;
     }
 
-    public String getColor() {
-        return color;
-    }
-    public void setColor(String color) {
-        this.color = color;
-    }
-
     public String getCategory() {
         return category;
     }
@@ -89,7 +79,6 @@ public class DocumentModel {
                 content + '\n' +
                 dateModified + '\n' +
                 languageLocale + '\n' +
-                color + '\n' +
                 category + '\n';
     }
 
@@ -101,7 +90,6 @@ public class DocumentModel {
                 this.content,
                 this.dateModified,
                 this.languageLocale,
-                this.color,
                 this.category);
     }
 }
