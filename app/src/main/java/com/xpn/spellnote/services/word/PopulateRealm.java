@@ -19,6 +19,7 @@ import timber.log.Timber;
 /**
  * A temporary class to create separate database files for every locale separately
  * This class is not going to appear in production or be merged with master
+ * du -ks * (in adb shell to get size of all files in KB)
  */
 public class PopulateRealm {
 
