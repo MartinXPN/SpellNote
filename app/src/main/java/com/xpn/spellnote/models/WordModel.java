@@ -5,19 +5,17 @@ public class WordModel {
 
     private String word;
     private int usage;
-    private String locale;
     private boolean isUserDefined = false;
 
-    public WordModel( String word, int usage, String locale, boolean isUserDefined ) {
+    public WordModel( String word, int usage, boolean isUserDefined ) {
         this.word = word;
         this.usage = usage;
-        this.locale = locale;
         this.isUserDefined = isUserDefined;
     }
 
 
-    public WordModel( String word, int usage, String locale ) {
-        this(word, usage, locale, false);
+    public WordModel( String word, int usage ) {
+        this(word, usage, false);
     }
 
     public String getWord() {
@@ -25,9 +23,6 @@ public class WordModel {
     }
     public int getUsage() {
         return usage;
-    }
-    public String getLocale() {
-        return locale;
     }
     public boolean getUserDefined() {
         return isUserDefined;

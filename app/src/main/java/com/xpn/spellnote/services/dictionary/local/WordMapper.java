@@ -8,7 +8,7 @@ public class WordMapper implements BeanMapper <WordModel, WordSchema> {
 
     @Override
     public WordModel mapFrom(WordSchema source) {
-        return new WordModel(source.getWord(), source.getUsage(), source.getLocale(), source.getUserDefined());
+        return new WordModel(source.getWord(), source.getUsage(), source.getUserDefined());
     }
 
     @Override
