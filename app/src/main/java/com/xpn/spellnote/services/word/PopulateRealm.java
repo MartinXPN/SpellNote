@@ -1,6 +1,7 @@
 package com.xpn.spellnote.services.word;
 
 import android.content.Context;
+import android.os.Environment;
 import android.widget.Toast;
 
 import com.xpn.spellnote.services.dictionary.local.WordSchema;
@@ -55,12 +56,14 @@ public class PopulateRealm {
         }
 
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
+                .directory(Environment.getExternalStorageDirectory())
                 .name(OUTPUT_DATABASE)
                 .build();
 
         Realm realmInstance = Realm.getInstance(realmConfiguration);
         realmInstance.executeTransaction(realm -> realm.createOrUpdateAllFromJson(WordSchema.class, words));
         realmInstance.close();
+        Realm.compactRealm(realmConfiguration);
 
         Toast.makeText(context, "Realm database created!", Toast.LENGTH_SHORT).show();
         Timber.d("Realm database is now at location: " + realmConfiguration.getPath());
