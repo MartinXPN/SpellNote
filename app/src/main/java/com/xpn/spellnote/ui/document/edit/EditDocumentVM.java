@@ -8,7 +8,7 @@ import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.document.DocumentService;
-import com.xpn.spellnote.services.spellcheck.SpellCheckerService;
+import com.xpn.spellnote.services.word.SpellCheckerService;
 import com.xpn.spellnote.ui.BaseViewModel;
 
 import java.util.ArrayList;

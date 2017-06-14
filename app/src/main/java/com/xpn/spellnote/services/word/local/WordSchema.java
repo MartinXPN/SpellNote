@@ -1,4 +1,4 @@
-package com.xpn.spellnote.services.dictionary.local;
+package com.xpn.spellnote.services.word.local;
 
 import com.xpn.spellnote.models.WordModel;
 
@@ -12,7 +12,6 @@ public class WordSchema extends RealmObject {
 
     @PrimaryKey @Required private String word;
     @Index private int usage;
-    @Index @Required private String locale;
     private boolean isUserDefined;
 
 
@@ -24,7 +23,6 @@ public class WordSchema extends RealmObject {
         super();
         this.word = wordModel.getWord();
         this.usage = wordModel.getUsage();
-        this.locale = wordModel.getLocale();
         this.isUserDefined = wordModel.getUserDefined();
     }
 
@@ -41,13 +39,6 @@ public class WordSchema extends RealmObject {
     }
     public void setUsage(int usage) {
         this.usage = usage;
-    }
-
-    public String getLocale() {
-        return locale;
-    }
-    public void setLocale(String locale) {
-        this.locale = locale;
     }
 
     public boolean getUserDefined() {

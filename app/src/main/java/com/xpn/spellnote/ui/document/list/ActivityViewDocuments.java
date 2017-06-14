@@ -15,10 +15,10 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databinding.ActivityViewDocumentsBinding;
 import com.xpn.spellnote.ui.about.ActivityAbout;
+import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.list.archive.FragmentViewArchive;
 import com.xpn.spellnote.ui.document.list.documents.FragmentViewDocumentList;
 import com.xpn.spellnote.ui.document.list.trash.FragmentViewTrash;
-import com.xpn.spellnote.ui.language.ActivitySelectLanguages;
 import com.xpn.spellnote.util.Util;
 
 

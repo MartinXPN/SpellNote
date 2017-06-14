@@ -9,25 +9,29 @@ import io.realm.annotations.Required;
 
 public class DictionarySchema extends RealmObject {
 
-    @PrimaryKey @Required String locale;
+    @PrimaryKey String locale;
     @Required String languageName;
     @Required String logoURL;
-    Integer version;
+    @Required String downloadURL;
+    @Required String alphabet;
+    @Required Integer version;
 
     public DictionarySchema() {
         super();
     }
 
 
-    public DictionarySchema( String locale, String languageName, String logoURL, Integer version ) {
+    private DictionarySchema(String locale, String languageName, String logoURL, Integer version, String alphabet, String downloadURL) {
         super();
         this.locale = locale;
         this.languageName = languageName;
         this.logoURL = logoURL;
         this.version = version;
+        this.alphabet = alphabet;
+        this.downloadURL = downloadURL;
     }
 
-    public DictionarySchema(DictionaryModel model) {
-        this(model.getLocale(), model.getLanguageName(), model.getLogoURL(), model.getVersion());
+    DictionarySchema(DictionaryModel model) {
+        this(model.getLocale(), model.getLanguageName(), model.getLogoURL(), model.getVersion(), model.getAlphabet(), model.getDownloadURL());
     }
 }
