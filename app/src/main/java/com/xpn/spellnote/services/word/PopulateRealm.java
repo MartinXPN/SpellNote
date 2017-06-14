@@ -4,11 +4,12 @@ import android.content.Context;
 import android.os.Environment;
 import android.widget.Toast;
 
-import com.xpn.spellnote.services.dictionary.local.WordSchema;
+import com.xpn.spellnote.services.word.local.WordSchema;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -59,6 +60,12 @@ public class PopulateRealm {
                 .directory(Environment.getExternalStorageDirectory())
                 .name(OUTPUT_DATABASE)
                 .build();
+
+        /// delete database if there is a file created during previous sessions
+        File file = new File(Environment.getExternalStorageDirectory() + "/" + OUTPUT_DATABASE );
+        boolean deleted = file.delete();
+        if( !deleted )
+            return;
 
         Realm realmInstance = Realm.getInstance(realmConfiguration);
         realmInstance.executeTransaction(realm -> realm.createOrUpdateAllFromJson(WordSchema.class, words));
