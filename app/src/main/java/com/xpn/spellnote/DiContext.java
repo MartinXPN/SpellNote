@@ -60,8 +60,8 @@ public class DiContext {
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
         documentService = new LocalDocumentServiceImpl(realmConfiguration, documentMapper);
         savedDictionaryService = new SavedDictionaryServiceImpl(realmConfiguration, dictionaryMapper);
-        spellCheckerService = new SpellCheckerServiceImpl(realmConfiguration, wordMapper);
-        suggestionService = new SuggestionServiceImpl(realmConfiguration, wordMapper);
+        spellCheckerService = new SpellCheckerServiceImpl(wordMapper);
+        suggestionService = new SuggestionServiceImpl(wordMapper);
 
         // REST services
         availableDictionariesService = retrofit.create(AvailableDictionariesService.class);
