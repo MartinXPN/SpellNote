@@ -42,7 +42,7 @@ public class SuggestionServiceImpl implements SuggestionService {
 
             ArrayList <WordModel> result = new ArrayList<>();
             for( WordSchema wordSchema : continuations ) {
-                if( !wordSchema.getWord().equals(word) )    result.add( wordMapper.mapFrom(wordSchema) );
+                if( !wordSchema.word.equals(word) )         result.add( wordMapper.mapFrom(wordSchema) );
                 if( result.size() >= SUGGESTION_LIMIT )     break;
             }
 
