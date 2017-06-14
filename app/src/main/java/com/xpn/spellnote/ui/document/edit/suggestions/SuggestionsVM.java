@@ -30,7 +30,7 @@ public class SuggestionsVM extends BaseViewModel {
 
     public void suggest(String word) {
         addSubscription( suggestionService
-                .getSuggestions(word, viewContract.getCurrentLanguage().getLocale())
+                .getSuggestions(word, viewContract.getCurrentLanguage())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

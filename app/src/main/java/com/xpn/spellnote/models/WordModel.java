@@ -1,7 +1,9 @@
 package com.xpn.spellnote.models;
 
 
-public class WordModel {
+import android.support.annotation.NonNull;
+
+public class WordModel implements Comparable<WordModel> {
 
     private String word;
     private int usage;
@@ -26,5 +28,10 @@ public class WordModel {
     }
     public boolean getUserDefined() {
         return isUserDefined;
+    }
+
+    @Override
+    public int compareTo(@NonNull WordModel wordModel) {
+        return Integer.valueOf(usage).compareTo( wordModel.getUsage() );
     }
 }
