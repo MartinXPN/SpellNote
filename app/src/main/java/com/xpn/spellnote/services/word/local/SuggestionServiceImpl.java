@@ -1,9 +1,8 @@
-package com.xpn.spellnote.services.spellcheck.local;
+package com.xpn.spellnote.services.word.local;
 
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.BeanMapper;
-import com.xpn.spellnote.services.dictionary.local.WordSchema;
-import com.xpn.spellnote.services.spellcheck.SuggestionService;
+import com.xpn.spellnote.services.word.SuggestionService;
 
 import java.util.ArrayList;
 import java.util.List;

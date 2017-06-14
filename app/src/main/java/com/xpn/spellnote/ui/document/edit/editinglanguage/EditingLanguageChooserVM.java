@@ -20,7 +20,7 @@ public class EditingLanguageChooserVM extends BaseViewModel {
     private final ViewContract viewContract;
     private final SavedDictionaryService savedDictionaryService;
     private ArrayList<DictionaryModel> supportedDictionaries = new ArrayList<>();
-    private DictionaryModel currentLanguage = new DictionaryModel(null, null, null, null);
+    private DictionaryModel currentLanguage = new DictionaryModel(null, null, null, null, null, null);
 
     public EditingLanguageChooserVM(ViewContract viewContract, SavedDictionaryService savedDictionaryService) {
         this.viewContract = viewContract;

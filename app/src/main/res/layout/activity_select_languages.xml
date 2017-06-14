@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.xpn.spellnote.ui.language.SelectLanguagesVM" />
+            type="com.xpn.spellnote.ui.dictionary.SelectLanguagesVM" />
     </data>
 
 
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ui.language.ActivitySelectLanguages">
+        tools:context=".ui.dictionary.ActivitySelectLanguages">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/toolbar_box"

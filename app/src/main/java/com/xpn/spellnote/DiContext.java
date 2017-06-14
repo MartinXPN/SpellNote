@@ -11,17 +11,16 @@ import com.xpn.spellnote.services.dictionary.SavedDictionaryService;
 import com.xpn.spellnote.services.dictionary.local.DictionaryMapper;
 import com.xpn.spellnote.services.dictionary.local.DictionarySchema;
 import com.xpn.spellnote.services.dictionary.local.SavedDictionaryServiceImpl;
-import com.xpn.spellnote.services.dictionary.local.WordMapper;
-import com.xpn.spellnote.services.dictionary.local.WordSchema;
 import com.xpn.spellnote.services.document.DocumentService;
 import com.xpn.spellnote.services.document.local.DocumentMapper;
 import com.xpn.spellnote.services.document.local.DocumentSchema;
 import com.xpn.spellnote.services.document.local.LocalDocumentServiceImpl;
-import com.xpn.spellnote.services.spellcheck.SpellCheckerService;
-import com.xpn.spellnote.services.spellcheck.SuggestionService;
-import com.xpn.spellnote.services.spellcheck.local.SpellCheckerServiceImpl;
-import com.xpn.spellnote.services.spellcheck.local.SuggestionServiceImpl;
-import com.xpn.spellnote.services.word.WordsService;
+import com.xpn.spellnote.services.word.SpellCheckerService;
+import com.xpn.spellnote.services.word.SuggestionService;
+import com.xpn.spellnote.services.word.local.SpellCheckerServiceImpl;
+import com.xpn.spellnote.services.word.local.SuggestionServiceImpl;
+import com.xpn.spellnote.services.word.local.WordMapper;
+import com.xpn.spellnote.services.word.local.WordSchema;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -45,7 +44,6 @@ public class DiContext {
     private final DocumentService documentService;
     private final SavedDictionaryService savedDictionaryService;
     private final AvailableDictionariesService availableDictionariesService;
-    private final WordsService wordsService;
     private final SpellCheckerService spellCheckerService;
     private final SuggestionService suggestionService;
 
@@ -61,13 +59,12 @@ public class DiContext {
         Realm.init(context);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
         documentService = new LocalDocumentServiceImpl(realmConfiguration, documentMapper);
-        savedDictionaryService = new SavedDictionaryServiceImpl(realmConfiguration, dictionaryMapper, wordMapper);
+        savedDictionaryService = new SavedDictionaryServiceImpl(realmConfiguration, dictionaryMapper);
         spellCheckerService = new SpellCheckerServiceImpl(realmConfiguration, wordMapper);
         suggestionService = new SuggestionServiceImpl(realmConfiguration, wordMapper);
 
         // REST services
         availableDictionariesService = retrofit.create(AvailableDictionariesService.class);
-        wordsService = retrofit.create(WordsService.class);
     }
 
 
@@ -79,9 +76,6 @@ public class DiContext {
     }
     public AvailableDictionariesService getAvailableDictionariesService() {
         return availableDictionariesService;
-    }
-    public WordsService getWordsService() {
-        return wordsService;
     }
     public SpellCheckerService getSpellCheckerService() {
         return spellCheckerService;

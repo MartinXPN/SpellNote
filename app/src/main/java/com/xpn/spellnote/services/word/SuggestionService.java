@@ -1,4 +1,4 @@
-package com.xpn.spellnote.services.spellcheck;
+package com.xpn.spellnote.services.word;
 
 import com.xpn.spellnote.models.WordModel;
 

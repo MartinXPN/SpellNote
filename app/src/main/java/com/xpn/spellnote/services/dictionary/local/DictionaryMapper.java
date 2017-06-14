@@ -12,15 +12,13 @@ public class DictionaryMapper implements BeanMapper<DictionaryModel, DictionaryS
                 source.locale,
                 source.languageName,
                 source.logoURL,
-                source.version);
+                source.version,
+                source.alphabet,
+                source.downloadURL);
     }
 
     @Override
     public DictionarySchema mapTo(DictionaryModel source) {
-        return new DictionarySchema(
-                source.getLocale(),
-                source.getLanguageName(),
-                source.getLogoURL(),
-                source.getVersion());
+        return new DictionarySchema(source);
     }
 }

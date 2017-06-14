@@ -13,4 +13,5 @@
 
     <color name="list_date">#737373</color>
     <color name="deleteColor">#c10d0d</color>
+    <color name="saveColor">#1e8117</color>
 </resources>
