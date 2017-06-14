@@ -5,7 +5,7 @@ import android.databinding.Bindable;
 import com.xpn.spellnote.BR;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.WordModel;
-import com.xpn.spellnote.services.spellcheck.SuggestionService;
+import com.xpn.spellnote.services.word.SuggestionService;
 import com.xpn.spellnote.ui.BaseViewModel;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.xpn.spellnote.ui.language;
+package com.xpn.spellnote.ui.dictionary;
 
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
@@ -41,8 +41,7 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
         DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
         viewModel = new SelectLanguagesVM(this,
                 diContext.getAvailableDictionariesService(),
-                diContext.getSavedDictionaryService(),
-                diContext.getWordsService());
+                diContext.getSavedDictionaryService());
 
         binding.setViewModel(viewModel);
         int numberOfColumns = (int) (Util.getWindowWidth(this) / getResources().getDimension(R.dimen.language_grid_column_width));

@@ -6,9 +6,9 @@
     <data>
         <variable
             name="viewModel"
-            type="com.xpn.spellnote.ui.language.LanguageItemVM" />
+            type="com.xpn.spellnote.ui.dictionary.LanguageItemVM" />
 
-        <import type="com.xpn.spellnote.ui.language.LanguageItemVM.Status"/>
+        <import type="com.xpn.spellnote.ui.dictionary.LanguageItemVM.Status"/>
         <import type="android.view.View"/>
     </data>
 
@@ -42,10 +42,13 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             style="@style/Widget.AppCompat.ProgressBar"
+            android:max="100"
+            android:progress="@{viewModel.progress}"
             android:visibility="@{viewModel.status == Status.SAVE_IN_PROGRESS ? View.VISIBLE : View.GONE}"
             android:layout_alignRight="@+id/language_flag"
             android:layout_alignEnd="@+id/language_flag"
-            android:layout_alignBottom="@+id/language_flag" />
+            android:layout_alignBottom="@+id/language_flag"
+            android:theme="@style/SaveProgress" />
 
         <ProgressBar
             android:layout_width="30dp"
@@ -55,7 +58,7 @@
             android:layout_alignRight="@+id/language_flag"
             android:layout_alignEnd="@+id/language_flag"
             android:layout_alignBottom="@+id/language_flag"
-            android:theme="@style/DeleteProgress"/>
+            android:theme="@style/DeleteProgress" />
 
 
         <TextView
