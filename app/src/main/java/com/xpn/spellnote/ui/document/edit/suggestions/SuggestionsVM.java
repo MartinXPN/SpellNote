@@ -30,7 +30,7 @@ public class SuggestionsVM extends BaseViewModel {
 
     public void suggest(String word) {
         addSubscription( suggestionService
-                .getSuggestions(word, viewContract.getCurrentLanguage().getLocale())
+                .getSuggestions(word, viewContract.getCurrentLanguage())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -43,7 +43,6 @@ public class SuggestionsVM extends BaseViewModel {
                             suggestionVMs.clear();
                             for(WordModel model : wordModels) {
                                 suggestionVMs.add( new SuggestionListItemVM(viewContract, model.getWord()));
-                                Timber.d("Suggestion (" + word + ") -> " + model.getWord());
                             }
 
                             Timber.d(suggestionVMs.size() + " Suggestions in total");
