@@ -43,7 +43,6 @@ public class SuggestionsVM extends BaseViewModel {
                             suggestionVMs.clear();
                             for(WordModel model : wordModels) {
                                 suggestionVMs.add( new SuggestionListItemVM(viewContract, model.getWord()));
-                                Timber.d("Suggestion (" + word + ") -> " + model.getWord());
                             }
 
                             Timber.d(suggestionVMs.size() + " Suggestions in total");

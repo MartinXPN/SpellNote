@@ -8,8 +8,10 @@ import com.xpn.spellnote.services.word.SuggestionService;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import io.reactivex.Observable;
@@ -63,19 +65,29 @@ public class SuggestionServiceImpl implements SuggestionService {
 
 
             /// get corrections
-            ArrayList <String> corrections = editDistance(word, dictionary);
+            int numberOfAllowedChanges = 1;
+            Map <String, Integer> corrections = editDistance(word, dictionary, numberOfAllowedChanges, new HashSet<>() );
             BehaviorSubject< List<WordModel> > correctionsResult = BehaviorSubject.create();
 
             Observable.create((ObservableOnSubscribe<List<WordModel>>) subscriber ->
                     spellCheckerService
-                            .getCorrectWords(corrections, dictionary.getLocale())
+                            .getCorrectWords(new ArrayList<>(corrections.keySet()), dictionary.getLocale())
                             .subscribe(subscriber::onNext))
                     .subscribe( correctionsResult );
 
+            Timber.d("CORRECTIONS: " + corrections );
+
             /// combine results
             ArrayList <WordModel> result = new ArrayList<>(continuationResult);
-            if( correctionsResult.getValue() != null )
-                result.addAll(correctionsResult.getValue());
+
+            /// make usage of corrections less by factor of number of changes made on the word
+            if( correctionsResult.getValue() != null ) {
+                List <WordModel> correction = correctionsResult.getValue();
+                for( WordModel wordModel : correction ) {
+                    wordModel.setUsage( wordModel.getUsage() / (numberOfAllowedChanges + 1 - corrections.get(wordModel.getWord()) ));
+                }
+                result.addAll(correction);
+            }
 
             /// sort the result in order of decreasing usage
             Collections.sort(result, (a, b) -> Integer.valueOf( b.getUsage() ).compareTo( a.getUsage() ));
@@ -113,5 +125,36 @@ public class SuggestionServiceImpl implements SuggestionService {
 
         res.remove(s);
         return new ArrayList<>(res);
+    }
+
+
+    /**
+     * Finds all resulting strings by making changes to s by at most numberOfAllowedChanges times
+     * one change = call ArrayList<String> editDistance( String s, DictionaryModel dictionary ) once
+     * Very costly recursion
+     * Try to keep numberOfAllowedChanges <= 3
+     * @return Map <word, numberOfAllowedChanges>
+     */
+    private Map<String, Integer> editDistance(String s, DictionaryModel dictionary, int numberOfAllowedChanges, Set <String> alreadyPresentWords ) {
+
+        Map<String, Integer> res = new HashMap<>();
+        ArrayList <String> editions = editDistance(s, dictionary);
+        ArrayList <String> newWords = new ArrayList<>();
+
+        for( String word : editions ) {
+            if( !alreadyPresentWords.contains(word) ) {
+                res.put(word, numberOfAllowedChanges);
+                newWords.add( word );
+            }
+        }
+        alreadyPresentWords.addAll( newWords );
+        Timber.d("There are " + newWords.size() + " new words(" + numberOfAllowedChanges + ")" );
+
+        for( String word : newWords ) {
+            if( numberOfAllowedChanges > 1 )
+                res.putAll( editDistance( word, dictionary, numberOfAllowedChanges - 1, alreadyPresentWords ) );
+        }
+
+        return res;
     }
 }

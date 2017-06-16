@@ -26,6 +26,9 @@ public class WordModel implements Comparable<WordModel> {
     public int getUsage() {
         return usage;
     }
+    public void setUsage(int usage) {
+        this.usage = usage;
+    }
     public boolean getUserDefined() {
         return isUserDefined;
     }

@@ -129,6 +129,9 @@ public class EditCorrectText extends AppCompatEditText {
         index = Math.min( index, text.length() - 1 );
         index = Math.max( index, 0 );
 
+        if( text.length() == 0 )
+            return index;
+
         if( isWordCharacter( text.charAt(index) ) ) {
             while (index > 0 && isWordCharacter(text.charAt(index - 1)))
                 --index;
