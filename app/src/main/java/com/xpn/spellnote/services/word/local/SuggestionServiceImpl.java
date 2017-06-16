@@ -111,6 +111,7 @@ public class SuggestionServiceImpl implements SuggestionService {
             res.add(tmp.deleteCharAt(i).toString());
         }
 
+        res.remove(s);
         return new ArrayList<>(res);
     }
 }

@@ -129,8 +129,12 @@ public class EditCorrectText extends AppCompatEditText {
         index = Math.min( index, text.length() - 1 );
         index = Math.max( index, 0 );
 
-        while( index > 0 && isWordCharacter(text.charAt(index-1))) {
-            --index;
+        if( isWordCharacter( text.charAt(index) ) ) {
+            while (index > 0 && isWordCharacter(text.charAt(index - 1)))
+                --index;
+        }
+        else {
+            return index;
         }
 
         /// words contain '-' but they don't start with it
