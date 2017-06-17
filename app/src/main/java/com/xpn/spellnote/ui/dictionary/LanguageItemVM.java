@@ -6,11 +6,16 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.xpn.spellnote.BR;
 import com.xpn.spellnote.models.DictionaryModel;
+import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.dictionary.SavedDictionaryService;
+import com.xpn.spellnote.services.word.SavedWordsService;
 import com.xpn.spellnote.ui.BaseViewModel;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
@@ -24,14 +29,16 @@ public class LanguageItemVM extends BaseViewModel {
     private int progress;
     private final ViewContract viewContract;
     private final SavedDictionaryService savedDictionaryService;
+    private final SavedWordsService savedWordsService;
 
     public enum Status { NOT_PRESENT, SAVE_IN_PROGRESS, SAVED, DELETE_IN_PROGRESS }
 
-    LanguageItemVM(ViewContract viewContract, DictionaryModel dictionaryModel, Status status, SavedDictionaryService savedDictionaryService) {
+    LanguageItemVM(ViewContract viewContract, DictionaryModel dictionaryModel, Status status, SavedDictionaryService savedDictionaryService, SavedWordsService savedWordsService) {
         this.viewContract = viewContract;
         this.dictionaryModel = dictionaryModel;
         this.status = status;
         this.savedDictionaryService = savedDictionaryService;
+        this.savedWordsService = savedWordsService;
     }
 
     public String getLanguageName() {
@@ -63,6 +70,10 @@ public class LanguageItemVM extends BaseViewModel {
     }
 
     private void saveDictionary() {
+        saveDictionary( new ArrayList<>() );
+    }
+    private void saveDictionary(List<WordModel> defaultWords) {
+        viewContract.onDownloadingDictionary(dictionaryModel);
         setStatus(Status.SAVE_IN_PROGRESS);
         StorageReference storage = FirebaseStorage.getInstance().getReferenceFromUrl(dictionaryModel.getDownloadURL());
         File file = new File(getDictionaryPath());
@@ -74,7 +85,10 @@ public class LanguageItemVM extends BaseViewModel {
                     Timber.d( "Saved " + snapshot.getBytesTransferred() + " from " + snapshot.getTotalByteCount() );
                 })
                 .addOnCompleteListener(task -> {
-                    addSubscription(savedDictionaryService.saveDictionary(dictionaryModel)
+                    addSubscription(Completable.mergeArray(
+                            savedDictionaryService.saveDictionary(dictionaryModel),
+                            savedWordsService.saveWords(dictionaryModel.getLocale(), defaultWords)
+                    )
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
@@ -118,6 +132,23 @@ public class LanguageItemVM extends BaseViewModel {
     }
 
 
+    private void updateDictionary() {
+        viewContract.onUpdatingDictionary(dictionaryModel);
+        setStatus(Status.SAVE_IN_PROGRESS);
+
+        addSubscription( savedWordsService.getUserDefinedWords(dictionaryModel.getLocale())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        userDefinedWords -> {
+                            removeDictionary();
+                            saveDictionary(userDefinedWords);
+                        },
+                        Timber::e
+                ));
+    }
+
+
     @Bindable
     public Status getStatus() {
         return status;
@@ -146,6 +177,7 @@ public class LanguageItemVM extends BaseViewModel {
     interface ViewContract {
         void onDownloadingDictionary(DictionaryModel dictionary);
         void onRemovingDictionary(DictionaryModel dictionary);
+        void onUpdatingDictionary(DictionaryModel dictionary);
         void showError(String message);
         void showMessage(String message);
     }

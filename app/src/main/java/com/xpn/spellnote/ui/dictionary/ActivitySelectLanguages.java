@@ -41,7 +41,8 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
         DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
         viewModel = new SelectLanguagesVM(this,
                 diContext.getAvailableDictionariesService(),
-                diContext.getSavedDictionaryService());
+                diContext.getSavedDictionaryService(),
+                diContext.getSavedWordsService());
 
         binding.setViewModel(viewModel);
         int numberOfColumns = (int) (Util.getWindowWidth(this) / getResources().getDimension(R.dimen.language_grid_column_width));
@@ -87,6 +88,14 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
         bundle.putString("languageName", dictionary.getLanguageName());
         bundle.putString("locale", dictionary.getLocale());
         analytics.logEvent("remove_dictionary", bundle);
+    }
+
+    @Override
+    public void onUpdatingDictionary(DictionaryModel dictionary) {
+        Bundle bundle = new Bundle();
+        bundle.putString("languageName", dictionary.getLanguageName());
+        bundle.putString("locale", dictionary.getLocale());
+        analytics.logEvent("update_dictionary", bundle);
     }
 
     @Override

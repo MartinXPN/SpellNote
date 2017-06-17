@@ -19,11 +19,9 @@
 
 
     <string name="action_sort_by">Sort by</string>
-    <string name="action_sort_by_date_added">Date added</string>
     <string name="action_sort_by_date_modified">Date modified</string>
     <string name="action_sort_by_title">Title</string>
     <string name="action_sort_by_language">Language</string>
-    <string name="action_sort_by_color">Color</string>
     <string name="action_sort_by_ascending">Ascending</string>
 
 
@@ -44,7 +42,7 @@
         \tThe app supports several languages, including English, Russian and Armenian.\n
         \tIt\'s an open-source <a href="https://github.com/MartinXPN/ProCorrector.git">project</a> done mainly for educational reasons.\n
     </string>
-    <string name="about_author">© 2016 <a href="https://www.linkedin.com/in/martin-mirakyan-945597101">Martin Mirakyan</a>\nAll Rights Reserved.</string>
+    <string name="about_author">© 2017 <a href="https://www.linkedin.com/in/martin-mirakyan-945597101">Martin Mirakyan</a>\nAll Rights Reserved.</string>
     <string name="action_title_show_suggestions">Show suggestions</string>
     <string name="action_title_overflow_menu">More options</string>
     <string name="action_title_record">Record</string>

@@ -31,6 +31,7 @@ import com.xpn.spellnote.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import timber.log.Timber;
 
@@ -172,7 +173,11 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     public void finish() {
-        AdsActivity.launch(this);
+        /// show ads in 50% of all cases
+        int number = new Random().nextInt(2);
+        if(number == 0)
+            AdsActivity.launch(this);
+
         super.finish();
     }
 
