@@ -30,7 +30,6 @@ import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -175,7 +174,7 @@ public class ActivityEditDocument extends AppCompatActivity
     @Override
     public void finish() {
         /// show ads in 50% of all cases
-        int number = new Random(new Date().getTime()).nextInt(2);
+        int number = new Random().nextInt(2);
         if(number == 0)
             AdsActivity.launch(this);
 

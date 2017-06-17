@@ -63,6 +63,7 @@ public class LanguageItemVM extends BaseViewModel {
     }
 
     private void saveDictionary() {
+        viewContract.onDownloadingDictionary(dictionaryModel);
         setStatus(Status.SAVE_IN_PROGRESS);
         StorageReference storage = FirebaseStorage.getInstance().getReferenceFromUrl(dictionaryModel.getDownloadURL());
         File file = new File(getDictionaryPath());
@@ -118,6 +119,12 @@ public class LanguageItemVM extends BaseViewModel {
     }
 
 
+    private void updateDictionary() {
+        viewContract.onUpdatingDictionary(dictionaryModel);
+
+    }
+
+
     @Bindable
     public Status getStatus() {
         return status;
@@ -146,6 +153,7 @@ public class LanguageItemVM extends BaseViewModel {
     interface ViewContract {
         void onDownloadingDictionary(DictionaryModel dictionary);
         void onRemovingDictionary(DictionaryModel dictionary);
+        void onUpdatingDictionary(DictionaryModel dictionary);
         void showError(String message);
         void showMessage(String message);
     }
