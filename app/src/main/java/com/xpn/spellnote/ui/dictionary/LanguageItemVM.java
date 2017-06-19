@@ -59,8 +59,17 @@ public class LanguageItemVM extends BaseViewModel {
             setStatus(Status.NOT_PRESENT);
         }
         else if(status == Status.SAVED) {
-            viewContract.showMessage("Removing " + dictionaryModel.getLanguageName());
-            removeDictionary();
+            viewContract.onAskUpdateOrRemove(dictionaryModel, new DictionaryListener() {
+                @Override
+                public void onUpdate(DictionaryModel dictionary) {
+                    updateDictionary();
+                }
+
+                @Override
+                public void onRemove(DictionaryModel dictionary) {
+                    removeDictionary();
+                }
+            });
         }
     }
 
@@ -81,6 +90,7 @@ public class LanguageItemVM extends BaseViewModel {
 
         storage.getFile(file)
                 .addOnProgressListener(snapshot -> {
+                    setStatus(Status.SAVE_IN_PROGRESS);
                     setProgress((int) ((float) (snapshot.getBytesTransferred()) / snapshot.getTotalByteCount() * 100));
                     Timber.d( "Saved " + snapshot.getBytesTransferred() + " from " + snapshot.getTotalByteCount() );
                 })
@@ -174,10 +184,16 @@ public class LanguageItemVM extends BaseViewModel {
     }
 
 
+    interface DictionaryListener {
+        void onUpdate(DictionaryModel dictionary);
+        void onRemove(DictionaryModel dictionary);
+    }
+
     interface ViewContract {
         void onDownloadingDictionary(DictionaryModel dictionary);
         void onRemovingDictionary(DictionaryModel dictionary);
         void onUpdatingDictionary(DictionaryModel dictionary);
+        void onAskUpdateOrRemove(DictionaryModel dictionary, DictionaryListener listener);
         void showError(String message);
         void showMessage(String message);
     }

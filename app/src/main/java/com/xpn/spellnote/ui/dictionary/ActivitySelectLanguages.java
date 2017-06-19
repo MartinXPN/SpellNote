@@ -2,8 +2,10 @@ package com.xpn.spellnote.ui.dictionary;
 
 import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +19,7 @@ import com.xpn.spellnote.R;
 import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.ActivitySelectLanguagesBinding;
 import com.xpn.spellnote.models.DictionaryModel;
+import com.xpn.spellnote.ui.dictionary.LanguageItemVM.DictionaryListener;
 import com.xpn.spellnote.ui.util.Util;
 
 
@@ -96,6 +99,18 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
         bundle.putString("languageName", dictionary.getLanguageName());
         bundle.putString("locale", dictionary.getLocale());
         analytics.logEvent("update_dictionary", bundle);
+    }
+
+    @Override
+    public void onAskUpdateOrRemove(DictionaryModel dictionary, DictionaryListener listener) {
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)  builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        else                                                        builder = new AlertDialog.Builder(this);
+        builder.setTitle(dictionary.getLanguageName())
+                .setMessage("Update or Delete the dictionary?")
+                .setPositiveButton("Update", (dialog, which) -> listener.onUpdate(dictionary))
+                .setNegativeButton("Delete", (dialog, which) -> listener.onRemove(dictionary))
+                .show();
     }
 
     @Override
