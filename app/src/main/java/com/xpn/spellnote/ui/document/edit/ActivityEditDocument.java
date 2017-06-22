@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.text.Editable;
@@ -221,15 +220,20 @@ public class ActivityEditDocument extends AppCompatActivity
 
         item.setChecked( checkSpelling );
         binding.content.setSpellCheckingEnabled(checkSpelling);
-        if( checkSpelling ) viewModel.checkSpelling(0, Integer.MAX_VALUE, binding.content.getWords(0, Integer.MAX_VALUE) );
-        else                binding.content.markText(0, Integer.MAX_VALUE, ContextCompat.getColor(this, R.color.text_correct));
+        if( checkSpelling )
+            viewModel.checkSpelling(0,  binding.content.getText().length(), binding.content.getWords(0, binding.content.getText().length()) );
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == SPEECH_RECOGNIZER_CODE && resultCode == RESULT_OK && data != null) {
+        if( resultCode != RESULT_OK ) {
+            super.onActivityResult(requestCode, resultCode, data);
+            return;
+        }
+
+        if( requestCode == SPEECH_RECOGNIZER_CODE && data != null ) {
             ArrayList <String> results = data.getStringArrayListExtra( RecognizerIntent.EXTRA_RESULTS );
             String spokenText = results.get(0);
             binding.content.replaceSelection(spokenText);
@@ -248,7 +252,7 @@ public class ActivityEditDocument extends AppCompatActivity
         if( !checkSpelling )    return;
         Timber.d("Mark Incorrect: " + incorrectWords);
         for( String word : incorrectWords ) {
-            binding.content.markWord( word, left, right, ContextCompat.getColor(this, R.color.text_wrong));
+            binding.content.markWord( word, left, right, binding.content.INCORRECT_COLOR);
         }
     }
 
@@ -257,7 +261,7 @@ public class ActivityEditDocument extends AppCompatActivity
         if( !checkSpelling )    return;
         Timber.d("Mark Correct: " + correctWords);
         for( String word : correctWords ) {
-            binding.content.markWord( word, left, right, ContextCompat.getColor(this, R.color.text_correct));
+            binding.content.markWord( word, left, right, binding.content.CORRECT_COLOR);
         }
     }
 

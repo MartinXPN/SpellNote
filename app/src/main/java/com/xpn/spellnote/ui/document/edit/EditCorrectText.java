@@ -1,30 +1,35 @@
 package com.xpn.spellnote.ui.document.edit;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.util.Pair;
 
+import com.xpn.spellnote.R;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class EditCorrectText extends AppCompatEditText {
 
+    public final Integer INCORRECT_COLOR = ContextCompat.getColor(this.getContext(), R.color.text_wrong);
+    public final Integer CORRECT_COLOR = ContextCompat.getColor(this.getContext(), R.color.text_correct);
     private boolean spellCheckingEnabled = true;
+
 
     public EditCorrectText(Context context) {
         super(context);
     }
-
     public EditCorrectText(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
     public EditCorrectText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
@@ -34,6 +39,22 @@ public class EditCorrectText extends AppCompatEditText {
     }
     public void setSpellCheckingEnabled(boolean spellCheckingEnabled) {
         this.spellCheckingEnabled = spellCheckingEnabled;
+        if( !spellCheckingEnabled ) {
+            /// mark the whole text as a correct one
+            markText(0, getText().length(), CORRECT_COLOR);
+        }
+    }
+
+
+    public void removeSpans(int left, int right) {
+        left = Math.max( 0, left );
+        right = Math.min( getText().length(), right );
+        ForegroundColorSpan[] toRemoveSpans = getText().getSpans(left, right, ForegroundColorSpan.class);
+        for (ForegroundColorSpan toRemoveSpan : toRemoveSpans)
+            getText().removeSpan(toRemoveSpan);
+    }
+    public void removeSpans() {
+        removeSpans( 0, getText().length() );
     }
 
 
@@ -63,9 +84,9 @@ public class EditCorrectText extends AppCompatEditText {
     }
 
     public void markText(int left, int right, int color) {
-        // color = Color.parseColor("#D20000")
         left = Math.max( left, 0 );
         right = Math.min( right, getText().length() );
+        removeSpans( left, right );
         getText().setSpan( new ForegroundColorSpan(color), left, right, 0 );
     }
 
@@ -108,9 +129,9 @@ public class EditCorrectText extends AppCompatEditText {
                 .replaceAll("[.:_,\n\t]", " ")      // remove all punctuation marks with a regexp
                 .split(" ");                        // split the resulting string into words by ' '
 
-        List<String> words = new ArrayList<>(Arrays.asList(res));
-        words.removeAll(Collections.singleton(""));
-        return words;
+        Set<String> words = new HashSet<>(Arrays.asList(res));
+        words.remove("");
+        return new ArrayList<>(words);
     }
 
     public CharSequence getCurrentWord() {
