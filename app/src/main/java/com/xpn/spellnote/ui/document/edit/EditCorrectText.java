@@ -53,9 +53,6 @@ public class EditCorrectText extends AppCompatEditText {
         for (ForegroundColorSpan toRemoveSpan : toRemoveSpans)
             getText().removeSpan(toRemoveSpan);
     }
-    public void removeSpans() {
-        removeSpans( 0, getText().length() );
-    }
 
 
 
