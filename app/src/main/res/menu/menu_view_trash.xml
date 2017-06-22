@@ -1,0 +1,40 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.document.list.ActivityViewDocuments">
+
+    <item
+        android:id="@+id/action_sort"
+        android:title="@string/action_sort_by"
+        android:icon="@drawable/ic_sort"
+        app:showAsAction="ifRoom">
+
+        <menu>
+            <group
+                android:checkableBehavior="single">
+                <item android:id="@+id/action_sort_by_date_modified"
+                    android:title="@string/action_sort_by_date_modified"
+                    app:showAsAction="never"/>
+
+                <item android:id="@+id/action_sort_by_title"
+                    android:title="@string/action_sort_by_title"
+                    app:showAsAction="never"/>
+
+                <item android:id="@+id/action_sort_by_language"
+                    android:title="@string/action_sort_by_language"
+                    app:showAsAction="never"/>
+            </group>
+            <item
+                android:id="@+id/action_sort_ascending"
+                android:checkable="true"
+                android:title="@string/action_sort_by_ascending"
+                app:showAsAction="never"/>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/action_empty_trash"
+        android:title="@string/action_empty_trash"
+        app:showAsAction="never" />
+
+</menu>
