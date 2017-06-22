@@ -133,7 +133,9 @@ public class ActivityEditDocument extends AppCompatActivity
                 /// show suggestions only if the current word has more than one character
                 if( getCurrentWord().length() > 1 ) suggestionsVM.suggest(getCurrentWord());
                 else                                onHideSuggestions();
-                viewModel.checkSpelling(left, right, words);
+
+                if( checkSpelling )
+                    viewModel.checkSpelling(left, right, words);
             }
 
             @Override
@@ -209,6 +211,9 @@ public class ActivityEditDocument extends AppCompatActivity
 
         if( showSuggestions )   item.setIcon( R.mipmap.ic_show_suggestions );
         else                    item.setIcon( R.mipmap.ic_hide_suggestions );
+
+        if( showSuggestions )   suggestionsVM.suggest(binding.content.getCurrentWord().toString());
+        else                    onHideSuggestions();
     }
     public void updateSpellChecking( boolean checkSpelling, MenuItem item ) {
         this.checkSpelling = checkSpelling;
@@ -216,6 +221,8 @@ public class ActivityEditDocument extends AppCompatActivity
 
         item.setChecked( checkSpelling );
         binding.content.setSpellCheckingEnabled(checkSpelling);
+        if( checkSpelling ) viewModel.checkSpelling(0, Integer.MAX_VALUE, binding.content.getWords(0, Integer.MAX_VALUE) );
+        else                binding.content.markText(0, Integer.MAX_VALUE, ContextCompat.getColor(this, R.color.text_correct));
     }
 
 
@@ -238,6 +245,7 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     public void markIncorrect(int left, int right, List<String> incorrectWords) {
+        if( !checkSpelling )    return;
         Timber.d("Mark Incorrect: " + incorrectWords);
         for( String word : incorrectWords ) {
             binding.content.markWord( word, left, right, ContextCompat.getColor(this, R.color.text_wrong));
@@ -246,6 +254,7 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     public void markCorrect(int left, int right, List<String> correctWords) {
+        if( !checkSpelling )    return;
         Timber.d("Mark Correct: " + correctWords);
         for( String word : correctWords ) {
             binding.content.markWord( word, left, right, ContextCompat.getColor(this, R.color.text_correct));
@@ -262,6 +271,8 @@ public class ActivityEditDocument extends AppCompatActivity
         CacheUtil.setCache(this, CACHE_DEFAULT_LOCALE, dictionary.getLocale());
 
         /// run spellchecking on the whole text again because the language was changed
+        if(!checkSpelling)
+            return;
         viewModel.checkSpelling(
                 0,
                 binding.content.getText().length(),

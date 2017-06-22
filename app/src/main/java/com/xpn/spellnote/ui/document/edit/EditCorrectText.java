@@ -99,6 +99,9 @@ public class EditCorrectText extends AppCompatEditText {
      * @return all nonempty strings found after that operation
      */
     public List <String> getWords(int left, int right) {
+        left = Math.max( 0, left );
+        right = Math.min( getText().length(), right );
+
         String[] res = getText()
                 .subSequence(left, right)           // take only the range [left, right)
                 .toString()                         // convert to immuatable string
