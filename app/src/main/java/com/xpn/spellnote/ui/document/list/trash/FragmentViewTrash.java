@@ -1,14 +1,15 @@
 package com.xpn.spellnote.ui.document.list.trash;
 
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.SpellNoteApp;
@@ -40,7 +41,14 @@ public class FragmentViewTrash extends BaseFragmentDocumentList {
         int id = item.getItemId();
 
         if( id == R.id.action_empty_trash ) {
-            Toast.makeText(getActivity(), "Empty", Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)  builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+            else                                                        builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Remove all document in Trash?")
+                    .setPositiveButton("Yes", (dialog, which) -> viewModel.removeCategory(getCategory()))
+                    .setNegativeButton("Cancel", (dialog, which) -> {})
+                    .show();
+
             return true;
         }
         return super.onOptionsItemSelected(item);
