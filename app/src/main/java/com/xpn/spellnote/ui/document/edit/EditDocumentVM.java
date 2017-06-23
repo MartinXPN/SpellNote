@@ -51,7 +51,7 @@ public class EditDocumentVM extends BaseViewModel {
     @Override
     public void onDestroy() {
         /// synchronously save the document if content or title are not empty
-        if( !document.getTitle().isEmpty() || !document.getContent().isEmpty() ) {
+        if( !document.getTitle().equals("") || !document.getContent().equals("") ) {
             onSaveDocument();
         }
         else {
