@@ -1,8 +1,13 @@
 package com.xpn.spellnote.ui.document.list.trash;
 
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,6 +29,31 @@ public class FragmentViewTrash extends BaseFragmentDocumentList {
         binding.list.setAdapter(adapter);
         return binding.getRoot();
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate( R.menu.menu_view_trash, menu );
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected( MenuItem item ) {
+        int id = item.getItemId();
+
+        if( id == R.id.action_empty_trash ) {
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)  builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
+            else                                                        builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Remove all document in Trash?")
+                    .setPositiveButton("Yes", (dialog, which) -> viewModel.removeCategory(getCategory()))
+                    .setNegativeButton("Cancel", (dialog, which) -> {})
+                    .show();
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     public String getCategory() {

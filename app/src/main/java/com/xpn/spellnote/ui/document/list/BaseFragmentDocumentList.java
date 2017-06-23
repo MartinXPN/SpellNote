@@ -78,8 +78,6 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate( R.menu.menu_view_documents, menu );
-
         menu.findItem( R.id.action_sort_ascending ).setChecked( getAscending() );
         String sortingOrder = getSortingOrder();
         if( sortingOrder.equals( TagsUtil.ORDER_DATE_MODIFIED ) )   menu.findItem( R.id.action_sort_by_date_modified ).setChecked( true );
