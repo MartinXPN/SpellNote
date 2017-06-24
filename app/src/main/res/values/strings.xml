@@ -48,7 +48,6 @@
 
     <string name="about_app">
         \tSpell Checker is an app designed for creating texts, taking notes, editing and correcting essays, etc. It can be used any time even without an internet access.\n
-        \tIt will find any spelling mistake and offer suggestions from its dictionary, which is created from Wikipedia’s most widely used words.\n
         \tThe app supports several languages, including English, Russian and Armenian.\n
         \tIt\'s an open-source <a href="https://github.com/MartinXPN/ProCorrector.git">project</a> done mainly for educational reasons.\n
     </string>
