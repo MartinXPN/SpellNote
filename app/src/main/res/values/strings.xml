@@ -41,10 +41,13 @@
     <string name="explanation_removed">Document removed</string>
     <string name="explanation_document_not_editable">Restore document to edit…</string>
 
+    <string name="empty_archive">No items in Archive</string>
+    <string name="empty_trash">No items in Trash</string>
+    <string name="empty_document">Create a new Document</string>
+
 
     <string name="about_app">
         \tSpell Checker is an app designed for creating texts, taking notes, editing and correcting essays, etc. It can be used any time even without an internet access.\n
-        \tIt will find any spelling mistake and offer suggestions from its dictionary, which is created from Wikipedia’s most widely used words.\n
         \tThe app supports several languages, including English, Russian and Armenian.\n
         \tIt\'s an open-source <a href="https://github.com/MartinXPN/ProCorrector.git">project</a> done mainly for educational reasons.\n
     </string>

@@ -41,6 +41,8 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
     protected DocumentListAdapter adapter = new DocumentListAdapter();
 
     public abstract DocumentListItemVM getListItemVM(DocumentModel model, DocumentListItemVM.ViewContract viewContract);
+    public abstract void onShowEmptyLogo();
+    public abstract void onHideEmptyLogo();
 
 
     @Override
@@ -177,6 +179,9 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
         @Override
         public int getItemCount() {
+            if( documentList.isEmpty() )    onShowEmptyLogo();
+            else                            onHideEmptyLogo();
+
             return documentList.size();
         }
 

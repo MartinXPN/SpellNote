@@ -22,10 +22,12 @@ import com.xpn.spellnote.util.TagsUtil;
 
 public class FragmentViewTrash extends BaseFragmentDocumentList {
 
+    private FragmentViewTrashBinding binding;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        FragmentViewTrashBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_trash, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_trash, container, false);
         binding.list.setAdapter(adapter);
         return binding.getRoot();
     }
@@ -65,5 +67,15 @@ public class FragmentViewTrash extends BaseFragmentDocumentList {
         return new TrashListItemVM(model,
                 ((SpellNoteApp)getActivity().getApplication()).getDiContext().getDocumentService(),
                 viewContract);
+    }
+
+    @Override
+    public void onShowEmptyLogo() {
+        binding.emptyLogo.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onHideEmptyLogo() {
+        binding.emptyLogo.setVisibility(View.GONE);
     }
 }

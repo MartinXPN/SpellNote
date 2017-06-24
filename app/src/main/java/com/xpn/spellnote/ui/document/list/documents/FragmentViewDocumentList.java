@@ -20,10 +20,12 @@ import com.xpn.spellnote.util.TagsUtil;
 
 public class FragmentViewDocumentList extends BaseFragmentDocumentList {
 
+    private FragmentViewDocumentListBinding binding;
+
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        FragmentViewDocumentListBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_document_list, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_document_list, container, false);
         binding.list.setAdapter(adapter);
 
         binding.addDocument.setOnClickListener(view -> ActivityEditDocument.launchForResult(this, getCategory(), Codes.EDIT_DOCUMENT_CODE));
@@ -46,5 +48,15 @@ public class FragmentViewDocumentList extends BaseFragmentDocumentList {
         return new DocumentListItemVM(model,
                 ((SpellNoteApp)getActivity().getApplication()).getDiContext().getDocumentService(),
                 viewContract);
+    }
+
+    @Override
+    public void onShowEmptyLogo() {
+        binding.emptyLogo.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onHideEmptyLogo() {
+        binding.emptyLogo.setVisibility(View.GONE);
     }
 }
