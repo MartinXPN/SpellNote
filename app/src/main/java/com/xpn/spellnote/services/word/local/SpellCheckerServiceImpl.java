@@ -27,22 +27,6 @@ public class SpellCheckerServiceImpl implements SpellCheckerService {
 
 
     @Override
-    public Single<Boolean> isWordCorrect(String word, String locale) {
-        return Single.defer(() -> {
-            RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-                    .name(locale + ".realm")
-                    .build();
-
-            Realm realm = Realm.getInstance(realmConfiguration);
-            realm.refresh();
-
-            return Single.just( realm.where(WordSchema.class)
-                    .equalTo("word", word)
-                    .findFirst() != null);
-        });
-    }
-
-    @Override
     public Single<List<WordModel>> getCorrectWords(List<String> words, String locale) {
         return Single.defer(() -> {
             RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
