@@ -1,13 +1,13 @@
 package com.xpn.spellnote.services.word.local;
 
-import com.annimon.stream.Collectors;
-import com.annimon.stream.Stream;
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.BeanMapper;
 import com.xpn.spellnote.services.word.SpellCheckerService;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import io.reactivex.Single;
 import io.realm.Realm;
@@ -25,16 +25,34 @@ public class SpellCheckerServiceImpl implements SpellCheckerService {
         this.wordMapper = wordMapper;
     }
 
+    private String capitalize(final String s) {
+        return Character.toUpperCase(s.charAt(0)) + s.substring(1);
+    }
+
 
     @Override
     public Single<List<WordModel>> getCorrectWords(List<String> words, String locale) {
         return Single.defer(() -> {
+
+            if( words.isEmpty() )
+                return Single.just( new ArrayList<WordModel>() );
+
+            Set<String> requestedWords = new HashSet<>(words);
+
+            /// handle the case of uppercase / lowercase words
+            List <String> lowercaseWords = new ArrayList<>();
+            for( String word : words ) {
+                if( Character.isUpperCase(word.charAt(0)) )
+                    lowercaseWords.add( word.toLowerCase() );
+            }
+            words.addAll(lowercaseWords);
+
+
             RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                     .name(locale + ".realm")
                     .build();
 
             Timber.d( "Opening database at: " + realmConfiguration.getPath() );
-
             Realm realm = Realm.getInstance(realmConfiguration);
             realm.refresh();
 
@@ -42,9 +60,20 @@ public class SpellCheckerServiceImpl implements SpellCheckerService {
                     .in("word", words.toArray(new String[words.size()]))
                     .findAll();
 
-            return Single.just( Stream.of(result)
-                    .map(wordMapper::mapFrom)
-                    .collect(Collectors.toCollection(ArrayList::new)));
+            /// if hello is correct => Hello is correct too
+            List <WordModel> ans = new ArrayList<>();
+            for( WordSchema word : result ) {
+                if( requestedWords.contains(word.word) )
+                    ans.add( wordMapper.mapFrom(word) );
+
+                if( Character.isLowerCase(word.word.charAt(0)) ) {
+                    String capitalWord = capitalize(word.word);
+                    if( requestedWords.contains(capitalWord) )
+                        ans.add( new WordModel(capitalWord, word.usage, word.isUserDefined) );
+                }
+            }
+
+            return Single.just( ans );
         });
     }
 }

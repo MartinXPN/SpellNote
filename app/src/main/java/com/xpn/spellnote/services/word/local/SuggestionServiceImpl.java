@@ -84,7 +84,7 @@ public class SuggestionServiceImpl implements SuggestionService {
             if( correctionsResult.getValue() != null ) {
                 List <WordModel> correction = correctionsResult.getValue();
                 for( WordModel wordModel : correction ) {
-                    wordModel.setUsage( wordModel.getUsage() / (numberOfAllowedChanges + 1 - corrections.get(wordModel.getWord()) ));
+                    wordModel.setUsage(wordModel.getUsage() / (numberOfAllowedChanges + 1 - corrections.get(wordModel.getWord())));
                 }
                 result.addAll(correction);
             }
