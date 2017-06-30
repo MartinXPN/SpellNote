@@ -4,7 +4,6 @@
     <string name="title_activity_view_documents">Documents</string>
     <string name="title_activity_select_languages">Select Languages</string>
     <string name="title_activity_about">About SpellNote</string>
-    <string name="title_activity_edit_document">Edit Document</string>
 
     <string name="navigation_drawer_open">Drawer opened</string>
     <string name="navigation_drawer_close">drawer closed</string>
@@ -44,6 +43,8 @@
     <string name="empty_archive">No items in Archive</string>
     <string name="empty_trash">No items in Trash</string>
     <string name="empty_document">Create a new Document</string>
+
+    <string name="hint_edit_document_title">Title…</string>
 
 
     <string name="about_app">
