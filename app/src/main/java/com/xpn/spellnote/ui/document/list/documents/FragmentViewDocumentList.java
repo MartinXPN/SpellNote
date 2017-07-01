@@ -30,6 +30,7 @@ public class FragmentViewDocumentList extends BaseFragmentDocumentList {
         binding.list.setAdapter(adapter);
 
         binding.addDocument.setOnClickListener(view -> ActivityEditDocument.launchForResult(this, getCategory(), Codes.EDIT_DOCUMENT_CODE));
+        binding.emptyLogo.setOnClickListener(view -> ActivityEditDocument.launchForResult(this, getCategory(), Codes.EDIT_DOCUMENT_CODE));
         return binding.getRoot();
     }
 
