@@ -44,6 +44,7 @@ public class EditingLanguageChooserVM extends BaseViewModel {
         for( DictionaryModel dictionary : supportedDictionaries )
             if( dictionary.getLocale().equals(locale) ) {
                 setCurrentLanguage(dictionary);
+                viewContract.onLanguageSelected(dictionary);
                 break;
             }
     }
@@ -94,6 +95,7 @@ public class EditingLanguageChooserVM extends BaseViewModel {
 
     public interface ViewContract extends EditingLanguageListItemVM.ViewContract {
         void onDictionaryListAvailable(List <DictionaryModel> dictionaries);
+        void onLanguageSelected(DictionaryModel dictionary);
         void showAvailableLanguages();
         void hideAvailableLanguages();
         boolean isLanguageListOpen();
