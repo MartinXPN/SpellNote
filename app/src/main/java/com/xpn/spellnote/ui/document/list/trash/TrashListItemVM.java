@@ -2,6 +2,7 @@ package com.xpn.spellnote.ui.document.list.trash;
 
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.models.DocumentModel;
+import com.xpn.spellnote.services.dictionary.SavedDictionaryService;
 import com.xpn.spellnote.services.document.DocumentService;
 import com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM;
 import com.xpn.spellnote.util.TagsUtil;
@@ -9,10 +10,10 @@ import com.xpn.spellnote.util.TagsUtil;
 
 class TrashListItemVM extends DocumentListItemVM {
 
-    TrashListItemVM(DocumentModel document, DocumentService documentService, ViewContract listener) {
-        super(document, documentService, listener);
-    }
 
+    TrashListItemVM(DocumentModel document, DocumentService documentService, SavedDictionaryService dictionaryService, ViewContract viewContract) {
+        super(document, documentService, dictionaryService, viewContract);
+    }
 
     @Override
     public int getSecondItemDrawable() {

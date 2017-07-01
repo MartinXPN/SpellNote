@@ -41,6 +41,19 @@ public class SavedDictionaryServiceImpl implements SavedDictionaryService {
     }
 
     @Override
+    public Single<DictionaryModel> getDictionary(String locale) {
+        return Single.defer(() -> {
+            Realm realm = Realm.getInstance(realmConfiguration);
+            realm.refresh();
+            DictionarySchema dictionary = realm.where(DictionarySchema.class)
+                    .equalTo("locale", locale)
+                    .findFirst();
+
+            return Single.just(dictionaryMapper.mapFrom(dictionary));
+        });
+    }
+
+    @Override
     public Completable saveDictionary(DictionaryModel dictionary) {
         return Completable.fromAction(() -> {
             Timber.d("Save dictionary: " + dictionary.toString());

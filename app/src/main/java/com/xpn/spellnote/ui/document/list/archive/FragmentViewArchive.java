@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.FragmentViewArchiveBinding;
@@ -46,8 +47,10 @@ public class FragmentViewArchive extends BaseFragmentDocumentList {
 
     @Override
     public DocumentListItemVM getListItemVM(DocumentModel model, DocumentListItemVM.ViewContract viewContract) {
+        DiContext diContext = ((SpellNoteApp)getActivity().getApplication()).getDiContext();
         return new ArchiveListItemVM(model,
-                ((SpellNoteApp)getActivity().getApplication()).getDiContext().getDocumentService(),
+                diContext.getDocumentService(),
+                diContext.getSavedDictionaryService(),
                 viewContract);
     }
 
