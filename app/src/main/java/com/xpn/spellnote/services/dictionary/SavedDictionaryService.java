@@ -11,6 +11,7 @@ import io.reactivex.Single;
 public interface SavedDictionaryService {
 
     Single<ArrayList<DictionaryModel>> getSavedDictionaries();
+    Single<DictionaryModel> getDictionary(String locale);
     Completable saveDictionary( DictionaryModel dictionary );
     Completable removeDictionary( DictionaryModel dictionary );
 }

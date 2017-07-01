@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:swipe="http://schemas.android.com/apk/res-auto" >
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="document" type="com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM" />
+        <variable name="viewModel" type="com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM" />
     </data>
 
     <com.daimajia.swipe.SwipeLayout
@@ -43,9 +43,9 @@
                 android:clickable="true"
                 android:longClickable="true"
                 android:scaleType="centerInside"
-                android:src="@{document.firstItemDrawable}"
-                android:onClick="@{() -> document.onFirstItemClicked()}"
-                android:onLongClick="@{() -> document.onFirstItemLongClicked()}"
+                android:src="@{viewModel.firstItemDrawable}"
+                android:onClick="@{() -> viewModel.onFirstItemClicked()}"
+                android:onLongClick="@{() -> viewModel.onFirstItemLongClicked()}"
                 android:contentDescription="@null" />
             <ImageView
                 android:layout_width="0dp"
@@ -56,9 +56,9 @@
                 android:clickable="true"
                 android:longClickable="true"
                 android:scaleType="centerInside"
-                android:src="@{document.secondItemDrawable}"
-                android:onClick="@{() -> document.onSecondItemClicked()}"
-                android:onLongClick="@{() -> document.onSecondItemLongClicked()}"
+                android:src="@{viewModel.secondItemDrawable}"
+                android:onClick="@{() -> viewModel.onSecondItemClicked()}"
+                android:onLongClick="@{() -> viewModel.onSecondItemLongClicked()}"
                 android:contentDescription="@null" />
             <ImageView
                 android:layout_width="0dp"
@@ -69,9 +69,9 @@
                 android:clickable="true"
                 android:longClickable="true"
                 android:scaleType="centerInside"
-                android:src="@{document.thirdItemDrawable}"
-                android:onClick="@{() -> document.onThirdItemClicked()}"
-                android:onLongClick="@{() -> document.onThirdItemLongClicked()}"
+                android:src="@{viewModel.thirdItemDrawable}"
+                android:onClick="@{() -> viewModel.onThirdItemClicked()}"
+                android:onLongClick="@{() -> viewModel.onThirdItemLongClicked()}"
                 android:contentDescription="@null" />
         </LinearLayout>
 
@@ -85,7 +85,7 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:background="?attr/selectableItemBackground"
-            android:onClick="@{() -> document.onContentClicked()}">
+            android:onClick="@{() -> viewModel.onContentClicked()}">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -111,7 +111,7 @@
                     android:textStyle="normal"
                     android:textSize="25sp"
                     android:textColor="#009600"
-                    android:text="@{document.title}" />
+                    android:text="@{viewModel.title}" />
 
                 <TextView
                     android:layout_weight="5"
@@ -123,7 +123,7 @@
                     android:ellipsize="end"
                     android:textSize="15sp"
                     android:textColor="#0089f7"
-                    android:text="@{document.content}" />
+                    android:text="@{viewModel.content}" />
             </LinearLayout>
 
             <LinearLayout
@@ -142,7 +142,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:scaleType="centerInside"
-                    android:src="@mipmap/ic_launcher"
+                    app:imageUrl="@{viewModel.dictionaryLogoURL}"
                     android:contentDescription="@null" />
 
                 <TextView
@@ -154,7 +154,7 @@
                     android:gravity="center"
                     android:textColor="@color/list_date"
                     android:textSize="13sp"
-                    android:text="@{document.date}" />
+                    android:text="@{viewModel.date}" />
             </LinearLayout>
         </RelativeLayout>
 
