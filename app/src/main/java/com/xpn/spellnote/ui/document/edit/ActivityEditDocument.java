@@ -22,6 +22,7 @@ import com.xpn.spellnote.databinding.ActivityEditDocumentBinding;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.ui.ads.AdsActivity;
+import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserVM;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
 import com.xpn.spellnote.util.CacheUtil;
@@ -43,6 +44,7 @@ public class ActivityEditDocument extends AppCompatActivity
     private static final String EXTRA_DOCUMENT_ID = "doc_id";
     private static final String CACHE_DEFAULT_LOCALE = "default_locale";
     private static final Integer SPEECH_RECOGNIZER_CODE = 1;
+    private static final Integer LANGUAGE_SELECTION_CODE = 2;
     private boolean showSuggestions;
     private boolean checkSpelling;
 
@@ -228,9 +230,17 @@ public class ActivityEditDocument extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        super.onActivityResult(requestCode, resultCode, data);
         if( resultCode != RESULT_OK ) {
-            super.onActivityResult(requestCode, resultCode, data);
             return;
+        }
+
+        if( requestCode == LANGUAGE_SELECTION_CODE ) {
+            /// refresh the activity
+            Intent refresh = new Intent(this, ActivityEditDocument.class);
+            refresh.putExtras(getIntent().getExtras());
+            startActivity(refresh);
+            this.finish();
         }
 
         if( requestCode == SPEECH_RECOGNIZER_CODE && data != null ) {
@@ -238,7 +248,6 @@ public class ActivityEditDocument extends AppCompatActivity
             String spokenText = results.get(0);
             binding.content.replaceSelection(spokenText);
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
 
@@ -282,6 +291,11 @@ public class ActivityEditDocument extends AppCompatActivity
                 binding.content.getText().length(),
                 binding.content.getWords(0, binding.content.getText().length())
         );
+    }
+
+    @Override
+    public void onLaunchLanguageChooser() {
+        startActivityForResult( new Intent( this, ActivitySelectLanguages.class ), LANGUAGE_SELECTION_CODE );
     }
 
     @Override

@@ -33,6 +33,10 @@ public class EditingLanguageChooserVM extends BaseViewModel {
         loadSupportedDictionaries();
     }
 
+    public void onAddLanguagesClicked() {
+        viewContract.onLaunchLanguageChooser();
+    }
+
     @Bindable
     public String getCurrentLanguageLogoUrl() {
         if( currentLanguage == null )
@@ -96,6 +100,7 @@ public class EditingLanguageChooserVM extends BaseViewModel {
     public interface ViewContract extends EditingLanguageListItemVM.ViewContract {
         void onDictionaryListAvailable(List <DictionaryModel> dictionaries);
         void onLanguageSelected(DictionaryModel dictionary);
+        void onLaunchLanguageChooser();
         void showAvailableLanguages();
         void hideAvailableLanguages();
         boolean isLanguageListOpen();

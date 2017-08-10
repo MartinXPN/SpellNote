@@ -137,10 +137,12 @@ public class LanguageItemVM extends BaseViewModel {
         setStatus(Status.DELETE_IN_PROGRESS);
 
         /// delete database file from file system
+        Timber.d( "Deleting dictionary at location: " + getDictionaryPath() );
         File file = new File(getDictionaryPath());
         boolean deleted = file.delete();
         if( !deleted ) {
             setStatus(Status.SAVED);
+            viewContract.showError("Couldn't delete dictionary");
             return;
         }
 
@@ -148,7 +150,10 @@ public class LanguageItemVM extends BaseViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        () -> setStatus(Status.NOT_PRESENT),
+                        () -> {
+                            setStatus(Status.NOT_PRESENT);
+                            Timber.d( "Removed dictionary: " + dictionaryModel.getLocale() );
+                        },
                         throwable -> {
                             setStatus(Status.NOT_PRESENT);
                             viewContract.showError("Couldn't delete dictionary");
