@@ -48,9 +48,9 @@
 
 
     <string name="about_app">
-        \tSpell Checker is an app designed for creating texts, taking notes, editing and correcting essays, etc. It can be used any time even without an internet access.\n
-        \tThe app supports several languages, including English, Russian and Armenian.\n
-        \tIt\'s an open-source <a href="https://github.com/MartinXPN/ProCorrector.git">project</a> done mainly for educational reasons.\n
+        Spell Checker is an app designed for creating texts, taking notes, editing and correcting essays, etc. It can be used any time even without an internet access.\n\n
+        The app supports several languages, including English, Russian and Armenian.\n\n
+        It\'s an open-source <a href="https://github.com/MartinXPN/ProCorrector.git">project</a> done mainly for educational reasons.\n
     </string>
     <string name="about_author">© 2017 <a href="https://www.linkedin.com/in/martin-mirakyan-945597101">Martin Mirakyan</a>\nAll Rights Reserved.</string>
 
