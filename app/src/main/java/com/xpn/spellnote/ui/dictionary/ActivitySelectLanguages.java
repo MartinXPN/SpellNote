@@ -1,19 +1,15 @@
 package com.xpn.spellnote.ui.dictionary;
 
-import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.squareup.picasso.Picasso;
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.SpellNoteApp;
@@ -63,17 +59,6 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
     protected void onDestroy() {
         super.onDestroy();
         viewModel.onDestroy();
-    }
-
-
-    @BindingAdapter({"bind:imageUrl"})
-    public static void loadImage(ImageView view, String url) {
-        Picasso.with(view.getContext())
-                .load(url)
-                .placeholder(ContextCompat.getDrawable(view.getContext(), R.mipmap.ic_placeholder))
-                .resizeDimen(R.dimen.language_flag_size, R.dimen.language_flag_size)
-                .centerInside()
-                .into(view);
     }
 
 
