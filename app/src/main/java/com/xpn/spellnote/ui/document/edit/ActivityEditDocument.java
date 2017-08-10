@@ -21,7 +21,6 @@ import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.ActivityEditDocumentBinding;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
-import com.xpn.spellnote.ui.ads.AdsActivity;
 import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserVM;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
@@ -140,9 +139,7 @@ public class ActivityEditDocument extends AppCompatActivity
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                viewModel.onSaveDocument();
-            }
+            public void afterTextChanged(Editable s) {}
         });
         binding.content.setOnClickListener(v -> {
             /// show suggestions only if the current word has more than one character
@@ -178,8 +175,8 @@ public class ActivityEditDocument extends AppCompatActivity
     public void finish() {
         /// show ads in 50% of all cases
         int number = new Random().nextInt(2);
-        if(number == 0)
-            AdsActivity.launch(this);
+//        if(number == 0)
+//            AdsActivity.launch(this);
 
         super.finish();
     }
