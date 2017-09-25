@@ -2,7 +2,6 @@ package com.xpn.spellnote.services.word;
 
 import android.content.Context;
 import android.os.Environment;
-import android.widget.Toast;
 
 import com.xpn.spellnote.services.word.local.WordSchema;
 
@@ -13,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import io.reactivex.Completable;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import timber.log.Timber;
@@ -22,11 +22,17 @@ import timber.log.Timber;
  * A temporary class to create separate database files for every locale separately
  * This class is not going to appear in production or be merged with master
  * du -ks * (in adb shell to get size of all files in KB)
+ *
+ * Operations that we need to perform to get database from app to local file storage
+ * adb shell
+ * run-as packagename
+ * cp /data/data/packagename/ sdcard/db.realm
+ * adb pull sdcard/db.realm ./
  */
 public class PopulateRealm {
 
-    private static final String JSON_FILE = "en-realm.json";
-    private static final String OUTPUT_DATABASE = "en.realm";
+    private static final String JSON_FILE = "ru-realm.json";
+    private static final String OUTPUT_DATABASE = "ru.realm";
 
     private static String loadJSONFromAsset(Context context) {
         String json;
@@ -46,33 +52,35 @@ public class PopulateRealm {
         return json;
     }
 
-    public static void populateDatabase(Context context) {
+    public static Completable populateDatabase(Context context) {
 
-        JSONArray words;
-        try {
-            words = new JSONArray(loadJSONFromAsset(context));
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return;
-        }
+        return Completable.fromAction(() -> {
 
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-                .directory(Environment.getExternalStorageDirectory())
-                .name(OUTPUT_DATABASE)
-                .build();
+            JSONArray words;
+            try {
+                words = new JSONArray(loadJSONFromAsset(context));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return;
+            }
 
-        /// delete database if there is a file created during previous sessions
-        File file = new File(Environment.getExternalStorageDirectory() + "/" + OUTPUT_DATABASE );
-        boolean deleted = file.delete();
-        if( !deleted )
-            return;
+            RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
+                    .directory(Environment.getExternalStorageDirectory())
+                    .name(OUTPUT_DATABASE)
+                    .build();
 
-        Realm realmInstance = Realm.getInstance(realmConfiguration);
-        realmInstance.executeTransaction(realm -> realm.createOrUpdateAllFromJson(WordSchema.class, words));
-        realmInstance.close();
-        Realm.compactRealm(realmConfiguration);
+            /// delete database if there is a file created during previous sessions
+            File file = new File(Environment.getExternalStorageDirectory() + "/" + OUTPUT_DATABASE );
+            boolean deleted = file.delete();
+            if( !deleted )
+                return;
 
-        Toast.makeText(context, "Realm database created!", Toast.LENGTH_SHORT).show();
-        Timber.d("Realm database is now at location: " + realmConfiguration.getPath());
+            Realm realmInstance = Realm.getInstance(realmConfiguration);
+            realmInstance.executeTransaction(realm -> realm.createOrUpdateAllFromJson(WordSchema.class, words));
+            realmInstance.close();
+            Realm.compactRealm(realmConfiguration);
+
+            Timber.d("Realm database is now at location: " + realmConfiguration.getPath());
+        });
     }
 }
