@@ -11,7 +11,7 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 
-class DocumentListVM extends BaseViewModel {
+public class DocumentListVM extends BaseViewModel {
 
     private ViewContract viewContract;
     private DocumentService documentService;
@@ -35,8 +35,19 @@ class DocumentListVM extends BaseViewModel {
                 .subscribe());
     }
 
+    public void removeCategory(String category) {
+        addSubscription(documentService.removeDocumentCategory(category)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> viewContract.updateDocumentList(),
+                        Timber::e
+                ));
+    }
+
 
     interface ViewContract {
         void onDocumentsAvailable(List<DocumentModel> documents);
+        void updateDocumentList();
     }
 }

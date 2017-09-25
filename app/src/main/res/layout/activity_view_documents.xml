@@ -35,8 +35,8 @@
             android:id="@+id/list_of_documents"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar_box" >
-        </FrameLayout>
+            android:layout_below="@+id/toolbar_box"
+            android:background="@color/document_list_background_color" />
 
         <View
             android:layout_width="match_parent"

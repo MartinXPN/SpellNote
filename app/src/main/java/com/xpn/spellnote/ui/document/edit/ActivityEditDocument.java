@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.text.Editable;
@@ -23,6 +22,7 @@ import com.xpn.spellnote.databinding.ActivityEditDocumentBinding;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.ui.ads.AdsActivity;
+import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserVM;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
 import com.xpn.spellnote.util.CacheUtil;
@@ -31,6 +31,7 @@ import com.xpn.spellnote.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import timber.log.Timber;
 
@@ -43,6 +44,7 @@ public class ActivityEditDocument extends AppCompatActivity
     private static final String EXTRA_DOCUMENT_ID = "doc_id";
     private static final String CACHE_DEFAULT_LOCALE = "default_locale";
     private static final Integer SPEECH_RECOGNIZER_CODE = 1;
+    private static final Integer LANGUAGE_SELECTION_CODE = 2;
     private boolean showSuggestions;
     private boolean checkSpelling;
 
@@ -132,13 +134,13 @@ public class ActivityEditDocument extends AppCompatActivity
                 /// show suggestions only if the current word has more than one character
                 if( getCurrentWord().length() > 1 ) suggestionsVM.suggest(getCurrentWord());
                 else                                onHideSuggestions();
-                viewModel.checkSpelling(left, right, words);
+
+                if( checkSpelling )
+                    viewModel.checkSpelling(left, right, words);
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                viewModel.onSaveDocument();
-            }
+            public void afterTextChanged(Editable s) {}
         });
         binding.content.setOnClickListener(v -> {
             /// show suggestions only if the current word has more than one character
@@ -172,7 +174,18 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     public void finish() {
-        AdsActivity.launch(this);
+        /// show ads in 50% of all cases
+        int number = new Random().nextInt(2);
+        if(number == 0)
+            AdsActivity.launch(this);
+
+        super.finish();
+    }
+
+    private void refreshActivity() {
+        Intent refresh = new Intent(this, ActivityEditDocument.class);
+        refresh.putExtras(getIntent().getExtras());
+        startActivity(refresh);
         super.finish();
     }
 
@@ -204,6 +217,9 @@ public class ActivityEditDocument extends AppCompatActivity
 
         if( showSuggestions )   item.setIcon( R.mipmap.ic_show_suggestions );
         else                    item.setIcon( R.mipmap.ic_hide_suggestions );
+
+        if( showSuggestions )   suggestionsVM.suggest(binding.content.getCurrentWord().toString());
+        else                    onHideSuggestions();
     }
     public void updateSpellChecking( boolean checkSpelling, MenuItem item ) {
         this.checkSpelling = checkSpelling;
@@ -211,18 +227,28 @@ public class ActivityEditDocument extends AppCompatActivity
 
         item.setChecked( checkSpelling );
         binding.content.setSpellCheckingEnabled(checkSpelling);
+        if( checkSpelling )
+            viewModel.checkSpelling(0,  binding.content.getText().length(), binding.content.getWords(0, binding.content.getText().length()) );
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == SPEECH_RECOGNIZER_CODE && resultCode == RESULT_OK && data != null) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if( resultCode != RESULT_OK ) {
+            return;
+        }
+
+        if( requestCode == LANGUAGE_SELECTION_CODE ) {
+            refreshActivity();
+        }
+
+        if( requestCode == SPEECH_RECOGNIZER_CODE && data != null ) {
             ArrayList <String> results = data.getStringArrayListExtra( RecognizerIntent.EXTRA_RESULTS );
             String spokenText = results.get(0);
             binding.content.replaceSelection(spokenText);
         }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
 
@@ -233,17 +259,19 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     public void markIncorrect(int left, int right, List<String> incorrectWords) {
+        if( !checkSpelling )    return;
         Timber.d("Mark Incorrect: " + incorrectWords);
         for( String word : incorrectWords ) {
-            binding.content.markWord( word, left, right, ContextCompat.getColor(this, R.color.text_wrong));
+            binding.content.markWord( word, left, right, binding.content.INCORRECT_COLOR);
         }
     }
 
     @Override
     public void markCorrect(int left, int right, List<String> correctWords) {
+        if( !checkSpelling )    return;
         Timber.d("Mark Correct: " + correctWords);
         for( String word : correctWords ) {
-            binding.content.markWord( word, left, right, ContextCompat.getColor(this, R.color.text_correct));
+            binding.content.markWord( word, left, right, binding.content.CORRECT_COLOR);
         }
     }
 
@@ -257,11 +285,18 @@ public class ActivityEditDocument extends AppCompatActivity
         CacheUtil.setCache(this, CACHE_DEFAULT_LOCALE, dictionary.getLocale());
 
         /// run spellchecking on the whole text again because the language was changed
+        if(!checkSpelling)
+            return;
         viewModel.checkSpelling(
                 0,
                 binding.content.getText().length(),
                 binding.content.getWords(0, binding.content.getText().length())
         );
+    }
+
+    @Override
+    public void onLaunchLanguageChooser() {
+        startActivityForResult( new Intent( this, ActivitySelectLanguages.class ), LANGUAGE_SELECTION_CODE );
     }
 
     @Override

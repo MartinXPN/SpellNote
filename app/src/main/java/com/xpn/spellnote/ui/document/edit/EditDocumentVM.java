@@ -51,7 +51,7 @@ public class EditDocumentVM extends BaseViewModel {
     @Override
     public void onDestroy() {
         /// synchronously save the document if content or title are not empty
-        if( !document.getTitle().isEmpty() || !document.getContent().isEmpty() ) {
+        if( !document.getTitle().equals("") || !document.getContent().equals("") ) {
             onSaveDocument();
         }
         else {
@@ -89,6 +89,7 @@ public class EditDocumentVM extends BaseViewModel {
     public void setTitle(String title) {
         document.setTitle(title);
         notifyPropertyChanged(BR.title);
+        onSaveDocument();
     }
 
 
@@ -99,6 +100,7 @@ public class EditDocumentVM extends BaseViewModel {
     public void setContent(String content) {
         document.setContent(content);
         notifyPropertyChanged(BR.content);
+        onSaveDocument();
     }
 
     void setLanguageLocale(String locale) {

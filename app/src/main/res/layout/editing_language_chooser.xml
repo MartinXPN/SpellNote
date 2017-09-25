@@ -37,13 +37,65 @@
             card_view:cardElevation="4dp"
             card_view:cardUseCompatPadding="true">
 
-            <com.samvel1024.databindingrv.BindingRecyclerView
-                android:id="@+id/supported_languages_grid"
+            <ScrollView
+                android:id="@+id/editing_language_chooser_scroll"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:bindingVarPath="com.xpn.spellnote.BR.viewModel"
-                app:itemLayoutResId="@layout/item_editing_language_grid"
-                app:viewModelList="@{viewModel.listViewModels}" />
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <!-- List of available languages -->
+                    <com.samvel1024.databindingrv.BindingRecyclerView
+                        android:id="@+id/supported_languages_grid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:bindingVarPath="com.xpn.spellnote.BR.viewModel"
+                        app:itemLayoutResId="@layout/item_editing_language_grid"
+                        app:viewModelList="@{viewModel.listViewModels}" />
+
+
+                    <!-- Option to add new dictionaries -->
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:orientation="vertical"
+                        android:onClick="@{() -> viewModel.onAddLanguagesClicked()}"
+                        android:background="?attr/selectableItemBackgroundBorderless">
+
+                        <ImageView
+                            android:id="@+id/language_flag"
+                            android:layout_width="@dimen/editing_language_flag_size"
+                            android:layout_height="@dimen/editing_language_flag_size"
+                            android:layout_margin="10dp"
+                            android:padding="10dp"
+                            android:src="@drawable/ic_add"
+                            android:background="@drawable/add_language_circle"
+                            android:contentDescription="@null" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="top|center_horizontal"
+                            android:textSize="12sp"
+                            android:textColor="#aa000000"
+                            android:lines="2"
+                            android:ellipsize="end"
+                            android:text="Add Dictionaries"
+                            android:layout_below="@+id/language_flag"
+                            android:layout_alignRight="@+id/language_flag"
+                            android:layout_alignEnd="@+id/language_flag"
+                            android:layout_alignLeft="@+id/language_flag"
+                            android:layout_alignStart="@+id/language_flag"/>
+                    </RelativeLayout>
+                </LinearLayout>
+            </ScrollView>
+
         </android.support.v7.widget.CardView>
 
     </RelativeLayout>

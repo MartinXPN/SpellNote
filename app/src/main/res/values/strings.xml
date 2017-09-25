@@ -1,11 +1,9 @@
 <resources>
 
     <string name="app_name">SpellNote</string>
-    <string name="action_settings">Settings</string>
     <string name="title_activity_view_documents">Documents</string>
     <string name="title_activity_select_languages">Select Languages</string>
     <string name="title_activity_about">About SpellNote</string>
-    <string name="title_activity_edit_document">Edit Document</string>
 
     <string name="navigation_drawer_open">Drawer opened</string>
     <string name="navigation_drawer_close">drawer closed</string>
@@ -19,12 +17,17 @@
 
 
     <string name="action_sort_by">Sort by</string>
-    <string name="action_sort_by_date_added">Date added</string>
     <string name="action_sort_by_date_modified">Date modified</string>
     <string name="action_sort_by_title">Title</string>
     <string name="action_sort_by_language">Language</string>
-    <string name="action_sort_by_color">Color</string>
     <string name="action_sort_by_ascending">Ascending</string>
+    <string name="action_empty_trash">Empty Trash</string>
+    <string name="action_title_show_suggestions">Show suggestions</string>
+    <string name="action_title_overflow_menu">More options</string>
+    <string name="action_title_record">Record</string>
+    <string name="action_title_send">Send</string>
+    <string name="action_title_copy">Copy</string>
+    <string name="action_title_check_spelling">Check Spelling</string>
 
 
     <string name="hint_move_to_documents">Move to Documents</string>
@@ -37,19 +40,18 @@
     <string name="explanation_removed">Document removed</string>
     <string name="explanation_document_not_editable">Restore document to edit…</string>
 
+    <string name="empty_archive">No items in Archive</string>
+    <string name="empty_trash">No items in Trash</string>
+    <string name="empty_document">Create a new Document</string>
+
+    <string name="hint_edit_document_title">Title…</string>
+
 
     <string name="about_app">
-        \tSpell Checker is an app designed for creating texts, taking notes, editing and correcting essays, etc. It can be used any time even without an internet access.\n
-        \tIt will find any spelling mistake and offer suggestions from its dictionary, which is created from Wikipedia’s most widely used words.\n
-        \tThe app supports several languages, including English, Russian and Armenian.\n
-        \tIt\'s an open-source <a href="https://github.com/MartinXPN/ProCorrector.git">project</a> done mainly for educational reasons.\n
+        Spell Checker is an app designed for creating texts, taking notes, editing and correcting essays, etc. It can be used any time even without an internet access.\n\n
+        The app supports several languages, including English, Russian and Armenian.\n\n
+        It\'s an open-source <a href="https://github.com/MartinXPN/ProCorrector.git">project</a> done mainly for educational reasons.\n
     </string>
-    <string name="about_author">© 2016 <a href="https://www.linkedin.com/in/martin-mirakyan-945597101">Martin Mirakyan</a>\nAll Rights Reserved.</string>
-    <string name="action_title_show_suggestions">Show suggestions</string>
-    <string name="action_title_overflow_menu">More options</string>
-    <string name="action_title_record">Record</string>
-    <string name="action_title_send">Send</string>
-    <string name="action_title_copy">Copy</string>
-    <string name="action_title_check_spelling">Check Spelling</string>
+    <string name="about_author">© 2017 <a href="https://www.linkedin.com/in/martin-mirakyan-945597101">Martin Mirakyan</a>\nAll Rights Reserved.</string>
 
 </resources>

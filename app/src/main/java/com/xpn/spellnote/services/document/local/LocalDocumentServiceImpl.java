@@ -29,33 +29,43 @@ public class LocalDocumentServiceImpl implements DocumentService {
 
     @Override
     public Completable saveDocument(DocumentModel document) {
-        return Completable.fromAction(() -> {
+        return Completable.defer(() -> Completable.fromAction(() -> {
             Realm realmInstance = Realm.getInstance(realmConfiguration);
             realmInstance.executeTransaction(realm -> realm.copyToRealmOrUpdate(mapper.mapTo(document)));
             realmInstance.refresh();
-        });
+        }));
     }
 
     @Override
     public Completable removeDocument(DocumentModel document) {
-        return Completable.fromAction(() -> {
+        return Completable.defer(() -> Completable.fromAction(() -> {
             Realm realmInstance = Realm.getInstance(realmConfiguration);
             DocumentSchema schema = realmInstance.where(DocumentSchema.class).equalTo("id", document.getId()).findFirst();
             realmInstance.executeTransaction(realm -> schema.deleteFromRealm());
             realmInstance.refresh();
-        });
+        }));
+    }
+
+    @Override
+    public Completable removeDocumentCategory(String category) {
+        return Completable.defer(() -> Completable.fromAction(() -> {
+            Realm realmInstance = Realm.getInstance(realmConfiguration);
+            RealmResults<DocumentSchema> documents = realmInstance.where(DocumentSchema.class).equalTo("category", category).findAll();
+            realmInstance.executeTransaction(realm -> documents.deleteAllFromRealm());
+            realmInstance.refresh();
+        }));
     }
 
     @Override
     public Completable moveDocument(DocumentModel document, String newCategory) {
-        return Completable.fromAction(() -> {
+        return Completable.defer(() -> Completable.fromAction(() -> {
             DocumentSchema schema = mapper.mapTo(document);
             schema.category = newCategory;
 
             Realm realmInstance = Realm.getInstance(realmConfiguration);
             realmInstance.executeTransaction(realm -> realm.copyToRealmOrUpdate(schema));
             realmInstance.refresh();
-        });
+        }));
     }
 
     @Override

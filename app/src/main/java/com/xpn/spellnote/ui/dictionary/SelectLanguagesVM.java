@@ -7,6 +7,7 @@ import com.xpn.spellnote.BR;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.services.dictionary.AvailableDictionariesService;
 import com.xpn.spellnote.services.dictionary.SavedDictionaryService;
+import com.xpn.spellnote.services.word.SavedWordsService;
 import com.xpn.spellnote.ui.BaseViewModel;
 
 import java.util.ArrayList;
@@ -24,12 +25,14 @@ public class SelectLanguagesVM extends BaseViewModel {
     private final ViewContract viewContract;
     private final AvailableDictionariesService availableDictionariesService;
     private final SavedDictionaryService savedDictionaryService;
+    private final SavedWordsService savedWordsService;
     private ArrayList <LanguageItemVM> listViewModels = new ArrayList<>();
 
-    SelectLanguagesVM(ViewContract viewContract, AvailableDictionariesService availableDictionariesService, SavedDictionaryService savedDictionaryService) {
+    SelectLanguagesVM(ViewContract viewContract, AvailableDictionariesService availableDictionariesService, SavedDictionaryService savedDictionaryService, SavedWordsService savedWordsService) {
         this.viewContract = viewContract;
         this.availableDictionariesService = availableDictionariesService;
         this.savedDictionaryService = savedDictionaryService;
+        this.savedWordsService = savedWordsService;
     }
 
     void loadDictionaries() {
@@ -49,8 +52,8 @@ public class SelectLanguagesVM extends BaseViewModel {
 
         //  Locale -> ItemVM
         Map<String, LanguageItemVM> viewModels = new TreeMap<>();
-        for(DictionaryModel dictionary : allDictionaries)       viewModels.put( dictionary.getLocale(), new LanguageItemVM(viewContract, dictionary, LanguageItemVM.Status.NOT_PRESENT, savedDictionaryService) );
-        for(DictionaryModel dictionary : savedDictionaries)     viewModels.put( dictionary.getLocale(), new LanguageItemVM(viewContract, dictionary, LanguageItemVM.Status.SAVED,       savedDictionaryService) );
+        for(DictionaryModel dictionary : allDictionaries)       viewModels.put( dictionary.getLocale(), new LanguageItemVM(viewContract, dictionary, LanguageItemVM.Status.NOT_PRESENT, savedDictionaryService, savedWordsService) );
+        for(DictionaryModel dictionary : savedDictionaries)     viewModels.put( dictionary.getLocale(), new LanguageItemVM(viewContract, dictionary, LanguageItemVM.Status.SAVED,       savedDictionaryService, savedWordsService) );
 
         listViewModels = new ArrayList<>(viewModels.values());
         notifyPropertyChanged(BR.listViewModels);

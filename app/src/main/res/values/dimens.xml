@@ -8,5 +8,8 @@
     <dimen name="document_list_item_height">95dp</dimen>
     <dimen name="language_grid_column_width">100dp</dimen>
     <dimen name="language_flag_size">70dp</dimen>
-    <dimen name="editing_language_flag_size">50dp</dimen>
+    <dimen name="editing_language_flag_size">60dp</dimen>
+
+    <dimen name="empty_logo_size">90dp</dimen>
+    <dimen name="empty_logo_text_size">21sp</dimen>
 </resources>

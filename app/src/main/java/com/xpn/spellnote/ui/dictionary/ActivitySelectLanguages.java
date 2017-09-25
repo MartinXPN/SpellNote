@@ -1,22 +1,21 @@
 package com.xpn.spellnote.ui.dictionary;
 
-import android.databinding.BindingAdapter;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.squareup.picasso.Picasso;
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.ActivitySelectLanguagesBinding;
 import com.xpn.spellnote.models.DictionaryModel;
+import com.xpn.spellnote.ui.dictionary.LanguageItemVM.DictionaryListener;
 import com.xpn.spellnote.ui.util.Util;
 
 
@@ -36,12 +35,16 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
         /// setup the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(view -> finish());
+        toolbar.setNavigationOnClickListener(view -> {
+            setResult(RESULT_OK);
+            finish();
+        });
 
         DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
         viewModel = new SelectLanguagesVM(this,
                 diContext.getAvailableDictionariesService(),
-                diContext.getSavedDictionaryService());
+                diContext.getSavedDictionaryService(),
+                diContext.getSavedWordsService());
 
         binding.setViewModel(viewModel);
         int numberOfColumns = (int) (Util.getWindowWidth(this) / getResources().getDimension(R.dimen.language_grid_column_width));
@@ -62,17 +65,6 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
     }
 
 
-    @BindingAdapter({"bind:imageUrl"})
-    public static void loadImage(ImageView view, String url) {
-        Picasso.with(view.getContext())
-                .load(url)
-                .placeholder(ContextCompat.getDrawable(view.getContext(), R.mipmap.ic_placeholder))
-                .resizeDimen(R.dimen.language_flag_size, R.dimen.language_flag_size)
-                .centerInside()
-                .into(view);
-    }
-
-
     @Override
     public void onDownloadingDictionary(DictionaryModel dictionary) {
         Bundle bundle = new Bundle();
@@ -87,6 +79,26 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
         bundle.putString("languageName", dictionary.getLanguageName());
         bundle.putString("locale", dictionary.getLocale());
         analytics.logEvent("remove_dictionary", bundle);
+    }
+
+    @Override
+    public void onUpdatingDictionary(DictionaryModel dictionary) {
+        Bundle bundle = new Bundle();
+        bundle.putString("languageName", dictionary.getLanguageName());
+        bundle.putString("locale", dictionary.getLocale());
+        analytics.logEvent("update_dictionary", bundle);
+    }
+
+    @Override
+    public void onAskUpdateOrRemove(DictionaryModel dictionary, DictionaryListener listener) {
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)  builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        else                                                        builder = new AlertDialog.Builder(this);
+        builder.setTitle(dictionary.getLanguageName())
+                .setMessage("Update or Delete the dictionary?")
+                .setPositiveButton("Update", (dialog, which) -> listener.onUpdate(dictionary))
+                .setNegativeButton("Delete", (dialog, which) -> listener.onRemove(dictionary))
+                .show();
     }
 
     @Override

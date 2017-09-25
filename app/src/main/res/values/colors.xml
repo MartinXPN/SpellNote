@@ -11,7 +11,11 @@
     <color name="text_wrong">#D20000</color>
     <color name="text_correct">#292929</color>
 
-    <color name="list_date">#737373</color>
-    <color name="deleteColor">#c10d0d</color>
-    <color name="saveColor">#1e8117</color>
+    <color name="delete_dictionary_progress_color">#c10d0d</color>
+    <color name="save_dictionary_progress_color">#1e8117</color>
+    <color name="document_list_background_color">#ffffff</color>
+    <color name="document_list_date_color">#737373</color>
+    <color name="document_list_content_color">#9b9b9b</color>
+    <color name="document_list_title_color">#202020</color>
+    <color name="document_list_swipe_layout_background_color">#f05445</color>
 </resources>
