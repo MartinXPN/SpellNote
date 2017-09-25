@@ -24,10 +24,7 @@ import timber.log.Timber;
  * du -ks * (in adb shell to get size of all files in KB)
  *
  * Operations that we need to perform to get database from app to local file storage
- * adb shell
- * run-as packagename
- * cp /data/data/packagename/ sdcard/db.realm
- * adb pull sdcard/db.realm ./
+ * adb pull sdcard/[LOCALE].realm ./
  */
 public class PopulateRealm {
 
@@ -71,9 +68,7 @@ public class PopulateRealm {
 
             /// delete database if there is a file created during previous sessions
             File file = new File(Environment.getExternalStorageDirectory() + "/" + OUTPUT_DATABASE );
-            boolean deleted = file.delete();
-            if( !deleted )
-                return;
+            file.delete();
 
             Realm realmInstance = Realm.getInstance(realmConfiguration);
             realmInstance.executeTransaction(realm -> realm.createOrUpdateAllFromJson(WordSchema.class, words));
