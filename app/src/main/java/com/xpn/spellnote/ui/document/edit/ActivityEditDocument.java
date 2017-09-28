@@ -140,7 +140,9 @@ public class ActivityEditDocument extends AppCompatActivity
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+                viewModel.notifyDocumentChanged();
+            }
         });
         binding.content.setOnClickListener(v -> {
             /// show suggestions only if the current word has more than one character

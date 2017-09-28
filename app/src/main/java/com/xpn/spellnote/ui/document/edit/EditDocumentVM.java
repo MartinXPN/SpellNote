@@ -12,6 +12,7 @@ import com.xpn.spellnote.services.word.SpellCheckerService;
 import com.xpn.spellnote.ui.BaseViewModel;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -100,6 +101,12 @@ public class EditDocumentVM extends BaseViewModel {
     public void setContent(String content) {
         document.setContent(content);
         notifyPropertyChanged(BR.content);
+        onSaveDocument();
+    }
+
+
+    void notifyDocumentChanged() {
+        document.setDateModified(new Date());
         onSaveDocument();
     }
 
