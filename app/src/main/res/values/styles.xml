@@ -14,12 +14,26 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppTheme.NavigationDrawer.NoActionBar" parent="AppTheme.NoActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+    
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
+    <style name="DeleteProgress" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/delete_dictionary_progress_color</item>
+    </style>
 
-    <style name="DeleteProgress" parent="Theme.AppCompat.Light"><item name="colorAccent">@color/delete_dictionary_progress_color</item></style>
-    <style name="SaveProgress"   parent="Theme.AppCompat.Light"><item name="colorAccent">@color/save_dictionary_progress_color</item></style>
+    <style name="SaveProgress" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/save_dictionary_progress_color</item>
+    </style>
+
+
 
 </resources>

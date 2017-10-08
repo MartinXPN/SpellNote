@@ -16,7 +16,7 @@
         <activity
             android:name=".ui.document.list.ActivityViewDocuments"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NavigationDrawer.NoActionBar">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
