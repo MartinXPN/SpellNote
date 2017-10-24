@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
@@ -25,6 +26,7 @@ import com.xpn.spellnote.ui.ads.AdsActivity;
 import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserVM;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
+import com.xpn.spellnote.ui.util.ToolbarActionItemTarget;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
@@ -149,6 +151,10 @@ public class ActivityEditDocument extends AppCompatActivity
             if( getCurrentWord().length() > 1 ) suggestionsVM.suggest(getCurrentWord());
             else                                onHideSuggestions();
         });
+
+
+        /// set-up tutorials
+        showTutorialSuggestions();
     }
 
     @Override
@@ -370,5 +376,15 @@ public class ActivityEditDocument extends AppCompatActivity
     @Override
     public void onHideSuggestions() {
         binding.suggestions.setVisibility(View.GONE);
+    }
+
+
+    private void showTutorialSuggestions() {
+        new ShowcaseView.Builder(this)
+                .setTarget(new ToolbarActionItemTarget(binding.toolbar, R.id.action_show_suggestions))
+                .setContentTitle("Suggestions")
+                .setContentText("Click to show or hide Suggestions")
+                .hideOnTouchOutside()
+                .build();
     }
 }
