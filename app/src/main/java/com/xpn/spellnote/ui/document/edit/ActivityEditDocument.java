@@ -49,6 +49,7 @@ public class ActivityEditDocument extends AppCompatActivity
     private static final Integer LANGUAGE_SELECTION_CODE = 2;
     private boolean showSuggestions;
     private boolean checkSpelling;
+    private List <ShowcaseView> tutorials = new ArrayList<>();
 
     private FirebaseAnalytics analytics;
 
@@ -177,6 +178,9 @@ public class ActivityEditDocument extends AppCompatActivity
         viewModel.onDestroy();
         editingLanguageChooserVM.onDestroy();
         suggestionsVM.onDestroy();
+
+        /// hide all tutorials if they are not hidden yet
+        tutorials.forEach(ShowcaseView::hide);
         super.onDestroy();
     }
 
@@ -380,11 +384,15 @@ public class ActivityEditDocument extends AppCompatActivity
 
 
     private void showTutorialSuggestions() {
-        new ShowcaseView.Builder(this)
+        ShowcaseView suggestionsTutorial = new ShowcaseView.Builder(this)
                 .setTarget(new ToolbarActionItemTarget(binding.toolbar, R.id.action_show_suggestions))
                 .setContentTitle("Suggestions")
                 .setContentText("Click to show or hide Suggestions")
                 .hideOnTouchOutside()
+                .withMaterialShowcase()
                 .build();
+
+        suggestionsTutorial.setStyle(R.style.CustomShowcaseTheme);
+        tutorials.add(suggestionsTutorial);
     }
 }
