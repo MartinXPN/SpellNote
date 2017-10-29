@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -149,7 +150,21 @@ public class ActivityEditDocument extends AppCompatActivity
             if( getCurrentWord().length() > 1 ) suggestionsVM.suggest(getCurrentWord());
             else                                onHideSuggestions();
         });
-        binding.contentScroll.getViewTreeObserver().addOnScrollChangedListener(this::onHideSuggestions);
+
+        /// hide suggestions on scroll
+        binding.contentScroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+
+            int prevY = 0;
+
+            @Override
+            public void onScrollChanged() {
+                int scrollY = binding.contentScroll.getScrollY();
+                if (Math.abs(prevY - scrollY) > 30) {
+                    onHideSuggestions();
+                    prevY = scrollY;
+                }
+            }
+        });
     }
 
     @Override
