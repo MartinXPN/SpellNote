@@ -1,6 +1,7 @@
 package com.xpn.spellnote.ui.document.edit;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.xpn.spellnote.ui.ads.AdsActivity;
 import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserVM;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
+import com.xpn.spellnote.ui.util.BaseShowCaseTutorial;
 import com.xpn.spellnote.ui.util.ToolbarActionItemTarget;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.TagsUtil;
@@ -49,7 +51,7 @@ public class ActivityEditDocument extends AppCompatActivity
     private static final Integer LANGUAGE_SELECTION_CODE = 2;
     private boolean showSuggestions;
     private boolean checkSpelling;
-    private List <ShowcaseView> tutorials = new ArrayList<>();
+    private List <BaseShowCaseTutorial> tutorials = new ArrayList<>();
 
     private FirebaseAnalytics analytics;
 
@@ -152,10 +154,6 @@ public class ActivityEditDocument extends AppCompatActivity
             if( getCurrentWord().length() > 1 ) suggestionsVM.suggest(getCurrentWord());
             else                                onHideSuggestions();
         });
-
-
-        /// set-up tutorials
-        showTutorialSuggestions();
     }
 
     @Override
@@ -180,7 +178,9 @@ public class ActivityEditDocument extends AppCompatActivity
         suggestionsVM.onDestroy();
 
         /// hide all tutorials if they are not hidden yet
-        tutorials.forEach(ShowcaseView::hide);
+        for( BaseShowCaseTutorial tutorial : tutorials ) {
+            tutorial.hide();
+        }
         super.onDestroy();
     }
 
@@ -206,6 +206,12 @@ public class ActivityEditDocument extends AppCompatActivity
         getMenuInflater().inflate(R.menu.menu_edit_document, menu);
         updateShowSuggestions( CacheUtil.getCache( this, TagsUtil.USER_PREFERENCE_SHOW_SUGGESTIONS, true ), menu.findItem( R.id.action_show_suggestions ) );
         updateSpellChecking( CacheUtil.getCache( this, TagsUtil.USER_PREFERENCE_CHECK_SPELLING, true ), menu.findItem( R.id.action_check_spelling ) );
+
+        /// Show suggestions tutorial
+        SuggestionTutorial suggestionTutorial = new SuggestionTutorial(this);
+        suggestionTutorial.showTutorial();
+        tutorials.add(suggestionTutorial);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -383,16 +389,20 @@ public class ActivityEditDocument extends AppCompatActivity
     }
 
 
-    private void showTutorialSuggestions() {
-        ShowcaseView suggestionsTutorial = new ShowcaseView.Builder(this)
-                .setTarget(new ToolbarActionItemTarget(binding.toolbar, R.id.action_show_suggestions))
-                .setContentTitle("Suggestions")
-                .setContentText("Click to show or hide Suggestions")
-                .hideOnTouchOutside()
-                .withMaterialShowcase()
-                .build();
+    private class SuggestionTutorial extends BaseShowCaseTutorial {
 
-        suggestionsTutorial.setStyle(R.style.CustomShowcaseTheme);
-        tutorials.add(suggestionsTutorial);
+        SuggestionTutorial(Context context) {
+            super(context, "suggestion_tutorial");
+        }
+
+        @Override
+        protected ShowcaseView display() {
+            return new ShowcaseView.Builder(ActivityEditDocument.this)
+                    .setTarget(new ToolbarActionItemTarget(binding.toolbar, R.id.action_show_suggestions))
+                    .setContentTitle(R.string.tutorial_show_suggestions_title)
+                    .setContentText(R.string.tutorial_show_suggestions_content)
+                    .withMaterialShowcase()
+                    .build();
+        }
     }
 }

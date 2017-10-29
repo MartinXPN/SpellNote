@@ -29,21 +29,21 @@
     </style>
 
 
-    <style name="CustomShowcaseTheme" parent="ShowcaseView.Light">
+    <style name="TutorialTheme" parent="ShowcaseView.Light">
         <item name="sv_backgroundColor">#78000000</item>
         <item name="sv_showcaseColor">#000000</item>
         <item name="sv_buttonText">OK</item>
         <item name="sv_tintButtonColor">false</item>
-        <item name="sv_titleTextAppearance">@style/CustomTitle</item>
-        <item name="sv_detailTextAppearance">@style/CustomText</item>
+        <item name="sv_titleTextAppearance">@style/TutorialTitleTheme</item>
+        <item name="sv_detailTextAppearance">@style/TutorialTextTheme</item>
     </style>
 
-    <style name="CustomTitle" parent="TextAppearance.ShowcaseView.Title">
+    <style name="TutorialTitleTheme" parent="TextAppearance.ShowcaseView.Title">
         <item name="android:textColor">#ffffff</item>
         <item name="android:textSize">25sp</item>
     </style>
 
-    <style name="CustomText" parent="TextAppearance.ShowcaseView.Detail.Light">
+    <style name="TutorialTextTheme" parent="TextAppearance.ShowcaseView.Detail.Light">
         <item name="android:textColor">#ffffff</item>
         <item name="android:textSize">19sp</item>
     </style>
