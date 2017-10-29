@@ -149,6 +149,7 @@ public class ActivityEditDocument extends AppCompatActivity
             if( getCurrentWord().length() > 1 ) suggestionsVM.suggest(getCurrentWord());
             else                                onHideSuggestions();
         });
+        binding.contentScroll.getViewTreeObserver().addOnScrollChangedListener(this::onHideSuggestions);
     }
 
     @Override
