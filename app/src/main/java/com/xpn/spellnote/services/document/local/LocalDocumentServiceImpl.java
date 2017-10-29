@@ -41,7 +41,8 @@ public class LocalDocumentServiceImpl implements DocumentService {
         return Completable.defer(() -> Completable.fromAction(() -> {
             Realm realmInstance = Realm.getInstance(realmConfiguration);
             DocumentSchema schema = realmInstance.where(DocumentSchema.class).equalTo("id", document.getId()).findFirst();
-            realmInstance.executeTransaction(realm -> schema.deleteFromRealm());
+            if( schema != null )
+                realmInstance.executeTransaction(realm -> schema.deleteFromRealm());
             realmInstance.refresh();
         }));
     }

@@ -47,6 +47,14 @@
     <string name="hint_edit_document_title">Title…</string>
 
 
+    <string name="tutorial_show_suggestions_title">Suggestions</string>
+    <string name="tutorial_show_suggestions_content">"Click to show or hide Suggestions"</string>
+    <string name="tutorial_swipe_title">Swipe Left</string>
+    <string name="tutorial_swipe_content">Long-press on revealed buttons to explore their meaning</string>
+    <string name="tutorial_select_dictionaries_title">Select Dictionaries</string>
+    <string name="tutorial_select_dictionaries_content">Choose which dictionaries you\'d like to use later on…</string>
+
+
     <string name="about_app">
         Spell Checker is an app designed for creating texts, taking notes, editing and correcting essays, etc. It can be used any time even without an internet access.\n\n
         The app supports several languages, including English, Russian and Armenian.\n\n

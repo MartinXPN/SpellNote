@@ -2,8 +2,6 @@ package com.xpn.spellnote.util;
 
 public class TagsUtil {
 
-    public static final String SHARED_PREFS_NAME = "shared_prefs";
-
     public static final String USER_PREFERENCE_SHOW_SUGGESTIONS = "show_sugg";
     public static final String USER_PREFERENCE_CHECK_SPELLING = "spell_check";
 

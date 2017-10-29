@@ -1,6 +1,7 @@
 package com.xpn.spellnote.ui.document.edit;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
@@ -26,6 +28,8 @@ import com.xpn.spellnote.ui.ads.AdsActivity;
 import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserVM;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
+import com.xpn.spellnote.ui.util.BaseShowCaseTutorial;
+import com.xpn.spellnote.ui.util.ToolbarActionItemTarget;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
@@ -187,6 +191,7 @@ public class ActivityEditDocument extends AppCompatActivity
         viewModel.onDestroy();
         editingLanguageChooserVM.onDestroy();
         suggestionsVM.onDestroy();
+
         super.onDestroy();
     }
 
@@ -212,6 +217,11 @@ public class ActivityEditDocument extends AppCompatActivity
         getMenuInflater().inflate(R.menu.menu_edit_document, menu);
         updateShowSuggestions( CacheUtil.getCache( this, TagsUtil.USER_PREFERENCE_SHOW_SUGGESTIONS, true ), menu.findItem( R.id.action_show_suggestions ) );
         updateSpellChecking( CacheUtil.getCache( this, TagsUtil.USER_PREFERENCE_CHECK_SPELLING, true ), menu.findItem( R.id.action_check_spelling ) );
+
+        /// Show suggestions tutorial
+        SuggestionTutorial suggestionTutorial = new SuggestionTutorial(this);
+        suggestionTutorial.showTutorial();
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -386,5 +396,22 @@ public class ActivityEditDocument extends AppCompatActivity
     @Override
     public void onHideSuggestions() {
         binding.suggestions.setVisibility(View.GONE);
+    }
+
+
+    private class SuggestionTutorial extends BaseShowCaseTutorial {
+
+        SuggestionTutorial(Context context) {
+            super(context, "suggestion_tutorial");
+        }
+
+        @Override
+        protected ShowcaseView.Builder display() {
+            return new ShowcaseView.Builder(ActivityEditDocument.this)
+                    .setTarget(new ToolbarActionItemTarget(binding.toolbar, R.id.action_show_suggestions))
+                    .setContentTitle(R.string.tutorial_show_suggestions_title)
+                    .setContentText(R.string.tutorial_show_suggestions_content)
+                    .withMaterialShowcase();
+        }
     }
 }
