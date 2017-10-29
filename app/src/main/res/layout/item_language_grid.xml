@@ -24,6 +24,8 @@
             android:id="@+id/language_flag"
             android:layout_width="@dimen/language_flag_size"
             android:layout_height="@dimen/language_flag_size"
+            android:layout_margin="5dp"
+            android:padding="7dp"
             app:imageUrl="@{viewModel.logoUrl}"
             android:contentDescription="@null" />
 

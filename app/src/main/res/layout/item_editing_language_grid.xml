@@ -21,6 +21,7 @@
             android:layout_width="@dimen/editing_language_flag_size"
             android:layout_height="@dimen/editing_language_flag_size"
             android:layout_margin="5dp"
+            android:padding="5dp"
             app:imageUrl="@{viewModel.logoUrl}"
             android:contentDescription="@null" />
 
