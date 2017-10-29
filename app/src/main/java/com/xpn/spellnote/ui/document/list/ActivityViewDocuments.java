@@ -9,6 +9,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.MenuItem;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -19,6 +20,7 @@ import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.list.archive.FragmentViewArchive;
 import com.xpn.spellnote.ui.document.list.documents.FragmentViewDocumentList;
 import com.xpn.spellnote.ui.document.list.trash.FragmentViewTrash;
+import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.Util;
 
 
@@ -26,6 +28,7 @@ public class ActivityViewDocuments extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
+    private static final String NAVIGATION_DRAWER_FIRST_LAUNCH_TAG = "nav_first";
     private static final String SAVED_STATE_FRAGMENT_TAG = "curr_f";
     private ActivityViewDocumentsBinding binding;
     BaseFragmentDocumentList documentFragment = null;
@@ -52,6 +55,12 @@ public class ActivityViewDocuments extends AppCompatActivity
         /// show the latest chosen fragment
         Integer navigationId = savedInstanceState == null ? R.id.nav_documents : savedInstanceState.getInt(SAVED_STATE_FRAGMENT_TAG);
         onNavigationItemSelected( binding.navigation.getMenu().findItem(navigationId));
+
+        /// open drawer on first launch
+        if(CacheUtil.getCache(this, NAVIGATION_DRAWER_FIRST_LAUNCH_TAG, true)) {
+            binding.drawer.openDrawer(Gravity.START, true);
+            CacheUtil.setCache(this, NAVIGATION_DRAWER_FIRST_LAUNCH_TAG, false );
+        }
     }
 
     @Override
