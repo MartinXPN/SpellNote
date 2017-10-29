@@ -1,5 +1,6 @@
 package com.xpn.spellnote.ui.document.list;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.BindingAdapter;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.xpn.spellnote.BR;
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
@@ -24,6 +27,7 @@ import com.xpn.spellnote.databinding.ItemDocumentListBinding;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.ui.document.edit.ActivityEditDocument;
 import com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM;
+import com.xpn.spellnote.ui.util.BaseShowCaseTutorial;
 import com.xpn.spellnote.ui.util.BindingHolder;
 import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.TagsUtil;
@@ -115,6 +119,8 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
     @Override
     public void onShowUndoOption(DocumentModel previousDocument, String message) {
         /// Show UNDO snack-bar
+        if( getView() == null )
+            return;
         Snackbar.make( getView(), message, Snackbar.LENGTH_LONG )
                 .setAction( "UNDO", view -> {
                     viewModel.restoreDocument(previousDocument);
@@ -175,6 +181,12 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
                 @Override public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {}
                 @Override public void onHandRelease(SwipeLayout layout, float xVel, float yVel) {}
             });
+
+
+            /// show swipe tutorial if position = 2
+            if( position == 2 ) {
+                new SwipeTutorial(getActivity(), ((ItemDocumentListBinding) holder.getBinding()).info).showTutorial();
+            }
         }
 
         @Override
@@ -188,6 +200,25 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         @Override
         public int getSwipeLayoutResourceId(int position) {
             return R.id.swipe;
+        }
+    }
+
+    private class SwipeTutorial extends BaseShowCaseTutorial {
+
+        private View targetView;
+
+        SwipeTutorial(Context context, View targetView) {
+            super(context, "swipe_tutorial");
+            this.targetView = targetView;
+        }
+
+        @Override
+        protected ShowcaseView.Builder display() {
+            return new ShowcaseView.Builder(getActivity())
+                    .setTarget( new ViewTarget(targetView) )
+                    .setContentTitle(R.string.tutorial_swipe_title)
+                    .setContentText(R.string.tutorial_swipe_content)
+                    .withMaterialShowcase();
         }
     }
 }

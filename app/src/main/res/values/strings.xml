@@ -49,6 +49,8 @@
 
     <string name="tutorial_show_suggestions_title">Suggestions</string>
     <string name="tutorial_show_suggestions_content">"Click to show or hide Suggestions"</string>
+    <string name="tutorial_swipe_title">Swipe Left</string>
+    <string name="tutorial_swipe_content">Long-press on revealed buttons to explore their meaning</string>
 
 
     <string name="about_app">

@@ -30,7 +30,7 @@
 
 
     <style name="TutorialTheme" parent="ShowcaseView.Light">
-        <item name="sv_backgroundColor">#78000000</item>
+        <item name="sv_backgroundColor">#a0000000</item>
         <item name="sv_showcaseColor">#000000</item>
         <item name="sv_buttonText">OK</item>
         <item name="sv_tintButtonColor">false</item>
