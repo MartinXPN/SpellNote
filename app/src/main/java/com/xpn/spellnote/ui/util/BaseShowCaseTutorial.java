@@ -22,11 +22,12 @@ public abstract class BaseShowCaseTutorial {
      * Initialize and construct tutorial to be displayed later
      * @return the constructed ShowcaseView
      */
-    protected abstract ShowcaseView display();
+    protected abstract ShowcaseView.Builder display();
 
     public void showTutorial() {
         if( !isDisplayed() ) {
-            tutorialView = display();
+            ShowcaseView.Builder builder = display();
+            tutorialView = builder.build();
             tutorialView.setStyle(R.style.TutorialTheme);
             tutorialView.hideButton();
             tutorialView.setOnClickListener(view -> {

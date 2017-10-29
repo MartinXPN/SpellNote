@@ -51,7 +51,6 @@ public class ActivityEditDocument extends AppCompatActivity
     private static final Integer LANGUAGE_SELECTION_CODE = 2;
     private boolean showSuggestions;
     private boolean checkSpelling;
-    private List <BaseShowCaseTutorial> tutorials = new ArrayList<>();
 
     private FirebaseAnalytics analytics;
 
@@ -177,10 +176,6 @@ public class ActivityEditDocument extends AppCompatActivity
         editingLanguageChooserVM.onDestroy();
         suggestionsVM.onDestroy();
 
-        /// hide all tutorials if they are not hidden yet
-        for( BaseShowCaseTutorial tutorial : tutorials ) {
-            tutorial.hide();
-        }
         super.onDestroy();
     }
 
@@ -210,7 +205,6 @@ public class ActivityEditDocument extends AppCompatActivity
         /// Show suggestions tutorial
         SuggestionTutorial suggestionTutorial = new SuggestionTutorial(this);
         suggestionTutorial.showTutorial();
-        tutorials.add(suggestionTutorial);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -396,13 +390,12 @@ public class ActivityEditDocument extends AppCompatActivity
         }
 
         @Override
-        protected ShowcaseView display() {
+        protected ShowcaseView.Builder display() {
             return new ShowcaseView.Builder(ActivityEditDocument.this)
                     .setTarget(new ToolbarActionItemTarget(binding.toolbar, R.id.action_show_suggestions))
                     .setContentTitle(R.string.tutorial_show_suggestions_title)
                     .setContentText(R.string.tutorial_show_suggestions_content)
-                    .withMaterialShowcase()
-                    .build();
+                    .withMaterialShowcase();
         }
     }
 }
