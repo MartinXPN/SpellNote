@@ -1,6 +1,7 @@
 package com.xpn.spellnote.ui.document.list;
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -11,7 +12,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databinding.ActivityViewDocumentsBinding;
@@ -20,6 +24,7 @@ import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.list.archive.FragmentViewArchive;
 import com.xpn.spellnote.ui.document.list.documents.FragmentViewDocumentList;
 import com.xpn.spellnote.ui.document.list.trash.FragmentViewTrash;
+import com.xpn.spellnote.ui.util.BaseShowCaseTutorial;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.Util;
 
@@ -45,7 +50,9 @@ public class ActivityViewDocuments extends AppCompatActivity
 
         /// set up toolbar and navigation-toggle
         setSupportActionBar(binding.toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawer, binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawer, binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+
+        };
         binding.drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -59,6 +66,8 @@ public class ActivityViewDocuments extends AppCompatActivity
         /// open drawer on first launch
         if(CacheUtil.getCache(this, NAVIGATION_DRAWER_FIRST_LAUNCH_TAG, true)) {
             binding.drawer.openDrawer(Gravity.START, true);
+//            MenuItem dictionariesItem = binding.navigation.getMenu().findItem(R.id.nav_trash);
+//            new SelectDictionariesTutorial(this, dictionariesItem.getActionView()).showTutorial();
             CacheUtil.setCache(this, NAVIGATION_DRAWER_FIRST_LAUNCH_TAG, false );
         }
     }
@@ -84,7 +93,7 @@ public class ActivityViewDocuments extends AppCompatActivity
         else if( id == R.id.nav_about )         startActivity( new Intent( this, ActivityAbout.class ) );
 
         /// close the drawer
-        binding.drawer.closeDrawer(GravityCompat.START);
+        binding.drawer.closeDrawer(GravityCompat.START, true);
         return true;
     }
 
@@ -107,6 +116,26 @@ public class ActivityViewDocuments extends AppCompatActivity
         else {
             this.documentFragment = documentFragment;
             fm.beginTransaction().replace(R.id.list_of_documents, documentFragment, fragmentTag).commit();
+        }
+    }
+
+
+    private class SelectDictionariesTutorial extends BaseShowCaseTutorial {
+
+        private View targetView;
+
+        SelectDictionariesTutorial(Context context, View targetView) {
+            super(context, "select_lang_tutorial");
+            this.targetView = targetView;
+        }
+
+        @Override
+        protected ShowcaseView.Builder display() {
+            return new ShowcaseView.Builder(ActivityViewDocuments.this)
+                    .setTarget( new ViewTarget(targetView) )
+                    .setContentTitle(R.string.tutorial_select_dictionaries_title)
+                    .setContentText(R.string.tutorial_select_dictionaries_content)
+                    .withMaterialShowcase();
         }
     }
 }
