@@ -304,6 +304,13 @@ public class ActivityEditDocument extends AppCompatActivity
     }
 
     @Override
+    public void onDocumentAvailable(DocumentModel document) {
+        /// as we have the document lets load all supported languages
+        /// to be able to set the default locale for editing
+        editingLanguageChooserVM.loadSupportedDictionaries();
+    }
+
+    @Override
     public void onLanguageSelected(DictionaryModel dictionary) {
         hideAvailableLanguages();
         editingLanguageChooserVM.setCurrentLanguage(dictionary);
@@ -329,11 +336,31 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     public void onDictionaryListAvailable(List<DictionaryModel> dictionaries) {
+
+        /// check if the document already has a default locale saved
+        if( viewModel.getLanguageLocale() != null ) {
+            String savedLocale = viewModel.getLanguageLocale();
+            boolean isLocaleAvailable = false;
+            for( DictionaryModel dictionary : dictionaries ) {
+                if( dictionary.getLocale().equals(savedLocale)) {
+                    isLocaleAvailable = true;
+                    break;
+                }
+            }
+
+            if( isLocaleAvailable ) {
+                editingLanguageChooserVM.setCurrentLanguage(savedLocale);
+                return;
+            }
+        }
+
+        /// otherwise lets decide which locale to use
         String locale = CacheUtil.getCache(this, CACHE_DEFAULT_LOCALE, null);
         if( locale == null ) {
             if( dictionaries.isEmpty() )    return;
             else                            locale = dictionaries.get(0).getLocale();
         }
+
         editingLanguageChooserVM.setCurrentLanguage(locale);
     }
 
