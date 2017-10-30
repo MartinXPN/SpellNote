@@ -35,7 +35,9 @@ public class EditingLanguageChooserFragment extends Fragment implements EditingL
         binding.setViewModel(viewModel);
 
         /// set-up editing language chooser
-        int numberOfItems = 3; /// number of dictionaries shown in one row
+        float languageGridItemSize = getResources().getDimension(R.dimen.language_chooser_grid_item_size);
+        float languageGridWidth = getResources().getDimension(R.dimen.language_chooser_grid_width);
+        int numberOfItems = (int) (languageGridWidth / languageGridItemSize);
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), numberOfItems);
         layoutManager.setAutoMeasureEnabled(true);
         binding.supportedLanguagesGrid.setHasFixedSize(true);

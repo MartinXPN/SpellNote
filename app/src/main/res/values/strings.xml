@@ -4,6 +4,7 @@
     <string name="title_activity_view_documents">Documents</string>
     <string name="title_activity_select_languages">Select Languages</string>
     <string name="title_activity_about">About SpellNote</string>
+    <string name="title_add_dictionaries">Add Dictionaries</string>
 
     <string name="navigation_drawer_open">Drawer opened</string>
     <string name="navigation_drawer_close">drawer closed</string>

@@ -20,8 +20,8 @@
 
         <ImageButton
             android:id="@+id/current_language"
-            android:layout_width="@dimen/editing_language_flag_size"
-            android:layout_height="@dimen/editing_language_flag_size"
+            android:layout_width="@dimen/language_chooser_flag_size"
+            android:layout_height="@dimen/language_chooser_flag_size"
             android:layout_margin="@dimen/fab_margin"
             android:padding="5dp"
             android:onClick="@{() -> viewModel.onShowAvailableLanguages()}"
@@ -32,8 +32,8 @@
 
         <android.support.v7.widget.CardView
             android:id="@+id/supported_languages_card"
-            android:layout_width="250dp"
-            android:layout_height="220dp"
+            android:layout_width="@dimen/language_chooser_grid_width"
+            android:layout_height="@dimen/language_chooser_grid_height"
             android:visibility="gone"
             card_view:cardCornerRadius="2dp"
             card_view:cardElevation="4dp"
@@ -56,7 +56,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:bindingVarPath="com.xpn.spellnote.BR.viewModel"
-                        app:itemLayoutResId="@layout/item_editing_language_grid"
+                        app:itemLayoutResId="@layout/item_language_chooser_grid"
                         app:viewModelList="@{viewModel.listViewModels}" />
 
 
@@ -71,8 +71,8 @@
 
                         <ImageView
                             android:id="@+id/language_flag"
-                            android:layout_width="@dimen/editing_language_flag_size"
-                            android:layout_height="@dimen/editing_language_flag_size"
+                            android:layout_width="@dimen/language_chooser_flag_size"
+                            android:layout_height="@dimen/language_chooser_flag_size"
                             android:layout_margin="10dp"
                             android:padding="10dp"
                             android:src="@drawable/ic_add"
@@ -88,7 +88,7 @@
                             android:textColor="#aa000000"
                             android:lines="2"
                             android:ellipsize="end"
-                            android:text="Add Dictionaries"
+                            android:text="@string/title_add_dictionaries"
                             android:layout_below="@+id/language_flag"
                             android:layout_alignRight="@+id/language_flag"
                             android:layout_alignEnd="@+id/language_flag"
