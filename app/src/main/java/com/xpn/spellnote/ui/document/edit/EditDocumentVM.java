@@ -73,6 +73,7 @@ public class EditDocumentVM extends BaseViewModel {
                         document -> {
                             this.document = document;
                             notifyChange();
+                            viewContract.onDocumentAvailable(this.document);
                         },
                         Timber::e
                 ));
@@ -110,8 +111,13 @@ public class EditDocumentVM extends BaseViewModel {
         onSaveDocument();
     }
 
+    @Bindable
+    public String getLanguageLocale() {
+        return document.getLanguageLocale();
+    }
     void setLanguageLocale(String locale) {
         document.setLanguageLocale(locale);
+        notifyPropertyChanged(BR.languageLocale);
     }
 
 
@@ -147,5 +153,6 @@ public class EditDocumentVM extends BaseViewModel {
         DictionaryModel getCurrentDictionary();
         void markIncorrect(int left, int right, List <String> incorrectWords);
         void markCorrect(int left, int right, List <String> correctWords);
+        void onDocumentAvailable(DocumentModel document);
     }
 }

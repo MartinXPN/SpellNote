@@ -30,7 +30,6 @@ public class EditingLanguageChooserVM extends BaseViewModel {
     @Override
     public void onStart() {
         super.onStart();
-        loadSupportedDictionaries();
     }
 
     public void onAddLanguagesClicked() {
