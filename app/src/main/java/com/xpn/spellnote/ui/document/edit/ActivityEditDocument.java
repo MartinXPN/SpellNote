@@ -7,7 +7,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -26,7 +25,7 @@ import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.ui.ads.AdsActivity;
 import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
-import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserVM;
+import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
 import com.xpn.spellnote.ui.util.BaseShowCaseTutorial;
 import com.xpn.spellnote.ui.util.ToolbarActionItemTarget;
@@ -43,7 +42,7 @@ import timber.log.Timber;
 
 public class ActivityEditDocument extends AppCompatActivity
         implements EditDocumentVM.ViewContract,
-        EditingLanguageChooserVM.ViewContract,
+        EditingLanguageChooserFragment.EditingLanguageChooserContract,
         SuggestionsVM.ViewContract {
 
     private static final String EXTRA_DOCUMENT_ID = "doc_id";
@@ -57,8 +56,8 @@ public class ActivityEditDocument extends AppCompatActivity
 
     private ActivityEditDocumentBinding binding;
     private EditDocumentVM viewModel;
-    private EditingLanguageChooserVM editingLanguageChooserVM;
     private SuggestionsVM suggestionsVM;
+    private EditingLanguageChooserFragment editingLanguageChooserFragment;
 
 
     public static void launchForResult(Fragment fragment, Long documentId, int requestCode) {
@@ -88,6 +87,7 @@ public class ActivityEditDocument extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_document);
+        editingLanguageChooserFragment = (EditingLanguageChooserFragment) getFragmentManager().findFragmentById(R.id.editing_language_chooser_fragment);
 
         /// set-up analytics
         analytics = FirebaseAnalytics.getInstance(this);
@@ -100,25 +100,14 @@ public class ActivityEditDocument extends AppCompatActivity
                 diContext.getDocumentService(),
                 diContext.getSpellCheckerService());
 
-        editingLanguageChooserVM = new EditingLanguageChooserVM(this, diContext.getSavedDictionaryService());
         suggestionsVM = new SuggestionsVM(this, diContext.getSuggestionService());
 
         binding.setModel(viewModel);
-        binding.setEditingLanguageChooserVM(editingLanguageChooserVM);
         binding.setSuggestionsVM(suggestionsVM);
 
         /// set-up the actionbar
         setSupportActionBar(binding.toolbar);
         binding.toolbar.setNavigationOnClickListener(v -> finish());
-
-
-        /// set-up editing language chooser
-        int numberOfItems = 3; /// number of dictionaries shown in one row
-        GridLayoutManager layoutManager = new GridLayoutManager(this, numberOfItems);
-        layoutManager.setAutoMeasureEnabled(true);
-        binding.editingLanguageChooser.supportedLanguagesGrid.setHasFixedSize(true);
-        binding.editingLanguageChooser.supportedLanguagesGrid.setNestedScrollingEnabled(false);
-        binding.editingLanguageChooser.supportedLanguagesGrid.setLayoutManager(layoutManager);
 
 
         /// set-up edit-correct text
@@ -165,7 +154,6 @@ public class ActivityEditDocument extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         viewModel.onStart();
-        editingLanguageChooserVM.onStart();
         suggestionsVM.onStart();
     }
 
@@ -179,7 +167,6 @@ public class ActivityEditDocument extends AppCompatActivity
 
         /// control lifecycle of VMs
         viewModel.onDestroy();
-        editingLanguageChooserVM.onDestroy();
         suggestionsVM.onDestroy();
 
         super.onDestroy();
@@ -221,7 +208,7 @@ public class ActivityEditDocument extends AppCompatActivity
         int id = item.getItemId();
 
         if( id == R.id.action_show_suggestions )    { updateShowSuggestions( !showSuggestions, item );                          return true; }
-        else if( id == R.id.action_record )         { Util.displaySpeechRecognizer( this, SPEECH_RECOGNIZER_CODE, getCurrentLanguage().getLocale() );   return true; }
+        else if( id == R.id.action_record )         { Util.displaySpeechRecognizer( this, SPEECH_RECOGNIZER_CODE, this.getCurrentDictionary().getLocale() );   return true; }
         else if( id == R.id.action_send )           { Util.sendDocument( this, "", binding.content.getText().toString() );      return true; }
         else if( id == R.id.action_copy )           { Util.copyTextToClipboard( this, binding.content.getText().toString() );   return true; }
         else if( id == R.id.action_check_spelling ) { updateSpellChecking( !checkSpelling, item );                              return true; }
@@ -273,20 +260,18 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     public DictionaryModel getCurrentDictionary() {
-        return editingLanguageChooserVM.getCurrentLanguage();
+        return editingLanguageChooserFragment.getCurrentDictionary();
     }
 
     @Override
     public void onDocumentAvailable(DocumentModel document) {
         /// as we have the document lets load all supported languages
         /// to be able to set the default locale for editing
-        editingLanguageChooserVM.loadSupportedDictionaries();
+        editingLanguageChooserFragment.loadSupportedDictionaries();
     }
 
     @Override
     public void onLanguageSelected(DictionaryModel dictionary) {
-        hideAvailableLanguages();
-        editingLanguageChooserVM.setCurrentLanguage(dictionary);
         viewModel.setLanguageLocale(dictionary.getLocale());
 
         /// update shared preferences (default locale)
@@ -304,7 +289,7 @@ public class ActivityEditDocument extends AppCompatActivity
     }
 
     @Override
-    public void onLaunchLanguageChooser() {
+    public void onLaunchDictionaryChooser() {
         startActivityForResult( new Intent( this, ActivitySelectLanguages.class ), LANGUAGE_SELECTION_CODE );
     }
 
@@ -323,7 +308,7 @@ public class ActivityEditDocument extends AppCompatActivity
             }
 
             if( isLocaleAvailable ) {
-                editingLanguageChooserVM.setCurrentLanguage(savedLocale);
+                editingLanguageChooserFragment.setCurrentLanguage(savedLocale);
                 return;
             }
         }
@@ -335,24 +320,7 @@ public class ActivityEditDocument extends AppCompatActivity
             else                            locale = dictionaries.get(0).getLocale();
         }
 
-        editingLanguageChooserVM.setCurrentLanguage(locale);
-    }
-
-    @Override
-    public void showAvailableLanguages() {
-        binding.editingLanguageChooser.currentLanguage.setVisibility( View.GONE );
-        binding.editingLanguageChooser.supportedLanguagesCard.setVisibility( View.VISIBLE );
-    }
-
-    @Override
-    public void hideAvailableLanguages() {
-        binding.editingLanguageChooser.supportedLanguagesCard.setVisibility( View.GONE );
-        binding.editingLanguageChooser.currentLanguage.setVisibility( View.VISIBLE );
-    }
-
-    @Override
-    public boolean isLanguageListOpen() {
-        return binding.editingLanguageChooser.supportedLanguagesCard.getVisibility() == View.VISIBLE;
+        editingLanguageChooserFragment.setCurrentLanguage(locale);
     }
 
     @Override
@@ -364,11 +332,6 @@ public class ActivityEditDocument extends AppCompatActivity
     @Override
     public String getCurrentWord() {
         return binding.content.getCurrentWord().toString();
-    }
-
-    @Override
-    public DictionaryModel getCurrentLanguage() {
-        return editingLanguageChooserVM.getCurrentLanguage();
     }
 
     @Override
