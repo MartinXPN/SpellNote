@@ -28,7 +28,7 @@
             android:name=".ui.dictionary.ActivitySelectLanguages"
             android:label="@string/title_activity_select_languages"
             android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait" />
+            android:configChanges="orientation|screenSize|keyboardHidden" />
 
         <activity
             android:name=".ui.about.ActivityAbout"
