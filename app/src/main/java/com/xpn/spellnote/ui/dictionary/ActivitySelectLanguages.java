@@ -1,12 +1,12 @@
 package com.xpn.spellnote.ui.dictionary;
 
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -21,21 +21,21 @@ import com.xpn.spellnote.ui.util.Util;
 
 public class ActivitySelectLanguages extends AppCompatActivity implements SelectLanguagesVM.ViewContract {
 
+    private ActivitySelectLanguagesBinding binding;
     private SelectLanguagesVM viewModel;
     private FirebaseAnalytics analytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivitySelectLanguagesBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_select_languages);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_select_languages);
 
         /// set-up analytics
         analytics = FirebaseAnalytics.getInstance(this);
 
         /// setup the toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(view -> {
+        setSupportActionBar(binding.toolbar);
+        binding.toolbar.setNavigationOnClickListener(view -> {
             setResult(RESULT_OK);
             finish();
         });
@@ -62,6 +62,19 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
     protected void onDestroy() {
         super.onDestroy();
         viewModel.onDestroy();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ||
+            newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+            int numberOfColumns = (int) (Util.getWindowWidth(this) / getResources().getDimension(R.dimen.language_grid_column_width));
+            binding.languagesGrid.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
+        }
     }
 
 
