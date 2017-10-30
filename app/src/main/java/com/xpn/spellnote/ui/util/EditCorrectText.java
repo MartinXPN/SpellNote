@@ -1,4 +1,4 @@
-package com.xpn.spellnote.ui.document.edit;
+package com.xpn.spellnote.ui.util;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -8,7 +8,6 @@ import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 
 import com.xpn.spellnote.R;
-import com.xpn.spellnote.ui.util.SpellCheckingListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;

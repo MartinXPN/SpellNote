@@ -10,6 +10,7 @@ import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.document.DocumentService;
 import com.xpn.spellnote.services.word.SpellCheckerService;
 import com.xpn.spellnote.ui.BaseViewModel;
+import com.xpn.spellnote.ui.util.EditCorrectText;
 import com.xpn.spellnote.ui.util.SpellCheckingListener;
 
 import java.util.ArrayList;
