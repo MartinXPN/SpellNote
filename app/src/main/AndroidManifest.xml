@@ -27,7 +27,8 @@
         <activity
             android:name=".ui.dictionary.ActivitySelectLanguages"
             android:label="@string/title_activity_select_languages"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".ui.about.ActivityAbout"
