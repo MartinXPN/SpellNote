@@ -10,6 +10,8 @@ import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.document.DocumentService;
 import com.xpn.spellnote.services.word.SpellCheckerService;
 import com.xpn.spellnote.ui.BaseViewModel;
+import com.xpn.spellnote.ui.util.EditCorrectText;
+import com.xpn.spellnote.ui.util.SpellCheckingListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,7 +24,7 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 
-public class EditDocumentVM extends BaseViewModel {
+public class EditDocumentVM extends BaseViewModel implements EditCorrectText.SpellChecker {
 
     private ViewContract viewContract;
     private final DocumentService documentService;
@@ -122,7 +124,8 @@ public class EditDocumentVM extends BaseViewModel {
 
 
     /// check spelling of the text on the interval [left, right]
-    void checkSpelling(int left, int right, List <String> words) {
+    @Override
+    public void checkSpelling(int left, int right, List <String> words, SpellCheckingListener listener) {
         if( viewContract.getCurrentDictionary().getLocale() == null )
             return;
 
@@ -142,8 +145,8 @@ public class EditDocumentVM extends BaseViewModel {
                 })
                 .subscribe(
                         wrongCorrectWords -> {
-                            viewContract.markIncorrect(left, right, wrongCorrectWords.first);
-                            viewContract.markCorrect(left, right, wrongCorrectWords.second);
+                            listener.markIncorrect(left, right, wrongCorrectWords.first);
+                            listener.markCorrect(left, right, wrongCorrectWords.second);
                         },
                         Timber::e
                 ));
@@ -151,8 +154,6 @@ public class EditDocumentVM extends BaseViewModel {
 
     public interface ViewContract {
         DictionaryModel getCurrentDictionary();
-        void markIncorrect(int left, int right, List <String> incorrectWords);
-        void markCorrect(int left, int right, List <String> correctWords);
         void onDocumentAvailable(DocumentModel document);
     }
 }

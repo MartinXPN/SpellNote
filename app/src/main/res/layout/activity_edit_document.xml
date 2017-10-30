@@ -74,7 +74,7 @@
                 android:layout_height="match_parent"
                 android:overScrollMode="ifContentScrolls" >
 
-                <com.xpn.spellnote.ui.document.edit.EditCorrectText
+                <com.xpn.spellnote.ui.util.EditCorrectText
                     android:id="@+id/content"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -89,7 +89,8 @@
                     android:cursorVisible="true"
 
                     android:hint="Text"
-                    android:text="@={model.content}"/>
+                    android:text="@={model.content}"
+                    app:spellChecker="@{model}"/>
             </ScrollView>
 
             <android.support.v7.widget.CardView
