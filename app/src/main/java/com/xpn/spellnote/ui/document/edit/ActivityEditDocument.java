@@ -129,19 +129,9 @@ public class ActivityEditDocument extends AppCompatActivity
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                int left = start - 10;
-                int right = start + count + 10;
-                List<String> words = binding.content.getWords(
-                        binding.content.getWordStart(left),
-                        binding.content.getWordEnd(right)
-                );
-
                 /// show suggestions only if the current word has more than one character
                 if( getCurrentWord().length() > 1 ) suggestionsVM.suggest(getCurrentWord());
                 else                                onHideSuggestions();
-
-                if( checkSpelling )
-                    viewModel.checkSpelling(left, right, words);
             }
 
             @Override
@@ -207,7 +197,8 @@ public class ActivityEditDocument extends AppCompatActivity
 
     private void refreshActivity() {
         Intent refresh = new Intent(this, ActivityEditDocument.class);
-        refresh.putExtras(getIntent().getExtras());
+        if( getIntent().getExtras() != null )
+            refresh.putExtras(getIntent().getExtras());
         startActivity(refresh);
         super.finish();
     }
@@ -256,7 +247,7 @@ public class ActivityEditDocument extends AppCompatActivity
         item.setChecked( checkSpelling );
         binding.content.setSpellCheckingEnabled(checkSpelling);
         if( checkSpelling )
-            viewModel.checkSpelling(0,  binding.content.getText().length(), binding.content.getWords(0, binding.content.getText().length()) );
+            viewModel.checkSpelling(0,  binding.content.getText().length(), binding.content.getAllWords(), binding.content );
     }
 
 
@@ -286,24 +277,6 @@ public class ActivityEditDocument extends AppCompatActivity
     }
 
     @Override
-    public void markIncorrect(int left, int right, List<String> incorrectWords) {
-        if( !checkSpelling )    return;
-        Timber.d("Mark Incorrect: " + incorrectWords);
-        for( String word : incorrectWords ) {
-            binding.content.markWord( word, left, right, binding.content.INCORRECT_COLOR);
-        }
-    }
-
-    @Override
-    public void markCorrect(int left, int right, List<String> correctWords) {
-        if( !checkSpelling )    return;
-        Timber.d("Mark Correct: " + correctWords);
-        for( String word : correctWords ) {
-            binding.content.markWord( word, left, right, binding.content.CORRECT_COLOR);
-        }
-    }
-
-    @Override
     public void onDocumentAvailable(DocumentModel document) {
         /// as we have the document lets load all supported languages
         /// to be able to set the default locale for editing
@@ -325,7 +298,8 @@ public class ActivityEditDocument extends AppCompatActivity
         viewModel.checkSpelling(
                 0,
                 binding.content.getText().length(),
-                binding.content.getWords(0, binding.content.getText().length())
+                binding.content.getAllWords(),
+                binding.content
         );
     }
 
@@ -405,8 +379,8 @@ public class ActivityEditDocument extends AppCompatActivity
         }
 
         float h = binding.contentScroll.getScrollY();
-        float x = binding.content.getCursorPosition().first;
-        float y = binding.content.getCursorPosition().second;
+        float x = binding.content.getCursorPositionX();
+        float y = binding.content.getCursorPositionY();
 
         y -= h + binding.suggestions.getPaddingTop();
         x -= binding.suggestions.getWidth() / 2;

@@ -6,9 +6,9 @@ import android.support.v7.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
-import android.util.Pair;
 
 import com.xpn.spellnote.R;
+import com.xpn.spellnote.ui.util.SpellCheckingListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,11 +17,12 @@ import java.util.List;
 import java.util.Set;
 
 
-public class EditCorrectText extends AppCompatEditText {
+public class EditCorrectText extends AppCompatEditText implements SpellCheckingListener {
 
     public final Integer INCORRECT_COLOR = ContextCompat.getColor(this.getContext(), R.color.text_wrong);
     public final Integer CORRECT_COLOR = ContextCompat.getColor(this.getContext(), R.color.text_correct);
     private boolean spellCheckingEnabled = true;
+    private SpellChecker spellChecker;
 
 
     public EditCorrectText(Context context) {
@@ -43,6 +44,10 @@ public class EditCorrectText extends AppCompatEditText {
             /// mark the whole text as a correct one
             markText(0, getText().length(), CORRECT_COLOR);
         }
+    }
+
+    public void setSpellChecker(SpellChecker spellChecker) {
+        this.spellChecker = spellChecker;
     }
 
 
@@ -131,6 +136,10 @@ public class EditCorrectText extends AppCompatEditText {
         return new ArrayList<>(words);
     }
 
+    public List <String> getAllWords() {
+        return getWords(0, getText().length() );
+    }
+
     public CharSequence getCurrentWord() {
         return getText().subSequence(
                 getWordStart(getSelectionStart()),
@@ -184,12 +193,53 @@ public class EditCorrectText extends AppCompatEditText {
     }
 
 
-    public Pair<Float, Float> getCursorPosition() {
+    public float getCursorPositionX() {
+        int pos = getSelectionStart();
+        return getLayout().getPrimaryHorizontal(pos) + getPaddingLeft();
+    }
+
+    public float getCursorPositionY() {
         int pos = getSelectionStart();
         int line = getLayout().getLineForOffset(pos);
-        float x = getLayout().getPrimaryHorizontal(pos) + getPaddingLeft();
-        float y = getLayout().getLineBottom(line) + getPaddingTop();
 
-        return new Pair<>(x, y);
+        return (float) (getLayout().getLineBottom(line) + getPaddingTop());
+    }
+
+    @Override
+    protected void onTextChanged(CharSequence text, int start, int before, int count) {
+        super.onTextChanged(text, start, before, count);
+
+        int left = start - 10;
+        int right = start + count + 10;
+        List<String> words = getWords(getWordStart(left), getWordEnd(right));
+
+        if( isSpellCheckingEnabled() && spellChecker != null )
+            spellChecker.checkSpelling(left, right, words, this);
+    }
+
+
+    @Override
+    public void markIncorrect(int left, int right, List<String> incorrectWords) {
+        if( !isSpellCheckingEnabled() )
+            return;
+
+        for( String word : incorrectWords ) {
+            markWord( word, left, right, INCORRECT_COLOR);
+        }
+    }
+
+    @Override
+    public void markCorrect(int left, int right, List<String> correctWords) {
+        if( !isSpellCheckingEnabled() )
+            return;
+
+        for( String word : correctWords ) {
+            markWord( word, left, right, CORRECT_COLOR);
+        }
+    }
+
+
+    public interface SpellChecker {
+        void checkSpelling(int left, int right, List <String> words, SpellCheckingListener listener);
     }
 }

@@ -89,7 +89,8 @@
                     android:cursorVisible="true"
 
                     android:hint="Text"
-                    android:text="@={model.content}"/>
+                    android:text="@={model.content}"
+                    app:spellChecker="@{model}"/>
             </ScrollView>
 
             <android.support.v7.widget.CardView
