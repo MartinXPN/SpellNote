@@ -76,4 +76,17 @@ public class SavedWordsServiceImpl implements SavedWordsService {
             realmInstance.executeTransaction(realm -> realm.copyToRealmOrUpdate(wordMapper.mapTo(word)));
         }));
     }
+
+    @Override
+    public Completable removeWord(String locale, WordModel word) {
+        return Completable.defer(() -> Completable.fromAction(() -> {
+            Realm realmInstance = getRealmInstance(locale);
+            WordSchema schema = realmInstance.where(WordSchema.class)
+                    .equalTo("word", word.getWord())
+                    .findFirst();
+
+            if( schema != null )
+                realmInstance.executeTransaction(realm -> schema.deleteFromRealm());
+        }));
+    }
 }

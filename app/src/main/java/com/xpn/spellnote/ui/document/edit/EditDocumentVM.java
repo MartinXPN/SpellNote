@@ -8,6 +8,8 @@ import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.document.DocumentService;
+import com.xpn.spellnote.services.word.DictionaryChangeSuggestingService;
+import com.xpn.spellnote.services.word.SavedWordsService;
 import com.xpn.spellnote.services.word.SpellCheckerService;
 import com.xpn.spellnote.ui.BaseViewModel;
 import com.xpn.spellnote.ui.util.EditCorrectText;
@@ -19,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
@@ -29,6 +32,8 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
     private ViewContract viewContract;
     private final DocumentService documentService;
     private final SpellCheckerService spellCheckerService;
+    private final DictionaryChangeSuggestingService dictionaryChangeSuggestingService;
+    private final SavedWordsService savedWordsService;
 
     private DocumentModel document = new DocumentModel();
     private Long documentId;
@@ -37,12 +42,16 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
     EditDocumentVM(ViewContract viewContract,
                    Long documentId,
                    DocumentService documentService,
-                   SpellCheckerService spellCheckerService) {
+                   SpellCheckerService spellCheckerService,
+                   SavedWordsService savedWordsService,
+                   DictionaryChangeSuggestingService dictionaryChangeSuggestingService) {
 
         this.viewContract = viewContract;
         this.documentId = documentId;
         this.documentService = documentService;
         this.spellCheckerService = spellCheckerService;
+        this.savedWordsService = savedWordsService;
+        this.dictionaryChangeSuggestingService = dictionaryChangeSuggestingService;
     }
 
     @Override
@@ -123,6 +132,46 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
     }
 
 
+    void addWordToDictionary(String word) {
+        String locale = getLanguageLocale();
+        WordModel wordModel = new WordModel(word, 100, true);
+
+        addSubscription(Single.zip(
+                dictionaryChangeSuggestingService.suggestAdding(locale, wordModel),
+                savedWordsService.saveWord(locale, wordModel).toSingle(() -> ""),
+                (wordModel1, o) -> wordModel1)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        savedWord -> viewContract.onDictionaryChanged(wordModel),
+                        throwable -> {
+                            viewContract.onDictionaryChanged(wordModel);
+                            Timber.e(throwable);
+                        }
+                ));
+    }
+
+
+    void removeWordFromDictionary(String word) {
+        String locale = getLanguageLocale();
+        WordModel wordModel = new WordModel(word, 100, true);
+
+        addSubscription(Single.zip(
+                dictionaryChangeSuggestingService.suggestRemoving(locale, wordModel),
+                savedWordsService.removeWord(locale, wordModel).toSingle(() -> ""),
+                (wordModel1, o) -> wordModel1)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        savedWord -> viewContract.onDictionaryChanged(wordModel),
+                        throwable -> {
+                            viewContract.onDictionaryChanged(wordModel);
+                            Timber.e(throwable);
+                        }
+                ));
+    }
+
+
     /// check spelling of the text on the interval [left, right]
     @Override
     public void checkSpelling(int left, int right, List <String> words, SpellCheckingListener listener) {
@@ -155,5 +204,6 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
     public interface ViewContract {
         DictionaryModel getCurrentDictionary();
         void onDocumentAvailable(DocumentModel document);
+        void onDictionaryChanged(WordModel word);
     }
 }

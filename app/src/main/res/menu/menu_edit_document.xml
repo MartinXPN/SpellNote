@@ -3,6 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+
+    <item
+        android:id="@+id/action_add_word_to_dictionary"
+        android:title="@string/action_title_add_word_to_dictionary"
+        android:icon="@drawable/ic_add_word_to_dictionary"
+        android:visible="false"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_remove_word_from_dictionary"
+        android:title="@string/action_title_remove_word_from_dictionary"
+        android:icon="@drawable/ic_remove_word_from_dictionary"
+        android:visible="false"
+        app:showAsAction="always" />
+
     <item
         android:id="@+id/action_show_suggestions"
         android:title="@string/action_title_show_suggestions"
