@@ -29,6 +29,8 @@
     <string name="action_title_send">Send</string>
     <string name="action_title_copy">Copy</string>
     <string name="action_title_check_spelling">Check Spelling</string>
+    <string name="action_title_add_word_to_dictionary">Add word to dictionary</string>
+    <string name="action_title_remove_word_from_dictionary">Remove word from dictionary</string>
 
 
     <string name="hint_move_to_documents">Move to Documents</string>

@@ -22,6 +22,7 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
     public final Integer CORRECT_COLOR = ContextCompat.getColor(this.getContext(), R.color.text_correct);
     private boolean spellCheckingEnabled = true;
     private SpellChecker spellChecker;
+    private CurrentWordCorrectnessListener currentWordCorrectnessListener;
 
 
     public EditCorrectText(Context context) {
@@ -48,7 +49,34 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
     public void setSpellChecker(SpellChecker spellChecker) {
         this.spellChecker = spellChecker;
     }
+    public void setCurrentWordCorrectnessListener(CurrentWordCorrectnessListener listener) {
+        this.currentWordCorrectnessListener = listener;
+    }
 
+
+    public void checkCurrentWordCorrectness() {
+
+        if( currentWordCorrectnessListener == null )
+            return;
+        int left = getWordStart(getSelectionStart());
+        int right = getWordEnd(getSelectionEnd());
+
+
+        List <String> words = getWords(left, right);
+        if( words.size() != 1 )
+            return;
+
+        String currentWord = words.get(0);
+        ForegroundColorSpan[] currentSpans = getText().getSpans(left, right, ForegroundColorSpan.class);
+        if( currentSpans.length == 0)   currentWordCorrectnessListener.onCurrentWordIsCorrect(currentWord);
+        else                            currentWordCorrectnessListener.onCurrentWordIsWrong(currentWord);
+    }
+
+
+    @Override
+    protected void onSelectionChanged(int selStart, int selEnd) {
+        super.onSelectionChanged(selStart, selEnd);
+    }
 
     public void removeSpans(int left, int right) {
         left = Math.max( 0, left );
@@ -225,6 +253,7 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
         for( String word : incorrectWords ) {
             markWord( word, left, right, INCORRECT_COLOR);
         }
+        checkCurrentWordCorrectness();
     }
 
     @Override
@@ -235,6 +264,7 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
         for( String word : correctWords ) {
             markWord( word, left, right, CORRECT_COLOR);
         }
+        checkCurrentWordCorrectness();
     }
 
 

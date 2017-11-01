@@ -131,9 +131,10 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
     }
 
 
-    public void addWordToDictionary(String word) {
+    void addWordToDictionary(String word) {
         String locale = getLanguageLocale();
         WordModel wordModel = new WordModel(word, 100, true);
+
         addSubscription(dictionaryChangeSuggestingService
                 .suggestAdding(locale, wordModel)
                 .subscribeOn(Schedulers.io())
@@ -147,7 +148,8 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
                 .subscribe());
     }
 
-    public void removeWordFromDictionary(String word) {
+
+    void removeWordFromDictionary(String word) {
         String locale = getLanguageLocale();
         WordModel wordModel = new WordModel(word, 100, true);
 

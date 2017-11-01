@@ -28,6 +28,7 @@ import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
 import com.xpn.spellnote.ui.util.BaseShowCaseTutorial;
+import com.xpn.spellnote.ui.util.CurrentWordCorrectnessListener;
 import com.xpn.spellnote.ui.util.ToolbarActionItemTarget;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.TagsUtil;
@@ -55,6 +56,7 @@ public class ActivityEditDocument extends AppCompatActivity
     private FirebaseAnalytics analytics;
 
     private ActivityEditDocumentBinding binding;
+    private Menu menu;
     private EditDocumentVM viewModel;
     private SuggestionsVM suggestionsVM;
     private EditingLanguageChooserFragment editingLanguageChooserFragment;
@@ -98,7 +100,9 @@ public class ActivityEditDocument extends AppCompatActivity
         viewModel = new EditDocumentVM(this,
                 getIntent().getExtras().getLong(EXTRA_DOCUMENT_ID),
                 diContext.getDocumentService(),
-                diContext.getSpellCheckerService());
+                diContext.getSpellCheckerService(),
+                diContext.getSavedWordsService(),
+                diContext.getDictionaryChangeSuggestingService());
 
         suggestionsVM = new SuggestionsVM(this, diContext.getSuggestionService());
 
@@ -132,6 +136,25 @@ public class ActivityEditDocument extends AppCompatActivity
             /// show suggestions only if the current word has more than one character
             if( getCurrentWord().length() > 1 ) suggestionsVM.suggest(getCurrentWord());
             else                                onHideSuggestions();
+
+            binding.content.checkCurrentWordCorrectness();
+        });
+
+        binding.content.setCurrentWordCorrectnessListener(new CurrentWordCorrectnessListener() {
+            @Override
+            public void onCurrentWordIsCorrect(String word) {
+                menu.findItem(R.id.action_remove_word_from_dictionary).setVisible(false);
+                menu.findItem(R.id.action_add_word_to_dictionary).setVisible(false);
+
+                if(binding.content.getSelectionStart() != binding.content.getSelectionEnd())
+                    menu.findItem(R.id.action_remove_word_from_dictionary).setVisible(true);
+            }
+
+            @Override
+            public void onCurrentWordIsWrong(String word) {
+                menu.findItem(R.id.action_remove_word_from_dictionary).setVisible(false);
+                menu.findItem(R.id.action_add_word_to_dictionary).setVisible(true);
+            }
         });
 
         /// hide suggestions on scroll
@@ -200,6 +223,7 @@ public class ActivityEditDocument extends AppCompatActivity
         SuggestionTutorial suggestionTutorial = new SuggestionTutorial(this);
         suggestionTutorial.showTutorial();
 
+        this.menu = menu;
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -212,6 +236,8 @@ public class ActivityEditDocument extends AppCompatActivity
         else if( id == R.id.action_send )           { Util.sendDocument( this, "", binding.content.getText().toString() );      return true; }
         else if( id == R.id.action_copy )           { Util.copyTextToClipboard( this, binding.content.getText().toString() );   return true; }
         else if( id == R.id.action_check_spelling ) { updateSpellChecking( !checkSpelling, item );                              return true; }
+        else if( id == R.id.action_add_word_to_dictionary )         { viewModel.addWordToDictionary( binding.content.getCurrentWord().toString() );         return true; }
+        else if( id == R.id.action_remove_word_from_dictionary )    { viewModel.removeWordFromDictionary( binding.content.getCurrentWord().toString() );    return true; }
 
         return super.onOptionsItemSelected(item);
     }
