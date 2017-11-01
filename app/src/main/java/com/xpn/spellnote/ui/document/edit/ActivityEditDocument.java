@@ -23,6 +23,7 @@ import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.ActivityEditDocumentBinding;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
+import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.ui.ads.AdsActivity;
 import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment;
@@ -35,6 +36,7 @@ import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -144,14 +146,15 @@ public class ActivityEditDocument extends AppCompatActivity
             @Override
             public void onCurrentWordIsCorrect(String word) {
                 hideRemoveAndAddButtons();
-                if(binding.content.getSelectionStart() != binding.content.getSelectionEnd()) {
+                if(binding.content.getSelectionStart() != binding.content.getSelectionEnd() && menu != null) {
                     menu.findItem(R.id.action_remove_word_from_dictionary).setVisible(true);
                 }
             }
 
             @Override
             public void onCurrentWordIsWrong(String word) {
-                menu.findItem(R.id.action_add_word_to_dictionary).setVisible(true);
+                if( menu != null )
+                    menu.findItem(R.id.action_add_word_to_dictionary).setVisible(true);
             }
 
             @Override
@@ -160,6 +163,8 @@ public class ActivityEditDocument extends AppCompatActivity
             }
 
             private void hideRemoveAndAddButtons() {
+                if( menu == null )
+                    return;
                 menu.findItem(R.id.action_remove_word_from_dictionary).setVisible(false);
                 menu.findItem(R.id.action_add_word_to_dictionary).setVisible(false);
             }
@@ -305,6 +310,16 @@ public class ActivityEditDocument extends AppCompatActivity
     }
 
     @Override
+    public void onDictionaryChanged(WordModel word) {
+        viewModel.checkSpelling(
+                0,
+                binding.content.getText().length(),
+                Collections.singletonList(word.getWord()),
+                binding.content
+        );
+    }
+
+    @Override
     public void onLanguageSelected(DictionaryModel dictionary) {
         viewModel.setLanguageLocale(dictionary.getLocale());
 
@@ -312,8 +327,6 @@ public class ActivityEditDocument extends AppCompatActivity
         CacheUtil.setCache(this, CACHE_DEFAULT_LOCALE, dictionary.getLocale());
 
         /// run spellchecking on the whole text again because the language was changed
-        if(!checkSpelling)
-            return;
         viewModel.checkSpelling(
                 0,
                 binding.content.getText().length(),

@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
@@ -135,17 +136,19 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
         String locale = getLanguageLocale();
         WordModel wordModel = new WordModel(word, 100, true);
 
-        addSubscription(dictionaryChangeSuggestingService
-                .suggestAdding(locale, wordModel)
+        addSubscription(Single.zip(
+                dictionaryChangeSuggestingService.suggestAdding(locale, wordModel),
+                savedWordsService.saveWord(locale, wordModel).toSingle(() -> ""),
+                (wordModel1, o) -> wordModel1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe());
-
-        addSubscription(savedWordsService
-                .saveWord(locale, wordModel)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe());
+                .subscribe(
+                        savedWord -> viewContract.onDictionaryChanged(wordModel),
+                        throwable -> {
+                            viewContract.onDictionaryChanged(wordModel);
+                            Timber.e(throwable);
+                        }
+                ));
     }
 
 
@@ -153,18 +156,19 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
         String locale = getLanguageLocale();
         WordModel wordModel = new WordModel(word, 100, true);
 
-        addSubscription(dictionaryChangeSuggestingService
-                .suggestRemoving(locale, wordModel)
+        addSubscription(Single.zip(
+                dictionaryChangeSuggestingService.suggestRemoving(locale, wordModel),
+                savedWordsService.removeWord(locale, wordModel).toSingle(() -> ""),
+                (wordModel1, o) -> wordModel1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe());
-
-
-        addSubscription(savedWordsService
-                .removeWord(locale, wordModel)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe());
+                .subscribe(
+                        savedWord -> viewContract.onDictionaryChanged(wordModel),
+                        throwable -> {
+                            viewContract.onDictionaryChanged(wordModel);
+                            Timber.e(throwable);
+                        }
+                ));
     }
 
 
@@ -200,5 +204,6 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
     public interface ViewContract {
         DictionaryModel getCurrentDictionary();
         void onDocumentAvailable(DocumentModel document);
+        void onDictionaryChanged(WordModel word);
     }
 }
