@@ -13,4 +13,5 @@ public interface SavedWordsService {
     Single<List<WordModel>> getUserDefinedWords(String locale);
     Completable saveWords(String locale, List<WordModel> words);
     Completable saveWord(String locale, WordModel word);
+    Completable removeWord(String locale, WordModel word);
 }

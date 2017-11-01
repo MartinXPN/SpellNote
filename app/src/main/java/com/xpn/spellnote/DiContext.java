@@ -15,6 +15,7 @@ import com.xpn.spellnote.services.document.DocumentService;
 import com.xpn.spellnote.services.document.local.DocumentMapper;
 import com.xpn.spellnote.services.document.local.DocumentSchema;
 import com.xpn.spellnote.services.document.local.LocalDocumentServiceImpl;
+import com.xpn.spellnote.services.word.AddWordSuggestionService;
 import com.xpn.spellnote.services.word.SavedWordsService;
 import com.xpn.spellnote.services.word.SpellCheckerService;
 import com.xpn.spellnote.services.word.SuggestionService;
@@ -45,10 +46,11 @@ public class DiContext {
 
     private final DocumentService documentService;
     private final SavedDictionaryService savedDictionaryService;
-    private final AvailableDictionariesService availableDictionariesService;
     private final SpellCheckerService spellCheckerService;
     private final SuggestionService suggestionService;
     private final SavedWordsService savedWordsService;
+    private final AddWordSuggestionService addWordSuggestionService;
+    private final AvailableDictionariesService availableDictionariesService;
 
 
     DiContext(Context context) {
@@ -68,6 +70,7 @@ public class DiContext {
         savedWordsService = new SavedWordsServiceImpl(wordMapper);
 
         // REST services
+        addWordSuggestionService = retrofit.create(AddWordSuggestionService.class);
         availableDictionariesService = retrofit.create(AvailableDictionariesService.class);
     }
 
@@ -78,9 +81,6 @@ public class DiContext {
     public SavedDictionaryService getSavedDictionaryService() {
         return savedDictionaryService;
     }
-    public AvailableDictionariesService getAvailableDictionariesService() {
-        return availableDictionariesService;
-    }
     public SpellCheckerService getSpellCheckerService() {
         return spellCheckerService;
     }
@@ -89,5 +89,11 @@ public class DiContext {
     }
     public SavedWordsService getSavedWordsService() {
         return savedWordsService;
+    }
+    public AddWordSuggestionService getAddWordSuggestionService() {
+        return addWordSuggestionService;
+    }
+    public AvailableDictionariesService getAvailableDictionariesService() {
+        return availableDictionariesService;
     }
 }
