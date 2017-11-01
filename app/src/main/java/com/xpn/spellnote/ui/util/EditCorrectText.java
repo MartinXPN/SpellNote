@@ -63,18 +63,24 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
 
 
         List <String> words = getWords(left, right);
-        if( words.size() != 1 )
+        if( words.size() != 1 ) {
+            currentWordCorrectnessListener.onMultipleWordsSelected();
             return;
+        }
 
         String currentWord = words.get(0);
         ForegroundColorSpan[] currentSpans = getText().getSpans(left, right, ForegroundColorSpan.class);
-        if( currentSpans.length == 0)   currentWordCorrectnessListener.onCurrentWordIsCorrect(currentWord);
-        else                            currentWordCorrectnessListener.onCurrentWordIsWrong(currentWord);
+
+        if( currentSpans.length == 0 || currentSpans[0].getForegroundColor() == CORRECT_COLOR )
+            currentWordCorrectnessListener.onCurrentWordIsCorrect(currentWord);
+        else
+            currentWordCorrectnessListener.onCurrentWordIsWrong(currentWord);
     }
 
 
     @Override
     protected void onSelectionChanged(int selStart, int selEnd) {
+        checkCurrentWordCorrectness();
         super.onSelectionChanged(selStart, selEnd);
     }
 

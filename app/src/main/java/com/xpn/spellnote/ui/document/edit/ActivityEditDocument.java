@@ -143,17 +143,25 @@ public class ActivityEditDocument extends AppCompatActivity
         binding.content.setCurrentWordCorrectnessListener(new CurrentWordCorrectnessListener() {
             @Override
             public void onCurrentWordIsCorrect(String word) {
-                menu.findItem(R.id.action_remove_word_from_dictionary).setVisible(false);
-                menu.findItem(R.id.action_add_word_to_dictionary).setVisible(false);
-
-                if(binding.content.getSelectionStart() != binding.content.getSelectionEnd())
+                hideRemoveAndAddButtons();
+                if(binding.content.getSelectionStart() != binding.content.getSelectionEnd()) {
                     menu.findItem(R.id.action_remove_word_from_dictionary).setVisible(true);
+                }
             }
 
             @Override
             public void onCurrentWordIsWrong(String word) {
-                menu.findItem(R.id.action_remove_word_from_dictionary).setVisible(false);
                 menu.findItem(R.id.action_add_word_to_dictionary).setVisible(true);
+            }
+
+            @Override
+            public void onMultipleWordsSelected() {
+                hideRemoveAndAddButtons();
+            }
+
+            private void hideRemoveAndAddButtons() {
+                menu.findItem(R.id.action_remove_word_from_dictionary).setVisible(false);
+                menu.findItem(R.id.action_add_word_to_dictionary).setVisible(false);
             }
         });
 

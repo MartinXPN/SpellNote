@@ -5,4 +5,5 @@ public interface CurrentWordCorrectnessListener {
 
     void onCurrentWordIsCorrect(String word);
     void onCurrentWordIsWrong(String word);
+    void onMultipleWordsSelected();
 }
