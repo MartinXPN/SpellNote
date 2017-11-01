@@ -8,7 +8,7 @@ import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.document.DocumentService;
-import com.xpn.spellnote.services.word.AddWordSuggestionService;
+import com.xpn.spellnote.services.word.DictionaryChangeSuggestingService;
 import com.xpn.spellnote.services.word.SavedWordsService;
 import com.xpn.spellnote.services.word.SpellCheckerService;
 import com.xpn.spellnote.ui.BaseViewModel;
@@ -31,7 +31,7 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
     private ViewContract viewContract;
     private final DocumentService documentService;
     private final SpellCheckerService spellCheckerService;
-    private final AddWordSuggestionService addWordSuggestionService;
+    private final DictionaryChangeSuggestingService dictionaryChangeSuggestingService;
     private final SavedWordsService savedWordsService;
 
     private DocumentModel document = new DocumentModel();
@@ -43,14 +43,14 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
                    DocumentService documentService,
                    SpellCheckerService spellCheckerService,
                    SavedWordsService savedWordsService,
-                   AddWordSuggestionService addWordSuggestionService) {
+                   DictionaryChangeSuggestingService dictionaryChangeSuggestingService) {
 
         this.viewContract = viewContract;
         this.documentId = documentId;
         this.documentService = documentService;
         this.spellCheckerService = spellCheckerService;
         this.savedWordsService = savedWordsService;
-        this.addWordSuggestionService = addWordSuggestionService;
+        this.dictionaryChangeSuggestingService = dictionaryChangeSuggestingService;
     }
 
     @Override
@@ -134,7 +134,7 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
     public void addWordToDictionary(String word) {
         String locale = getLanguageLocale();
         WordModel wordModel = new WordModel(word, 100, true);
-        addSubscription(addWordSuggestionService
+        addSubscription(dictionaryChangeSuggestingService
                 .suggestAdding(locale, wordModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -142,6 +142,24 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
 
         addSubscription(savedWordsService
                 .saveWord(locale, wordModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe());
+    }
+
+    public void removeWordFromDictionary(String word) {
+        String locale = getLanguageLocale();
+        WordModel wordModel = new WordModel(word, 100, true);
+
+        addSubscription(dictionaryChangeSuggestingService
+                .suggestRemoving(locale, wordModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe());
+
+
+        addSubscription(savedWordsService
+                .removeWord(locale, wordModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe());

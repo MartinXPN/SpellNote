@@ -7,8 +7,12 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 
-public interface AddWordSuggestionService {
+public interface DictionaryChangeSuggestingService {
 
-    @POST( "suggestedWords/{locale}.json" )
+    @POST( "suggestAddWords/{locale}.json" )
     Observable<WordModel> suggestAdding(@Path("locale") String locale, WordModel word);
+
+
+    @POST( "suggestRemoveWords/{locale}.json" )
+    Observable<WordModel> suggestRemoving(@Path("locale") String locale, WordModel word);
 }
