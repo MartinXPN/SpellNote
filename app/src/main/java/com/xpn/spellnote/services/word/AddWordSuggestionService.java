@@ -4,10 +4,11 @@ import com.xpn.spellnote.models.WordModel;
 
 import io.reactivex.Observable;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 
 public interface AddWordSuggestionService {
 
-    @POST( "suggestedWords.json" )
-    Observable<WordModel> suggestAdding(WordModel word);
+    @POST( "suggestedWords/{locale}.json" )
+    Observable<WordModel> suggestAdding(@Path("locale") String locale, WordModel word);
 }

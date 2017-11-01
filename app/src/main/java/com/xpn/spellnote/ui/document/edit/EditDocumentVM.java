@@ -8,6 +8,8 @@ import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.document.DocumentService;
+import com.xpn.spellnote.services.word.AddWordSuggestionService;
+import com.xpn.spellnote.services.word.SavedWordsService;
 import com.xpn.spellnote.services.word.SpellCheckerService;
 import com.xpn.spellnote.ui.BaseViewModel;
 import com.xpn.spellnote.ui.util.EditCorrectText;
@@ -29,6 +31,8 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
     private ViewContract viewContract;
     private final DocumentService documentService;
     private final SpellCheckerService spellCheckerService;
+    private final AddWordSuggestionService addWordSuggestionService;
+    private final SavedWordsService savedWordsService;
 
     private DocumentModel document = new DocumentModel();
     private Long documentId;
@@ -37,12 +41,16 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
     EditDocumentVM(ViewContract viewContract,
                    Long documentId,
                    DocumentService documentService,
-                   SpellCheckerService spellCheckerService) {
+                   SpellCheckerService spellCheckerService,
+                   SavedWordsService savedWordsService,
+                   AddWordSuggestionService addWordSuggestionService) {
 
         this.viewContract = viewContract;
         this.documentId = documentId;
         this.documentService = documentService;
         this.spellCheckerService = spellCheckerService;
+        this.savedWordsService = savedWordsService;
+        this.addWordSuggestionService = addWordSuggestionService;
     }
 
     @Override
@@ -120,6 +128,23 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
     void setLanguageLocale(String locale) {
         document.setLanguageLocale(locale);
         notifyPropertyChanged(BR.languageLocale);
+    }
+
+
+    public void addWordToDictionary(String word) {
+        String locale = getLanguageLocale();
+        WordModel wordModel = new WordModel(word, 100, true);
+        addSubscription(addWordSuggestionService
+                .suggestAdding(locale, wordModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe());
+
+        addSubscription(savedWordsService
+                .saveWord(locale, wordModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe());
     }
 
 
