@@ -42,7 +42,7 @@ public class SpellCheckerServiceImpl implements SpellCheckerService {
             /// handle the case of uppercase / lowercase words
             List <String> lowercaseWords = new ArrayList<>();
             for( String word : words ) {
-                if( Character.isUpperCase(word.charAt(0)) )
+                if( !word.isEmpty() && Character.isUpperCase(word.charAt(0)) )
                     lowercaseWords.add( word.toLowerCase() );
             }
             words.addAll(lowercaseWords);

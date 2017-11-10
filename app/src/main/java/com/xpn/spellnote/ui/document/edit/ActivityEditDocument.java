@@ -30,7 +30,7 @@ import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
 import com.xpn.spellnote.ui.util.BaseShowCaseTutorial;
-import com.xpn.spellnote.ui.util.CurrentWordCorrectnessListener;
+import com.xpn.spellnote.ui.util.EditCorrectText.WordCorrectness;
 import com.xpn.spellnote.ui.util.ToolbarActionItemTarget;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.TagsUtil;
@@ -125,6 +125,8 @@ public class ActivityEditDocument extends AppCompatActivity
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                hideRemoveAddWordToDictionaryButtons();
+
                 /// show suggestions only if the current word has more than one character
                 if( getCurrentWord().length() > 1 ) suggestionsVM.suggest(getCurrentWord());
                 else                                onHideSuggestions();
@@ -135,39 +137,22 @@ public class ActivityEditDocument extends AppCompatActivity
                 viewModel.notifyDocumentChanged();
             }
         });
-        binding.content.setOnClickListener(v -> {
+        binding.content.setOnClickListener(view -> {
             /// show suggestions only if the current word has more than one character
-            if( getCurrentWord().length() > 1 ) suggestionsVM.suggest(getCurrentWord());
-            else                                onHideSuggestions();
+            if (getCurrentWord().length() > 1) suggestionsVM.suggest(getCurrentWord());
+            else onHideSuggestions();
 
-            binding.content.checkCurrentWordCorrectness();
-        });
+            binding.content.isCurrentWordCorrect();
 
-        binding.content.setCurrentWordCorrectnessListener(new CurrentWordCorrectnessListener() {
-            @Override
-            public void onCurrentWordIsCorrect(String word) {
-                hideRemoveAndAddButtons();
-                if(binding.content.getSelectionStart() != binding.content.getSelectionEnd() && menu != null) {
+            hideRemoveAddWordToDictionaryButtons();
+            if( menu != null ) {
+                if(binding.content.isCurrentWordCorrect() == WordCorrectness.CORRECT) {
                     menu.findItem(R.id.action_remove_word_from_dictionary).setVisible(true);
                 }
-            }
-
-            @Override
-            public void onCurrentWordIsWrong(String word) {
-                if( menu != null )
+                else if( binding.content.isCurrentWordCorrect() == WordCorrectness.INCORRECT ) {
                     menu.findItem(R.id.action_add_word_to_dictionary).setVisible(true);
-            }
-
-            @Override
-            public void onMultipleWordsSelected() {
-                hideRemoveAndAddButtons();
-            }
-
-            private void hideRemoveAndAddButtons() {
-                if( menu == null )
-                    return;
-                menu.findItem(R.id.action_remove_word_from_dictionary).setVisible(false);
-                menu.findItem(R.id.action_add_word_to_dictionary).setVisible(false);
+                    new AddWordToDictionaryTutorial(ActivityEditDocument.this).showTutorial();
+                }
             }
         });
 
@@ -293,6 +278,13 @@ public class ActivityEditDocument extends AppCompatActivity
             String spokenText = results.get(0);
             binding.content.replaceSelection(spokenText);
         }
+    }
+
+    private void hideRemoveAddWordToDictionaryButtons() {
+        if( menu == null )
+            return;
+        menu.findItem(R.id.action_remove_word_from_dictionary).setVisible(false);
+        menu.findItem(R.id.action_add_word_to_dictionary).setVisible(false);
     }
 
 
@@ -440,6 +432,22 @@ public class ActivityEditDocument extends AppCompatActivity
                     .setTarget( new ViewTarget(editingLanguageChooserFragment.getCurrentLanguageLogoView()) )
                     .setContentTitle(R.string.tutorial_select_dictionaries_title)
                     .setContentText(R.string.tutorial_select_dictionaries_content)
+                    .withMaterialShowcase();
+        }
+    }
+
+    private class AddWordToDictionaryTutorial extends BaseShowCaseTutorial {
+
+        AddWordToDictionaryTutorial(Context context) {
+            super(context, "add_word_tutorial");
+        }
+
+        @Override
+        protected ShowcaseView.Builder display() {
+            return new ShowcaseView.Builder(ActivityEditDocument.this)
+                    .setTarget(new ToolbarActionItemTarget(binding.toolbar, R.id.action_add_word_to_dictionary))
+                    .setContentTitle(R.string.tutorial_add_word_to_dictionary_title)
+                    .setContentText(R.string.tutorial_add_word_to_dictionary_content)
                     .withMaterialShowcase();
         }
     }

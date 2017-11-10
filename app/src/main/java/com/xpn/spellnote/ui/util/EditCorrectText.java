@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import timber.log.Timber;
+
 
 public class EditCorrectText extends AppCompatEditText implements SpellCheckingListener {
 
@@ -22,7 +24,6 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
     public final Integer CORRECT_COLOR = ContextCompat.getColor(this.getContext(), R.color.text_correct);
     private boolean spellCheckingEnabled = true;
     private SpellChecker spellChecker;
-    private CurrentWordCorrectnessListener currentWordCorrectnessListener;
 
 
     public EditCorrectText(Context context) {
@@ -49,39 +50,26 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
     public void setSpellChecker(SpellChecker spellChecker) {
         this.spellChecker = spellChecker;
     }
-    public void setCurrentWordCorrectnessListener(CurrentWordCorrectnessListener listener) {
-        this.currentWordCorrectnessListener = listener;
-    }
+
+    public enum WordCorrectness {INCORRECT, CORRECT, NO_WORD_SELECTED}
 
 
-    public void checkCurrentWordCorrectness() {
+    public WordCorrectness isCurrentWordCorrect() {
 
-        if( currentWordCorrectnessListener == null )
-            return;
         int left = getWordStart(getSelectionStart());
         int right = getWordEnd(getSelectionEnd());
 
 
         List <String> words = getWords(left, right);
+        Timber.d("CURRENT WORDS: " + words);
         if( words.size() != 1 ) {
-            currentWordCorrectnessListener.onMultipleWordsSelected();
-            return;
+            return WordCorrectness.NO_WORD_SELECTED;
         }
 
-        String currentWord = words.get(0);
         ForegroundColorSpan[] currentSpans = getText().getSpans(left, right, ForegroundColorSpan.class);
-
         if( currentSpans.length == 0 || currentSpans[0].getForegroundColor() == CORRECT_COLOR )
-            currentWordCorrectnessListener.onCurrentWordIsCorrect(currentWord);
-        else
-            currentWordCorrectnessListener.onCurrentWordIsWrong(currentWord);
-    }
-
-
-    @Override
-    protected void onSelectionChanged(int selStart, int selEnd) {
-        checkCurrentWordCorrectness();
-        super.onSelectionChanged(selStart, selEnd);
+            return WordCorrectness.CORRECT;
+        return WordCorrectness.INCORRECT;
     }
 
     public void removeSpans(int left, int right) {
@@ -259,7 +247,6 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
         for( String word : incorrectWords ) {
             markWord( word, left, right, INCORRECT_COLOR);
         }
-        checkCurrentWordCorrectness();
     }
 
     @Override
@@ -270,7 +257,6 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
         for( String word : correctWords ) {
             markWord( word, left, right, CORRECT_COLOR);
         }
-        checkCurrentWordCorrectness();
     }
 
 
