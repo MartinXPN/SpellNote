@@ -16,6 +16,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
@@ -191,6 +192,8 @@ public class ActivityEditDocument extends AppCompatActivity
         super.onStart();
         viewModel.onStart();
         suggestionsVM.onStart();
+
+        new SelectDictionariesTutorial(this).showTutorial();
     }
 
     @Override
@@ -231,10 +234,6 @@ public class ActivityEditDocument extends AppCompatActivity
         getMenuInflater().inflate(R.menu.menu_edit_document, menu);
         updateShowSuggestions( CacheUtil.getCache( this, TagsUtil.USER_PREFERENCE_SHOW_SUGGESTIONS, true ), menu.findItem( R.id.action_show_suggestions ) );
         updateSpellChecking( CacheUtil.getCache( this, TagsUtil.USER_PREFERENCE_CHECK_SPELLING, true ), menu.findItem( R.id.action_check_spelling ) );
-
-        /// Show suggestions tutorial
-        SuggestionTutorial suggestionTutorial = new SuggestionTutorial(this);
-        suggestionTutorial.showTutorial();
 
         this.menu = menu;
         return super.onCreateOptionsMenu(menu);
@@ -402,6 +401,9 @@ public class ActivityEditDocument extends AppCompatActivity
         binding.suggestions.setX(x);
         binding.suggestions.setY(y);
         binding.suggestions.setVisibility(View.VISIBLE);
+
+        /// Show suggestions tutorial if not shown yet
+        new SuggestionTutorial(this).showTutorial();
     }
 
     @Override
@@ -422,6 +424,22 @@ public class ActivityEditDocument extends AppCompatActivity
                     .setTarget(new ToolbarActionItemTarget(binding.toolbar, R.id.action_show_suggestions))
                     .setContentTitle(R.string.tutorial_show_suggestions_title)
                     .setContentText(R.string.tutorial_show_suggestions_content)
+                    .withMaterialShowcase();
+        }
+    }
+
+    private class SelectDictionariesTutorial extends BaseShowCaseTutorial {
+
+        SelectDictionariesTutorial(Context context) {
+            super(context, "select_lang_tutorial");
+        }
+
+        @Override
+        protected ShowcaseView.Builder display() {
+            return new ShowcaseView.Builder(ActivityEditDocument.this)
+                    .setTarget( new ViewTarget(editingLanguageChooserFragment.getCurrentLanguageLogoView()) )
+                    .setContentTitle(R.string.tutorial_select_dictionaries_title)
+                    .setContentText(R.string.tutorial_select_dictionaries_content)
                     .withMaterialShowcase();
         }
     }
