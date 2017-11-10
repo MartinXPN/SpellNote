@@ -106,6 +106,10 @@ public class EditingLanguageChooserFragment extends Fragment implements EditingL
         viewModel.setCurrentLanguage(locale);
     }
 
+    public View getCurrentLanguageLogoView() {
+        return binding.currentLanguage;
+    }
+
 
     public interface EditingLanguageChooserContract {
         void onDictionaryListAvailable(List<DictionaryModel> dictionaries);

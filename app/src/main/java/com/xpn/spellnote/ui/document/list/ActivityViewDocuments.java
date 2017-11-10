@@ -1,7 +1,6 @@
 package com.xpn.spellnote.ui.document.list;
 
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -12,10 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.View;
 
-import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databinding.ActivityViewDocumentsBinding;
@@ -24,7 +20,6 @@ import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.list.archive.FragmentViewArchive;
 import com.xpn.spellnote.ui.document.list.documents.FragmentViewDocumentList;
 import com.xpn.spellnote.ui.document.list.trash.FragmentViewTrash;
-import com.xpn.spellnote.ui.util.BaseShowCaseTutorial;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.Util;
 
@@ -116,26 +111,6 @@ public class ActivityViewDocuments extends AppCompatActivity
         else {
             this.documentFragment = documentFragment;
             fm.beginTransaction().replace(R.id.list_of_documents, documentFragment, fragmentTag).commit();
-        }
-    }
-
-
-    private class SelectDictionariesTutorial extends BaseShowCaseTutorial {
-
-        private View targetView;
-
-        SelectDictionariesTutorial(Context context, View targetView) {
-            super(context, "select_lang_tutorial");
-            this.targetView = targetView;
-        }
-
-        @Override
-        protected ShowcaseView.Builder display() {
-            return new ShowcaseView.Builder(ActivityViewDocuments.this)
-                    .setTarget( new ViewTarget(targetView) )
-                    .setContentTitle(R.string.tutorial_select_dictionaries_title)
-                    .setContentText(R.string.tutorial_select_dictionaries_content)
-                    .withMaterialShowcase();
         }
     }
 }
