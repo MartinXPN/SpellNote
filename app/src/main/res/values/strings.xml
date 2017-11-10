@@ -56,6 +56,8 @@
     <string name="tutorial_swipe_content">Long-press on revealed buttons to explore their meaning</string>
     <string name="tutorial_select_dictionaries_title">Select Dictionaries</string>
     <string name="tutorial_select_dictionaries_content">Choose which dictionaries you\'d like to use later on…</string>
+    <string name="tutorial_add_word_to_dictionary_title">Add word to Dictionary</string>
+    <string name="tutorial_add_word_to_dictionary_content">Click to add your own words to dictionary</string>
 
 
     <string name="about_app">

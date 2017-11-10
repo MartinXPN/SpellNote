@@ -30,6 +30,7 @@ import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
 import com.xpn.spellnote.ui.util.BaseShowCaseTutorial;
+import com.xpn.spellnote.ui.util.EditCorrectText.WordCorrectness;
 import com.xpn.spellnote.ui.util.ToolbarActionItemTarget;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.TagsUtil;
@@ -145,10 +146,10 @@ public class ActivityEditDocument extends AppCompatActivity
 
             hideRemoveAddWordToDictionaryButtons();
             if( menu != null ) {
-                if(binding.content.isCurrentWordCorrect()) {
+                if(binding.content.isCurrentWordCorrect() == WordCorrectness.CORRECT) {
                     menu.findItem(R.id.action_remove_word_from_dictionary).setVisible(true);
                 }
-                else {
+                else if( binding.content.isCurrentWordCorrect() == WordCorrectness.INCORRECT ) {
                     menu.findItem(R.id.action_add_word_to_dictionary).setVisible(true);
                     new AddWordToDictionaryTutorial(ActivityEditDocument.this).showTutorial();
                 }
@@ -445,8 +446,8 @@ public class ActivityEditDocument extends AppCompatActivity
         protected ShowcaseView.Builder display() {
             return new ShowcaseView.Builder(ActivityEditDocument.this)
                     .setTarget(new ToolbarActionItemTarget(binding.toolbar, R.id.action_add_word_to_dictionary))
-                    .setContentTitle("Add word to Dictionary")
-                    .setContentText("Click to add your own words to dictionary")
+                    .setContentTitle(R.string.tutorial_add_word_to_dictionary_title)
+                    .setContentText(R.string.tutorial_add_word_to_dictionary_content)
                     .withMaterialShowcase();
         }
     }

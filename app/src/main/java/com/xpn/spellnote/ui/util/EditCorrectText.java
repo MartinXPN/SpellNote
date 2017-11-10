@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import timber.log.Timber;
+
 
 public class EditCorrectText extends AppCompatEditText implements SpellCheckingListener {
 
@@ -49,27 +51,25 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
         this.spellChecker = spellChecker;
     }
 
+    public enum WordCorrectness {INCORRECT, CORRECT, NO_WORD_SELECTED}
 
-    public boolean isCurrentWordCorrect() {
+
+    public WordCorrectness isCurrentWordCorrect() {
 
         int left = getWordStart(getSelectionStart());
         int right = getWordEnd(getSelectionEnd());
 
 
         List <String> words = getWords(left, right);
+        Timber.d("CURRENT WORDS: " + words);
         if( words.size() != 1 ) {
-            return true;
+            return WordCorrectness.NO_WORD_SELECTED;
         }
 
         ForegroundColorSpan[] currentSpans = getText().getSpans(left, right, ForegroundColorSpan.class);
-        return currentSpans.length == 0 || currentSpans[0].getForegroundColor() == CORRECT_COLOR;
-    }
-
-
-    @Override
-    protected void onSelectionChanged(int selStart, int selEnd) {
-        isCurrentWordCorrect();
-        super.onSelectionChanged(selStart, selEnd);
+        if( currentSpans.length == 0 || currentSpans[0].getForegroundColor() == CORRECT_COLOR )
+            return WordCorrectness.CORRECT;
+        return WordCorrectness.INCORRECT;
     }
 
     public void removeSpans(int left, int right) {
