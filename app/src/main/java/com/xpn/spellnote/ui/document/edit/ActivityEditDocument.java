@@ -233,8 +233,8 @@ public class ActivityEditDocument extends AppCompatActivity
         else if( id == R.id.action_send )           { Util.sendDocument( this, "", binding.content.getText().toString() );      return true; }
         else if( id == R.id.action_copy )           { Util.copyTextToClipboard( this, binding.content.getText().toString() );   return true; }
         else if( id == R.id.action_check_spelling ) { updateSpellChecking( !checkSpelling, item );                              return true; }
-        else if( id == R.id.action_add_word_to_dictionary )         { viewModel.addWordToDictionary( binding.content.getCurrentWord().toString() );         return true; }
-        else if( id == R.id.action_remove_word_from_dictionary )    { viewModel.removeWordFromDictionary( binding.content.getCurrentWord().toString() );    return true; }
+        else if( id == R.id.action_add_word_to_dictionary )         { viewModel.addWordToDictionary( binding.content.getCurrentWord().toString() );         hideRemoveAddWordToDictionaryButtons();     return true; }
+        else if( id == R.id.action_remove_word_from_dictionary )    { viewModel.removeWordFromDictionary( binding.content.getCurrentWord().toString() );    hideRemoveAddWordToDictionaryButtons();     return true; }
 
         return super.onOptionsItemSelected(item);
     }
@@ -302,6 +302,7 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     public void onDictionaryChanged(WordModel word) {
+        Toast.makeText(this, "Dictionary updated: " + word.getWord(), Toast.LENGTH_SHORT).show();
         viewModel.checkSpelling(
                 0,
                 binding.content.getText().length(),
