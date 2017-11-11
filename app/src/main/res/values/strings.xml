@@ -48,6 +48,7 @@
     <string name="empty_document">Create a new Document</string>
 
     <string name="hint_edit_document_title">Title…</string>
+    <string name="hint_edit_content">Type the text here…</string>
 
 
     <string name="tutorial_show_suggestions_title">Suggestions</string>
