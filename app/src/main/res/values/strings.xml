@@ -40,6 +40,12 @@
     <string name="hint_unarchive">Unarchive</string>
     <string name="hint_remove_forever">Remove Forever</string>
     <string name="hint_send">Send</string>
+    <string name="undo">UNDO</string>
+    <string name="explanation_unarchived">Unarchived</string>
+    <string name="explanation_archived">Archived</string>
+    <string name="explanation_moved_to_trash">Moved to Trash</string>
+    <string name="explanation_restored">Restored</string>
+    <string name="explanation_removed_forever">Removed Forever</string>
     <string name="explanation_removed">Document removed</string>
     <string name="explanation_document_not_editable">Restore document to edit…</string>
 
@@ -49,6 +55,17 @@
 
     <string name="hint_edit_document_title">Title…</string>
 
+
+    <string name="request_update_or_delete_dictionary">Update or Delete the dictionary?</string>
+    <string name="update_or_delete_dictionary_option_update">Update</string>
+    <string name="update_or_delete_dictionary_option_delete">Delete</string>
+
+    <string name="request_remove_all_documents">Remove all document in Trash?</string>
+    <string name="request_remove_all_documents_option_yes">Yes</string>
+    <string name="request_remove_all_documents_option_cancel">Cancel</string>
+
+
+    <string name="error_couldnt_create_document">Couldn\'t create document</string>
 
     <string name="tutorial_show_suggestions_title">Suggestions</string>
     <string name="tutorial_show_suggestions_content">"Click to show or hide Suggestions"</string>
@@ -66,8 +83,4 @@
         It\'s an open-source <a href="https://github.com/MartinXPN/SpellNote">project</a> done mainly for educational reasons.\n
     </string>
     <string name="about_author">© 2017 <a href="https://www.linkedin.com/in/martin-mirakyan-945597101">Martin Mirakyan</a>\nAll Rights Reserved.</string>
-    <string name="title_activity_main">MainActivity</string>
-
-    <string name="action_settings">Settings</string>
-
 </resources>

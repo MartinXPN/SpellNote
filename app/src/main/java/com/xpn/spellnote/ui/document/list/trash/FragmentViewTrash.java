@@ -47,9 +47,9 @@ public class FragmentViewTrash extends BaseFragmentDocumentList {
             AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)  builder = new AlertDialog.Builder(getActivity(), android.R.style.Theme_Material_Dialog_Alert);
             else                                                        builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("Remove all document in Trash?")
-                    .setPositiveButton("Yes", (dialog, which) -> viewModel.removeCategory(getCategory()))
-                    .setNegativeButton("Cancel", (dialog, which) -> {})
+            builder.setTitle(R.string.request_remove_all_documents)
+                    .setPositiveButton(R.string.request_remove_all_documents_option_yes, (dialog, which) -> viewModel.removeCategory(getCategory()))
+                    .setNegativeButton(R.string.request_remove_all_documents_option_cancel, (dialog, which) -> {})
                     .show();
 
             return true;

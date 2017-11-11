@@ -108,9 +108,9 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)  builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
         else                                                        builder = new AlertDialog.Builder(this);
         builder.setTitle(dictionary.getLanguageName())
-                .setMessage("Update or Delete the dictionary?")
-                .setPositiveButton("Update", (dialog, which) -> listener.onUpdate(dictionary))
-                .setNegativeButton("Delete", (dialog, which) -> listener.onRemove(dictionary))
+                .setMessage(R.string.request_update_or_delete_dictionary)
+                .setPositiveButton(R.string.update_or_delete_dictionary_option_update, (dialog, which) -> listener.onUpdate(dictionary))
+                .setNegativeButton(R.string.update_or_delete_dictionary_option_delete, (dialog, which) -> listener.onRemove(dictionary))
                 .show();
     }
 
