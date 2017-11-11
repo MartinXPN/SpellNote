@@ -117,12 +117,12 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
     }
 
     @Override
-    public void onShowUndoOption(DocumentModel previousDocument, String message) {
+    public void onShowUndoOption(DocumentModel previousDocument, @StringRes int messageResourceId) {
         /// Show UNDO snack-bar
         if( getView() == null )
             return;
-        Snackbar.make( getView(), message, Snackbar.LENGTH_LONG )
-                .setAction( "UNDO", view -> {
+        Snackbar.make( getView(), messageResourceId, Snackbar.LENGTH_LONG )
+                .setAction( R.string.undo, view -> {
                     viewModel.restoreDocument(previousDocument);
                     updateDocumentList();
                 }).show();
@@ -134,8 +134,8 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
     }
 
     @Override
-    public void onShowExplanation(@StringRes int resourceId) {
-        Toast.makeText(getActivity(), getString(resourceId), Toast.LENGTH_SHORT).show();
+    public void onShowExplanation(@StringRes int messageResourceId) {
+        Toast.makeText(getActivity(), getString(messageResourceId), Toast.LENGTH_SHORT).show();
     }
 
     @Override

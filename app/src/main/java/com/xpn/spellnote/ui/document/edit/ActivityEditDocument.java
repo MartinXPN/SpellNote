@@ -82,7 +82,7 @@ public class ActivityEditDocument extends AppCompatActivity
                 .subscribe(
                         () -> launchForResult(fragment, document.getId(), requestCode ),
                         throwable -> {
-                            Toast.makeText(fragment.getActivity(), "Couldn't create document", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(fragment.getActivity(), R.string.error_couldnt_create_document, Toast.LENGTH_SHORT).show();
                             Timber.e(throwable);
                         });
     }
