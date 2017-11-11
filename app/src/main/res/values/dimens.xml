@@ -19,4 +19,7 @@
     <dimen name="empty_logo_text_size">21sp</dimen>
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
+
+    <dimen name="suggestion_box_height">190dp</dimen>
+    <dimen name="suggestion_box_width">125dp</dimen>
 </resources>
