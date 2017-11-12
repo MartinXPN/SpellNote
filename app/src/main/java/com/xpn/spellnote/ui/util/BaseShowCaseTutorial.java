@@ -25,15 +25,26 @@ public abstract class BaseShowCaseTutorial {
     protected abstract ShowcaseView.Builder display();
 
     public void showTutorial() {
+        showTutorial(false);
+    }
+
+    public void showTutorial(boolean showOkButton) {
         if( !isDisplayed() ) {
             ShowcaseView.Builder builder = display();
             tutorialView = builder.build();
             tutorialView.setStyle(R.style.TutorialTheme);
-            tutorialView.hideButton();
             tutorialView.setOnClickListener(view -> {
                 setDisplayed();
                 hide();
             });
+            if(!showOkButton)
+                tutorialView.hideButton();
+            else {
+                tutorialView.overrideButtonClick(view -> {
+                    setDisplayed();
+                    hide();
+                });
+            }
         }
     }
 

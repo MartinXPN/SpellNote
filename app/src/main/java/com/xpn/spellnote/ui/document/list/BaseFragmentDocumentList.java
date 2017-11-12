@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.xpn.spellnote.BR;
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
@@ -183,9 +182,9 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
             });
 
 
-            /// show swipe tutorial if position = 2
-            if( position == 2 ) {
-                new SwipeTutorial(getActivity(), ((ItemDocumentListBinding) holder.getBinding()).info).showTutorial();
+            /// show swipe tutorial if position = MIN_ITEM_COUNT_FOR_TUTORIAL
+            if( position == SwipeTutorial.MIN_ITEM_COUNT_FOR_TUTORIAL ) {
+                new SwipeTutorial(getActivity()).showTutorial(true);
             }
         }
 
@@ -205,17 +204,14 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
     private class SwipeTutorial extends BaseShowCaseTutorial {
 
-        private View targetView;
-
-        SwipeTutorial(Context context, View targetView) {
+        static final int MIN_ITEM_COUNT_FOR_TUTORIAL = 1;
+        SwipeTutorial(Context context) {
             super(context, "swipe_tutorial");
-            this.targetView = targetView;
         }
 
         @Override
         protected ShowcaseView.Builder display() {
             return new ShowcaseView.Builder(getActivity())
-                    .setTarget( new ViewTarget(targetView) )
                     .setContentTitle(R.string.tutorial_swipe_title)
                     .setContentText(R.string.tutorial_swipe_content)
                     .withMaterialShowcase();
