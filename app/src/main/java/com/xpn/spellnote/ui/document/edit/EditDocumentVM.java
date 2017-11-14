@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
@@ -136,18 +135,20 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
         String locale = getLanguageLocale();
         WordModel wordModel = new WordModel(word, 100, true);
 
-        addSubscription(Single.zip(
-                dictionaryChangeSuggestingService.suggestAdding(locale, wordModel),
-                savedWordsService.saveWord(locale, wordModel).toSingle(() -> ""),
-                (wordModel1, o) -> wordModel1)
+        addSubscription(savedWordsService.saveWord(locale, wordModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        savedWord -> viewContract.onDictionaryChanged(wordModel),
-                        throwable -> {
+                        () -> {
                             viewContract.onDictionaryChanged(wordModel);
-                            Timber.e(throwable);
-                        }
+                            addSubscription(dictionaryChangeSuggestingService.suggestAdding(locale, wordModel)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(
+                                            (wordModel1, throwable) -> {}
+                                    ));
+                        },
+                        Timber::e
                 ));
     }
 
@@ -156,18 +157,20 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
         String locale = getLanguageLocale();
         WordModel wordModel = new WordModel(word, 100, true);
 
-        addSubscription(Single.zip(
-                dictionaryChangeSuggestingService.suggestRemoving(locale, wordModel),
-                savedWordsService.removeWord(locale, wordModel).toSingle(() -> ""),
-                (wordModel1, o) -> wordModel1)
+        addSubscription(savedWordsService.removeWord(locale, wordModel)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        savedWord -> viewContract.onDictionaryChanged(wordModel),
-                        throwable -> {
+                        () -> {
                             viewContract.onDictionaryChanged(wordModel);
-                            Timber.e(throwable);
-                        }
+                            addSubscription(dictionaryChangeSuggestingService.suggestRemoving(locale, wordModel)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(
+                                            (wordModel1, throwable) -> {}
+                                    ));
+                        },
+                        Timber::e
                 ));
     }
 
