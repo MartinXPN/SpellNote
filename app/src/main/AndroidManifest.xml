@@ -10,13 +10,12 @@
         android:name="com.xpn.spellnote.SpellNoteApp"
         android:allowBackup="false"
         tools:replace="android:allowBackup"
-        android:icon="@mipmap/ic_launcher"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:icon="@mipmap/ic_launcher">
 
         <activity
             android:name=".ui.document.list.ActivityViewDocuments"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NavigationDrawer.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar.NavigationDrawer">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,7 +40,9 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
 
-        <activity android:name=".ui.ads.AdsActivity" />
+        <activity
+            android:name=".ui.ads.AdsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
     </application>
 </manifest>

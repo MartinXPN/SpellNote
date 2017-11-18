@@ -45,9 +45,7 @@ public class ActivityViewDocuments extends AppCompatActivity
 
         /// set up toolbar and navigation-toggle
         setSupportActionBar(binding.toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawer, binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-
-        };
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.drawer, binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         binding.drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -61,8 +59,6 @@ public class ActivityViewDocuments extends AppCompatActivity
         /// open drawer on first launch
         if(CacheUtil.getCache(this, NAVIGATION_DRAWER_FIRST_LAUNCH_TAG, true)) {
             binding.drawer.openDrawer(Gravity.START, true);
-//            MenuItem dictionariesItem = binding.navigation.getMenu().findItem(R.id.nav_trash);
-//            new SelectDictionariesTutorial(this, dictionariesItem.getActionView()).showTutorial();
             CacheUtil.setCache(this, NAVIGATION_DRAWER_FIRST_LAUNCH_TAG, false );
         }
     }
