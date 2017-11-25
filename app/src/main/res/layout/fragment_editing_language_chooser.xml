@@ -51,7 +51,7 @@
 
 
                     <!-- List of available languages -->
-                    <com.samvel1024.databindingrv.BindingRecyclerView
+                    <com.xpn.spellnote.ui.util.bindingrecyclerview.BindingRecyclerView
                         android:id="@+id/supported_languages_grid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
