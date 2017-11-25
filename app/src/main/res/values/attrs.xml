@@ -4,7 +4,6 @@
     <declare-styleable name="BindingRecyclerView">
         <attr name="itemLayoutResId" format="reference" />
         <attr name="bindingVarPath" format="string" />
-        <attr name="helloWorld" format="string" />
     </declare-styleable>
 
 </resources>

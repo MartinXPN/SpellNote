@@ -8,8 +8,6 @@ import com.xpn.spellnote.R;
 
 import java.lang.reflect.Field;
 
-import timber.log.Timber;
-
 
 class Configurer {
 
@@ -39,7 +37,6 @@ class Configurer {
         int resId = typedArray.getResourceId(R.styleable.BindingRecyclerView_itemLayoutResId, 0);
         if (resId == 0)
             throw new IllegalStateException("BindingRecyclerView.itemLayoutResId attribute is not present");
-        Timber.d("resId: " + resId);
         view.setItemLayoutResId(resId);
     }
 
@@ -47,24 +44,15 @@ class Configurer {
         if (!typedArray.hasValue(R.styleable.BindingRecyclerView_bindingVarPath))
             throw new IllegalStateException("BindingRecyclerView.bindingVarPath attribute is not present");
 
-        String helloWorld = typedArray.getString(R.styleable.BindingRecyclerView_helloWorld);
         String path = typedArray.getString(R.styleable.BindingRecyclerView_bindingVarPath);
-        Timber.d("helloWorld:" + helloWorld);
         String className = path.substring(0, path.lastIndexOf("."));
         String fieldName = path.substring(path.lastIndexOf(".") + 1);
-        Timber.d("path:" + path);
-        Timber.d("className:" + className);
-        Timber.d("fieldName:" + fieldName);
 
         try {
             Class brClass = Class.forName(className);
-            Timber.d("brClass");
             Field varField = brClass.getField(fieldName);
-            Timber.d("varField");
             int varId = (int) varField.get(null);
-            Timber.d("varId");
             view.setBindingVarId(varId);
-            Timber.d("setBindingVarId");
         } catch (Exception e) {
             throw new IllegalStateException("Could not find binding variable id with path " + path, e);
         }
