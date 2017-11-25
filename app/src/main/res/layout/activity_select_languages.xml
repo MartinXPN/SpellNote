@@ -32,7 +32,7 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
         </android.support.design.widget.AppBarLayout>
 
-        <com.samvel1024.databindingrv.BindingRecyclerView
+        <com.xpn.spellnote.ui.util.bindingrecyclerview.BindingRecyclerView
             android:id="@+id/languages_grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

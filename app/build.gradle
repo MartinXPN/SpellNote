@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'realm-android'
 
 repositories {
@@ -68,10 +67,9 @@ dependencies {
     compile 'com.jakewharton.timber:timber:4.5.1'           // Logger
     compile 'com.annimon:stream:1.1.9'                      // Stream API
 
-    compile 'de.hdodenhof:circleimageview:2.1.0'            // Circle ImageView
-    compile 'com.daimajia.swipelayout:library:1.2.0@aar'    // Swipe layout (swipe items in document list)
-    compile 'com.samvel1024.databindingrv:data-binding-recyclerview:0.0.3'  // binding RecyclerVew for easy manipulations with lists
-    compile 'com.github.amlcurran.showcaseview:library:5.4.3'               // popups for tutorial
+    compile 'de.hdodenhof:circleimageview:2.1.0'                // Circle ImageView
+    compile 'com.daimajia.swipelayout:library:1.2.0@aar'        // Swipe layout (swipe items in document list)
+    compile 'com.github.amlcurran.showcaseview:library:5.4.3'   // popups for tutorial
 }
 
 apply plugin: 'com.google.gms.google-services'
