@@ -1,4 +1,4 @@
-package com.xpn.spellnote.ui.util;
+package com.xpn.spellnote.ui.util.tutorial;
 
 import android.content.Context;
 
@@ -29,7 +29,17 @@ public abstract class BaseShowCaseTutorial {
     }
 
     public void showTutorial(boolean showOkButton) {
+        showTutorial(showOkButton, null);
+    }
+
+    public void showTutorial(OnPrepareShowTutorialListener listener) {
+        showTutorial(false, listener);
+    }
+
+    public void showTutorial(boolean showOkButton, OnPrepareShowTutorialListener listener) {
         if( !isDisplayed() ) {
+            if(listener != null)
+                listener.onPrepareShowing();
             ShowcaseView.Builder builder = display();
             tutorialView = builder.build();
             tutorialView.setStyle(R.style.TutorialTheme);
@@ -82,5 +92,10 @@ public abstract class BaseShowCaseTutorial {
     public void hide() {
         if(tutorialView != null)
             tutorialView.hide();
+    }
+
+
+    public interface OnPrepareShowTutorialListener {
+        void onPrepareShowing();
     }
 }

@@ -147,6 +147,7 @@
                     android:layout_height="0dp"
                     android:scaleType="centerInside"
                     app:imageUrl="@{viewModel.dictionaryLogoURL}"
+                    app:placeholder="@{@drawable/ic_language}"
                     android:contentDescription="@null" />
 
                 <TextView

@@ -59,7 +59,6 @@ public class SavedDictionaryServiceImpl implements SavedDictionaryService {
             Timber.d("Save dictionary: " + dictionary.toString());
             Realm realmInstance = Realm.getInstance(realmConfiguration);
             realmInstance.executeTransaction(realm -> realm.copyToRealmOrUpdate(dictionaryMapper.mapTo(dictionary)));
-            realmInstance.refresh();
         });
     }
 
@@ -75,7 +74,6 @@ public class SavedDictionaryServiceImpl implements SavedDictionaryService {
                     .equalTo("locale", dictionary.getLocale())
                     .findFirst()
                     .deleteFromRealm());
-            realmInstance.refresh();
         });
     }
 }

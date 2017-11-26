@@ -31,12 +31,13 @@ public class SpellCheckerServiceImpl implements SpellCheckerService {
 
 
     @Override
-    public Single<List<WordModel>> getCorrectWords(List<String> words, String locale) {
+    public Single<List<WordModel>> getCorrectWords(List<String> askedWords, String locale) {
         return Single.defer(() -> {
 
-            if( words.isEmpty() )
+            if( askedWords.isEmpty() )
                 return Single.just( new ArrayList<WordModel>() );
 
+            List <String> words = new ArrayList<>(askedWords);
             Set<String> requestedWords = new HashSet<>(words);
 
             /// handle the case of uppercase / lowercase words

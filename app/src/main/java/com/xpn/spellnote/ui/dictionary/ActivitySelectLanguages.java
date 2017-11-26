@@ -16,7 +16,7 @@ import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.ActivitySelectLanguagesBinding;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.ui.dictionary.LanguageItemVM.DictionaryListener;
-import com.xpn.spellnote.ui.util.Util;
+import com.xpn.spellnote.ui.util.ViewUtil;
 
 
 public class ActivitySelectLanguages extends AppCompatActivity implements SelectLanguagesVM.ViewContract {
@@ -47,7 +47,7 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
                 diContext.getSavedWordsService());
 
         binding.setViewModel(viewModel);
-        int numberOfColumns = (int) (Util.getWindowWidth(this) / getResources().getDimension(R.dimen.language_grid_column_width));
+        int numberOfColumns = (int) (ViewUtil.getWindowWidth(this) / getResources().getDimension(R.dimen.language_grid_column_width));
         binding.languagesGrid.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
     }
 
@@ -72,7 +72,7 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ||
             newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
 
-            int numberOfColumns = (int) (Util.getWindowWidth(this) / getResources().getDimension(R.dimen.language_grid_column_width));
+            int numberOfColumns = (int) (ViewUtil.getWindowWidth(this) / getResources().getDimension(R.dimen.language_grid_column_width));
             binding.languagesGrid.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
         }
     }

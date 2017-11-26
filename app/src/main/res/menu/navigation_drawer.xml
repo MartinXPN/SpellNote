@@ -34,10 +34,6 @@
         android:id="@+id/nav_group_assistant"
         android:checkableBehavior="none">
         <item
-            android:id="@+id/nav_help"
-            android:icon="@drawable/ic_help_black"
-            android:title="@string/nav_help_and_tips" />
-        <item
             android:id="@+id/nav_feedback"
             android:icon="@drawable/ic_feedback"
             android:title="@string/nav_send_feedback" />
