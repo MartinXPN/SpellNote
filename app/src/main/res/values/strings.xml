@@ -33,6 +33,7 @@
     <string name="action_title_remove_word_from_dictionary">Remove word from dictionary</string>
 
 
+    <string name="description_loading_advertisement">Loading advertisement…</string>
     <string name="hint_move_to_documents">Move to Documents</string>
     <string name="hint_move_to_archive">Move to Archive</string>
     <string name="hint_move_to_trash">Move to Trash</string>
