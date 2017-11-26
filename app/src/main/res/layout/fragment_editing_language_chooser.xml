@@ -26,6 +26,7 @@
             android:padding="5dp"
             android:onClick="@{() -> viewModel.onShowAvailableLanguages()}"
             app:imageUrl="@{viewModel.currentLanguageLogoUrl}"
+            app:placeholder="@{@drawable/ic_language}"
             android:scaleType="centerInside"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@null" />

@@ -27,6 +27,7 @@
             android:layout_margin="5dp"
             android:padding="7dp"
             app:imageUrl="@{viewModel.logoUrl}"
+            app:placeholder="@{@drawable/ic_language}"
             android:contentDescription="@null" />
 
         <ImageView

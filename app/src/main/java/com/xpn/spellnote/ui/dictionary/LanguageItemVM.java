@@ -1,15 +1,10 @@
 package com.xpn.spellnote.ui.dictionary;
 
 import android.databinding.Bindable;
-import android.databinding.BindingAdapter;
-import android.support.v4.content.ContextCompat;
-import android.widget.ImageView;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 import com.xpn.spellnote.BR;
-import com.xpn.spellnote.R;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.dictionary.SavedDictionaryService;
@@ -44,16 +39,6 @@ public class LanguageItemVM extends BaseViewModel {
         this.status = status;
         this.savedDictionaryService = savedDictionaryService;
         this.savedWordsService = savedWordsService;
-    }
-
-    @BindingAdapter({"bind:imageUrl"})
-    public static void loadImage(ImageView view, String url) {
-        Picasso.with(view.getContext())
-                .load(url)
-                .placeholder(ContextCompat.getDrawable(view.getContext(), R.mipmap.ic_placeholder))
-                .resizeDimen(R.dimen.language_flag_size, R.dimen.language_flag_size)
-                .centerInside()
-                .into(view);
     }
 
     public String getLanguageName() {

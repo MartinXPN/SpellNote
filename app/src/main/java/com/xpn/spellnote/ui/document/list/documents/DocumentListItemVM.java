@@ -1,12 +1,8 @@
 package com.xpn.spellnote.ui.document.list.documents;
 
 import android.databinding.Bindable;
-import android.databinding.BindingAdapter;
 import android.support.annotation.StringRes;
-import android.support.v4.content.ContextCompat;
-import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
 import com.xpn.spellnote.BR;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.models.DictionaryModel;
@@ -55,16 +51,6 @@ public class DocumentListItemVM extends BaseViewModel {
     public String getDictionaryLogoURL() {
         if( dictionary == null )    return "error";
         else                        return dictionary.getLogoURL();
-    }
-
-    @BindingAdapter({"bind:imageUrl"})
-    public static void loadImage(ImageView view, String url) {
-        Picasso.with(view.getContext())
-                .load(url)
-                .placeholder(ContextCompat.getDrawable(view.getContext(), R.drawable.ic_language))
-                .resizeDimen(R.dimen.language_flag_size, R.dimen.language_flag_size)
-                .centerInside()
-                .into(view);
     }
 
 
