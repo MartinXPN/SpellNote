@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 
-public class Util {
+public class ViewUtil {
 
     public static int dpToPx( float dp, Context context ) {
         Resources r = context.getResources();
@@ -26,14 +26,16 @@ public class Util {
         View view = activity.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            if( imm != null )
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
     public static void showKeyboard( AppCompatActivity activity ) {
         View view = activity.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            if( imm != null )
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
     }
 }

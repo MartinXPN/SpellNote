@@ -29,9 +29,10 @@ import com.xpn.spellnote.ui.ads.AdsActivity;
 import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
-import com.xpn.spellnote.ui.util.BaseShowCaseTutorial;
 import com.xpn.spellnote.ui.util.EditCorrectText.WordCorrectness;
-import com.xpn.spellnote.ui.util.ToolbarActionItemTarget;
+import com.xpn.spellnote.ui.util.ViewUtil;
+import com.xpn.spellnote.ui.util.tutorial.BaseShowCaseTutorial;
+import com.xpn.spellnote.ui.util.tutorial.ToolbarActionItemTarget;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
@@ -151,7 +152,7 @@ public class ActivityEditDocument extends AppCompatActivity
                 }
                 else if( binding.content.isCurrentWordCorrect() == WordCorrectness.INCORRECT ) {
                     menu.findItem(R.id.action_add_word_to_dictionary).setVisible(true);
-                    new AddWordToDictionaryTutorial(ActivityEditDocument.this).showTutorial();
+                    new AddWordToDictionaryTutorial(ActivityEditDocument.this).showTutorial(() -> ViewUtil.hideKeyboard(this));
                 }
             }
         });
@@ -178,7 +179,7 @@ public class ActivityEditDocument extends AppCompatActivity
         viewModel.onStart();
         suggestionsVM.onStart();
 
-        new SelectDictionariesTutorial(this).showTutorial();
+        new SelectDictionariesTutorial(this).showTutorial(() -> ViewUtil.hideKeyboard(this));
     }
 
     @Override
@@ -396,7 +397,7 @@ public class ActivityEditDocument extends AppCompatActivity
         binding.suggestions.setVisibility(View.VISIBLE);
 
         /// Show suggestions tutorial if not shown yet
-        new SuggestionTutorial(this).showTutorial();
+        new SuggestionTutorial(this).showTutorial(() -> ViewUtil.hideKeyboard(this));
     }
 
     @Override

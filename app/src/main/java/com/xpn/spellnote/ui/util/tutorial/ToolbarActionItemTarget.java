@@ -1,4 +1,4 @@
-package com.xpn.spellnote.ui.util;
+package com.xpn.spellnote.ui.util.tutorial;
 
 import android.graphics.Point;
 import android.support.annotation.IdRes;
