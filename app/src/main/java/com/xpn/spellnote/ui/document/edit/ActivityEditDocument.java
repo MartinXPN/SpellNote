@@ -25,7 +25,7 @@ import com.xpn.spellnote.databinding.ActivityEditDocumentBinding;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.models.WordModel;
-import com.xpn.spellnote.ui.ads.AdsActivity;
+import com.xpn.spellnote.ui.ads.InterstitialAdHelper;
 import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
@@ -58,6 +58,7 @@ public class ActivityEditDocument extends AppCompatActivity
     private boolean checkSpelling;
 
     private FirebaseAnalytics analytics;
+    private InterstitialAdHelper ads;
 
     private ActivityEditDocumentBinding binding;
     private Menu menu;
@@ -98,6 +99,10 @@ public class ActivityEditDocument extends AppCompatActivity
         /// set-up analytics
         analytics = FirebaseAnalytics.getInstance(this);
 
+        /// set-up advertisement helper
+        ads = new InterstitialAdHelper();
+        ads.initializeAds(this);
+
 
         /// set-up view-models
         DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
@@ -115,7 +120,7 @@ public class ActivityEditDocument extends AppCompatActivity
 
         /// set-up the actionbar
         setSupportActionBar(binding.toolbar);
-        binding.toolbar.setNavigationOnClickListener(v -> finish());
+        binding.toolbar.setNavigationOnClickListener(v -> showAdOrFinish());
 
 
         /// set-up edit-correct text
@@ -197,14 +202,21 @@ public class ActivityEditDocument extends AppCompatActivity
         super.onDestroy();
     }
 
-    @Override
-    public void finish() {
+    private void showAdOrFinish() {
         /// show ads in 50% of all cases
         int number = new Random().nextInt(2);
-        if(number == 0)
-            AdsActivity.launch(this);
-
-        super.finish();
+        if(number == 0) {
+            try {
+                ads.showAd(this::finish);
+            }
+            catch (IllegalStateException e) {
+                Timber.e(e);
+                finish();
+            }
+        }
+        else {
+            finish();
+        }
     }
 
     private void refreshActivity() {
@@ -212,7 +224,7 @@ public class ActivityEditDocument extends AppCompatActivity
         if( getIntent().getExtras() != null )
             refresh.putExtras(getIntent().getExtras());
         startActivity(refresh);
-        super.finish();
+        finish();
     }
 
     @Override
