@@ -19,4 +19,10 @@ public class BindingAdapters {
                 .centerInside()
                 .into(view);
     }
+
+
+    @BindingAdapter("android:src")
+    public static void setImageResource(ImageView imageView, int resource){
+        imageView.setImageResource(resource);
+    }
 }

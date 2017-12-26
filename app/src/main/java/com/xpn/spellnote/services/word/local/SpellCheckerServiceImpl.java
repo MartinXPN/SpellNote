@@ -53,7 +53,7 @@ public class SpellCheckerServiceImpl implements SpellCheckerService {
                     .name(locale + ".realm")
                     .build();
 
-            Timber.d( "Opening database at: " + realmConfiguration.getPath() );
+            Timber.d( "Opening database at: %s", realmConfiguration.getPath() );
             Realm realm = Realm.getInstance(realmConfiguration);
             realm.refresh();
 

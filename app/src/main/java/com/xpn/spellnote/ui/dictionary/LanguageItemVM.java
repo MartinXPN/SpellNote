@@ -90,7 +90,7 @@ public class LanguageItemVM extends BaseViewModel {
         setStatus(Status.SAVE_IN_PROGRESS);
         StorageReference storage = FirebaseStorage.getInstance().getReferenceFromUrl(dictionaryModel.getDownloadURL());
         File file = new File(getDictionaryPath());
-        Timber.d("Saving file to: " + getDictionaryPath());
+        Timber.d("Saving file to: %s", getDictionaryPath());
 
         downloadTask = storage.getFile(file);
         downloadTask.addOnProgressListener(snapshot -> {
@@ -128,7 +128,7 @@ public class LanguageItemVM extends BaseViewModel {
         setStatus(Status.DELETE_IN_PROGRESS);
 
         /// delete database file from file system
-        Timber.d( "Deleting dictionary at location: " + getDictionaryPath() );
+        Timber.d( "Deleting dictionary at location: %s", getDictionaryPath() );
         File file = new File(getDictionaryPath());
         boolean deleted = file.delete();
         if( !deleted ) {
@@ -143,7 +143,7 @@ public class LanguageItemVM extends BaseViewModel {
                 .subscribe(
                         () -> {
                             setStatus(Status.NOT_PRESENT);
-                            Timber.d( "Removed dictionary: " + dictionaryModel.getLocale() );
+                            Timber.d( "Removed dictionary: %s", dictionaryModel.getLocale() );
                         },
                         throwable -> {
                             setStatus(Status.NOT_PRESENT);

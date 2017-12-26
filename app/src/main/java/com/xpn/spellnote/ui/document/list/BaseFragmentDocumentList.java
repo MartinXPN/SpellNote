@@ -2,7 +2,6 @@ package com.xpn.spellnote.ui.document.list;
 
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.BindingAdapter;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
@@ -12,7 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.daimajia.swipe.SwipeLayout;
@@ -140,12 +138,6 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
     @Override
     public void onSendDocument(String title, String content) {
         Util.sendDocument( getActivity(), title, content );
-    }
-
-
-    @BindingAdapter("android:src")
-    public static void setImageResource(ImageView imageView, int resource){
-        imageView.setImageResource(resource);
     }
 
     @Override

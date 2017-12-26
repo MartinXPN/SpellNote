@@ -56,7 +56,7 @@ public class SavedDictionaryServiceImpl implements SavedDictionaryService {
     @Override
     public Completable saveDictionary(DictionaryModel dictionary) {
         return Completable.fromAction(() -> {
-            Timber.d("Save dictionary: " + dictionary.toString());
+            Timber.d("Save dictionary: %s", dictionary.toString());
             Realm realmInstance = Realm.getInstance(realmConfiguration);
             realmInstance.executeTransaction(realm -> realm.copyToRealmOrUpdate(dictionaryMapper.mapTo(dictionary)));
         });
