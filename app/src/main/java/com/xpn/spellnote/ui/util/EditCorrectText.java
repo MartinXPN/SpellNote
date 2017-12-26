@@ -9,11 +9,9 @@ import android.util.AttributeSet;
 
 import com.xpn.spellnote.R;
 
+import java.text.BreakIterator;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import timber.log.Timber;
 
@@ -61,7 +59,7 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
 
 
         List <String> words = getWords(left, right);
-        Timber.d("CURRENT WORDS: " + words);
+        Timber.d("CURRENT WORDS: %s", words);
         if( words.size() != 1 ) {
             return WordCorrectness.NO_WORD_SELECTED;
         }
@@ -146,15 +144,23 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
         left = Math.max( 0, left );
         right = Math.min( getText().length(), right );
 
-        String[] res = getText()
-                .subSequence(left, right)           // take only the range [left, right)
-                .toString()                         // convert to immuatable string
-                .replaceAll("[.:_,\n\t]", " ")      // remove all punctuation marks with a regexp
-                .split(" ");                        // split the resulting string into words by ' '
+        /// take only the range [left, right)
+        String text = getText().subSequence(left, right).toString();
+        List<String> words = new ArrayList<>();
+        BreakIterator breakIterator = BreakIterator.getWordInstance();
+        breakIterator.setText(text);
 
-        Set<String> words = new HashSet<>(Arrays.asList(res));
-        words.remove("");
-        return new ArrayList<>(words);
+        int lastIndex = breakIterator.first();
+        while (BreakIterator.DONE != lastIndex) {
+            int firstIndex = lastIndex;
+            lastIndex = breakIterator.next();
+            if (lastIndex != BreakIterator.DONE && Character.isLetterOrDigit(text.charAt(firstIndex))) {
+                words.add(text.substring(firstIndex, lastIndex));
+            }
+        }
+
+        Timber.d("Current words: %s", words.toString());
+        return words;
     }
 
     public List <String> getAllWords() {
@@ -191,8 +197,8 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
             return index;
         }
 
-        /// words contain '-' but they don't start with it
-        while( index < text.length() && text.charAt(index) == '-')
+        /// words may contain some symbols but they may not start with them
+        while( index < text.length() && !Character.isLetter(text.charAt(index)))
             ++index;
         return index;
     }

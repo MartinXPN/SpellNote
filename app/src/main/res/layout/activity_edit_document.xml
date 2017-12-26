@@ -47,6 +47,7 @@
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:scrollHorizontally="true"
+                    android:textIsSelectable="true"
 
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
@@ -89,6 +90,7 @@
                     android:background="@drawable/rectangle_transparent"
                     android:keepScreenOn="true"
                     android:cursorVisible="true"
+                    android:textIsSelectable="true"
 
                     android:hint="@string/hint_edit_content"
                     android:text="@={model.content}"
