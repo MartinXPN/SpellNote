@@ -40,6 +40,9 @@
                     android:imeOptions="flagNoExtractUi"
                     android:inputType="textNoSuggestions"
                     android:background="@drawable/rectangle_transparent"
+                    android:theme="@style/EditDocument"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="#6effffff"
 
                     android:maxLines="1"
                     android:ellipsize="end"
@@ -76,6 +79,7 @@
                     android:imeOptions="flagNoExtractUi"
                     android:inputType="textMultiLine|textNoSuggestions"
                     android:gravity="top|start"
+                    android:theme="@style/EditDocument"
 
                     android:paddingTop="15dp"
                     android:paddingStart="15dp"

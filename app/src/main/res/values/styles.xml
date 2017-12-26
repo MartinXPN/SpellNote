@@ -22,6 +22,11 @@
     <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
+    <style name="EditDocument" parent="AppTheme.NoActionBar">
+        <item name="colorAccent">@color/editTextColorHighlight</item>
+    </style>
+
+
     <style name="DeleteProgress" parent="Theme.AppCompat.Light">
         <item name="colorAccent">@color/delete_dictionary_progress_color</item>
     </style>

@@ -35,7 +35,7 @@
         <activity
             android:name=".ui.document.edit.ActivityEditDocument"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/EditDocument"
             android:windowSoftInputMode="stateHidden" />
     </application>
 </manifest>
