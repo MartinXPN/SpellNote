@@ -37,7 +37,6 @@
             android:id="@+id/list_of_documents"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/document_list_background_color"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <View
