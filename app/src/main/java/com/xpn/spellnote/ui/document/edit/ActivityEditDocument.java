@@ -39,6 +39,7 @@ import com.xpn.spellnote.util.Util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import timber.log.Timber;
@@ -332,6 +333,9 @@ public class ActivityEditDocument extends AppCompatActivity
         /// update shared preferences (default locale)
         CacheUtil.setCache(this, CACHE_DEFAULT_LOCALE, dictionary.getLocale());
 
+        /// update locale for EditCorrectText
+        binding.content.setLocale(new Locale(dictionary.getLocale()));
+
         /// run spellchecking on the whole text again because the language was changed
         viewModel.checkSpelling(
                 0,
@@ -374,6 +378,7 @@ public class ActivityEditDocument extends AppCompatActivity
         }
 
         editingLanguageChooserFragment.setCurrentLanguage(locale);
+        binding.content.setLocale(new Locale(locale));
     }
 
     @Override

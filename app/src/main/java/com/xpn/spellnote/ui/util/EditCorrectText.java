@@ -12,6 +12,7 @@ import com.xpn.spellnote.R;
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import timber.log.Timber;
 
@@ -22,6 +23,7 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
     public final Integer CORRECT_COLOR = ContextCompat.getColor(this.getContext(), R.color.text_correct);
     private boolean spellCheckingEnabled = true;
     private SpellChecker spellChecker;
+    private Locale locale = Locale.ENGLISH;
 
 
     public EditCorrectText(Context context) {
@@ -43,6 +45,10 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
             /// mark the whole text as a correct one
             markText(0, getText().length(), CORRECT_COLOR);
         }
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 
     public void setSpellChecker(SpellChecker spellChecker) {
@@ -147,7 +153,11 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
         /// take only the range [left, right)
         String text = getText().subSequence(left, right).toString();
         List<String> words = new ArrayList<>();
-        BreakIterator breakIterator = BreakIterator.getWordInstance();
+        Timber.d("CURRENT LOCALE: %s", locale);
+
+        BreakIterator breakIterator;
+        if( locale == null )    breakIterator = BreakIterator.getWordInstance();
+        else                    breakIterator = BreakIterator.getWordInstance(locale);
         breakIterator.setText(text);
 
         int lastIndex = breakIterator.first();
@@ -159,7 +169,7 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
             }
         }
 
-        Timber.d("Current words: %s", words.toString());
+        Timber.d("getWords(): %s", words.toString());
         return words;
     }
 

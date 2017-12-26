@@ -66,6 +66,7 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'      // Retrofit adapter for Rx
     compile 'com.jakewharton.timber:timber:4.6.0'               // Logger
     compile 'com.annimon:stream:1.1.9'                          // Stream API
+    compile 'org.apache.commons:commons-lang3:3.7'              // Apache Commons: Utilities
 
     compile 'de.hdodenhof:circleimageview:2.2.0'                // Circle ImageView
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'        // Swipe layout (swipe items in document list)
