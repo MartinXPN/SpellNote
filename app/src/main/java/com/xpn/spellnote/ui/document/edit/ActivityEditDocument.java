@@ -152,7 +152,7 @@ public class ActivityEditDocument extends AppCompatActivity
             binding.content.isCurrentWordCorrect();
 
             hideRemoveAddWordToDictionaryButtons();
-            if( menu != null ) {
+            if( menu != null && getCurrentDictionary() != null && getCurrentDictionary().getLocale() != null ) {
                 if(binding.content.isCurrentWordCorrect() == WordCorrectness.CORRECT) {
                     menu.findItem(R.id.action_remove_word_from_dictionary).setVisible(true);
                 }
