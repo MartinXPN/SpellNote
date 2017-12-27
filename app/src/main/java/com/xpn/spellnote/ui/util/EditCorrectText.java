@@ -179,8 +179,8 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
 
     public CharSequence getCurrentWord() {
         return getText().subSequence(
-                getWordStart(getSelectionStart()),
-                getWordEnd(getSelectionEnd()));
+                getWordStart(getSelectionStart() - 1),
+                getWordEnd(getSelectionEnd() - 1));
     }
 
     private boolean isWordCharacter(char c) {

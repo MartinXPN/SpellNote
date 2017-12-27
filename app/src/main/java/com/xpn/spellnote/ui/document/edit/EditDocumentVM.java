@@ -128,7 +128,7 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
     void setLanguageLocale(String locale) {
         document.setLanguageLocale(locale);
         notifyPropertyChanged(BR.languageLocale);
-        if( !document.getContent().isEmpty() && !document.getTitle().isEmpty() )
+        if( !document.getContent().isEmpty() || !document.getTitle().isEmpty() )
             onSaveDocument();
     }
 
