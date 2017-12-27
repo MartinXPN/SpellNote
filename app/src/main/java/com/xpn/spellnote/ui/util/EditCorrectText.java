@@ -60,8 +60,8 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
 
     public WordCorrectness isCurrentWordCorrect() {
 
-        int left = getWordStart(getSelectionStart());
-        int right = getWordEnd(getSelectionEnd());
+        int left = getWordStart(getSelectionStart() - 1);
+        int right = getWordEnd(getSelectionEnd() - 1);
 
 
         List <String> words = getWords(left, right);
@@ -104,8 +104,8 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
 
     public void replaceCurrentWord( String newWord ) {
         replace(
-                getWordStart( getSelectionStart() ),
-                getWordEnd( getSelectionEnd() ),
+                getWordStart( getSelectionStart() - 1 ),
+                getWordEnd( getSelectionEnd() - 1 ),
                 newWord
         );
     }

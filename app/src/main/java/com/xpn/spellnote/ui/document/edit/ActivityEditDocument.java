@@ -150,8 +150,6 @@ public class ActivityEditDocument extends AppCompatActivity
             if (getCurrentWord().length() > 1) suggestionsVM.suggest(getCurrentWord());
             else onHideSuggestions();
 
-            binding.content.isCurrentWordCorrect();
-
             hideRemoveAddWordToDictionaryButtons();
             if( menu != null && getCurrentDictionary() != null && getCurrentDictionary().getLocale() != null ) {
                 if(binding.content.isCurrentWordCorrect() == WordCorrectness.CORRECT) {
