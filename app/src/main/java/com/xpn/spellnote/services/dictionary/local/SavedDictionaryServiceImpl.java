@@ -34,9 +34,11 @@ public class SavedDictionaryServiceImpl implements SavedDictionaryService {
             realm.refresh();
             RealmResults <DictionarySchema> dictionaries = realm.where(DictionarySchema.class).findAll();
 
-            return Single.just( Stream.of(dictionaries)
+            ArrayList<DictionaryModel> res = Stream.of(dictionaries)
                     .map(dictionaryMapper::mapFrom)
-                    .collect(Collectors.toCollection(ArrayList::new)));
+                    .collect(Collectors.toCollection(ArrayList::new));
+            realm.close();
+            return Single.just(res);
         });
     }
 
@@ -49,7 +51,9 @@ public class SavedDictionaryServiceImpl implements SavedDictionaryService {
                     .equalTo("locale", locale)
                     .findFirst();
 
-            return Single.just(dictionaryMapper.mapFrom(dictionary));
+            DictionaryModel res = dictionaryMapper.mapFrom(dictionary);
+            realm.close();
+            return Single.just(res);
         });
     }
 
@@ -59,6 +63,7 @@ public class SavedDictionaryServiceImpl implements SavedDictionaryService {
             Timber.d("Save dictionary: %s", dictionary.toString());
             Realm realmInstance = Realm.getInstance(realmConfiguration);
             realmInstance.executeTransaction(realm -> realm.copyToRealmOrUpdate(dictionaryMapper.mapTo(dictionary)));
+            realmInstance.close();
         });
     }
 
@@ -74,6 +79,7 @@ public class SavedDictionaryServiceImpl implements SavedDictionaryService {
                     .equalTo("locale", dictionary.getLocale())
                     .findFirst()
                     .deleteFromRealm());
+            realmInstance.close();
         });
     }
 }

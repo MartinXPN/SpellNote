@@ -13,12 +13,10 @@ import java.util.Set;
 
 import io.reactivex.Single;
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
-import timber.log.Timber;
 
 
-public class SpellCheckerServiceImpl implements SpellCheckerService {
+public class SpellCheckerServiceImpl extends BaseWordService implements SpellCheckerService {
 
     private final BeanMapper<WordModel, WordSchema> wordMapper;
 
@@ -51,14 +49,7 @@ public class SpellCheckerServiceImpl implements SpellCheckerService {
             words.addAll(lowercaseWords);
 
 
-            RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-                    .name(locale + ".realm")
-                    .build();
-
-            Timber.d( "Opening database at: %s", realmConfiguration.getPath() );
-            Realm realm = Realm.getInstance(realmConfiguration);
-            realm.refresh();
-
+            Realm realm = getRealmInstance(locale);
             RealmResults <WordSchema> result = realm.where(WordSchema.class)
                     .in("word", words.toArray(new String[words.size()]))
                     .findAll();
@@ -80,6 +71,7 @@ public class SpellCheckerServiceImpl implements SpellCheckerService {
                 if( StringUtils.isNumeric(word) )
                     ans.add(new WordModel(word, 0));
 
+            realm.close();
             return Single.just( ans );
         });
     }
