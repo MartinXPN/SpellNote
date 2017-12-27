@@ -4,6 +4,8 @@ import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.BeanMapper;
 import com.xpn.spellnote.services.word.SpellCheckerService;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -53,7 +55,7 @@ public class SpellCheckerServiceImpl implements SpellCheckerService {
                     .name(locale + ".realm")
                     .build();
 
-            Timber.d( "Opening database at: " + realmConfiguration.getPath() );
+            Timber.d( "Opening database at: %s", realmConfiguration.getPath() );
             Realm realm = Realm.getInstance(realmConfiguration);
             realm.refresh();
 
@@ -73,6 +75,10 @@ public class SpellCheckerServiceImpl implements SpellCheckerService {
                         ans.add( new WordModel(capitalWord, word.usage, word.isUserDefined) );
                 }
             }
+
+            for( String word : requestedWords )
+                if( StringUtils.isNumeric(word) )
+                    ans.add(new WordModel(word, 0));
 
             return Single.just( ans );
         });

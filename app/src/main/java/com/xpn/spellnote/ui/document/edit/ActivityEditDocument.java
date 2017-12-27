@@ -34,12 +34,12 @@ import com.xpn.spellnote.ui.util.ViewUtil;
 import com.xpn.spellnote.ui.util.tutorial.BaseShowCaseTutorial;
 import com.xpn.spellnote.ui.util.tutorial.ToolbarActionItemTarget;
 import com.xpn.spellnote.util.CacheUtil;
-import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import timber.log.Timber;
@@ -50,6 +50,8 @@ public class ActivityEditDocument extends AppCompatActivity
         EditingLanguageChooserFragment.EditingLanguageChooserContract,
         SuggestionsVM.ViewContract {
 
+    private static final String USER_PREFERENCE_SHOW_SUGGESTIONS = "show_sugg";
+    private static final String USER_PREFERENCE_CHECK_SPELLING = "spell_check";
     private static final String EXTRA_DOCUMENT_ID = "doc_id";
     private static final String CACHE_DEFAULT_LOCALE = "default_locale";
     private static final Integer SPEECH_RECOGNIZER_CODE = 1;
@@ -70,7 +72,7 @@ public class ActivityEditDocument extends AppCompatActivity
     public static void launchForResult(Fragment fragment, Long documentId, int requestCode) {
         Intent i = new Intent( fragment.getActivity(), ActivityEditDocument.class );
         i.putExtra( EXTRA_DOCUMENT_ID, documentId );
-        Timber.d("Starting activity for result with request code: " + requestCode);
+        Timber.d("Starting activity for result with request code: %s", requestCode);
         fragment.startActivityForResult( i, requestCode );
     }
 
@@ -151,7 +153,7 @@ public class ActivityEditDocument extends AppCompatActivity
             binding.content.isCurrentWordCorrect();
 
             hideRemoveAddWordToDictionaryButtons();
-            if( menu != null ) {
+            if( menu != null && getCurrentDictionary() != null && getCurrentDictionary().getLocale() != null ) {
                 if(binding.content.isCurrentWordCorrect() == WordCorrectness.CORRECT) {
                     menu.findItem(R.id.action_remove_word_from_dictionary).setVisible(true);
                 }
@@ -230,8 +232,8 @@ public class ActivityEditDocument extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit_document, menu);
-        updateShowSuggestions( CacheUtil.getCache( this, TagsUtil.USER_PREFERENCE_SHOW_SUGGESTIONS, true ), menu.findItem( R.id.action_show_suggestions ) );
-        updateSpellChecking( CacheUtil.getCache( this, TagsUtil.USER_PREFERENCE_CHECK_SPELLING, true ), menu.findItem( R.id.action_check_spelling ) );
+        updateShowSuggestions( CacheUtil.getCache( this, USER_PREFERENCE_SHOW_SUGGESTIONS, true ), menu.findItem( R.id.action_show_suggestions ) );
+        updateSpellChecking( CacheUtil.getCache( this, USER_PREFERENCE_CHECK_SPELLING, true ), menu.findItem( R.id.action_check_spelling ) );
 
         this.menu = menu;
         return super.onCreateOptionsMenu(menu);
@@ -255,7 +257,7 @@ public class ActivityEditDocument extends AppCompatActivity
 
     public void updateShowSuggestions( boolean showSuggestions, MenuItem item ) {
         this.showSuggestions = showSuggestions;
-        CacheUtil.setCache( this, TagsUtil.USER_PREFERENCE_SHOW_SUGGESTIONS, showSuggestions );
+        CacheUtil.setCache( this, USER_PREFERENCE_SHOW_SUGGESTIONS, showSuggestions );
 
         if( showSuggestions )   item.setIcon( R.mipmap.ic_show_suggestions );
         else                    item.setIcon( R.mipmap.ic_hide_suggestions );
@@ -265,7 +267,7 @@ public class ActivityEditDocument extends AppCompatActivity
     }
     public void updateSpellChecking( boolean checkSpelling, MenuItem item ) {
         this.checkSpelling = checkSpelling;
-        CacheUtil.setCache( this, TagsUtil.USER_PREFERENCE_CHECK_SPELLING, checkSpelling );
+        CacheUtil.setCache( this, USER_PREFERENCE_CHECK_SPELLING, checkSpelling );
 
         item.setChecked( checkSpelling );
         binding.content.setSpellCheckingEnabled(checkSpelling);
@@ -331,6 +333,9 @@ public class ActivityEditDocument extends AppCompatActivity
         /// update shared preferences (default locale)
         CacheUtil.setCache(this, CACHE_DEFAULT_LOCALE, dictionary.getLocale());
 
+        /// update locale for EditCorrectText
+        binding.content.setLocale(new Locale(dictionary.getLocale()));
+
         /// run spellchecking on the whole text again because the language was changed
         viewModel.checkSpelling(
                 0,
@@ -373,6 +378,7 @@ public class ActivityEditDocument extends AppCompatActivity
         }
 
         editingLanguageChooserFragment.setCurrentLanguage(locale);
+        binding.content.setLocale(new Locale(locale));
     }
 
     @Override

@@ -57,8 +57,7 @@ public class SuggestionsVM extends BaseViewModel {
                                 suggestionVMs.add( new SuggestionListItemVM(viewContract, model.getWord()));
                             }
 
-                            Timber.d(suggestionVMs.size() + " Suggestions in total");
-
+                            Timber.d("%s Suggestions in total", suggestionVMs.size());
                             notifyPropertyChanged(BR.suggestionVMs);
                             viewContract.onShowSuggestions();
                         },

@@ -39,7 +39,7 @@ public class SuggestionServiceImpl implements SuggestionService {
     @Override
     public Single<List<WordModel>> getSuggestions(String word, DictionaryModel dictionary) {
 
-        Timber.d("Get suggestions for " + word + "!" );
+        Timber.d("Get suggestions for %s!", word );
         return Single.defer(() -> {
             if( dictionary == null || dictionary.getLanguageName() == null || word == null || word.isEmpty() )
                 return Single.just( new ArrayList<>() );
@@ -75,7 +75,7 @@ public class SuggestionServiceImpl implements SuggestionService {
                             .subscribe(subscriber::onNext))
                     .subscribe( correctionsResult );
 
-            Timber.d("CORRECTIONS: " + corrections );
+            Timber.d("CORRECTIONS: %s", corrections );
 
             /// combine results
             ArrayList <WordModel> result = new ArrayList<>(continuationResult);
@@ -148,7 +148,7 @@ public class SuggestionServiceImpl implements SuggestionService {
             }
         }
         alreadyPresentWords.addAll( newWords );
-        Timber.d("There are " + newWords.size() + " new words(" + numberOfAllowedChanges + ")" );
+        Timber.d("There are %d new words(%d)", newWords.size() , numberOfAllowedChanges);
 
         for( String word : newWords ) {
             if( numberOfAllowedChanges > 1 )

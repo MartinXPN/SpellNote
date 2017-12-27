@@ -4,6 +4,7 @@
     <color name="colorPrimary">#527dad</color>
     <color name="colorPrimaryDark">#38618d</color>
     <color name="colorAccent">#527dad</color>
+    <color name="editTextColorHighlight">#5f5f5f</color>
     <color name="textPrimary">#fff</color>
     <color name="windowBackground">#ffffff</color>
     <color name="url_color">#3366BB</color>

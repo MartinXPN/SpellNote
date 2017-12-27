@@ -83,7 +83,8 @@ public class LocalDocumentServiceImpl implements DocumentService {
             realmInstance.refresh();
             RealmResults<DocumentSchema> documents = realmInstance.where(DocumentSchema.class)
                     .equalTo("category", category)
-                    .findAllSorted(orderField, ascending ? Sort.ASCENDING : Sort.DESCENDING);
+                    .sort(orderField, ascending ? Sort.ASCENDING : Sort.DESCENDING)
+                    .findAll();
 
             return Single.just( Stream.of(documents)
                     .map(mapper::mapFrom)
