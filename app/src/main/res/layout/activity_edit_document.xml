@@ -83,8 +83,8 @@
                     android:theme="@style/AppTheme.NoActionBar"
 
                     android:paddingTop="15dp"
-                    android:paddingStart="15dp"
-                    android:paddingEnd="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
                     android:paddingBottom="@dimen/suggestion_box_height"
 
                     android:background="@drawable/rectangle_transparent"
@@ -122,7 +122,8 @@
                 android:id="@+id/editing_language_chooser_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:name="com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment"/>
+                android:name="com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment"
+                tools:layout="@layout/fragment_editing_language_chooser" />
 
 
             <View
