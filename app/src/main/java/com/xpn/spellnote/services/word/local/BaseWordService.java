@@ -15,6 +15,8 @@ class BaseWordService {
                 .build();
 
         Timber.d("Opening database at: %s", realmConfiguration.getPath());
-        return Realm.getInstance(realmConfiguration);
+        Realm realm = Realm.getInstance(realmConfiguration);
+        realm.refresh();
+        return realm;
     }
 }
