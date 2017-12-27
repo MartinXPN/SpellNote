@@ -80,7 +80,7 @@
                     android:imeOptions="flagNoExtractUi"
                     android:inputType="textMultiLine|textNoSuggestions"
                     android:gravity="top|start"
-                    android:theme="@style/EditDocument"
+                    android:theme="@style/AppTheme.NoActionBar"
 
                     android:paddingTop="15dp"
                     android:paddingStart="15dp"
@@ -94,7 +94,9 @@
 
                     android:hint="@string/hint_edit_content"
                     android:text="@={model.content}"
-                    app:spellChecker="@{model}"/>
+                    app:spellChecker="@{model}">
+                    <requestFocus />
+                </com.xpn.spellnote.ui.util.EditCorrectText>
             </ScrollView>
 
             <android.support.v7.widget.CardView

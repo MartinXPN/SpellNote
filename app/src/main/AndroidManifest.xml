@@ -36,6 +36,6 @@
             android:name=".ui.document.edit.ActivityEditDocument"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="adjustResize" />
     </application>
 </manifest>
