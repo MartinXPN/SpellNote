@@ -24,6 +24,7 @@
     <string name="action_sort_by_ascending">Ascending</string>
     <string name="action_empty_trash">Empty Trash</string>
     <string name="action_title_show_suggestions">Show suggestions</string>
+    <string name="action_title_hide_suggestions">Hide suggestions</string>
     <string name="action_title_overflow_menu">More options</string>
     <string name="action_title_record">Record</string>
     <string name="action_title_send">Send</string>

@@ -28,6 +28,13 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/action_hide_suggestions"
+        android:title="@string/action_title_hide_suggestions"
+        android:icon="@mipmap/ic_hide_suggestions"
+        android:visible="false"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_overflow_menu"
         android:title="@string/action_title_overflow_menu"
         android:icon="@drawable/ic_overflow_menu"

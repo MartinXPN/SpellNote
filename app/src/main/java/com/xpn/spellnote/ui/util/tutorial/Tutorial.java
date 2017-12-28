@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.tooltip.Tooltip;
+import com.xpn.spellnote.R;
 import com.xpn.spellnote.util.CacheUtil;
 
 
@@ -18,6 +19,7 @@ public class Tutorial {
     private MenuItem menuTarget;
     private @StringRes int textId;
     private int gravity;
+    private Tooltip tooltip;
 
 
     public Tutorial(Context context, String tag, @StringRes int textId, int gravity) {
@@ -48,16 +50,31 @@ public class Tutorial {
             else if( viewTarget != null )   result = new Tooltip.Builder(viewTarget);
             else                            throw new IllegalStateException("Target must be initialized!");
 
-            result.setText(textId)
+            tooltip = result.setText(textId)
                     .setGravity(gravity)
-                    .setDismissOnClick(true).setOnDismissListener(() -> {
-                        setDisplayed();
-                        /// reset menu target to its normal state
-                        if(menuTarget != null )
-                            menuTarget.getActionView().setOnClickListener(view -> ((AppCompatActivity)context).onOptionsItemSelected(menuTarget));
-                    })
+                    .setBackgroundColor(context.getResources().getColor(R.color.tutorial_background_color))
+                    .setTextColor(context.getResources().getColor(android.R.color.white))
+                    .setPadding(R.dimen.tutorial_padding)
+                    .setCornerRadius(R.dimen.tutorial_corner_radius)
                     .show();
+
+            if( menuTarget != null ) {
+                menuTarget.getActionView().setOnClickListener(view -> {
+                    ((AppCompatActivity)context).onOptionsItemSelected(menuTarget);
+                    tooltip.dismiss();
+                    setDisplayed();
+                });
+            }
+
+            tooltip.setOnClickListener(tooltip1 -> {
+                tooltip.dismiss();
+                setDisplayed();
+            });
         }
+    }
+
+    public boolean isShowing() {
+        return tooltip != null && tooltip.isShowing();
     }
 
 

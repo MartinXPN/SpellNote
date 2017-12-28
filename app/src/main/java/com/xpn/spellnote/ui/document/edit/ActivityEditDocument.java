@@ -53,7 +53,6 @@ public class ActivityEditDocument extends AppCompatActivity
     private static final String CACHE_DEFAULT_LOCALE = "default_locale";
     private static final Integer SPEECH_RECOGNIZER_CODE = 1;
     private static final Integer LANGUAGE_SELECTION_CODE = 2;
-    private boolean showSuggestions;
     private boolean checkSpelling;
 
     private FirebaseAnalytics analytics;
@@ -227,12 +226,12 @@ public class ActivityEditDocument extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit_document, menu);
-        updateShowSuggestions( CacheUtil.getCache( this, USER_PREFERENCE_SHOW_SUGGESTIONS, true ), menu.findItem( R.id.action_show_suggestions ) );
-        updateSpellChecking( CacheUtil.getCache( this, USER_PREFERENCE_CHECK_SPELLING, true ), menu.findItem( R.id.action_check_spelling ) );
         this.menu = menu;
+        updateShowSuggestions( CacheUtil.getCache( this, USER_PREFERENCE_SHOW_SUGGESTIONS, true ) );
+        updateSpellChecking( CacheUtil.getCache( this, USER_PREFERENCE_CHECK_SPELLING, true ), menu.findItem( R.id.action_check_spelling ) );
 
-        final MenuItem suggestions = menu.findItem(R.id.action_show_suggestions);
-        final MenuItem addToDictionary = menu.findItem(R.id.action_add_word_to_dictionary);
+        MenuItem suggestions = menu.findItem(R.id.action_show_suggestions);
+        MenuItem addToDictionary = menu.findItem(R.id.action_add_word_to_dictionary);
         ((TooltipActionView) suggestions.getActionView()).setMenuItem(suggestions);
         ((TooltipActionView) addToDictionary.getActionView()).setMenuItem(addToDictionary);
         return super.onCreateOptionsMenu(menu);
@@ -242,7 +241,8 @@ public class ActivityEditDocument extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if( id == R.id.action_show_suggestions )    { updateShowSuggestions( !showSuggestions, item );                          return true; }
+        if( id == R.id.action_show_suggestions )    { updateShowSuggestions( false );               return true; }
+        if( id == R.id.action_hide_suggestions )    { updateShowSuggestions( true );                return true; }
         else if( id == R.id.action_record )         { Util.displaySpeechRecognizer( this, SPEECH_RECOGNIZER_CODE, this.getCurrentDictionary().getLocale() );   return true; }
         else if( id == R.id.action_send )           { Util.sendDocument( this, "", binding.content.getText().toString() );      return true; }
         else if( id == R.id.action_copy )           { Util.copyTextToClipboard( this, binding.content.getText().toString() );   return true; }
@@ -254,12 +254,12 @@ public class ActivityEditDocument extends AppCompatActivity
     }
 
 
-    public void updateShowSuggestions( boolean showSuggestions, MenuItem item ) {
-        this.showSuggestions = showSuggestions;
+    public void updateShowSuggestions( boolean showSuggestions ) {
+        Timber.d("updateShowSuggestions(%b)", showSuggestions);
         CacheUtil.setCache( this, USER_PREFERENCE_SHOW_SUGGESTIONS, showSuggestions );
 
-        if( showSuggestions )   item.setIcon( R.mipmap.ic_show_suggestions );
-        else                    item.setIcon( R.mipmap.ic_hide_suggestions );
+        menu.findItem(R.id.action_show_suggestions).setVisible(showSuggestions);
+        menu.findItem(R.id.action_hide_suggestions).setVisible(!showSuggestions);
 
         if( showSuggestions )   suggestionsVM.suggest(binding.content.getCurrentWord().toString());
         else                    onHideSuggestions();
@@ -393,6 +393,7 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     public void onShowSuggestions() {
+        boolean showSuggestions = CacheUtil.getCache( this, USER_PREFERENCE_SHOW_SUGGESTIONS, true );
         if( !showSuggestions || suggestionsVM.getSuggestionVMs().isEmpty() ) {
             onHideSuggestions();
             return;
@@ -425,16 +426,26 @@ public class ActivityEditDocument extends AppCompatActivity
 
 
     /****** Tutorials ******/
+    private Tutorial suggestionTutorial = null;
     private void showSuggestionsTutorial(MenuItem target) {
-        new Tutorial(this, "suggestion_tutorial", R.string.tutorial_show_suggestions, Gravity.TOP)
-                .setTarget(target)
-                .showTutorial();
+        if( suggestionTutorial == null ) {
+            suggestionTutorial = new Tutorial(this, "suggestion_tutorial", R.string.tutorial_show_suggestions, Gravity.BOTTOM)
+                    .setTarget(target);
+            suggestionTutorial.showTutorial();
+        }
+        else if( suggestionTutorial.isShowing() )
+            suggestionTutorial.showTutorial();
     }
 
+    private Tutorial addWordTutorial = null;
     private void showAddToDictionaryTutorial(MenuItem target) {
-        new Tutorial(this, "add_word_tutorial", R.string.tutorial_add_word_to_dictionary, Gravity.TOP)
-                .setTarget(target)
-                .showTutorial();
+        if( addWordTutorial == null ) {
+            addWordTutorial = new Tutorial(this, "add_word_tutorial", R.string.tutorial_add_word_to_dictionary, Gravity.BOTTOM)
+                    .setTarget(target);
+            addWordTutorial.showTutorial();
+        }
+        else if( !addWordTutorial.isShowing() )
+            addWordTutorial.showTutorial();
     }
 
     private void showSelectDictionariesTutorial() {
