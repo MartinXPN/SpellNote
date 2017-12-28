@@ -1,7 +1,6 @@
 package com.xpn.spellnote.ui.document.edit;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -9,15 +8,15 @@ import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
-import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.tooltip.TooltipActionView;
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.SpellNoteApp;
@@ -30,9 +29,7 @@ import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
 import com.xpn.spellnote.ui.util.EditCorrectText.WordCorrectness;
-import com.xpn.spellnote.ui.util.ViewUtil;
-import com.xpn.spellnote.ui.util.tutorial.BaseShowCaseTutorial;
-import com.xpn.spellnote.ui.util.tutorial.ToolbarActionItemTarget;
+import com.xpn.spellnote.ui.util.tutorial.Tutorial;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.Util;
 
@@ -157,7 +154,7 @@ public class ActivityEditDocument extends AppCompatActivity
                 }
                 else if( binding.content.isCurrentWordCorrect() == WordCorrectness.INCORRECT ) {
                     menu.findItem(R.id.action_add_word_to_dictionary).setVisible(true);
-                    new AddWordToDictionaryTutorial(ActivityEditDocument.this).showTutorial(() -> ViewUtil.hideKeyboard(this));
+                    showAddToDictionaryTutorial(menu.findItem(R.id.action_add_word_to_dictionary));
                 }
             }
         });
@@ -184,7 +181,7 @@ public class ActivityEditDocument extends AppCompatActivity
         viewModel.onStart();
         suggestionsVM.onStart();
 
-        new SelectDictionariesTutorial(this).showTutorial(() -> ViewUtil.hideKeyboard(this));
+        showSelectDictionariesTutorial();
     }
 
     @Override
@@ -232,8 +229,12 @@ public class ActivityEditDocument extends AppCompatActivity
         getMenuInflater().inflate(R.menu.menu_edit_document, menu);
         updateShowSuggestions( CacheUtil.getCache( this, USER_PREFERENCE_SHOW_SUGGESTIONS, true ), menu.findItem( R.id.action_show_suggestions ) );
         updateSpellChecking( CacheUtil.getCache( this, USER_PREFERENCE_CHECK_SPELLING, true ), menu.findItem( R.id.action_check_spelling ) );
-
         this.menu = menu;
+
+        final MenuItem suggestions = menu.findItem(R.id.action_show_suggestions);
+        final MenuItem addToDictionary = menu.findItem(R.id.action_add_word_to_dictionary);
+        ((TooltipActionView) suggestions.getActionView()).setMenuItem(suggestions);
+        ((TooltipActionView) addToDictionary.getActionView()).setMenuItem(addToDictionary);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -413,7 +414,7 @@ public class ActivityEditDocument extends AppCompatActivity
         binding.suggestions.setVisibility(View.VISIBLE);
 
         /// Show suggestions tutorial if not shown yet
-        new SuggestionTutorial(this).showTutorial(() -> ViewUtil.hideKeyboard(this));
+        showSuggestionsTutorial(menu.findItem(R.id.action_show_suggestions));
     }
 
     @Override
@@ -422,51 +423,23 @@ public class ActivityEditDocument extends AppCompatActivity
     }
 
 
-    private class SuggestionTutorial extends BaseShowCaseTutorial {
 
-        SuggestionTutorial(Context context) {
-            super(context, "suggestion_tutorial");
-        }
-
-        @Override
-        protected ShowcaseView.Builder display() {
-            return new ShowcaseView.Builder(ActivityEditDocument.this)
-                    .setTarget(new ToolbarActionItemTarget(binding.toolbar, R.id.action_show_suggestions))
-                    .setContentTitle(R.string.tutorial_show_suggestions_title)
-                    .setContentText(R.string.tutorial_show_suggestions_content)
-                    .withMaterialShowcase();
-        }
+    /****** Tutorials ******/
+    private void showSuggestionsTutorial(MenuItem target) {
+        new Tutorial(this, "suggestion_tutorial", R.string.tutorial_show_suggestions, Gravity.TOP)
+                .setTarget(target)
+                .showTutorial();
     }
 
-    private class SelectDictionariesTutorial extends BaseShowCaseTutorial {
-
-        SelectDictionariesTutorial(Context context) {
-            super(context, "select_lang_tutorial");
-        }
-
-        @Override
-        protected ShowcaseView.Builder display() {
-            return new ShowcaseView.Builder(ActivityEditDocument.this)
-                    .setTarget( new ViewTarget(editingLanguageChooserFragment.getCurrentLanguageLogoView()) )
-                    .setContentTitle(R.string.tutorial_select_dictionaries_title)
-                    .setContentText(R.string.tutorial_select_dictionaries_content)
-                    .withMaterialShowcase();
-        }
+    private void showAddToDictionaryTutorial(MenuItem target) {
+        new Tutorial(this, "add_word_tutorial", R.string.tutorial_add_word_to_dictionary, Gravity.TOP)
+                .setTarget(target)
+                .showTutorial();
     }
 
-    private class AddWordToDictionaryTutorial extends BaseShowCaseTutorial {
-
-        AddWordToDictionaryTutorial(Context context) {
-            super(context, "add_word_tutorial");
-        }
-
-        @Override
-        protected ShowcaseView.Builder display() {
-            return new ShowcaseView.Builder(ActivityEditDocument.this)
-                    .setTarget(new ToolbarActionItemTarget(binding.toolbar, R.id.action_add_word_to_dictionary))
-                    .setContentTitle(R.string.tutorial_add_word_to_dictionary_title)
-                    .setContentText(R.string.tutorial_add_word_to_dictionary_content)
-                    .withMaterialShowcase();
-        }
+    private void showSelectDictionariesTutorial() {
+        new Tutorial(this, "select_lang_tutorial", R.string.tutorial_select_dictionaries, Gravity.TOP)
+                .setTarget(editingLanguageChooserFragment.getCurrentLanguageLogoView())
+                .showTutorial();
     }
 }

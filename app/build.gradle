@@ -70,7 +70,7 @@ dependencies {
 
     compile 'de.hdodenhof:circleimageview:2.2.0'                // Circle ImageView
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'        // Swipe layout (swipe items in document list)
-    compile 'com.github.amlcurran.showcaseview:library:5.4.3'   // Popups for tutorial
+    compile 'com.github.vihtarb:tooltip:0.1.9'                  // Popups for tutorial
 }
 
 apply plugin: 'com.google.gms.google-services'

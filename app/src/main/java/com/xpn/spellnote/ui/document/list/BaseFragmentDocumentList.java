@@ -1,10 +1,10 @@
 package com.xpn.spellnote.ui.document.list;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
-import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.xpn.spellnote.BR;
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
@@ -25,7 +24,7 @@ import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.ui.document.edit.ActivityEditDocument;
 import com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM;
 import com.xpn.spellnote.ui.util.BindingHolder;
-import com.xpn.spellnote.ui.util.tutorial.BaseShowCaseTutorial;
+import com.xpn.spellnote.ui.util.tutorial.Tutorial;
 import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
@@ -148,6 +147,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
 
     private class DocumentListAdapter extends RecyclerSwipeAdapter<BindingHolder> {
+        private static final int MIN_ITEM_COUNT_FOR_TUTORIAL = 1;
 
         @Override
         public BindingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -175,8 +175,8 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
 
             /// show swipe tutorial if position = MIN_ITEM_COUNT_FOR_TUTORIAL
-            if( position == SwipeTutorial.MIN_ITEM_COUNT_FOR_TUTORIAL ) {
-                new SwipeTutorial(getActivity()).showTutorial(true);
+            if( position == MIN_ITEM_COUNT_FOR_TUTORIAL ) {
+                showSwipeTutorial(holder.itemView);
             }
         }
 
@@ -194,19 +194,9 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         }
     }
 
-    private class SwipeTutorial extends BaseShowCaseTutorial {
-
-        static final int MIN_ITEM_COUNT_FOR_TUTORIAL = 1;
-        SwipeTutorial(Context context) {
-            super(context, "swipe_tutorial");
-        }
-
-        @Override
-        protected ShowcaseView.Builder display() {
-            return new ShowcaseView.Builder(getActivity())
-                    .setContentTitle(R.string.tutorial_swipe_title)
-                    .setContentText(R.string.tutorial_swipe_content)
-                    .withMaterialShowcase();
-        }
+    public void showSwipeTutorial(View target) {
+        new Tutorial(getActivity(), "swipe_tutorial", R.string.tutorial_swipe, Gravity.BOTTOM)
+                .setTarget(target)
+                .showTutorial();
     }
 }

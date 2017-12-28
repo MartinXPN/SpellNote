@@ -69,14 +69,10 @@
 
     <string name="error_couldnt_create_document">Couldn\'t create document</string>
 
-    <string name="tutorial_show_suggestions_title">Suggestions</string>
-    <string name="tutorial_show_suggestions_content">"Click to show or hide Suggestions"</string>
-    <string name="tutorial_swipe_title">◄◄◄ Swipe left documents</string>
-    <string name="tutorial_swipe_content">Long-press on revealed buttons to explore their meaning</string>
-    <string name="tutorial_select_dictionaries_title">Select Dictionaries</string>
-    <string name="tutorial_select_dictionaries_content">Choose which dictionaries you\'d like to use later on…</string>
-    <string name="tutorial_add_word_to_dictionary_title">Add word to Dictionary</string>
-    <string name="tutorial_add_word_to_dictionary_content">Click to add your own words to dictionary</string>
+    <string name="tutorial_show_suggestions">"Show or hide Suggestions"</string>
+    <string name="tutorial_swipe">◄◄◄ Swipe left documents to Delete, Send, etc…</string>
+    <string name="tutorial_select_dictionaries">Select Dictionaries to use later on…</string>
+    <string name="tutorial_add_word_to_dictionary">Add word to Dictionary</string>
 
 
     <string name="about_app">
