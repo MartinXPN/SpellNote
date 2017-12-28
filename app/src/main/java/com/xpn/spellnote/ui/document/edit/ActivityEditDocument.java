@@ -179,7 +179,11 @@ public class ActivityEditDocument extends AppCompatActivity
         super.onStart();
         viewModel.onStart();
         suggestionsVM.onStart();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         showSelectDictionariesTutorial();
     }
 
@@ -428,24 +432,16 @@ public class ActivityEditDocument extends AppCompatActivity
     /****** Tutorials ******/
     private Tutorial suggestionTutorial = null;
     private void showSuggestionsTutorial(MenuItem target) {
-        if( suggestionTutorial == null ) {
-            suggestionTutorial = new Tutorial(this, "suggestion_tutorial", R.string.tutorial_show_suggestions, Gravity.BOTTOM)
-                    .setTarget(target);
-            suggestionTutorial.showTutorial();
-        }
-        else if( suggestionTutorial.isShowing() )
-            suggestionTutorial.showTutorial();
+        if( suggestionTutorial == null )
+            suggestionTutorial = new Tutorial(this, "suggestion_tutorial", R.string.tutorial_show_suggestions, Gravity.BOTTOM).setTarget(target);
+        suggestionTutorial.showTutorial();
     }
 
     private Tutorial addWordTutorial = null;
     private void showAddToDictionaryTutorial(MenuItem target) {
-        if( addWordTutorial == null ) {
-            addWordTutorial = new Tutorial(this, "add_word_tutorial", R.string.tutorial_add_word_to_dictionary, Gravity.BOTTOM)
-                    .setTarget(target);
-            addWordTutorial.showTutorial();
-        }
-        else if( !addWordTutorial.isShowing() )
-            addWordTutorial.showTutorial();
+        if( addWordTutorial == null )
+            addWordTutorial = new Tutorial(this, "add_word_tutorial", R.string.tutorial_add_word_to_dictionary, Gravity.BOTTOM).setTarget(target);
+        addWordTutorial.showTutorial();
     }
 
     private void showSelectDictionariesTutorial() {

@@ -44,7 +44,7 @@ public class Tutorial {
 
 
     public void showTutorial() {
-        if( !isDisplayed() ) {
+        if( !isShowing() && !isDisplayed() ) {
             Tooltip.Builder result;
             if( menuTarget != null )        result = new Tooltip.Builder(menuTarget);
             else if( viewTarget != null )   result = new Tooltip.Builder(viewTarget);
