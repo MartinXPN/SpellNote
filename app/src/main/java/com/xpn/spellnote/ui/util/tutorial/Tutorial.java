@@ -43,34 +43,46 @@ public class Tutorial {
     }
 
 
-    public void showTutorial() {
-        if( !isShowing() && !isDisplayed() ) {
-            Tooltip.Builder result;
-            if( menuTarget != null )        result = new Tooltip.Builder(menuTarget);
-            else if( viewTarget != null )   result = new Tooltip.Builder(viewTarget);
-            else                            throw new IllegalStateException("Target must be initialized!");
+    public void showTutorial(boolean redraw) {
+        if(isDisplayed())
+            return;
 
-            tooltip = result.setText(textId)
-                    .setGravity(gravity)
-                    .setBackgroundColor(context.getResources().getColor(R.color.tutorial_background_color))
-                    .setTextColor(context.getResources().getColor(android.R.color.white))
-                    .setPadding(R.dimen.tutorial_padding)
-                    .setCornerRadius(R.dimen.tutorial_corner_radius)
-                    .show();
+        if(isShowing() && !redraw)
+            return;
 
-            if( menuTarget != null ) {
-                menuTarget.getActionView().setOnClickListener(view -> {
-                    ((AppCompatActivity)context).onOptionsItemSelected(menuTarget);
-                    tooltip.dismiss();
-                    setDisplayed();
-                });
-            }
+        if(tooltip != null)
+            tooltip.dismiss();
 
-            tooltip.setOnClickListener(tooltip1 -> {
+        Tooltip.Builder result;
+        if( menuTarget != null )        result = new Tooltip.Builder(menuTarget);
+        else if( viewTarget != null )   result = new Tooltip.Builder(viewTarget);
+        else                            throw new IllegalStateException("Target must be initialized!");
+
+        tooltip = result.setText(textId)
+                .setGravity(gravity)
+                .setBackgroundColor(context.getResources().getColor(R.color.tutorial_background_color))
+                .setTextColor(context.getResources().getColor(android.R.color.white))
+                .setPadding(R.dimen.tutorial_padding)
+                .setCornerRadius(R.dimen.tutorial_corner_radius)
+                .show();
+
+        if( menuTarget != null ) {
+            menuTarget.getActionView().setOnClickListener(view -> {
+                ((AppCompatActivity)context).onOptionsItemSelected(menuTarget);
                 tooltip.dismiss();
                 setDisplayed();
             });
         }
+
+        tooltip.setOnClickListener(tooltip1 -> {
+            tooltip.dismiss();
+            setDisplayed();
+        });
+    }
+
+
+    public void showTutorial() {
+        showTutorial(false);
     }
 
     public boolean isShowing() {

@@ -3,6 +3,7 @@ package com.xpn.spellnote.ui.document.edit;
 import android.app.Fragment;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
@@ -143,8 +144,8 @@ public class ActivityEditDocument extends AppCompatActivity
         });
         binding.content.setOnClickListener(view -> {
             /// show suggestions only if the current word has more than one character
-            if (getCurrentWord().length() > 1) suggestionsVM.suggest(getCurrentWord());
-            else onHideSuggestions();
+            if (getCurrentWord().length() > 1)  suggestionsVM.suggest(getCurrentWord());
+            else                                onHideSuggestions();
 
             hideRemoveAddWordToDictionaryButtons();
             if( menu != null && getCurrentDictionary() != null && getCurrentDictionary().getLocale() != null ) {
@@ -172,6 +173,26 @@ public class ActivityEditDocument extends AppCompatActivity
                 }
             }
         });
+
+
+        /// handle keyboard show-hide
+        binding.getRoot().getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+
+            Rect r = new Rect();
+            binding.getRoot().getWindowVisibleDisplayFrame(r);
+            int screenHeight = binding.getRoot().getRootView().getHeight();
+            int keypadHeight = screenHeight - r.bottom;
+
+            if (keypadHeight > screenHeight * 0.15) {
+                showSelectDictionariesTutorial();   /// redraw tutorial
+            }
+            else {
+                binding.content.clearFocus();
+                binding.title.clearFocus();
+                if( selectDictionariesTutorial != null )
+                    showSelectDictionariesTutorial();   /// redraw tutorial
+            }
+        });
     }
 
     @Override
@@ -179,12 +200,6 @@ public class ActivityEditDocument extends AppCompatActivity
         super.onStart();
         viewModel.onStart();
         suggestionsVM.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        showSelectDictionariesTutorial();
     }
 
     @Override
@@ -444,9 +459,12 @@ public class ActivityEditDocument extends AppCompatActivity
         addWordTutorial.showTutorial();
     }
 
+    private Tutorial selectDictionariesTutorial = null;
     private void showSelectDictionariesTutorial() {
-        new Tutorial(this, "select_lang_tutorial", R.string.tutorial_select_dictionaries, Gravity.TOP)
-                .setTarget(editingLanguageChooserFragment.getCurrentLanguageLogoView())
-                .showTutorial();
+        if( selectDictionariesTutorial == null ) {
+            selectDictionariesTutorial = new Tutorial(this, "select_lang_tutorial", R.string.tutorial_select_dictionaries, Gravity.TOP);
+            selectDictionariesTutorial.setTarget(editingLanguageChooserFragment.getCurrentLanguageLogoView());
+        }
+        selectDictionariesTutorial.showTutorial(true);
     }
 }
