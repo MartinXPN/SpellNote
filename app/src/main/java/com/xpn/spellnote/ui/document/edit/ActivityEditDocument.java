@@ -29,6 +29,7 @@ import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
 import com.xpn.spellnote.ui.util.EditCorrectText.WordCorrectness;
+import com.xpn.spellnote.ui.util.ViewUtil;
 import com.xpn.spellnote.ui.util.tutorial.Tutorial;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.Util;
@@ -141,7 +142,9 @@ public class ActivityEditDocument extends AppCompatActivity
                 viewModel.notifyDocumentChanged();
             }
         });
+        binding.title.setOnClickListener(view -> ViewUtil.showKeyboard(this, binding.title));
         binding.content.setOnClickListener(view -> {
+            ViewUtil.showKeyboard(this, binding.content);
             /// show suggestions only if the current word has more than one character
             if (getCurrentWord().length() > 1)  suggestionsVM.suggest(getCurrentWord());
             else                                onHideSuggestions();

@@ -1,5 +1,6 @@
 package com.xpn.spellnote.ui.util;
 
+import android.app.Service;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
@@ -30,12 +31,9 @@ public class ViewUtil {
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
-    public static void showKeyboard( AppCompatActivity activity ) {
-        View view = activity.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if( imm != null )
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        }
+    public static void showKeyboard( AppCompatActivity activity, View v ) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Service.INPUT_METHOD_SERVICE);
+        if( imm != null )
+            imm.showSoftInput(v, 0);
     }
 }
