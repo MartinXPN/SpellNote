@@ -1,7 +1,6 @@
 package com.xpn.spellnote.ui.document.edit;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -9,15 +8,15 @@ import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
-import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.tooltip.TooltipActionView;
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.SpellNoteApp;
@@ -31,8 +30,7 @@ import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooser
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
 import com.xpn.spellnote.ui.util.EditCorrectText.WordCorrectness;
 import com.xpn.spellnote.ui.util.ViewUtil;
-import com.xpn.spellnote.ui.util.tutorial.BaseShowCaseTutorial;
-import com.xpn.spellnote.ui.util.tutorial.ToolbarActionItemTarget;
+import com.xpn.spellnote.ui.util.tutorial.Tutorial;
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.Util;
 
@@ -56,7 +54,6 @@ public class ActivityEditDocument extends AppCompatActivity
     private static final String CACHE_DEFAULT_LOCALE = "default_locale";
     private static final Integer SPEECH_RECOGNIZER_CODE = 1;
     private static final Integer LANGUAGE_SELECTION_CODE = 2;
-    private boolean showSuggestions;
     private boolean checkSpelling;
 
     private FirebaseAnalytics analytics;
@@ -145,10 +142,12 @@ public class ActivityEditDocument extends AppCompatActivity
                 viewModel.notifyDocumentChanged();
             }
         });
+        binding.title.setOnClickListener(view -> ViewUtil.showKeyboard(this, binding.title));
         binding.content.setOnClickListener(view -> {
+            ViewUtil.showKeyboard(this, binding.content);
             /// show suggestions only if the current word has more than one character
-            if (getCurrentWord().length() > 1) suggestionsVM.suggest(getCurrentWord());
-            else onHideSuggestions();
+            if (getCurrentWord().length() > 1)  suggestionsVM.suggest(getCurrentWord());
+            else                                onHideSuggestions();
 
             hideRemoveAddWordToDictionaryButtons();
             if( menu != null && getCurrentDictionary() != null && getCurrentDictionary().getLocale() != null ) {
@@ -157,7 +156,7 @@ public class ActivityEditDocument extends AppCompatActivity
                 }
                 else if( binding.content.isCurrentWordCorrect() == WordCorrectness.INCORRECT ) {
                     menu.findItem(R.id.action_add_word_to_dictionary).setVisible(true);
-                    new AddWordToDictionaryTutorial(ActivityEditDocument.this).showTutorial(() -> ViewUtil.hideKeyboard(this));
+                    showAddToDictionaryTutorial(menu.findItem(R.id.action_add_word_to_dictionary));
                 }
             }
         });
@@ -183,8 +182,6 @@ public class ActivityEditDocument extends AppCompatActivity
         super.onStart();
         viewModel.onStart();
         suggestionsVM.onStart();
-
-        new SelectDictionariesTutorial(this).showTutorial(() -> ViewUtil.hideKeyboard(this));
     }
 
     @Override
@@ -230,10 +227,14 @@ public class ActivityEditDocument extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit_document, menu);
-        updateShowSuggestions( CacheUtil.getCache( this, USER_PREFERENCE_SHOW_SUGGESTIONS, true ), menu.findItem( R.id.action_show_suggestions ) );
+        this.menu = menu;
+        updateShowSuggestions( CacheUtil.getCache( this, USER_PREFERENCE_SHOW_SUGGESTIONS, true ) );
         updateSpellChecking( CacheUtil.getCache( this, USER_PREFERENCE_CHECK_SPELLING, true ), menu.findItem( R.id.action_check_spelling ) );
 
-        this.menu = menu;
+        MenuItem suggestions = menu.findItem(R.id.action_show_suggestions);
+        MenuItem addToDictionary = menu.findItem(R.id.action_add_word_to_dictionary);
+        ((TooltipActionView) suggestions.getActionView()).setMenuItem(suggestions);
+        ((TooltipActionView) addToDictionary.getActionView()).setMenuItem(addToDictionary);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -241,7 +242,8 @@ public class ActivityEditDocument extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if( id == R.id.action_show_suggestions )    { updateShowSuggestions( !showSuggestions, item );                          return true; }
+        if( id == R.id.action_show_suggestions )    { updateShowSuggestions( false );               return true; }
+        if( id == R.id.action_hide_suggestions )    { updateShowSuggestions( true );                return true; }
         else if( id == R.id.action_record )         { Util.displaySpeechRecognizer( this, SPEECH_RECOGNIZER_CODE, this.getCurrentDictionary().getLocale() );   return true; }
         else if( id == R.id.action_send )           { Util.sendDocument( this, "", binding.content.getText().toString() );      return true; }
         else if( id == R.id.action_copy )           { Util.copyTextToClipboard( this, binding.content.getText().toString() );   return true; }
@@ -253,12 +255,12 @@ public class ActivityEditDocument extends AppCompatActivity
     }
 
 
-    public void updateShowSuggestions( boolean showSuggestions, MenuItem item ) {
-        this.showSuggestions = showSuggestions;
+    public void updateShowSuggestions( boolean showSuggestions ) {
+        Timber.d("updateShowSuggestions(%b)", showSuggestions);
         CacheUtil.setCache( this, USER_PREFERENCE_SHOW_SUGGESTIONS, showSuggestions );
 
-        if( showSuggestions )   item.setIcon( R.mipmap.ic_show_suggestions );
-        else                    item.setIcon( R.mipmap.ic_hide_suggestions );
+        menu.findItem(R.id.action_show_suggestions).setVisible(showSuggestions);
+        menu.findItem(R.id.action_hide_suggestions).setVisible(!showSuggestions);
 
         if( showSuggestions )   suggestionsVM.suggest(binding.content.getCurrentWord().toString());
         else                    onHideSuggestions();
@@ -392,6 +394,7 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     public void onShowSuggestions() {
+        boolean showSuggestions = CacheUtil.getCache( this, USER_PREFERENCE_SHOW_SUGGESTIONS, true );
         if( !showSuggestions || suggestionsVM.getSuggestionVMs().isEmpty() ) {
             onHideSuggestions();
             return;
@@ -413,7 +416,7 @@ public class ActivityEditDocument extends AppCompatActivity
         binding.suggestions.setVisibility(View.VISIBLE);
 
         /// Show suggestions tutorial if not shown yet
-        new SuggestionTutorial(this).showTutorial(() -> ViewUtil.hideKeyboard(this));
+        showSuggestionsTutorial(menu.findItem(R.id.action_show_suggestions));
     }
 
     @Override
@@ -422,51 +425,19 @@ public class ActivityEditDocument extends AppCompatActivity
     }
 
 
-    private class SuggestionTutorial extends BaseShowCaseTutorial {
 
-        SuggestionTutorial(Context context) {
-            super(context, "suggestion_tutorial");
-        }
-
-        @Override
-        protected ShowcaseView.Builder display() {
-            return new ShowcaseView.Builder(ActivityEditDocument.this)
-                    .setTarget(new ToolbarActionItemTarget(binding.toolbar, R.id.action_show_suggestions))
-                    .setContentTitle(R.string.tutorial_show_suggestions_title)
-                    .setContentText(R.string.tutorial_show_suggestions_content)
-                    .withMaterialShowcase();
-        }
+    /****** Tutorials ******/
+    private Tutorial suggestionTutorial = null;
+    private void showSuggestionsTutorial(MenuItem target) {
+        if( suggestionTutorial == null )
+            suggestionTutorial = new Tutorial(this, "suggestion_tutorial", R.string.tutorial_show_suggestions, Gravity.BOTTOM).setTarget(target);
+        suggestionTutorial.showTutorial();
     }
 
-    private class SelectDictionariesTutorial extends BaseShowCaseTutorial {
-
-        SelectDictionariesTutorial(Context context) {
-            super(context, "select_lang_tutorial");
-        }
-
-        @Override
-        protected ShowcaseView.Builder display() {
-            return new ShowcaseView.Builder(ActivityEditDocument.this)
-                    .setTarget( new ViewTarget(editingLanguageChooserFragment.getCurrentLanguageLogoView()) )
-                    .setContentTitle(R.string.tutorial_select_dictionaries_title)
-                    .setContentText(R.string.tutorial_select_dictionaries_content)
-                    .withMaterialShowcase();
-        }
-    }
-
-    private class AddWordToDictionaryTutorial extends BaseShowCaseTutorial {
-
-        AddWordToDictionaryTutorial(Context context) {
-            super(context, "add_word_tutorial");
-        }
-
-        @Override
-        protected ShowcaseView.Builder display() {
-            return new ShowcaseView.Builder(ActivityEditDocument.this)
-                    .setTarget(new ToolbarActionItemTarget(binding.toolbar, R.id.action_add_word_to_dictionary))
-                    .setContentTitle(R.string.tutorial_add_word_to_dictionary_title)
-                    .setContentText(R.string.tutorial_add_word_to_dictionary_content)
-                    .withMaterialShowcase();
-        }
+    private Tutorial addWordTutorial = null;
+    private void showAddToDictionaryTutorial(MenuItem target) {
+        if( addWordTutorial == null )
+            addWordTutorial = new Tutorial(this, "add_word_tutorial", R.string.tutorial_add_word_to_dictionary, Gravity.BOTTOM).setTarget(target);
+        addWordTutorial.showTutorial();
     }
 }

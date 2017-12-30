@@ -22,4 +22,7 @@
 
     <dimen name="suggestion_box_height">190dp</dimen>
     <dimen name="suggestion_box_width">125dp</dimen>
+
+    <dimen name="tutorial_padding">15dp</dimen>
+    <dimen name="tutorial_corner_radius">3dp</dimen>
 </resources>

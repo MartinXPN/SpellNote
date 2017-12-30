@@ -12,6 +12,8 @@
     <color name="text_wrong">#D20000</color>
     <color name="text_correct">#292929</color>
 
+    <color name="tutorial_background_color">#c8113d84</color>
+
     <color name="delete_dictionary_progress_color">#c10d0d</color>
     <color name="save_dictionary_progress_color">#1e8117</color>
     <color name="document_list_date_color">#737373</color>
