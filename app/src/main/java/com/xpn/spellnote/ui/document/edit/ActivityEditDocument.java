@@ -3,7 +3,6 @@ package com.xpn.spellnote.ui.document.edit;
 import android.app.Fragment;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
@@ -171,26 +170,6 @@ public class ActivityEditDocument extends AppCompatActivity
                     onHideSuggestions();
                     prevY = scrollY;
                 }
-            }
-        });
-
-
-        /// handle keyboard show-hide
-        binding.getRoot().getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-
-            Rect r = new Rect();
-            binding.getRoot().getWindowVisibleDisplayFrame(r);
-            int screenHeight = binding.getRoot().getRootView().getHeight();
-            int keypadHeight = screenHeight - r.bottom;
-
-            if (keypadHeight > screenHeight * 0.15) {
-                showSelectDictionariesTutorial();   /// redraw tutorial
-            }
-            else {
-                binding.content.clearFocus();
-                binding.title.clearFocus();
-                if( selectDictionariesTutorial != null )
-                    showSelectDictionariesTutorial();   /// redraw tutorial
             }
         });
     }
@@ -457,14 +436,5 @@ public class ActivityEditDocument extends AppCompatActivity
         if( addWordTutorial == null )
             addWordTutorial = new Tutorial(this, "add_word_tutorial", R.string.tutorial_add_word_to_dictionary, Gravity.BOTTOM).setTarget(target);
         addWordTutorial.showTutorial();
-    }
-
-    private Tutorial selectDictionariesTutorial = null;
-    private void showSelectDictionariesTutorial() {
-        if( selectDictionariesTutorial == null ) {
-            selectDictionariesTutorial = new Tutorial(this, "select_lang_tutorial", R.string.tutorial_select_dictionaries, Gravity.TOP);
-            selectDictionariesTutorial.setTarget(editingLanguageChooserFragment.getCurrentLanguageLogoView());
-        }
-        selectDictionariesTutorial.showTutorial(true);
     }
 }

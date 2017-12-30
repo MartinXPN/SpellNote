@@ -69,15 +69,11 @@ public class Tutorial {
         if( menuTarget != null ) {
             menuTarget.getActionView().setOnClickListener(view -> {
                 ((AppCompatActivity)context).onOptionsItemSelected(menuTarget);
-                tooltip.dismiss();
                 setDisplayed();
             });
         }
 
-        tooltip.setOnClickListener(tooltip1 -> {
-            tooltip.dismiss();
-            setDisplayed();
-        });
+        tooltip.setOnClickListener(tooltip1 -> setDisplayed());
     }
 
 
@@ -100,11 +96,10 @@ public class Tutorial {
     /**
      * Save in cache that tutorial had been displayed
      */
-    private void setDisplayed() {
-        setDisplayed(context, tag);
-    }
-    private static void setDisplayed(Context context, String tag) {
+    public void setDisplayed() {
         CacheUtil.setCache(context, tag, true);
+        if(tooltip != null)
+            tooltip.dismiss();
     }
 
     /**
