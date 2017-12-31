@@ -166,7 +166,10 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
                 @Override public void onStartOpen(SwipeLayout layout) {
                     closeAllExcept( layout );
                 }
-                @Override public void onOpen(SwipeLayout layout) {}
+                @Override public void onOpen(SwipeLayout layout) {
+                    if(swipeTutorial != null && swipeTutorial.isShowing())
+                        swipeTutorial.setDisplayed();
+                }
                 @Override public void onStartClose(SwipeLayout layout) {}
                 @Override public void onClose(SwipeLayout layout) {}
                 @Override public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {}
@@ -194,9 +197,11 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         }
     }
 
+    Tutorial swipeTutorial = null;
     public void showSwipeTutorial(View target) {
-        new Tutorial(getActivity(), "swipe_tutorial", R.string.tutorial_swipe, Gravity.BOTTOM)
-                .setTarget(target)
-                .showTutorial();
+        if(swipeTutorial == null)
+            swipeTutorial = new Tutorial(getActivity(), "swipe_tutorial", R.string.tutorial_swipe, Gravity.BOTTOM)
+                .setTarget(target);
+        swipeTutorial.showTutorial();
     }
 }
