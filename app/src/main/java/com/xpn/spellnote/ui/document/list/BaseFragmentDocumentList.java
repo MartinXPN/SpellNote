@@ -1,17 +1,16 @@
 package com.xpn.spellnote.ui.document.list;
 
 import android.content.Intent;
-import android.databinding.BindingAdapter;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.daimajia.swipe.SwipeLayout;
@@ -25,6 +24,7 @@ import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.ui.document.edit.ActivityEditDocument;
 import com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM;
 import com.xpn.spellnote.ui.util.BindingHolder;
+import com.xpn.spellnote.ui.util.tutorial.Tutorial;
 import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
@@ -113,10 +113,12 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
     }
 
     @Override
-    public void onShowUndoOption(DocumentModel previousDocument, String message) {
+    public void onShowUndoOption(DocumentModel previousDocument, @StringRes int messageResourceId) {
         /// Show UNDO snack-bar
-        Snackbar.make( getView(), message, Snackbar.LENGTH_LONG )
-                .setAction( "UNDO", view -> {
+        if( getView() == null )
+            return;
+        Snackbar.make( getView(), messageResourceId, Snackbar.LENGTH_LONG )
+                .setAction( R.string.undo, view -> {
                     viewModel.restoreDocument(previousDocument);
                     updateDocumentList();
                 }).show();
@@ -128,19 +130,13 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
     }
 
     @Override
-    public void onShowExplanation(@StringRes int resourceId) {
-        Toast.makeText(getActivity(), getString(resourceId), Toast.LENGTH_SHORT).show();
+    public void onShowExplanation(@StringRes int messageResourceId) {
+        Toast.makeText(getActivity(), getString(messageResourceId), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onSendDocument(String title, String content) {
         Util.sendDocument( getActivity(), title, content );
-    }
-
-
-    @BindingAdapter("android:src")
-    public static void setImageResource(ImageView imageView, int resource){
-        imageView.setImageResource(resource);
     }
 
     @Override
@@ -151,6 +147,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
 
     private class DocumentListAdapter extends RecyclerSwipeAdapter<BindingHolder> {
+        private static final int MIN_ITEM_COUNT_FOR_TUTORIAL = 1;
 
         @Override
         public BindingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -169,12 +166,21 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
                 @Override public void onStartOpen(SwipeLayout layout) {
                     closeAllExcept( layout );
                 }
-                @Override public void onOpen(SwipeLayout layout) {}
+                @Override public void onOpen(SwipeLayout layout) {
+                    if(swipeTutorial != null && swipeTutorial.isShowing())
+                        swipeTutorial.setDisplayed();
+                }
                 @Override public void onStartClose(SwipeLayout layout) {}
                 @Override public void onClose(SwipeLayout layout) {}
                 @Override public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {}
                 @Override public void onHandRelease(SwipeLayout layout, float xVel, float yVel) {}
             });
+
+
+            /// show swipe tutorial if position = MIN_ITEM_COUNT_FOR_TUTORIAL
+            if( position == MIN_ITEM_COUNT_FOR_TUTORIAL ) {
+                showSwipeTutorial(holder.itemView);
+            }
         }
 
         @Override
@@ -189,5 +195,13 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         public int getSwipeLayoutResourceId(int position) {
             return R.id.swipe;
         }
+    }
+
+    Tutorial swipeTutorial = null;
+    public void showSwipeTutorial(View target) {
+        if(swipeTutorial == null)
+            swipeTutorial = new Tutorial(getActivity(), "swipe_tutorial", R.string.tutorial_swipe, Gravity.BOTTOM)
+                .setTarget(target);
+        swipeTutorial.showTutorial();
     }
 }

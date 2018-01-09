@@ -8,10 +8,15 @@ import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.document.DocumentService;
+import com.xpn.spellnote.services.word.DictionaryChangeSuggestingService;
+import com.xpn.spellnote.services.word.SavedWordsService;
 import com.xpn.spellnote.services.word.SpellCheckerService;
 import com.xpn.spellnote.ui.BaseViewModel;
+import com.xpn.spellnote.ui.util.EditCorrectText;
+import com.xpn.spellnote.ui.util.SpellCheckingListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,11 +26,13 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 
-public class EditDocumentVM extends BaseViewModel {
+public class EditDocumentVM extends BaseViewModel implements EditCorrectText.SpellChecker {
 
     private ViewContract viewContract;
     private final DocumentService documentService;
     private final SpellCheckerService spellCheckerService;
+    private final DictionaryChangeSuggestingService dictionaryChangeSuggestingService;
+    private final SavedWordsService savedWordsService;
 
     private DocumentModel document = new DocumentModel();
     private Long documentId;
@@ -34,12 +41,16 @@ public class EditDocumentVM extends BaseViewModel {
     EditDocumentVM(ViewContract viewContract,
                    Long documentId,
                    DocumentService documentService,
-                   SpellCheckerService spellCheckerService) {
+                   SpellCheckerService spellCheckerService,
+                   SavedWordsService savedWordsService,
+                   DictionaryChangeSuggestingService dictionaryChangeSuggestingService) {
 
         this.viewContract = viewContract;
         this.documentId = documentId;
         this.documentService = documentService;
         this.spellCheckerService = spellCheckerService;
+        this.savedWordsService = savedWordsService;
+        this.dictionaryChangeSuggestingService = dictionaryChangeSuggestingService;
     }
 
     @Override
@@ -72,6 +83,7 @@ public class EditDocumentVM extends BaseViewModel {
                         document -> {
                             this.document = document;
                             notifyChange();
+                            viewContract.onDocumentAvailable(this.document);
                         },
                         Timber::e
                 ));
@@ -103,13 +115,71 @@ public class EditDocumentVM extends BaseViewModel {
         onSaveDocument();
     }
 
+
+    void notifyDocumentChanged() {
+        document.setDateModified(new Date());
+        onSaveDocument();
+    }
+
+    @Bindable
+    public String getLanguageLocale() {
+        return document.getLanguageLocale();
+    }
     void setLanguageLocale(String locale) {
         document.setLanguageLocale(locale);
+        notifyPropertyChanged(BR.languageLocale);
+        if( !document.getContent().isEmpty() || !document.getTitle().isEmpty() )
+            onSaveDocument();
+    }
+
+
+    void addWordToDictionary(String word) {
+        String locale = getLanguageLocale();
+        WordModel wordModel = new WordModel(word, 100, true);
+
+        addSubscription(savedWordsService.saveWord(locale, wordModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> {
+                            viewContract.onDictionaryChanged(wordModel);
+                            addSubscription(dictionaryChangeSuggestingService.suggestAdding(locale, wordModel)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(
+                                            (wordModel1, throwable) -> {}
+                                    ));
+                        },
+                        Timber::e
+                ));
+    }
+
+
+    void removeWordFromDictionary(String word) {
+        String locale = getLanguageLocale();
+        WordModel wordModel = new WordModel(word, 100, true);
+
+        addSubscription(savedWordsService.removeWord(locale, wordModel)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        () -> {
+                            viewContract.onDictionaryChanged(wordModel);
+                            addSubscription(dictionaryChangeSuggestingService.suggestRemoving(locale, wordModel)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(
+                                            (wordModel1, throwable) -> {}
+                                    ));
+                        },
+                        Timber::e
+                ));
     }
 
 
     /// check spelling of the text on the interval [left, right]
-    void checkSpelling(int left, int right, List <String> words) {
+    @Override
+    public void checkSpelling(int left, int right, List <String> words, SpellCheckingListener listener) {
         if( viewContract.getCurrentDictionary().getLocale() == null )
             return;
 
@@ -129,8 +199,8 @@ public class EditDocumentVM extends BaseViewModel {
                 })
                 .subscribe(
                         wrongCorrectWords -> {
-                            viewContract.markIncorrect(left, right, wrongCorrectWords.first);
-                            viewContract.markCorrect(left, right, wrongCorrectWords.second);
+                            listener.markIncorrect(left, right, wrongCorrectWords.first);
+                            listener.markCorrect(left, right, wrongCorrectWords.second);
                         },
                         Timber::e
                 ));
@@ -138,7 +208,7 @@ public class EditDocumentVM extends BaseViewModel {
 
     public interface ViewContract {
         DictionaryModel getCurrentDictionary();
-        void markIncorrect(int left, int right, List <String> incorrectWords);
-        void markCorrect(int left, int right, List <String> correctWords);
+        void onDocumentAvailable(DocumentModel document);
+        void onDictionaryChanged(WordModel word);
     }
 }

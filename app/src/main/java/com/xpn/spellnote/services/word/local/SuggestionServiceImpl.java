@@ -19,12 +19,11 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Single;
 import io.reactivex.subjects.BehaviorSubject;
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import timber.log.Timber;
 
 
-public class SuggestionServiceImpl implements SuggestionService {
+public class SuggestionServiceImpl extends BaseWordService implements SuggestionService {
 
     private static final int SUGGESTION_LIMIT = 100;
     private final SpellCheckerService spellCheckerService;
@@ -39,19 +38,13 @@ public class SuggestionServiceImpl implements SuggestionService {
     @Override
     public Single<List<WordModel>> getSuggestions(String word, DictionaryModel dictionary) {
 
-        Timber.d("Get suggestions for " + word + "!" );
+        Timber.d("Get suggestions for %s!", word );
         return Single.defer(() -> {
             if( dictionary == null || dictionary.getLanguageName() == null || word == null || word.isEmpty() )
                 return Single.just( new ArrayList<>() );
 
-            RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-                    .name(dictionary.getLocale() + ".realm")
-                    .build();
-            Realm realm = Realm.getInstance(realmConfiguration);
-            realm.refresh();
-
-
             /// get continuations
+            Realm realm = getRealmInstance(dictionary.getLocale());
             RealmResults <WordSchema> continuations = realm.where(WordSchema.class)
                     .like("word", word + '*')
                     .findAll();
@@ -75,7 +68,7 @@ public class SuggestionServiceImpl implements SuggestionService {
                             .subscribe(subscriber::onNext))
                     .subscribe( correctionsResult );
 
-            Timber.d("CORRECTIONS: " + corrections );
+            Timber.d("CORRECTIONS: %s", corrections );
 
             /// combine results
             ArrayList <WordModel> result = new ArrayList<>(continuationResult);
@@ -91,6 +84,7 @@ public class SuggestionServiceImpl implements SuggestionService {
 
             /// sort the result in order of decreasing usage
             Collections.sort(result, (a, b) -> Integer.valueOf( b.getUsage() ).compareTo( a.getUsage() ));
+            realm.close();
             return Single.just(result);
         });
     }
@@ -148,7 +142,7 @@ public class SuggestionServiceImpl implements SuggestionService {
             }
         }
         alreadyPresentWords.addAll( newWords );
-        Timber.d("There are " + newWords.size() + " new words(" + numberOfAllowedChanges + ")" );
+        Timber.d("There are %d new words(%d)", newWords.size() , numberOfAllowedChanges);
 
         for( String word : newWords ) {
             if( numberOfAllowedChanges > 1 )

@@ -12,12 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 
 public class SuggestionsVM extends BaseViewModel {
 
+    private Disposable suggestionSubscription;
     private final ViewContract viewContract;
     private ArrayList <SuggestionListItemVM> suggestionVMs = new ArrayList<>();
     private final SuggestionService suggestionService;
@@ -27,10 +29,20 @@ public class SuggestionsVM extends BaseViewModel {
         this.suggestionService = suggestionService;
     }
 
+    @Override
+    public void onDestroy() {
+        if( suggestionSubscription != null && !suggestionSubscription.isDisposed() )
+            suggestionSubscription.dispose();
+        super.onDestroy();
+    }
 
     public void suggest(String word) {
-        addSubscription( suggestionService
-                .getSuggestions(word, viewContract.getCurrentLanguage())
+        /// cancel previous suggestion subscription
+        if( suggestionSubscription != null && !suggestionSubscription.isDisposed() )
+            suggestionSubscription.dispose();
+
+        suggestionSubscription = suggestionService
+                .getSuggestions(word, viewContract.getCurrentDictionary())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -45,13 +57,12 @@ public class SuggestionsVM extends BaseViewModel {
                                 suggestionVMs.add( new SuggestionListItemVM(viewContract, model.getWord()));
                             }
 
-                            Timber.d(suggestionVMs.size() + " Suggestions in total");
-
+                            Timber.d("%s Suggestions in total", suggestionVMs.size());
                             notifyPropertyChanged(BR.suggestionVMs);
                             viewContract.onShowSuggestions();
                         },
                         Timber::e
-                ));
+                );
     }
 
 
@@ -63,7 +74,7 @@ public class SuggestionsVM extends BaseViewModel {
 
     public interface ViewContract extends SuggestionListItemVM.ViewContract {
         String getCurrentWord();
-        DictionaryModel getCurrentLanguage();
+        DictionaryModel getCurrentDictionary();
         void onShowSuggestions();
         void onHideSuggestions();
     }

@@ -32,7 +32,7 @@ public class LocalDocumentServiceImpl implements DocumentService {
         return Completable.defer(() -> Completable.fromAction(() -> {
             Realm realmInstance = Realm.getInstance(realmConfiguration);
             realmInstance.executeTransaction(realm -> realm.copyToRealmOrUpdate(mapper.mapTo(document)));
-            realmInstance.refresh();
+            realmInstance.close();
         }));
     }
 
@@ -41,8 +41,9 @@ public class LocalDocumentServiceImpl implements DocumentService {
         return Completable.defer(() -> Completable.fromAction(() -> {
             Realm realmInstance = Realm.getInstance(realmConfiguration);
             DocumentSchema schema = realmInstance.where(DocumentSchema.class).equalTo("id", document.getId()).findFirst();
-            realmInstance.executeTransaction(realm -> schema.deleteFromRealm());
-            realmInstance.refresh();
+            if( schema != null )
+                realmInstance.executeTransaction(realm -> schema.deleteFromRealm());
+            realmInstance.close();
         }));
     }
 
@@ -52,7 +53,7 @@ public class LocalDocumentServiceImpl implements DocumentService {
             Realm realmInstance = Realm.getInstance(realmConfiguration);
             RealmResults<DocumentSchema> documents = realmInstance.where(DocumentSchema.class).equalTo("category", category).findAll();
             realmInstance.executeTransaction(realm -> documents.deleteAllFromRealm());
-            realmInstance.refresh();
+            realmInstance.close();
         }));
     }
 
@@ -64,7 +65,7 @@ public class LocalDocumentServiceImpl implements DocumentService {
 
             Realm realmInstance = Realm.getInstance(realmConfiguration);
             realmInstance.executeTransaction(realm -> realm.copyToRealmOrUpdate(schema));
-            realmInstance.refresh();
+            realmInstance.close();
         }));
     }
 
@@ -74,7 +75,10 @@ public class LocalDocumentServiceImpl implements DocumentService {
             Realm realmInstance = Realm.getInstance(realmConfiguration);
             realmInstance.refresh();
             DocumentSchema document = realmInstance.where(DocumentSchema.class).equalTo("id", id).findFirst();
-            return Single.just(mapper.mapFrom(document));
+
+            DocumentModel res = mapper.mapFrom(document);
+            realmInstance.close();
+            return Single.just(res);
         });
     }
 
@@ -86,11 +90,18 @@ public class LocalDocumentServiceImpl implements DocumentService {
             realmInstance.refresh();
             RealmResults<DocumentSchema> documents = realmInstance.where(DocumentSchema.class)
                     .equalTo("category", category)
-                    .findAllSorted(orderField, ascending ? Sort.ASCENDING : Sort.DESCENDING);
+                    .sort(orderField, ascending ? Sort.ASCENDING : Sort.DESCENDING)
+                    .findAll();
 
-            return Single.just( Stream.of(documents)
+            List<DocumentModel> res = Stream.of(documents)
                     .map(mapper::mapFrom)
-                    .collect(Collectors.toCollection(ArrayList::new)));
+                    .filter(value -> value.getTitle() != null &&
+                            value.getContent() != null &&
+                            (!value.getTitle().isEmpty() || !value.getContent().isEmpty()))
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+            realmInstance.close();
+            return Single.just(res);
         });
     }
 }

@@ -8,6 +8,8 @@ public class DictionaryMapper implements BeanMapper<DictionaryModel, DictionaryS
 
     @Override
     public DictionaryModel mapFrom(DictionarySchema source) {
+        if( source == null )
+            return new DictionaryModel("", "", "null", 0, "", "");
         return new DictionaryModel(
                 source.locale,
                 source.languageName,

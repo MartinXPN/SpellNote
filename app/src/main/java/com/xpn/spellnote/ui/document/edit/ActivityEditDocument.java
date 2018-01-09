@@ -6,31 +6,38 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.tooltip.TooltipActionView;
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.ActivityEditDocumentBinding;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
-import com.xpn.spellnote.ui.ads.AdsActivity;
+import com.xpn.spellnote.models.WordModel;
+import com.xpn.spellnote.ui.ads.InterstitialAdHelper;
 import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
-import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserVM;
+import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
+import com.xpn.spellnote.ui.util.EditCorrectText.WordCorrectness;
+import com.xpn.spellnote.ui.util.ViewUtil;
+import com.xpn.spellnote.ui.util.tutorial.Tutorial;
 import com.xpn.spellnote.util.CacheUtil;
-import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import timber.log.Timber;
@@ -38,28 +45,31 @@ import timber.log.Timber;
 
 public class ActivityEditDocument extends AppCompatActivity
         implements EditDocumentVM.ViewContract,
-        EditingLanguageChooserVM.ViewContract,
+        EditingLanguageChooserFragment.EditingLanguageChooserContract,
         SuggestionsVM.ViewContract {
 
+    private static final String USER_PREFERENCE_SHOW_SUGGESTIONS = "show_sugg";
+    private static final String USER_PREFERENCE_CHECK_SPELLING = "spell_check";
     private static final String EXTRA_DOCUMENT_ID = "doc_id";
     private static final String CACHE_DEFAULT_LOCALE = "default_locale";
     private static final Integer SPEECH_RECOGNIZER_CODE = 1;
     private static final Integer LANGUAGE_SELECTION_CODE = 2;
-    private boolean showSuggestions;
     private boolean checkSpelling;
 
     private FirebaseAnalytics analytics;
+    private InterstitialAdHelper ads;
 
     private ActivityEditDocumentBinding binding;
+    private Menu menu;
     private EditDocumentVM viewModel;
-    private EditingLanguageChooserVM editingLanguageChooserVM;
     private SuggestionsVM suggestionsVM;
+    private EditingLanguageChooserFragment editingLanguageChooserFragment;
 
 
     public static void launchForResult(Fragment fragment, Long documentId, int requestCode) {
         Intent i = new Intent( fragment.getActivity(), ActivityEditDocument.class );
         i.putExtra( EXTRA_DOCUMENT_ID, documentId );
-        Timber.d("Starting activity for result with request code: " + requestCode);
+        Timber.d("Starting activity for result with request code: %s", requestCode);
         fragment.startActivityForResult( i, requestCode );
     }
 
@@ -73,7 +83,7 @@ public class ActivityEditDocument extends AppCompatActivity
                 .subscribe(
                         () -> launchForResult(fragment, document.getId(), requestCode ),
                         throwable -> {
-                            Toast.makeText(fragment.getActivity(), "Couldn't create document", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(fragment.getActivity(), R.string.error_couldnt_create_document, Toast.LENGTH_SHORT).show();
                             Timber.e(throwable);
                         });
     }
@@ -83,9 +93,14 @@ public class ActivityEditDocument extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_document);
+        editingLanguageChooserFragment = (EditingLanguageChooserFragment) getFragmentManager().findFragmentById(R.id.editing_language_chooser_fragment);
 
         /// set-up analytics
         analytics = FirebaseAnalytics.getInstance(this);
+
+        /// set-up advertisement helper
+        ads = new InterstitialAdHelper();
+        ads.initializeAds(this);
 
 
         /// set-up view-models
@@ -93,27 +108,18 @@ public class ActivityEditDocument extends AppCompatActivity
         viewModel = new EditDocumentVM(this,
                 getIntent().getExtras().getLong(EXTRA_DOCUMENT_ID),
                 diContext.getDocumentService(),
-                diContext.getSpellCheckerService());
+                diContext.getSpellCheckerService(),
+                diContext.getSavedWordsService(),
+                diContext.getDictionaryChangeSuggestingService());
 
-        editingLanguageChooserVM = new EditingLanguageChooserVM(this, diContext.getSavedDictionaryService());
         suggestionsVM = new SuggestionsVM(this, diContext.getSuggestionService());
 
         binding.setModel(viewModel);
-        binding.setEditingLanguageChooserVM(editingLanguageChooserVM);
         binding.setSuggestionsVM(suggestionsVM);
 
         /// set-up the actionbar
         setSupportActionBar(binding.toolbar);
-        binding.toolbar.setNavigationOnClickListener(v -> finish());
-
-
-        /// set-up editing language chooser
-        int numberOfItems = 3; /// number of dictionaries shown in one row
-        GridLayoutManager layoutManager = new GridLayoutManager(this, numberOfItems);
-        layoutManager.setAutoMeasureEnabled(true);
-        binding.editingLanguageChooser.supportedLanguagesGrid.setHasFixedSize(true);
-        binding.editingLanguageChooser.supportedLanguagesGrid.setNestedScrollingEnabled(false);
-        binding.editingLanguageChooser.supportedLanguagesGrid.setLayoutManager(layoutManager);
+        binding.toolbar.setNavigationOnClickListener(v -> showAdOrFinish());
 
 
         /// set-up edit-correct text
@@ -124,28 +130,50 @@ public class ActivityEditDocument extends AppCompatActivity
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                int left = start - 10;
-                int right = start + count + 10;
-                List<String> words = binding.content.getWords(
-                        binding.content.getWordStart(left),
-                        binding.content.getWordEnd(right)
-                );
+                hideRemoveAddWordToDictionaryButtons();
 
                 /// show suggestions only if the current word has more than one character
                 if( getCurrentWord().length() > 1 ) suggestionsVM.suggest(getCurrentWord());
                 else                                onHideSuggestions();
-
-                if( checkSpelling )
-                    viewModel.checkSpelling(left, right, words);
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+                viewModel.notifyDocumentChanged();
+            }
         });
-        binding.content.setOnClickListener(v -> {
+        binding.title.setOnClickListener(view -> ViewUtil.showKeyboard(this, binding.title));
+        binding.content.setOnClickListener(view -> {
+            ViewUtil.showKeyboard(this, binding.content);
             /// show suggestions only if the current word has more than one character
-            if( getCurrentWord().length() > 1 ) suggestionsVM.suggest(getCurrentWord());
+            if (getCurrentWord().length() > 1)  suggestionsVM.suggest(getCurrentWord());
             else                                onHideSuggestions();
+
+            hideRemoveAddWordToDictionaryButtons();
+            if( menu != null && getCurrentDictionary() != null && getCurrentDictionary().getLocale() != null ) {
+                if(binding.content.isCurrentWordCorrect() == WordCorrectness.CORRECT) {
+                    menu.findItem(R.id.action_remove_word_from_dictionary).setVisible(true);
+                }
+                else if( binding.content.isCurrentWordCorrect() == WordCorrectness.INCORRECT ) {
+                    menu.findItem(R.id.action_add_word_to_dictionary).setVisible(true);
+                    showAddToDictionaryTutorial(menu.findItem(R.id.action_add_word_to_dictionary));
+                }
+            }
+        });
+
+        /// hide suggestions on scroll
+        binding.contentScroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+
+            int prevY = 0;
+
+            @Override
+            public void onScrollChanged() {
+                int scrollY = binding.contentScroll.getScrollY();
+                if (Math.abs(prevY - scrollY) > 30) {
+                    onHideSuggestions();
+                    prevY = scrollY;
+                }
+            }
         });
     }
 
@@ -153,7 +181,6 @@ public class ActivityEditDocument extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         viewModel.onStart();
-        editingLanguageChooserVM.onStart();
         suggestionsVM.onStart();
     }
 
@@ -167,33 +194,47 @@ public class ActivityEditDocument extends AppCompatActivity
 
         /// control lifecycle of VMs
         viewModel.onDestroy();
-        editingLanguageChooserVM.onDestroy();
         suggestionsVM.onDestroy();
+
         super.onDestroy();
     }
 
-    @Override
-    public void finish() {
+    private void showAdOrFinish() {
         /// show ads in 50% of all cases
         int number = new Random().nextInt(2);
-        if(number == 0)
-            AdsActivity.launch(this);
-
-        super.finish();
+        if(number == 0) {
+            try {
+                ads.showAd(this::finish);
+            }
+            catch (IllegalStateException e) {
+                Timber.e(e);
+                finish();
+            }
+        }
+        else {
+            finish();
+        }
     }
 
     private void refreshActivity() {
         Intent refresh = new Intent(this, ActivityEditDocument.class);
-        refresh.putExtras(getIntent().getExtras());
+        if( getIntent().getExtras() != null )
+            refresh.putExtras(getIntent().getExtras());
         startActivity(refresh);
-        super.finish();
+        finish();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_edit_document, menu);
-        updateShowSuggestions( CacheUtil.getCache( this, TagsUtil.USER_PREFERENCE_SHOW_SUGGESTIONS, true ), menu.findItem( R.id.action_show_suggestions ) );
-        updateSpellChecking( CacheUtil.getCache( this, TagsUtil.USER_PREFERENCE_CHECK_SPELLING, true ), menu.findItem( R.id.action_check_spelling ) );
+        this.menu = menu;
+        updateShowSuggestions( CacheUtil.getCache( this, USER_PREFERENCE_SHOW_SUGGESTIONS, true ) );
+        updateSpellChecking( CacheUtil.getCache( this, USER_PREFERENCE_CHECK_SPELLING, true ), menu.findItem( R.id.action_check_spelling ) );
+
+        MenuItem suggestions = menu.findItem(R.id.action_show_suggestions);
+        MenuItem addToDictionary = menu.findItem(R.id.action_add_word_to_dictionary);
+        ((TooltipActionView) suggestions.getActionView()).setMenuItem(suggestions);
+        ((TooltipActionView) addToDictionary.getActionView()).setMenuItem(addToDictionary);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -201,34 +242,37 @@ public class ActivityEditDocument extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if( id == R.id.action_show_suggestions )    { updateShowSuggestions( !showSuggestions, item );                          return true; }
-        else if( id == R.id.action_record )         { Util.displaySpeechRecognizer( this, SPEECH_RECOGNIZER_CODE );             return true; }
+        if( id == R.id.action_show_suggestions )    { updateShowSuggestions( false );               return true; }
+        if( id == R.id.action_hide_suggestions )    { updateShowSuggestions( true );                return true; }
+        else if( id == R.id.action_record )         { Util.displaySpeechRecognizer( this, SPEECH_RECOGNIZER_CODE, this.getCurrentDictionary().getLocale() );   return true; }
         else if( id == R.id.action_send )           { Util.sendDocument( this, "", binding.content.getText().toString() );      return true; }
         else if( id == R.id.action_copy )           { Util.copyTextToClipboard( this, binding.content.getText().toString() );   return true; }
         else if( id == R.id.action_check_spelling ) { updateSpellChecking( !checkSpelling, item );                              return true; }
+        else if( id == R.id.action_add_word_to_dictionary )         { viewModel.addWordToDictionary( binding.content.getCurrentWord().toString() );         hideRemoveAddWordToDictionaryButtons();     return true; }
+        else if( id == R.id.action_remove_word_from_dictionary )    { viewModel.removeWordFromDictionary( binding.content.getCurrentWord().toString() );    hideRemoveAddWordToDictionaryButtons();     return true; }
 
         return super.onOptionsItemSelected(item);
     }
 
 
-    public void updateShowSuggestions( boolean showSuggestions, MenuItem item ) {
-        this.showSuggestions = showSuggestions;
-        CacheUtil.setCache( this, TagsUtil.USER_PREFERENCE_SHOW_SUGGESTIONS, showSuggestions );
+    public void updateShowSuggestions( boolean showSuggestions ) {
+        Timber.d("updateShowSuggestions(%b)", showSuggestions);
+        CacheUtil.setCache( this, USER_PREFERENCE_SHOW_SUGGESTIONS, showSuggestions );
 
-        if( showSuggestions )   item.setIcon( R.mipmap.ic_show_suggestions );
-        else                    item.setIcon( R.mipmap.ic_hide_suggestions );
+        menu.findItem(R.id.action_show_suggestions).setVisible(showSuggestions);
+        menu.findItem(R.id.action_hide_suggestions).setVisible(!showSuggestions);
 
         if( showSuggestions )   suggestionsVM.suggest(binding.content.getCurrentWord().toString());
         else                    onHideSuggestions();
     }
     public void updateSpellChecking( boolean checkSpelling, MenuItem item ) {
         this.checkSpelling = checkSpelling;
-        CacheUtil.setCache( this, TagsUtil.USER_PREFERENCE_CHECK_SPELLING, checkSpelling );
+        CacheUtil.setCache( this, USER_PREFERENCE_CHECK_SPELLING, checkSpelling );
 
         item.setChecked( checkSpelling );
         binding.content.setSpellCheckingEnabled(checkSpelling);
         if( checkSpelling )
-            viewModel.checkSpelling(0,  binding.content.getText().length(), binding.content.getWords(0, binding.content.getText().length()) );
+            viewModel.checkSpelling(0,  binding.content.getText().length(), binding.content.getAllWords(), binding.content );
     }
 
 
@@ -251,79 +295,90 @@ public class ActivityEditDocument extends AppCompatActivity
         }
     }
 
+    private void hideRemoveAddWordToDictionaryButtons() {
+        if( menu == null )
+            return;
+        menu.findItem(R.id.action_remove_word_from_dictionary).setVisible(false);
+        menu.findItem(R.id.action_add_word_to_dictionary).setVisible(false);
+    }
+
 
     @Override
     public DictionaryModel getCurrentDictionary() {
-        return editingLanguageChooserVM.getCurrentLanguage();
+        return editingLanguageChooserFragment.getCurrentDictionary();
     }
 
     @Override
-    public void markIncorrect(int left, int right, List<String> incorrectWords) {
-        if( !checkSpelling )    return;
-        Timber.d("Mark Incorrect: " + incorrectWords);
-        for( String word : incorrectWords ) {
-            binding.content.markWord( word, left, right, binding.content.INCORRECT_COLOR);
-        }
+    public void onDocumentAvailable(DocumentModel document) {
+        /// as we have the document lets load all supported languages
+        /// to be able to set the default locale for editing
+        editingLanguageChooserFragment.loadSupportedDictionaries();
     }
 
     @Override
-    public void markCorrect(int left, int right, List<String> correctWords) {
-        if( !checkSpelling )    return;
-        Timber.d("Mark Correct: " + correctWords);
-        for( String word : correctWords ) {
-            binding.content.markWord( word, left, right, binding.content.CORRECT_COLOR);
-        }
+    public void onDictionaryChanged(WordModel word) {
+        Toast.makeText(this, "Dictionary updated: " + word.getWord(), Toast.LENGTH_SHORT).show();
+        viewModel.checkSpelling(
+                0,
+                binding.content.getText().length(),
+                Collections.singletonList(word.getWord()),
+                binding.content
+        );
     }
 
     @Override
     public void onLanguageSelected(DictionaryModel dictionary) {
-        hideAvailableLanguages();
-        editingLanguageChooserVM.setCurrentLanguage(dictionary);
         viewModel.setLanguageLocale(dictionary.getLocale());
 
         /// update shared preferences (default locale)
         CacheUtil.setCache(this, CACHE_DEFAULT_LOCALE, dictionary.getLocale());
 
+        /// update locale for EditCorrectText
+        binding.content.setLocale(new Locale(dictionary.getLocale()));
+
         /// run spellchecking on the whole text again because the language was changed
-        if(!checkSpelling)
-            return;
         viewModel.checkSpelling(
                 0,
                 binding.content.getText().length(),
-                binding.content.getWords(0, binding.content.getText().length())
+                binding.content.getAllWords(),
+                binding.content
         );
     }
 
     @Override
-    public void onLaunchLanguageChooser() {
+    public void onLaunchDictionaryChooser() {
         startActivityForResult( new Intent( this, ActivitySelectLanguages.class ), LANGUAGE_SELECTION_CODE );
     }
 
     @Override
     public void onDictionaryListAvailable(List<DictionaryModel> dictionaries) {
+
+        /// check if the document already has a default locale saved
+        if( viewModel.getLanguageLocale() != null ) {
+            String savedLocale = viewModel.getLanguageLocale();
+            boolean isLocaleAvailable = false;
+            for( DictionaryModel dictionary : dictionaries ) {
+                if( dictionary.getLocale().equals(savedLocale)) {
+                    isLocaleAvailable = true;
+                    break;
+                }
+            }
+
+            if( isLocaleAvailable ) {
+                editingLanguageChooserFragment.setCurrentLanguage(savedLocale);
+                return;
+            }
+        }
+
+        /// otherwise lets decide which locale to use
         String locale = CacheUtil.getCache(this, CACHE_DEFAULT_LOCALE, null);
         if( locale == null ) {
             if( dictionaries.isEmpty() )    return;
             else                            locale = dictionaries.get(0).getLocale();
         }
-        editingLanguageChooserVM.setCurrentLanguage(locale);
-    }
 
-    @Override
-    public void showAvailableLanguages() {
-        binding.editingLanguageChooser.currentLanguage.setVisibility( View.GONE );
-        binding.editingLanguageChooser.supportedLanguagesCard.setVisibility( View.VISIBLE );
-    }
-
-    @Override
-    public void hideAvailableLanguages() {
-        binding.editingLanguageChooser.supportedLanguagesCard.setVisibility( View.GONE );
-        binding.editingLanguageChooser.currentLanguage.setVisibility( View.VISIBLE );
-    }
-
-    @Override
-    public boolean isLanguageListOpen() {
-        return binding.editingLanguageChooser.supportedLanguagesCard.getVisibility() == View.VISIBLE;
+        editingLanguageChooserFragment.setCurrentLanguage(locale);
+        binding.content.setLocale(new Locale(locale));
     }
 
     @Override
@@ -338,20 +393,16 @@ public class ActivityEditDocument extends AppCompatActivity
     }
 
     @Override
-    public DictionaryModel getCurrentLanguage() {
-        return editingLanguageChooserVM.getCurrentLanguage();
-    }
-
-    @Override
     public void onShowSuggestions() {
+        boolean showSuggestions = CacheUtil.getCache( this, USER_PREFERENCE_SHOW_SUGGESTIONS, true );
         if( !showSuggestions || suggestionsVM.getSuggestionVMs().isEmpty() ) {
             onHideSuggestions();
             return;
         }
 
         float h = binding.contentScroll.getScrollY();
-        float x = binding.content.getCursorPosition().first;
-        float y = binding.content.getCursorPosition().second;
+        float x = binding.content.getCursorPositionX();
+        float y = binding.content.getCursorPositionY();
 
         y -= h + binding.suggestions.getPaddingTop();
         x -= binding.suggestions.getWidth() / 2;
@@ -363,10 +414,30 @@ public class ActivityEditDocument extends AppCompatActivity
         binding.suggestions.setX(x);
         binding.suggestions.setY(y);
         binding.suggestions.setVisibility(View.VISIBLE);
+
+        /// Show suggestions tutorial if not shown yet
+        showSuggestionsTutorial(menu.findItem(R.id.action_show_suggestions));
     }
 
     @Override
     public void onHideSuggestions() {
         binding.suggestions.setVisibility(View.GONE);
+    }
+
+
+
+    /****** Tutorials ******/
+    private Tutorial suggestionTutorial = null;
+    private void showSuggestionsTutorial(MenuItem target) {
+        if( suggestionTutorial == null )
+            suggestionTutorial = new Tutorial(this, "suggestion_tutorial", R.string.tutorial_show_suggestions, Gravity.BOTTOM).setTarget(target);
+        suggestionTutorial.showTutorial();
+    }
+
+    private Tutorial addWordTutorial = null;
+    private void showAddToDictionaryTutorial(MenuItem target) {
+        if( addWordTutorial == null )
+            addWordTutorial = new Tutorial(this, "add_word_tutorial", R.string.tutorial_add_word_to_dictionary, Gravity.BOTTOM).setTarget(target);
+        addWordTutorial.showTutorial();
     }
 }

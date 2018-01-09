@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="model"
             type="com.xpn.spellnote.ui.document.edit.EditDocumentVM" />
-
-        <variable
-            name="editingLanguageChooserVM"
-            type="com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserVM" />
 
         <variable
             name="suggestionsVM"
@@ -40,15 +35,19 @@
 
                 <EditText
                     android:id="@+id/title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:imeOptions="flagNoExtractUi"
                     android:inputType="textNoSuggestions"
                     android:background="@drawable/rectangle_transparent"
+                    android:theme="@style/EditDocument"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="#6effffff"
 
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:scrollHorizontally="true"
+                    android:textIsSelectable="true"
 
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
@@ -74,34 +73,42 @@
                 android:layout_height="match_parent"
                 android:overScrollMode="ifContentScrolls" >
 
-                <com.xpn.spellnote.ui.document.edit.EditCorrectText
+                <com.xpn.spellnote.ui.util.EditCorrectText
                     android:id="@+id/content"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="flagNoExtractUi"
                     android:inputType="textMultiLine|textNoSuggestions"
                     android:gravity="top|start"
+                    android:theme="@style/AppTheme.NoActionBar"
 
-                    android:padding="15dp"
+                    android:paddingTop="15dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="@dimen/suggestion_box_height"
 
                     android:background="@drawable/rectangle_transparent"
                     android:keepScreenOn="true"
                     android:cursorVisible="true"
+                    android:textIsSelectable="true"
 
-                    android:hint="Text"
-                    android:text="@={model.content}"/>
+                    android:hint="@string/hint_edit_content"
+                    android:text="@={model.content}"
+                    app:spellChecker="@{model}">
+                    <requestFocus />
+                </com.xpn.spellnote.ui.util.EditCorrectText>
             </ScrollView>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/suggestions"
-                android:layout_width="125dp"
-                android:layout_height="190dp"
+                android:layout_width="@dimen/suggestion_box_width"
+                android:layout_height="@dimen/suggestion_box_height"
                 android:visibility="gone"
                 app:cardCornerRadius="2dp"
                 app:cardElevation="4dp"
                 app:cardUseCompatPadding="true">
 
-                <com.samvel1024.databindingrv.BindingRecyclerView
+                <com.xpn.spellnote.ui.util.bindingrecyclerview.BindingRecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layoutManager="LinearLayoutManager"
@@ -111,12 +118,12 @@
             </android.support.v7.widget.CardView>
 
 
-            <include
-                android:id="@+id/editing_language_chooser"
+            <fragment
+                android:id="@+id/editing_language_chooser_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                layout="@layout/editing_language_chooser"
-                app:viewModel="@{editingLanguageChooserVM}"/>
+                android:name="com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment"
+                tools:layout="@layout/fragment_editing_language_chooser" />
 
 
             <View

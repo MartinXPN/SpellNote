@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'realm-android'
 
 repositories {
@@ -9,11 +8,11 @@ repositories {
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         applicationId 'com.xpn.spellnote'
-        minSdkVersion 14 // used to be 11
+        minSdkVersion 14
         targetSdkVersion 26
         versionCode 1
         versionName '1.0.0'
@@ -54,23 +53,24 @@ dependencies {
 
 
     /// Firebase
-    compile 'com.google.firebase:firebase-core:11.4.0'      // Firebase Analytics
-    compile 'com.google.firebase:firebase-crash:11.4.0'     // Firebase Crash reporting
-    compile 'com.google.firebase:firebase-ads:11.4.0'       // Firebase Ads
-    compile 'com.google.firebase:firebase-storage:11.4.0'   // Firebase Storage
+    compile 'com.google.firebase:firebase-core:11.8.0'          // Firebase Analytics
+    compile 'com.google.firebase:firebase-crash:11.8.0'         // Firebase Crash reporting
+    compile 'com.google.firebase:firebase-ads:11.8.0'           // Firebase Ads
+    compile 'com.google.firebase:firebase-storage:11.8.0'       // Firebase Storage
 
-    compile 'com.squareup.picasso:picasso:2.5.2'            // Picasso - Image loader
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'          // RxAndroid
-    compile 'io.reactivex.rxjava2:rxjava:2.1.3'             // RxJAVA
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'         // Retrofit for HTTP requests
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'   // Retrofit Gson for parsing json
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'  // Retrofit adapter for Rx
-    compile 'com.jakewharton.timber:timber:4.5.1'           // Logger
-    compile 'com.annimon:stream:1.1.9'                      // Stream API
+    compile 'com.squareup.picasso:picasso:2.5.2'                // Picasso - Image loader
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'              // RxAndroid
+    compile 'io.reactivex.rxjava2:rxjava:2.1.7'                 // RxJAVA
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'             // Retrofit for HTTP requests
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'       // Retrofit Gson for parsing json
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'      // Retrofit adapter for Rx
+    compile 'com.jakewharton.timber:timber:4.6.0'               // Logger
+    compile 'com.annimon:stream:1.1.9'                          // Stream API
+    compile 'org.apache.commons:commons-lang3:3.7'              // Apache Commons: Utilities
 
-    compile 'de.hdodenhof:circleimageview:2.1.0'            // Circle ImageView
-    compile 'com.daimajia.swipelayout:library:1.2.0@aar'    // Swipe layout (swipe items in document list)
-    compile 'com.samvel1024.databindingrv:data-binding-recyclerview:0.0.3' // binding RecyclerVew for easy manipulations with lists
+    compile 'de.hdodenhof:circleimageview:2.2.0'                // Circle ImageView
+    compile 'com.daimajia.swipelayout:library:1.2.0@aar'        // Swipe layout (swipe items in document list)
+    compile 'com.github.vihtarb:tooltip:0.1.9'                  // Popups for tutorial
 }
 
 apply plugin: 'com.google.gms.google-services'

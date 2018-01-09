@@ -4,16 +4,18 @@
     <color name="colorPrimary">#527dad</color>
     <color name="colorPrimaryDark">#38618d</color>
     <color name="colorAccent">#527dad</color>
+    <color name="editTextColorHighlight">#5f5f5f</color>
     <color name="textPrimary">#fff</color>
-    <color name="windowBackground">#FAFAFA</color>
+    <color name="windowBackground">#ffffff</color>
     <color name="url_color">#3366BB</color>
 
     <color name="text_wrong">#D20000</color>
     <color name="text_correct">#292929</color>
 
+    <color name="tutorial_background_color">#c8113d84</color>
+
     <color name="delete_dictionary_progress_color">#c10d0d</color>
     <color name="save_dictionary_progress_color">#1e8117</color>
-    <color name="document_list_background_color">#ffffff</color>
     <color name="document_list_date_color">#737373</color>
     <color name="document_list_content_color">#9b9b9b</color>
     <color name="document_list_title_color">#202020</color>

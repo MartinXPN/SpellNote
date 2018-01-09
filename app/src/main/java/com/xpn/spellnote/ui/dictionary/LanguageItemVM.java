@@ -1,15 +1,11 @@
 package com.xpn.spellnote.ui.dictionary;
 
 import android.databinding.Bindable;
-import android.databinding.BindingAdapter;
-import android.support.v4.content.ContextCompat;
-import android.widget.ImageView;
 
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 import com.xpn.spellnote.BR;
-import com.xpn.spellnote.R;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.dictionary.SavedDictionaryService;
@@ -32,6 +28,7 @@ public class LanguageItemVM extends BaseViewModel {
     private DictionaryModel dictionaryModel;
     private Status status;
     private int progress;
+    private FileDownloadTask downloadTask;
     private final ViewContract viewContract;
     private final SavedDictionaryService savedDictionaryService;
     private final SavedWordsService savedWordsService;
@@ -44,16 +41,6 @@ public class LanguageItemVM extends BaseViewModel {
         this.status = status;
         this.savedDictionaryService = savedDictionaryService;
         this.savedWordsService = savedWordsService;
-    }
-
-    @BindingAdapter({"bind:imageUrl"})
-    public static void loadImage(ImageView view, String url) {
-        Picasso.with(view.getContext())
-                .load(url)
-                .placeholder(ContextCompat.getDrawable(view.getContext(), R.mipmap.ic_placeholder))
-                .resizeDimen(R.dimen.language_flag_size, R.dimen.language_flag_size)
-                .centerInside()
-                .into(view);
     }
 
     public String getLanguageName() {
@@ -69,6 +56,8 @@ public class LanguageItemVM extends BaseViewModel {
             saveDictionary();
         }
         else if( status == Status.SAVE_IN_PROGRESS) {
+            if(downloadTask != null )
+                downloadTask.cancel();
             subscriptions.clear();
             viewContract.showMessage("Download canceled");
             setStatus(Status.NOT_PRESENT);
@@ -101,15 +90,17 @@ public class LanguageItemVM extends BaseViewModel {
         setStatus(Status.SAVE_IN_PROGRESS);
         StorageReference storage = FirebaseStorage.getInstance().getReferenceFromUrl(dictionaryModel.getDownloadURL());
         File file = new File(getDictionaryPath());
-        Timber.d("Saving file to: " + getDictionaryPath());
+        Timber.d("Saving file to: %s", getDictionaryPath());
 
-        storage.getFile(file)
-                .addOnProgressListener(snapshot -> {
+        downloadTask = storage.getFile(file);
+        downloadTask.addOnProgressListener(snapshot -> {
                     setStatus(Status.SAVE_IN_PROGRESS);
                     setProgress((int) ((float) (snapshot.getBytesTransferred()) / snapshot.getTotalByteCount() * 100));
                     Timber.d( "Saved " + snapshot.getBytesTransferred() + " from " + snapshot.getTotalByteCount() );
                 })
                 .addOnCompleteListener(task -> {
+                    if( !task.isSuccessful() || !task.isComplete() )
+                        return;
                     addSubscription(Completable.mergeArray(
                             savedDictionaryService.saveDictionary(dictionaryModel),
                             savedWordsService.saveWords(dictionaryModel.getLocale(), defaultWords)
@@ -137,7 +128,7 @@ public class LanguageItemVM extends BaseViewModel {
         setStatus(Status.DELETE_IN_PROGRESS);
 
         /// delete database file from file system
-        Timber.d( "Deleting dictionary at location: " + getDictionaryPath() );
+        Timber.d( "Deleting dictionary at location: %s", getDictionaryPath() );
         File file = new File(getDictionaryPath());
         boolean deleted = file.delete();
         if( !deleted ) {
@@ -152,7 +143,7 @@ public class LanguageItemVM extends BaseViewModel {
                 .subscribe(
                         () -> {
                             setStatus(Status.NOT_PRESENT);
-                            Timber.d( "Removed dictionary: " + dictionaryModel.getLocale() );
+                            Timber.d( "Removed dictionary: %s", dictionaryModel.getLocale() );
                         },
                         throwable -> {
                             setStatus(Status.NOT_PRESENT);

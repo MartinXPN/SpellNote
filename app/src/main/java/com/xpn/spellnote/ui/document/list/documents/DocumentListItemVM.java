@@ -1,12 +1,8 @@
 package com.xpn.spellnote.ui.document.list.documents;
 
 import android.databinding.Bindable;
-import android.databinding.BindingAdapter;
 import android.support.annotation.StringRes;
-import android.support.v4.content.ContextCompat;
-import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
 import com.xpn.spellnote.BR;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.models.DictionaryModel;
@@ -57,16 +53,6 @@ public class DocumentListItemVM extends BaseViewModel {
         else                        return dictionary.getLogoURL();
     }
 
-    @BindingAdapter({"bind:imageUrl"})
-    public static void loadImage(ImageView view, String url) {
-        Picasso.with(view.getContext())
-                .load(url)
-                .placeholder(ContextCompat.getDrawable(view.getContext(), R.drawable.ic_language))
-                .resizeDimen(R.dimen.language_flag_size, R.dimen.language_flag_size)
-                .centerInside()
-                .into(view);
-    }
-
 
     public void onContentClicked() {
         viewContract.onEditDocument(document.getId());
@@ -79,7 +65,7 @@ public class DocumentListItemVM extends BaseViewModel {
     }
     public void onFirstItemClicked() {
         viewContract.onRemoveDocumentFromShownList( document );
-        viewContract.onShowUndoOption(document.clone(), "Archived");
+        viewContract.onShowUndoOption(document.clone(), R.string.explanation_archived);
         addSubscription(documentService.moveDocument(document, TagsUtil.CATEGORY_ARCHIVE).subscribe());
     }
     public boolean onFirstItemLongClicked() {
@@ -94,7 +80,7 @@ public class DocumentListItemVM extends BaseViewModel {
     }
     public void onSecondItemClicked() {
         viewContract.onRemoveDocumentFromShownList( document );
-        viewContract.onShowUndoOption(document.clone(), "Moved to Trash");
+        viewContract.onShowUndoOption(document.clone(), R.string.explanation_moved_to_trash);
         addSubscription(documentService.moveDocument(document, TagsUtil.CATEGORY_TRASH).subscribe());
     }
     public boolean onSecondItemLongClicked() {
@@ -131,9 +117,9 @@ public class DocumentListItemVM extends BaseViewModel {
 
     public interface ViewContract {
         void onRemoveDocumentFromShownList(DocumentModel document);
-        void onShowUndoOption(DocumentModel previousDocument, String message);
+        void onShowUndoOption(DocumentModel previousDocument, @StringRes int messageResourceId);
         void onEditDocument(Long documentId);
-        void onShowExplanation(@StringRes int resourceId);
+        void onShowExplanation(@StringRes int messageResourceId);
         void onSendDocument(String title, String content);
     }
 }

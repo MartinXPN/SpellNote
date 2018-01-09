@@ -9,7 +9,7 @@
     </data>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/language_chooser_grid_item_size"
         android:layout_height="wrap_content"
         android:padding="5dp"
         android:orientation="vertical"
@@ -18,10 +18,12 @@
 
         <ImageView
             android:id="@+id/language_flag"
-            android:layout_width="@dimen/editing_language_flag_size"
-            android:layout_height="@dimen/editing_language_flag_size"
-            android:layout_margin="5dp"
+            android:layout_width="@dimen/language_chooser_flag_size"
+            android:layout_height="@dimen/language_chooser_flag_size"
+            android:padding="5dp"
             app:imageUrl="@{viewModel.logoUrl}"
+            app:placeholder="@{@drawable/ic_language}"
+            android:layout_centerHorizontal="true"
             android:contentDescription="@null" />
 
         <TextView
