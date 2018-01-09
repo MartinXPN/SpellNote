@@ -6,7 +6,6 @@ import android.os.Environment;
 import com.xpn.spellnote.services.word.local.WordSchema;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,14 +52,7 @@ public class PopulateRealm {
 
         return Completable.fromAction(() -> {
 
-            JSONArray words;
-            try {
-                words = new JSONArray(loadJSONFromAsset(context));
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return;
-            }
-
+            JSONArray words = new JSONArray(loadJSONFromAsset(context));
             RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                     .directory(Environment.getExternalStorageDirectory())
                     .name(OUTPUT_DATABASE)
@@ -75,7 +67,7 @@ public class PopulateRealm {
             realmInstance.close();
             Realm.compactRealm(realmConfiguration);
 
-            Timber.d("Realm database is now at location: " + realmConfiguration.getPath());
+            Timber.d("Realm database is now at location: %s", realmConfiguration.getPath());
         });
     }
 }
