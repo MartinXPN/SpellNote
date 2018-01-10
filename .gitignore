@@ -1,3 +1,8 @@
+*.DS_Store
+app/release/
+app/src/main/assets/
+.idea/dictionaries/
+
 # Built application files
 *.apk
 *.ap_
