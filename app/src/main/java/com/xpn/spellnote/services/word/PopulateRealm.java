@@ -22,6 +22,8 @@ import timber.log.Timber;
  * This class is not going to appear in production or be merged with master
  * du -ks * (in adb shell to get size of all files in KB)
  *
+ * Remember to grant the app a permission to access external storage
+ *
  * Operations that we need to perform to get database from app to local file storage
  * adb pull sdcard/[LOCALE].realm ./
  */
