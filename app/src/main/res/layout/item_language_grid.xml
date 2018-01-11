@@ -59,13 +59,13 @@
             android:layout_height="@dimen/language_status_size"
             android:indeterminate="false"
             android:progressDrawable="@drawable/circular_progress_bar"
-            android:background="@drawable/progress_circle_shape"
             android:progress="@{viewModel.progress}"
             android:visibility="@{viewModel.status == Status.SAVE_IN_PROGRESS ? View.VISIBLE : View.GONE}"
             android:layout_alignRight="@+id/language_flag"
             android:layout_alignEnd="@+id/language_flag"
             android:layout_alignBottom="@+id/language_flag"
             android:max="100"
+            android:theme="@style/SaveProgress"
             style="?android:attr/progressBarStyleHorizontal" />
 
         <ProgressBar
