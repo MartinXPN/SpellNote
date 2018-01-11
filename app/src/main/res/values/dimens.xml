@@ -7,7 +7,8 @@
     <dimen name="document_list_item_content_size">14sp</dimen>
 
 
-    <dimen name="language_grid_column_width">100dp</dimen>
+    <dimen name="language_status_size">30dp</dimen>
+    <dimen name="language_grid_column_width">110dp</dimen>
     <dimen name="language_flag_size">70dp</dimen>
 
     <!-- Language chooser -->
@@ -30,4 +31,8 @@
     <dimen name="tutorial_padding">15dp</dimen>
     <dimen name="tutorial_corner_radius">3dp</dimen>
     <dimen name="tutorial_text_size">15sp</dimen>
+
+
+    <!-- About -->
+    <dimen name="about_text_size">19sp</dimen>
 </resources>

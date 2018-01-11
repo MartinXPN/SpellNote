@@ -37,10 +37,6 @@
             android:lines="2"
             android:ellipsize="end"
             android:text="@{viewModel.languageName}"
-            android:layout_below="@+id/language_flag"
-            android:layout_alignRight="@+id/language_flag"
-            android:layout_alignEnd="@+id/language_flag"
-            android:layout_alignLeft="@+id/language_flag"
-            android:layout_alignStart="@+id/language_flag"/>
+            android:layout_below="@+id/language_flag" />
     </RelativeLayout>
 </layout>

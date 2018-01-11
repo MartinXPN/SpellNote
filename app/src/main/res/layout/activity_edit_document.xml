@@ -86,6 +86,7 @@
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="@dimen/suggestion_box_height"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
 
                     android:background="@drawable/rectangle_transparent"
                     android:keepScreenOn="true"

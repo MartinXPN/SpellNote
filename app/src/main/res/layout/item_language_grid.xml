@@ -13,7 +13,7 @@
     </data>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/language_grid_column_width"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:orientation="vertical"
@@ -26,14 +26,29 @@
             android:layout_height="@dimen/language_flag_size"
             android:layout_margin="5dp"
             android:padding="7dp"
+            android:layout_centerHorizontal="true"
             app:imageUrl="@{viewModel.logoUrl}"
             app:placeholder="@{@drawable/ic_language}"
             android:contentDescription="@null" />
 
+
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/language_status_size"
+            android:layout_height="@dimen/language_status_size"
+            android:src="@drawable/ic_circle"
+            android:scaleType="centerInside"
+            android:visibility="@{viewModel.status != Status.NOT_PRESENT ? View.VISIBLE : View.GONE}"
+            android:layout_alignRight="@+id/language_flag"
+            android:layout_alignEnd="@+id/language_flag"
+            android:layout_alignBottom="@+id/language_flag"
+            android:contentDescription="@null" />
+
+
+        <ImageView
+            android:layout_width="@dimen/language_status_size"
+            android:layout_height="@dimen/language_status_size"
             android:src="@drawable/ic_supported"
+            android:scaleType="centerInside"
             android:visibility="@{viewModel.status == Status.SAVED ? View.VISIBLE : View.GONE}"
             android:layout_alignRight="@+id/language_flag"
             android:layout_alignEnd="@+id/language_flag"
@@ -42,8 +57,8 @@
 
 
         <ProgressBar
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/language_status_size"
+            android:layout_height="@dimen/language_status_size"
             style="@style/Widget.AppCompat.ProgressBar"
             android:max="100"
             android:progress="@{viewModel.progress}"
@@ -54,8 +69,8 @@
             android:theme="@style/SaveProgress" />
 
         <ProgressBar
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/language_status_size"
+            android:layout_height="@dimen/language_status_size"
             style="@style/Widget.AppCompat.ProgressBar"
             android:visibility="@{viewModel.status == Status.DELETE_IN_PROGRESS ? View.VISIBLE : View.GONE}"
             android:layout_alignRight="@+id/language_flag"
@@ -70,15 +85,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="top|center_horizontal"
-            android:textSize="15sp"
-            android:textColor="#aa000000"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/language_chooser_text_color"
             android:lines="2"
             android:ellipsize="end"
             android:text="@{viewModel.languageName}"
-            android:layout_below="@+id/language_flag"
-            android:layout_alignRight="@+id/language_flag"
-            android:layout_alignEnd="@+id/language_flag"
-            android:layout_alignLeft="@+id/language_flag"
-            android:layout_alignStart="@+id/language_flag"/>
+            android:layout_below="@+id/language_flag" />
     </RelativeLayout>
 </layout>
