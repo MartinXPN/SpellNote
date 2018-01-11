@@ -7,6 +7,7 @@
     <dimen name="document_list_item_content_size">14sp</dimen>
 
 
+    <!-- Language grid (dictionary management) -->
     <dimen name="language_status_size">30dp</dimen>
     <dimen name="language_grid_column_width">110dp</dimen>
     <dimen name="language_flag_size">70dp</dimen>
