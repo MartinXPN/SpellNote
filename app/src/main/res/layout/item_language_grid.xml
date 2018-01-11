@@ -65,7 +65,6 @@
             android:layout_alignEnd="@+id/language_flag"
             android:layout_alignBottom="@+id/language_flag"
             android:max="100"
-            android:theme="@style/SaveProgress"
             style="?android:attr/progressBarStyleHorizontal" />
 
         <ProgressBar
