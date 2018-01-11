@@ -24,8 +24,10 @@
     <dimen name="empty_logo_text_size">21sp</dimen>
 
     <!-- Edit document -->
+    <dimen name="editing_text_size">18sp</dimen>
     <dimen name="suggestion_box_height">190dp</dimen>
     <dimen name="suggestion_box_width">155dp</dimen>
+    <dimen name="suggestion_text_size">18sp</dimen>
 
     <!-- Tutorials -->
     <dimen name="tutorial_padding">15dp</dimen>
