@@ -11,6 +11,7 @@
     <dimen name="language_status_size">30dp</dimen>
     <dimen name="language_grid_column_width">110dp</dimen>
     <dimen name="language_flag_size">70dp</dimen>
+    <dimen name="progress_ring_thickness">3dp</dimen>
 
     <!-- Language chooser -->
     <dimen name="language_chooser_grid_width">250dp</dimen>

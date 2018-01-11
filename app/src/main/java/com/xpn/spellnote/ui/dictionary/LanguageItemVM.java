@@ -96,7 +96,7 @@ public class LanguageItemVM extends BaseViewModel {
         downloadTask.addOnProgressListener(snapshot -> {
                     setStatus(Status.SAVE_IN_PROGRESS);
                     setProgress((int) ((float) (snapshot.getBytesTransferred()) / snapshot.getTotalByteCount() * 100));
-                    Timber.d( "Saved " + snapshot.getBytesTransferred() + " from " + snapshot.getTotalByteCount() );
+                    Timber.d( "Saved %d from %d -> %d percent", snapshot.getBytesTransferred(), snapshot.getTotalByteCount(), getProgress() );
                 })
                 .addOnCompleteListener(task -> {
                     if( !task.isSuccessful() || !task.isComplete() )
