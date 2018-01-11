@@ -1,6 +1,40 @@
 <resources>
-    <!-- Example customization of dimensions originally defined in res/values/dimens.xml
-         (such as screen margins) for screens with more than 820dp of available width. This
-         would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
-    <dimen name="activity_horizontal_margin">64dp</dimen>
+    <dimen name="fab_margin">24dp</dimen>
+
+    <!-- Document list -->
+    <dimen name="document_list_item_height">115dp</dimen>
+    <dimen name="document_list_item_title_size">23sp</dimen>
+    <dimen name="document_list_item_content_size">17sp</dimen>
+
+
+    <!-- Language grid (dictionary management) -->
+    <dimen name="language_status_size">37dp</dimen>
+    <dimen name="language_grid_column_width">155dp</dimen>
+    <dimen name="language_flag_size">100dp</dimen>
+
+    <!-- Language chooser -->
+    <dimen name="language_chooser_grid_width">370dp</dimen>
+    <dimen name="language_chooser_grid_height">300dp</dimen>
+    <dimen name="language_chooser_grid_item_size">110dp</dimen>
+    <dimen name="language_chooser_flag_size">70dp</dimen>
+    <dimen name="language_chooser_text_size">15sp</dimen>
+
+
+    <!-- Empty list placeholders  -->
+    <dimen name="empty_logo_size">130dp</dimen>
+    <dimen name="empty_logo_text_size">27sp</dimen>
+
+    <!-- Edit document -->
+    <dimen name="editing_text_size">21sp</dimen>
+    <dimen name="suggestion_box_height">250dp</dimen>
+    <dimen name="suggestion_box_width">210dp</dimen>
+    <dimen name="suggestion_text_size">21sp</dimen>
+
+    <!-- Tutorials -->
+    <dimen name="tutorial_padding">18dp</dimen>
+    <dimen name="tutorial_text_size">18sp</dimen>
+
+
+    <!-- About -->
+    <dimen name="about_text_size">21sp</dimen>
 </resources>

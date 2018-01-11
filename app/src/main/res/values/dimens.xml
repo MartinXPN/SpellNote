@@ -1,28 +1,41 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="text_margin">16dp</dimen>
 
+    <!-- Document list -->
     <dimen name="document_list_item_height">95dp</dimen>
-    <dimen name="language_grid_column_width">100dp</dimen>
+    <dimen name="document_list_item_title_size">21sp</dimen>
+    <dimen name="document_list_item_content_size">14sp</dimen>
+
+
+    <!-- Language grid (dictionary management) -->
+    <dimen name="language_status_size">30dp</dimen>
+    <dimen name="language_grid_column_width">110dp</dimen>
     <dimen name="language_flag_size">70dp</dimen>
 
+    <!-- Language chooser -->
     <dimen name="language_chooser_grid_width">250dp</dimen>
     <dimen name="language_chooser_grid_height">220dp</dimen>
     <dimen name="language_chooser_grid_item_size">70dp</dimen>
     <dimen name="language_chooser_flag_size">60dp</dimen>
+    <dimen name="language_chooser_text_size">12sp</dimen>
 
 
+    <!-- Empty list placeholders  -->
     <dimen name="empty_logo_size">90dp</dimen>
     <dimen name="empty_logo_text_size">21sp</dimen>
-    <dimen name="nav_header_vertical_spacing">16dp</dimen>
-    <dimen name="nav_header_height">160dp</dimen>
 
+    <!-- Edit document -->
+    <dimen name="editing_text_size">18sp</dimen>
     <dimen name="suggestion_box_height">190dp</dimen>
-    <dimen name="suggestion_box_width">125dp</dimen>
+    <dimen name="suggestion_box_width">155dp</dimen>
+    <dimen name="suggestion_text_size">18sp</dimen>
 
+    <!-- Tutorials -->
     <dimen name="tutorial_padding">15dp</dimen>
     <dimen name="tutorial_corner_radius">3dp</dimen>
+    <dimen name="tutorial_text_size">15sp</dimen>
+
+
+    <!-- About -->
+    <dimen name="about_text_size">19sp</dimen>
 </resources>
