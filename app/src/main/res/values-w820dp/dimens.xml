@@ -8,6 +8,7 @@
 
 
     <!-- Language grid (dictionary management) -->
+    <dimen name="language_status_size">37dp</dimen>
     <dimen name="language_grid_column_width">155dp</dimen>
     <dimen name="language_flag_size">100dp</dimen>
 
