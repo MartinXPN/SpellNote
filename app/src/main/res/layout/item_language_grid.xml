@@ -54,7 +54,6 @@
             android:contentDescription="@null" />
 
         <ProgressBar
-            android:id="@+id/save_progress"
             android:layout_width="@dimen/language_status_size"
             android:layout_height="@dimen/language_status_size"
             android:indeterminate="false"
@@ -79,7 +78,6 @@
 
 
         <TextView
-            android:id="@+id/language_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

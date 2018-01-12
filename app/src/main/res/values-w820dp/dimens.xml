@@ -32,7 +32,7 @@
 
     <!-- Tutorials -->
     <dimen name="tutorial_padding">18dp</dimen>
-    <dimen name="tutorial_text_size">18sp</dimen>
+    <dimen name="tutorial_text_size">23sp</dimen>
 
 
     <!-- About -->
