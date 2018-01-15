@@ -10,9 +10,11 @@
 
     android:id="@+id/drawer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
-    <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.document.list.ActivityViewDocuments">
@@ -35,18 +37,16 @@
             android:id="@+id/list_of_documents"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar_box" >
-        </FrameLayout>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="4dp"
             android:layout_below="@id/toolbar_box"
-            android:background="@drawable/shadow" />
+            android:background="@drawable/shadow"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    </RelativeLayout>
-
-
+    </android.support.design.widget.CoordinatorLayout>
 
 
     <android.support.design.widget.NavigationView
@@ -54,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="false"
+        android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/navigation_drawer" />
 

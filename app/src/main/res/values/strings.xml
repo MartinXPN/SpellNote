@@ -1,11 +1,10 @@
 <resources>
 
     <string name="app_name">SpellNote</string>
-    <string name="action_settings">Settings</string>
     <string name="title_activity_view_documents">Documents</string>
     <string name="title_activity_select_languages">Select Languages</string>
     <string name="title_activity_about">About SpellNote</string>
-    <string name="title_activity_edit_document">Edit Document</string>
+    <string name="title_add_dictionaries">Add Dictionaries</string>
 
     <string name="navigation_drawer_open">Drawer opened</string>
     <string name="navigation_drawer_close">drawer closed</string>
@@ -19,14 +18,23 @@
 
 
     <string name="action_sort_by">Sort by</string>
-    <string name="action_sort_by_date_added">Date added</string>
     <string name="action_sort_by_date_modified">Date modified</string>
     <string name="action_sort_by_title">Title</string>
     <string name="action_sort_by_language">Language</string>
-    <string name="action_sort_by_color">Color</string>
     <string name="action_sort_by_ascending">Ascending</string>
+    <string name="action_empty_trash">Empty Trash</string>
+    <string name="action_title_show_suggestions">Show suggestions</string>
+    <string name="action_title_hide_suggestions">Hide suggestions</string>
+    <string name="action_title_overflow_menu">More options</string>
+    <string name="action_title_record">Record</string>
+    <string name="action_title_send">Send</string>
+    <string name="action_title_copy">Copy</string>
+    <string name="action_title_check_spelling">Check Spelling</string>
+    <string name="action_title_add_word_to_dictionary">Add word to dictionary</string>
+    <string name="action_title_remove_word_from_dictionary">Remove word from dictionary</string>
 
 
+    <string name="description_loading_advertisement">Loading advertisement…</string>
     <string name="hint_move_to_documents">Move to Documents</string>
     <string name="hint_move_to_archive">Move to Archive</string>
     <string name="hint_move_to_trash">Move to Trash</string>
@@ -34,22 +42,44 @@
     <string name="hint_unarchive">Unarchive</string>
     <string name="hint_remove_forever">Remove Forever</string>
     <string name="hint_send">Send</string>
+    <string name="undo">UNDO</string>
+    <string name="explanation_unarchived">Unarchived</string>
+    <string name="explanation_archived">Archived</string>
+    <string name="explanation_moved_to_trash">Moved to Trash</string>
+    <string name="explanation_restored">Restored</string>
+    <string name="explanation_removed_forever">Removed Forever</string>
     <string name="explanation_removed">Document removed</string>
     <string name="explanation_document_not_editable">Restore document to edit…</string>
 
+    <string name="empty_archive">No items in Archive</string>
+    <string name="empty_trash">No items in Trash</string>
+    <string name="empty_document">Create a new Document</string>
+
+    <string name="hint_edit_document_title">Title…</string>
+    <string name="hint_edit_content">Type the text here…</string>
+
+
+    <string name="request_update_or_delete_dictionary">Update or Delete the dictionary?</string>
+    <string name="update_or_delete_dictionary_option_update">Update</string>
+    <string name="update_or_delete_dictionary_option_delete">Delete</string>
+
+    <string name="request_remove_all_documents">Remove all document in Trash?</string>
+    <string name="request_remove_all_documents_option_yes">Yes</string>
+    <string name="request_remove_all_documents_option_cancel">Cancel</string>
+
+
+    <string name="error_couldnt_create_document">Couldn\'t create document</string>
+
+    <string name="tutorial_show_suggestions">"Show or hide Suggestions"</string>
+    <string name="tutorial_swipe">◄◄◄ Swipe left documents to Delete, Send, etc…\n(tap to dismiss)</string>
+    <string name="tutorial_select_dictionaries">Select Dictionaries to use later on…</string>
+    <string name="tutorial_add_word_to_dictionary">Add word to Dictionary</string>
+
 
     <string name="about_app">
-        \tSpell Checker is an app designed for creating texts, taking notes, editing and correcting essays, etc. It can be used any time even without an internet access.\n
-        \tIt will find any spelling mistake and offer suggestions from its dictionary, which is created from Wikipedia’s most widely used words.\n
-        \tThe app supports several languages, including English, Russian and Armenian.\n
-        \tIt\'s an open-source <a href="https://github.com/MartinXPN/ProCorrector.git">project</a> done mainly for educational reasons.\n
+        SpellNote is an app designed for creating texts, taking notes, editing and correcting essays, etc. It can be used any time even without an internet access.\n\n
+        The app supports several languages, including English, Russian and Armenian.\n\n
+        It\'s an open-source <a href="https://github.com/MartinXPN/SpellNote">project</a> done mainly for educational reasons.\n
     </string>
-    <string name="about_author">© 2016 <a href="https://www.linkedin.com/in/martin-mirakyan-945597101">Martin Mirakyan</a>\nAll Rights Reserved.</string>
-    <string name="action_title_show_suggestions">Show suggestions</string>
-    <string name="action_title_overflow_menu">More options</string>
-    <string name="action_title_record">Record</string>
-    <string name="action_title_send">Send</string>
-    <string name="action_title_copy">Copy</string>
-    <string name="action_title_check_spelling">Check Spelling</string>
-
+    <string name="about_author">© 2018 <a href="https://www.linkedin.com/in/martin-mirakyan-945597101">Martin Mirakyan</a>\nAll Rights Reserved.</string>
 </resources>

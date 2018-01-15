@@ -1,35 +1,40 @@
 package com.xpn.spellnote.models;
 
 
-public class WordModel {
+import android.support.annotation.NonNull;
+
+public class WordModel implements Comparable<WordModel> {
 
     private String word;
-    private Float usage;
-    private String locale;
-    private Boolean isUserDefined = false;
+    private int usage;
+    private boolean isUserDefined = false;
 
-    public WordModel( String word, Float usage, String locale, Boolean isUserDefined ) {
+    public WordModel( String word, int usage, boolean isUserDefined ) {
         this.word = word;
         this.usage = usage;
-        this.locale = locale;
         this.isUserDefined = isUserDefined;
     }
 
 
-    public WordModel( String word, Float usage, String locale ) {
-        this(word, usage, locale, false);
+    public WordModel( String word, int usage ) {
+        this(word, usage, false);
     }
 
     public String getWord() {
         return word;
     }
-    public Float getUsage() {
+    public int getUsage() {
         return usage;
     }
-    public String getLocale() {
-        return locale;
+    public void setUsage(int usage) {
+        this.usage = usage;
     }
-    public Boolean getUserDefined() {
+    public boolean getUserDefined() {
         return isUserDefined;
+    }
+
+    @Override
+    public int compareTo(@NonNull WordModel wordModel) {
+        return Integer.valueOf(usage).compareTo( wordModel.getUsage() );
     }
 }

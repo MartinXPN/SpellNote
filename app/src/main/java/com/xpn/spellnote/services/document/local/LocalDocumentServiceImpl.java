@@ -1,88 +1,107 @@
 package com.xpn.spellnote.services.document.local;
 
-import com.activeandroid.query.Delete;
-import com.activeandroid.query.Select;
-import com.activeandroid.query.Update;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.services.BeanMapper;
 import com.xpn.spellnote.services.document.DocumentService;
-import com.xpn.spellnote.util.TagsUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 
 public class LocalDocumentServiceImpl implements DocumentService {
 
-    private BeanMapper <DocumentModel, DocumentSchema> mapper;
+    private final BeanMapper <DocumentModel, DocumentSchema> mapper;
+    private final RealmConfiguration realmConfiguration;
 
-    public LocalDocumentServiceImpl(BeanMapper<DocumentModel, DocumentSchema> mapper) {
+    public LocalDocumentServiceImpl(RealmConfiguration realmConfiguration, BeanMapper<DocumentModel, DocumentSchema> mapper) {
+        this.realmConfiguration = realmConfiguration;
         this.mapper = mapper;
     }
 
     @Override
     public Completable saveDocument(DocumentModel document) {
-        return Completable.fromAction(() -> {
-            /// delete the document if it's present
-            /// to avoid conflicts with ID
-            if( document.getId() != -1 ) {
-                new Delete().from(DocumentSchema.class).where("id = ?", document.getId()).execute();
-            }
-
-            DocumentSchema documentSchema = mapper.mapTo(document);
-            documentSchema.save();
-            document.setId(documentSchema.getId());
-        });
+        return Completable.defer(() -> Completable.fromAction(() -> {
+            Realm realmInstance = Realm.getInstance(realmConfiguration);
+            realmInstance.executeTransaction(realm -> realm.copyToRealmOrUpdate(mapper.mapTo(document)));
+            realmInstance.close();
+        }));
     }
 
     @Override
     public Completable removeDocument(DocumentModel document) {
-        return Completable.fromAction(() -> new Delete().from(DocumentSchema.class)
-                .where("id = ?", document.getId())
-                .execute());
+        return Completable.defer(() -> Completable.fromAction(() -> {
+            Realm realmInstance = Realm.getInstance(realmConfiguration);
+            DocumentSchema schema = realmInstance.where(DocumentSchema.class).equalTo("id", document.getId()).findFirst();
+            if( schema != null )
+                realmInstance.executeTransaction(realm -> schema.deleteFromRealm());
+            realmInstance.close();
+        }));
+    }
+
+    @Override
+    public Completable removeDocumentCategory(String category) {
+        return Completable.defer(() -> Completable.fromAction(() -> {
+            Realm realmInstance = Realm.getInstance(realmConfiguration);
+            RealmResults<DocumentSchema> documents = realmInstance.where(DocumentSchema.class).equalTo("category", category).findAll();
+            realmInstance.executeTransaction(realm -> documents.deleteAllFromRealm());
+            realmInstance.close();
+        }));
     }
 
     @Override
     public Completable moveDocument(DocumentModel document, String newCategory) {
-        return Completable.fromAction(() -> {
-            new Update(DocumentSchema.class)
-                    .set("category = ?", newCategory)
-                    .where("id = ?", document.getId())
-                    .execute();
-            document.setCategory( newCategory );
-        });
+        return Completable.defer(() -> Completable.fromAction(() -> {
+            DocumentSchema schema = mapper.mapTo(document);
+            schema.category = newCategory;
+
+            Realm realmInstance = Realm.getInstance(realmConfiguration);
+            realmInstance.executeTransaction(realm -> realm.copyToRealmOrUpdate(schema));
+            realmInstance.close();
+        }));
     }
 
     @Override
     public Single<DocumentModel> getDocument(Long id) {
         return Single.defer(() -> {
-            DocumentSchema document =  new Select()
-                    .from( DocumentSchema.class )
-                    .where( "id = ?", id )
-                    .executeSingle();
+            Realm realmInstance = Realm.getInstance(realmConfiguration);
+            realmInstance.refresh();
+            DocumentSchema document = realmInstance.where(DocumentSchema.class).equalTo("id", id).findFirst();
 
-            return Single.just(mapper.mapFrom(document));
+            DocumentModel res = mapper.mapFrom(document);
+            realmInstance.close();
+            return Single.just(res);
         });
     }
 
     @Override
-    public Single<List<DocumentModel>> getAllDocuments(String category, String orderBy, boolean ascending) {
+    public Single<List<DocumentModel>> getAllDocuments(String category, String orderField, boolean ascending) {
 
         return Single.defer(() -> {
-            List <DocumentSchema> documents = new Select()
-                    .from(DocumentSchema.class)
-                    .where("category = ?", category)
-                    .orderBy( orderBy + " " + ( ascending ? TagsUtil.ORDER_ASCENDING : TagsUtil.ORDER_DESCENDING ) )
-                    .execute();
+            Realm realmInstance = Realm.getInstance(realmConfiguration);
+            realmInstance.refresh();
+            RealmResults<DocumentSchema> documents = realmInstance.where(DocumentSchema.class)
+                    .equalTo("category", category)
+                    .sort(orderField, ascending ? Sort.ASCENDING : Sort.DESCENDING)
+                    .findAll();
 
-            return Single.just( Stream.of(documents)
-                    .map(document -> mapper.mapFrom(document))
-                    .collect(Collectors.toCollection(ArrayList::new)));
+            List<DocumentModel> res = Stream.of(documents)
+                    .map(mapper::mapFrom)
+                    .filter(value -> value.getTitle() != null &&
+                            value.getContent() != null &&
+                            (!value.getTitle().isEmpty() || !value.getContent().isEmpty()))
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+            realmInstance.close();
+            return Single.just(res);
         });
     }
 }

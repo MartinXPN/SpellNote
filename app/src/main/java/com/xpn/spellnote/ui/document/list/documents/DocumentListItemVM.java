@@ -1,9 +1,13 @@
 package com.xpn.spellnote.ui.document.list.documents;
 
+import android.databinding.Bindable;
 import android.support.annotation.StringRes;
 
+import com.xpn.spellnote.BR;
 import com.xpn.spellnote.R;
+import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
+import com.xpn.spellnote.services.dictionary.SavedDictionaryService;
 import com.xpn.spellnote.services.document.DocumentService;
 import com.xpn.spellnote.ui.BaseViewModel;
 import com.xpn.spellnote.util.TagsUtil;
@@ -11,17 +15,26 @@ import com.xpn.spellnote.util.TagsUtil;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
+
 
 public class DocumentListItemVM extends BaseViewModel {
 
     protected DocumentModel document;
+    protected DictionaryModel dictionary;
     protected ViewContract viewContract;
     protected DocumentService documentService;
+    protected SavedDictionaryService dictionaryService;
 
-    public DocumentListItemVM(DocumentModel document, DocumentService documentService, ViewContract viewContract ) {
+    public DocumentListItemVM(DocumentModel document, DocumentService documentService, SavedDictionaryService dictionaryService, ViewContract viewContract ) {
         this.document = document;
         this.documentService = documentService;
+        this.dictionaryService = dictionaryService;
         this.viewContract = viewContract;
+
+        onFetchDictionary();
     }
 
 
@@ -33,6 +46,11 @@ public class DocumentListItemVM extends BaseViewModel {
     }
     public String getDate() {
         return new SimpleDateFormat( "MMM d\nHH:mm", Locale.US ).format( document.getDateModified() );
+    }
+    @Bindable
+    public String getDictionaryLogoURL() {
+        if( dictionary == null )    return "error";
+        else                        return dictionary.getLogoURL();
     }
 
 
@@ -47,7 +65,7 @@ public class DocumentListItemVM extends BaseViewModel {
     }
     public void onFirstItemClicked() {
         viewContract.onRemoveDocumentFromShownList( document );
-        viewContract.onShowUndoOption(document.clone(), "Archived");
+        viewContract.onShowUndoOption(document.clone(), R.string.explanation_archived);
         addSubscription(documentService.moveDocument(document, TagsUtil.CATEGORY_ARCHIVE).subscribe());
     }
     public boolean onFirstItemLongClicked() {
@@ -62,7 +80,7 @@ public class DocumentListItemVM extends BaseViewModel {
     }
     public void onSecondItemClicked() {
         viewContract.onRemoveDocumentFromShownList( document );
-        viewContract.onShowUndoOption(document.clone(), "Moved to Trash");
+        viewContract.onShowUndoOption(document.clone(), R.string.explanation_moved_to_trash);
         addSubscription(documentService.moveDocument(document, TagsUtil.CATEGORY_TRASH).subscribe());
     }
     public boolean onSecondItemLongClicked() {
@@ -83,11 +101,25 @@ public class DocumentListItemVM extends BaseViewModel {
         return true;
     }
 
+
+    private void onFetchDictionary() {
+        addSubscription(dictionaryService.getDictionary(document.getLanguageLocale())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        dictionaryModel -> {
+                            this.dictionary = dictionaryModel;
+                            notifyPropertyChanged(BR.dictionaryLogoURL);
+                        },
+                        Timber::e
+                ));
+    }
+
     public interface ViewContract {
         void onRemoveDocumentFromShownList(DocumentModel document);
-        void onShowUndoOption(DocumentModel previousDocument, String message);
+        void onShowUndoOption(DocumentModel previousDocument, @StringRes int messageResourceId);
         void onEditDocument(Long documentId);
-        void onShowExplanation(@StringRes int resourceId);
+        void onShowExplanation(@StringRes int messageResourceId);
         void onSendDocument(String title, String content);
     }
 }

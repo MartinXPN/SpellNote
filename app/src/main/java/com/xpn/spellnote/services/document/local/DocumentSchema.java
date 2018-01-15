@@ -1,35 +1,48 @@
 package com.xpn.spellnote.services.document.local;
 
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
+import com.xpn.spellnote.models.DocumentModel;
 
 import java.util.Date;
 
+import io.realm.RealmObject;
+import io.realm.annotations.Index;
+import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
-@Table(name = "SavedDocuments")
-public class DocumentSchema extends Model {
 
-    @Column String title;
-    @Column String content;
-    @Column Date dateModified;
-    @Column String languageLocale;
-    @Column String color;
-    @Column(index = true) String category;
+public class DocumentSchema extends RealmObject {
 
+    @PrimaryKey long id;
+    String title;
+    String content;
+    @Index @Required Date dateModified;
+    @Index @Required String languageLocale;
+    @Index String category;
 
     public DocumentSchema() {
         super();
     }
 
-    public DocumentSchema(String title, String content, Date dateModified, String languageLocale, String color, String category) {
+    public DocumentSchema(Long id, String title, String content, Date dateModified, String languageLocale, String category) {
         super();
+        /// generate new id if it's not present yet
+        if( id == -1L )
+            id = new Date().getTime();
+        this.id = id;
         this.title = title;
         this.content = content;
         this.dateModified = dateModified;
         this.languageLocale = languageLocale;
-        this.color = color;
         this.category = category;
+    }
+
+    public DocumentSchema(DocumentModel model) {
+        this( model.getId(),
+                model.getTitle(),
+                model.getContent(),
+                model.getDateModified(),
+                model.getLanguageLocale(),
+                model.getCategory() );
     }
 
     public String toString() {
@@ -37,7 +50,6 @@ public class DocumentSchema extends Model {
                 content + '\n' +
                 dateModified + '\n' +
                 languageLocale + '\n' +
-                color + '\n' +
                 category + '\n';
     }
 }

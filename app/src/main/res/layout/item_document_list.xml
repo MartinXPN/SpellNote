@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:swipe="http://schemas.android.com/apk/res-auto" >
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="document" type="com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM" />
+        <variable name="viewModel" type="com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM" />
     </data>
 
     <com.daimajia.swipe.SwipeLayout
@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/document_list_item_height"
         android:clickable="true"
+        android:focusable="true"
         android:longClickable="true"
 
         swipe:clickToClose="true"
@@ -30,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:weightSum="3"
-            android:background="#f05445"
+            android:background="@color/document_list_swipe_layout_background_color"
             android:gravity="end"
             android:orientation="horizontal">
 
@@ -41,11 +42,12 @@
 
                 android:layout_weight="1"
                 android:clickable="true"
+                android:focusable="true"
                 android:longClickable="true"
                 android:scaleType="centerInside"
-                android:src="@{document.firstItemDrawable}"
-                android:onClick="@{() -> document.onFirstItemClicked()}"
-                android:onLongClick="@{() -> document.onFirstItemLongClicked()}"
+                android:src="@{viewModel.firstItemDrawable}"
+                android:onClick="@{() -> viewModel.onFirstItemClicked()}"
+                android:onLongClick="@{() -> viewModel.onFirstItemLongClicked()}"
                 android:contentDescription="@null" />
             <ImageView
                 android:layout_width="0dp"
@@ -54,11 +56,12 @@
 
                 android:layout_weight="1"
                 android:clickable="true"
+                android:focusable="true"
                 android:longClickable="true"
                 android:scaleType="centerInside"
-                android:src="@{document.secondItemDrawable}"
-                android:onClick="@{() -> document.onSecondItemClicked()}"
-                android:onLongClick="@{() -> document.onSecondItemLongClicked()}"
+                android:src="@{viewModel.secondItemDrawable}"
+                android:onClick="@{() -> viewModel.onSecondItemClicked()}"
+                android:onLongClick="@{() -> viewModel.onSecondItemLongClicked()}"
                 android:contentDescription="@null" />
             <ImageView
                 android:layout_width="0dp"
@@ -67,11 +70,12 @@
 
                 android:layout_weight="1"
                 android:clickable="true"
+                android:focusable="true"
                 android:longClickable="true"
                 android:scaleType="centerInside"
-                android:src="@{document.thirdItemDrawable}"
-                android:onClick="@{() -> document.onThirdItemClicked()}"
-                android:onLongClick="@{() -> document.onThirdItemLongClicked()}"
+                android:src="@{viewModel.thirdItemDrawable}"
+                android:onClick="@{() -> viewModel.onThirdItemClicked()}"
+                android:onLongClick="@{() -> viewModel.onThirdItemLongClicked()}"
                 android:contentDescription="@null" />
         </LinearLayout>
 
@@ -80,12 +84,12 @@
             android:id="@+id/content_part"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:background="?attr/selectableItemBackground"
-            android:onClick="@{() -> document.onContentClicked()}">
+            android:onClick="@{() -> viewModel.onContentClicked()}">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -109,9 +113,9 @@
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:textStyle="normal"
-                    android:textSize="25sp"
-                    android:textColor="#009600"
-                    android:text="@{document.title}" />
+                    android:textSize="@dimen/document_list_item_title_size"
+                    android:textColor="@color/document_list_title_color"
+                    android:text="@{viewModel.title}" />
 
                 <TextView
                     android:layout_weight="5"
@@ -121,9 +125,9 @@
 
                     android:maxLines="2"
                     android:ellipsize="end"
-                    android:textSize="15sp"
-                    android:textColor="#0089f7"
-                    android:text="@{document.content}" />
+                    android:textSize="@dimen/document_list_item_content_size"
+                    android:textColor="@color/document_list_content_color"
+                    android:text="@{viewModel.content}" />
             </LinearLayout>
 
             <LinearLayout
@@ -133,6 +137,7 @@
                 android:padding="5dp"
                 android:orientation="vertical"
                 android:weightSum="2"
+                android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true" >
 
@@ -141,8 +146,9 @@
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:scaleType="centerInside"
-                    android:src="@mipmap/ic_launcher"
+                    android:scaleType="fitCenter"
+                    app:imageUrl="@{viewModel.dictionaryLogoURL}"
+                    app:placeholder="@{@drawable/ic_language}"
                     android:contentDescription="@null" />
 
                 <TextView
@@ -152,9 +158,9 @@
                     android:layout_height="0dp"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:textColor="@color/list_date"
+                    android:textColor="@color/document_list_date_color"
                     android:textSize="13sp"
-                    android:text="@{document.date}" />
+                    android:text="@{viewModel.date}" />
             </LinearLayout>
         </RelativeLayout>
 

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databinding.ActivityAboutBinding;
 
@@ -17,6 +18,10 @@ public class ActivityAbout extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityAboutBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_about);
 
+        /// set-up analytics
+        FirebaseAnalytics.getInstance(this);
+
+        /// set-up toolbar
         setSupportActionBar(binding.toolbar);
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

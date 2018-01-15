@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageListItemVM" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="@dimen/language_chooser_grid_item_size"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:orientation="vertical"
+        android:onClick="@{() -> viewModel.onLanguageSelected()}"
+        android:background="?attr/selectableItemBackgroundBorderless">
+
+        <ImageView
+            android:id="@+id/language_flag"
+            android:layout_width="@dimen/language_chooser_flag_size"
+            android:layout_height="@dimen/language_chooser_flag_size"
+            android:padding="5dp"
+            app:imageUrl="@{viewModel.logoUrl}"
+            app:placeholder="@{@drawable/ic_language}"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:id="@+id/language_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="top|center_horizontal"
+            android:textSize="@dimen/language_chooser_text_size"
+            android:textColor="@color/language_chooser_text_color"
+            android:lines="2"
+            android:ellipsize="end"
+            android:text="@{viewModel.languageName}"
+            android:layout_below="@+id/language_flag" />
+    </RelativeLayout>
+</layout>

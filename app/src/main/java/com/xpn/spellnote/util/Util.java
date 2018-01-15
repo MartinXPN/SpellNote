@@ -10,8 +10,6 @@ import android.content.Intent;
 import android.speech.RecognizerIntent;
 import android.widget.Toast;
 
-import java.util.Locale;
-
 public class Util {
 
     public static void sendEmail( Context context, String[] receivers, String subject, String messageBody ) {
@@ -66,10 +64,10 @@ public class Util {
 
 
 
-    public static void displaySpeechRecognizer( Activity activity, Integer SPEECH_RECOGNIZER_CODE ) {
+    public static void displaySpeechRecognizer( Activity activity, Integer SPEECH_RECOGNIZER_CODE, String languageLocale ) {
 
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.ENGLISH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, languageLocale);
         try {
             activity.startActivityForResult(intent, SPEECH_RECOGNIZER_CODE);
         }

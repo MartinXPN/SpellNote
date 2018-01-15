@@ -1,17 +1,16 @@
 package com.xpn.spellnote.ui.document.list;
 
 import android.content.Intent;
-import android.databinding.BindingAdapter;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.daimajia.swipe.SwipeLayout;
@@ -25,14 +24,13 @@ import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.ui.document.edit.ActivityEditDocument;
 import com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM;
 import com.xpn.spellnote.ui.util.BindingHolder;
+import com.xpn.spellnote.ui.util.tutorial.Tutorial;
 import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import timber.log.Timber;
 
 
 public abstract class BaseFragmentDocumentList extends BaseSortableFragment
@@ -43,6 +41,8 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
     protected DocumentListAdapter adapter = new DocumentListAdapter();
 
     public abstract DocumentListItemVM getListItemVM(DocumentModel model, DocumentListItemVM.ViewContract viewContract);
+    public abstract void onShowEmptyLogo();
+    public abstract void onHideEmptyLogo();
 
 
     @Override
@@ -69,10 +69,8 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Timber.d("onActivityResult()");
         if( requestCode == Codes.EDIT_DOCUMENT_CODE ) {
-            adapter.notifyDataSetChanged();
-            Timber.d("Document Edited Adapter notified about changes");
+            updateDocumentList();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -82,14 +80,11 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate( R.menu.menu_view_documents, menu );
-
         menu.findItem( R.id.action_sort_ascending ).setChecked( getAscending() );
         String sortingOrder = getSortingOrder();
         if( sortingOrder.equals( TagsUtil.ORDER_DATE_MODIFIED ) )   menu.findItem( R.id.action_sort_by_date_modified ).setChecked( true );
         if( sortingOrder.equals( TagsUtil.ORDER_TITLE ) )           menu.findItem( R.id.action_sort_by_title ).setChecked( true );
         if( sortingOrder.equals( TagsUtil.ORDER_LANUAGE ) )         menu.findItem( R.id.action_sort_by_language ).setChecked( true );
-        if( sortingOrder.equals( TagsUtil.ORDER_COLOR ) )           menu.findItem( R.id.action_sort_by_color ).setChecked( true );
     }
 
     @Override
@@ -99,7 +94,6 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         if( id == R.id.action_sort_by_date_modified )   { item.setChecked( true );  setSortingOrder(TagsUtil.ORDER_DATE_MODIFIED);    return true; }
         if( id == R.id.action_sort_by_title )           { item.setChecked( true );  setSortingOrder(TagsUtil.ORDER_TITLE);            return true; }
         if( id == R.id.action_sort_by_language )        { item.setChecked( true );  setSortingOrder(TagsUtil.ORDER_LANUAGE);          return true; }
-        if( id == R.id.action_sort_by_color )           { item.setChecked( true );  setSortingOrder(TagsUtil.ORDER_COLOR);            return true; }
 
         if( id == R.id.action_sort_ascending )          { item.setChecked( !item.isChecked() );  setAscending( !getAscending() );     return true; }
         return super.onOptionsItemSelected(item);
@@ -119,10 +113,12 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
     }
 
     @Override
-    public void onShowUndoOption(DocumentModel previousDocument, String message) {
+    public void onShowUndoOption(DocumentModel previousDocument, @StringRes int messageResourceId) {
         /// Show UNDO snack-bar
-        Snackbar.make( getView(), message, Snackbar.LENGTH_LONG )
-                .setAction( "UNDO", view -> {
+        if( getView() == null )
+            return;
+        Snackbar.make( getView(), messageResourceId, Snackbar.LENGTH_LONG )
+                .setAction( R.string.undo, view -> {
                     viewModel.restoreDocument(previousDocument);
                     updateDocumentList();
                 }).show();
@@ -130,23 +126,17 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
     @Override
     public void onEditDocument(Long documentId) {
-        ActivityEditDocument.launchForResult(getActivity(), documentId, Codes.EDIT_DOCUMENT_CODE);
+        ActivityEditDocument.launchForResult(this, documentId, Codes.EDIT_DOCUMENT_CODE);
     }
 
     @Override
-    public void onShowExplanation(@StringRes int resourceId) {
-        Toast.makeText(getActivity(), getString(resourceId), Toast.LENGTH_SHORT).show();
+    public void onShowExplanation(@StringRes int messageResourceId) {
+        Toast.makeText(getActivity(), getString(messageResourceId), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onSendDocument(String title, String content) {
         Util.sendDocument( getActivity(), title, content );
-    }
-
-
-    @BindingAdapter("android:src")
-    public static void setImageResource(ImageView imageView, int resource){
-        imageView.setImageResource(resource);
     }
 
     @Override
@@ -157,6 +147,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
 
     private class DocumentListAdapter extends RecyclerSwipeAdapter<BindingHolder> {
+        private static final int MIN_ITEM_COUNT_FOR_TUTORIAL = 1;
 
         @Override
         public BindingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -166,7 +157,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
         @Override
         public void onBindViewHolder(final BindingHolder holder, int position) {
-            holder.getBinding().setVariable(BR.document, getListItemVM( documentList.get( position ), BaseFragmentDocumentList.this));
+            holder.getBinding().setVariable(BR.viewModel, getListItemVM( documentList.get( position ), BaseFragmentDocumentList.this));
             holder.getBinding().executePendingBindings();
 
 
@@ -175,16 +166,28 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
                 @Override public void onStartOpen(SwipeLayout layout) {
                     closeAllExcept( layout );
                 }
-                @Override public void onOpen(SwipeLayout layout) {}
+                @Override public void onOpen(SwipeLayout layout) {
+                    if(swipeTutorial != null && swipeTutorial.isShowing())
+                        swipeTutorial.setDisplayed();
+                }
                 @Override public void onStartClose(SwipeLayout layout) {}
                 @Override public void onClose(SwipeLayout layout) {}
                 @Override public void onUpdate(SwipeLayout layout, int leftOffset, int topOffset) {}
                 @Override public void onHandRelease(SwipeLayout layout, float xVel, float yVel) {}
             });
+
+
+            /// show swipe tutorial if position = MIN_ITEM_COUNT_FOR_TUTORIAL
+            if( position == MIN_ITEM_COUNT_FOR_TUTORIAL ) {
+                showSwipeTutorial(holder.itemView);
+            }
         }
 
         @Override
         public int getItemCount() {
+            if( documentList.isEmpty() )    onShowEmptyLogo();
+            else                            onHideEmptyLogo();
+
             return documentList.size();
         }
 
@@ -192,5 +195,13 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         public int getSwipeLayoutResourceId(int position) {
             return R.id.swipe;
         }
+    }
+
+    Tutorial swipeTutorial = null;
+    public void showSwipeTutorial(View target) {
+        if(swipeTutorial == null)
+            swipeTutorial = new Tutorial(getActivity(), "swipe_tutorial", R.string.tutorial_swipe, Gravity.BOTTOM)
+                .setTarget(target);
+        swipeTutorial.showTutorial();
     }
 }
