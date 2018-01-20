@@ -81,7 +81,7 @@ public class ActivityViewDocuments extends AppCompatActivity
         else if( id == R.id.nav_trash )         showFragment( id, new FragmentViewTrash() );
         else if( id == R.id.nav_dictionaries)   startActivity( new Intent( this, ActivitySelectLanguages.class ) ) ;
         else if( id == R.id.nav_feedback )      Util.sendFeedback( this );
-        else if( id == R.id.nav_rate )          Util.openURL( this, getString(R.string.play_store_url));
+        else if( id == R.id.nav_rate )          Util.openAppInPlayStore( this );
         else if( id == R.id.nav_about )         startActivity( new Intent( this, ActivityAbout.class ) );
 
         /// close the drawer
