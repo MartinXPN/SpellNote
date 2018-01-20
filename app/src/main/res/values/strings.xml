@@ -1,6 +1,7 @@
 <resources>
 
     <string name="app_name">SpellNote</string>
+
     <string name="title_activity_view_documents">Documents</string>
     <string name="title_activity_select_languages">Select Languages</string>
     <string name="title_activity_about">About SpellNote</string>
@@ -14,6 +15,7 @@
     <string name="nav_dictionaries">My dictionaries</string>
     <string name="nav_help_and_tips"><![CDATA[Help & Tips]]></string>
     <string name="nav_send_feedback">Send feedback</string>
+    <string name="nav_rate">Rate on Play Store</string>
     <string name="nav_about">About us</string>
 
 
