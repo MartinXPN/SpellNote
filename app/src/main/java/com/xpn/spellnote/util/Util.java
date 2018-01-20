@@ -1,16 +1,23 @@
 package com.xpn.spellnote.util;
 
-
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.speech.RecognizerIntent;
 import android.widget.Toast;
 
+
 public class Util {
+
+    public static void openURL(Context context, String url) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        context.startActivity(browserIntent);
+    }
+
 
     public static void sendEmail( Context context, String[] receivers, String subject, String messageBody ) {
 
