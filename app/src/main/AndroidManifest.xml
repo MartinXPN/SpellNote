@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.xpn.spellnote">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -39,5 +40,11 @@
             android:label=""
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
+
+        <!-- Ads -->
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            tools:replace="android:theme" />
     </application>
 </manifest>
