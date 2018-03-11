@@ -139,12 +139,12 @@ public class ActivityViewDocuments extends AppCompatActivity
     @Override
     public void onAdsRemoved() {
         binding.navigation.getMenu().findItem(R.id.nav_remove_ads).setVisible(false);
-        Toast.makeText(this, "Thanks for supporting SpellNote!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Thanks for supporting SpellNote!", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onPurchaseError(Throwable error) {
         Timber.e(error);
-        Toast.makeText(this, "Error occurred while removing ads, please try again", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Please try again later", Toast.LENGTH_SHORT).show();
     }
 }

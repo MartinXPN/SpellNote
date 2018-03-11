@@ -10,12 +10,12 @@ import com.xpn.spellnote.R;
 
 
 public class InterstitialAdHelper {
-    private final Context context;
     private final InterstitialAd ad;
+    private final RemoveAdsBilling billing;
 
-    public InterstitialAdHelper(Context context) {
-        this.context = context;
-        if( RemoveAdsBilling.areAdsRemoved(context) ) {
+    public InterstitialAdHelper(Context context, RemoveAdsBilling billing) {
+        this.billing = billing;
+        if( billing.areAdsRemoved() ) {
             ad = null;
             return;
         }
@@ -43,7 +43,7 @@ public class InterstitialAdHelper {
 
 
     public void showAd(OnAdShownListener listener) throws IllegalStateException {
-        if( RemoveAdsBilling.areAdsRemoved(context) ) {
+        if( billing.areAdsRemoved() ) {
             throw new IllegalStateException("Ads are already removed");
         }
         if( !ad.isLoaded() ) {

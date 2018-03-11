@@ -25,6 +25,7 @@ import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.ui.ads.InterstitialAdHelper;
+import com.xpn.spellnote.ui.ads.RemoveAdsBilling;
 import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
@@ -99,7 +100,8 @@ public class ActivityEditDocument extends AppCompatActivity
         analytics = FirebaseAnalytics.getInstance(this);
 
         /// set-up advertisement helper
-        ads = new InterstitialAdHelper(this);
+        RemoveAdsBilling billing = new RemoveAdsBilling(null, this, getString(R.string.license_key), getString(R.string.remove_ads_id));
+        ads = new InterstitialAdHelper(this, billing);
 
         /// set-up view-models
         DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();

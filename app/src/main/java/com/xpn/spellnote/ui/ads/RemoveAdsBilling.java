@@ -1,19 +1,16 @@
 package com.xpn.spellnote.ui.ads;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
-import com.xpn.spellnote.util.CacheUtil;
 
 
 public class RemoveAdsBilling implements BillingProcessor.IBillingHandler {
 
-    private static final String ADS_REMOVED_KEY = "rem_ads";
     private final Activity activity;
     private final BillingProcessor bp;
     private final String removeAdsId;
@@ -40,17 +37,14 @@ public class RemoveAdsBilling implements BillingProcessor.IBillingHandler {
         bp.purchase(activity, removeAdsId);
     }
 
-    public static boolean areAdsRemoved(Context context) {
-        return CacheUtil.getCache(context, ADS_REMOVED_KEY, false);
+    public boolean areAdsRemoved() {
+        return bp.isPurchased(removeAdsId);
     }
 
-    public boolean areAdsRemoved() {
-        return areAdsRemoved(activity);
-    }
+
 
     @Override
     public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
-        CacheUtil.setCache(activity, ADS_REMOVED_KEY, true);
         viewContract.onAdsRemoved();
     }
 
