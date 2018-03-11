@@ -10,9 +10,16 @@ import com.xpn.spellnote.R;
 
 
 public class InterstitialAdHelper {
-    private InterstitialAd ad;
+    private final Context context;
+    private final InterstitialAd ad;
 
-    public void initializeAds(Context context) {
+    public InterstitialAdHelper(Context context) {
+        this.context = context;
+        if( RemoveAdsBilling.areAdsRemoved(context) ) {
+            ad = null;
+            return;
+        }
+
         MobileAds.initialize(context, context.getString(R.string.ads_unit_id) );
 
         ad = new InterstitialAd(context);
@@ -36,6 +43,9 @@ public class InterstitialAdHelper {
 
 
     public void showAd(OnAdShownListener listener) throws IllegalStateException {
+        if( RemoveAdsBilling.areAdsRemoved(context) ) {
+            throw new IllegalStateException("Ads are already removed");
+        }
         if( !ad.isLoaded() ) {
             throw new IllegalStateException("Advertisement wasn't loaded yet");
         }

@@ -1,6 +1,8 @@
 package com.xpn.spellnote.ui.ads;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -30,12 +32,20 @@ public class RemoveAdsBilling implements BillingProcessor.IBillingHandler {
         }
     }
 
+    public boolean handleActivityResult(int requestCode, int resultCode, Intent data) {
+        return bp.handleActivityResult(requestCode, resultCode, data);
+    }
+
     public void purchase() {
         bp.purchase(activity, removeAdsId);
     }
 
+    public static boolean areAdsRemoved(Context context) {
+        return CacheUtil.getCache(context, ADS_REMOVED_KEY, false);
+    }
+
     public boolean areAdsRemoved() {
-        return CacheUtil.getCache(activity, ADS_REMOVED_KEY, false);
+        return areAdsRemoved(activity);
     }
 
     @Override

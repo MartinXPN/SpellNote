@@ -130,6 +130,13 @@ public class ActivityViewDocuments extends AppCompatActivity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!billing.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
     public void onAdsRemoved() {
         binding.navigation.getMenu().findItem(R.id.nav_remove_ads).setVisible(false);
         Toast.makeText(this, "Thanks for supporting SpellNote!", Toast.LENGTH_SHORT).show();

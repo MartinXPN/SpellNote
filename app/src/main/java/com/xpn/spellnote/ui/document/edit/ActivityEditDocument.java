@@ -99,9 +99,7 @@ public class ActivityEditDocument extends AppCompatActivity
         analytics = FirebaseAnalytics.getInstance(this);
 
         /// set-up advertisement helper
-        ads = new InterstitialAdHelper();
-        ads.initializeAds(this);
-
+        ads = new InterstitialAdHelper(this);
 
         /// set-up view-models
         DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
