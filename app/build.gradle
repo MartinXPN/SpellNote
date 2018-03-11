@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 apply plugin: 'realm-android'
 
 repositories {
@@ -53,10 +54,12 @@ dependencies {
 
 
     /// Firebase
-    implementation 'com.google.firebase:firebase-core:11.8.0'       // Firebase Analytics
-    implementation 'com.google.firebase:firebase-crash:11.8.0'      // Firebase Crash reporting
-    implementation 'com.google.firebase:firebase-ads:11.8.0'        // Firebase Ads
-    implementation 'com.google.firebase:firebase-storage:11.8.0'    // Firebase Storage
+    implementation 'com.google.firebase:firebase-core:11.8.0'       // Analytics
+    implementation 'com.google.firebase:firebase-ads:11.8.0'        // Ads
+    implementation 'com.google.firebase:firebase-storage:11.8.0'    // Storage
+    compile('com.crashlytics.sdk.android:crashlytics:2.9.1@aar') {  // Crashlytics
+        transitive = true
+    }
 
     implementation 'com.anjlab.android.iab.v3:library:1.0.44'       // Billing
     implementation 'com.squareup.picasso:picasso:2.5.2'             // Picasso - Image loader
