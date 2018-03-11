@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.Constants;
 import com.anjlab.android.iab.v3.TransactionDetails;
 
 
@@ -55,6 +56,11 @@ public class RemoveAdsBilling implements BillingProcessor.IBillingHandler {
 
     @Override
     public void onBillingError(int errorCode, @Nullable Throwable error) {
+        if( errorCode == Constants.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED ) {
+            bp.loadOwnedPurchasesFromGoogle();
+            viewContract.onAdsRemoved();
+            return;
+        }
         viewContract.onPurchaseError(error);
     }
 
