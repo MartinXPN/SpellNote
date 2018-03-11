@@ -27,6 +27,10 @@
             android:id="@+id/nav_dictionaries"
             android:icon="@drawable/ic_language"
             android:title="@string/nav_dictionaries" />
+        <item
+            android:id="@+id/nav_remove_ads"
+            android:icon="@drawable/ic_remove_ads"
+            android:title="@string/nav_remove_ads" />
     </group>
 
 

@@ -13,6 +13,7 @@
     <string name="nav_archive">Archive</string>
     <string name="nav_trash">Trash</string>
     <string name="nav_dictionaries">My dictionaries</string>
+    <string name="nav_remove_ads">Remove Ads</string>
     <string name="nav_help_and_tips"><![CDATA[Help & Tips]]></string>
     <string name="nav_send_feedback">Send feedback</string>
     <string name="nav_rate">Rate on Play Store</string>
