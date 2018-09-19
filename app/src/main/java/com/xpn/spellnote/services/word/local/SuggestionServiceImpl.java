@@ -103,7 +103,7 @@ public class SuggestionServiceImpl extends BaseWordService implements Suggestion
         for( int i=0; i < s.length(); i++ ) {
             for( char c : dictionary.getAlphabet().toCharArray() ) {
 
-                /// insert character at position [i]
+                /// Insert character at position [i]
                 now.insert(i, c);
                 res.add( now.toString() );
                 now.deleteCharAt(i);
@@ -111,7 +111,7 @@ public class SuggestionServiceImpl extends BaseWordService implements Suggestion
                 if( now.charAt(i) == c )
                     continue;
 
-                /// replace character at position [i] with c
+                /// Replace character at position [i] with c
                 char currentChar = now.charAt(i);
                 now.setCharAt( i, c );
                 res.add( now.toString() );
@@ -119,10 +119,17 @@ public class SuggestionServiceImpl extends BaseWordService implements Suggestion
             }
 
             /// Delete character at position [i]
-            char c = now.charAt(i);
+            char currentChar = now.charAt(i);
             now.deleteCharAt(i);
             res.add(now.toString());
-            now.insert(i, c);
+            now.insert(i, currentChar);
+
+            /// Swap two neighbour characters
+            if( i == s.length() - 1 )
+                continue;
+            swap(now, i, i+1);
+            res.add(now.toString());
+            swap(now, i, i+1);
         }
 
         res.remove(s);
@@ -158,5 +165,12 @@ public class SuggestionServiceImpl extends BaseWordService implements Suggestion
         }
 
         return res;
+    }
+
+
+    private void swap(StringBuilder s, int i, int j) {
+        char tmp = s.charAt(i);
+        s.setCharAt(i, s.charAt(j));
+        s.setCharAt(j, tmp);
     }
 }
