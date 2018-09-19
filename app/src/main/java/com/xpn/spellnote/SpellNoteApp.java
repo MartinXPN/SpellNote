@@ -1,5 +1,6 @@
 package com.xpn.spellnote;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ public class SpellNoteApp extends Application {
     private DiContext diContext;
 
 
+    @SuppressLint("CheckResult")
     @Override
     public void onCreate() {
         super.onCreate();
