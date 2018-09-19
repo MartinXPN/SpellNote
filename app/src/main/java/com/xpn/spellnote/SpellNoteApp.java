@@ -3,6 +3,9 @@ package com.xpn.spellnote;
 import android.app.Application;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
 import com.xpn.spellnote.services.word.PopulateRealm;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -20,6 +23,9 @@ public class SpellNoteApp extends Application {
     public void onCreate() {
         super.onCreate();
 
+        if( !BuildConfig.DEBUG ) {
+            Fabric.with(this, new Crashlytics());
+        }
         Realm.init(this);               // Initialize Realm
         Timber.plant(new Timber.DebugTree());   // Initialize logger
         diContext = new DiContext(this);        // Initialize app context

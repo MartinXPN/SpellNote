@@ -1,6 +1,7 @@
 <resources>
 
     <string name="app_name">SpellNote</string>
+
     <string name="title_activity_view_documents">Documents</string>
     <string name="title_activity_select_languages">Select Languages</string>
     <string name="title_activity_about">About SpellNote</string>
@@ -12,8 +13,10 @@
     <string name="nav_archive">Archive</string>
     <string name="nav_trash">Trash</string>
     <string name="nav_dictionaries">My dictionaries</string>
+    <string name="nav_remove_ads">Remove Ads</string>
     <string name="nav_help_and_tips"><![CDATA[Help & Tips]]></string>
     <string name="nav_send_feedback">Send feedback</string>
+    <string name="nav_rate">Rate on Play Store</string>
     <string name="nav_about">About us</string>
 
 
@@ -71,7 +74,7 @@
     <string name="error_couldnt_create_document">Couldn\'t create document</string>
 
     <string name="tutorial_show_suggestions">"Show or hide Suggestions"</string>
-    <string name="tutorial_swipe">◄◄◄ Swipe left documents to Delete, Send, etc…\n(click to dismiss)</string>
+    <string name="tutorial_swipe">◄◄◄ Swipe left documents to Delete, Send, etc…\n(tap to dismiss)</string>
     <string name="tutorial_select_dictionaries">Select Dictionaries to use later on…</string>
     <string name="tutorial_add_word_to_dictionary">Add word to Dictionary</string>
 

@@ -84,8 +84,8 @@
             android:id="@+id/content_part"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:background="?attr/selectableItemBackground"
@@ -113,7 +113,7 @@
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:textStyle="normal"
-                    android:textSize="25sp"
+                    android:textSize="@dimen/document_list_item_title_size"
                     android:textColor="@color/document_list_title_color"
                     android:text="@{viewModel.title}" />
 
@@ -125,7 +125,7 @@
 
                     android:maxLines="2"
                     android:ellipsize="end"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/document_list_item_content_size"
                     android:textColor="@color/document_list_content_color"
                     android:text="@{viewModel.content}" />
             </LinearLayout>
@@ -137,6 +137,7 @@
                 android:padding="5dp"
                 android:orientation="vertical"
                 android:weightSum="2"
+                android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true" >
 
@@ -145,7 +146,7 @@
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:scaleType="centerInside"
+                    android:scaleType="fitCenter"
                     app:imageUrl="@{viewModel.dictionaryLogoURL}"
                     app:placeholder="@{@drawable/ic_language}"
                     android:contentDescription="@null" />

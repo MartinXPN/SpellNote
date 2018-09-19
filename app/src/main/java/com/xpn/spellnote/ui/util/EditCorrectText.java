@@ -184,7 +184,7 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
     }
 
     private boolean isWordCharacter(char c) {
-        return Character.isLetter(c) || c == '-' || c == '\'';
+        return Character.isLetterOrDigit(c) || c == '-' || c == '\'';
     }
 
     /**
@@ -199,6 +199,7 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
         if( text.length() == 0 )
             return index;
 
+        int initialIndex = index;
         if( isWordCharacter( text.charAt(index) ) ) {
             while (index > 0 && isWordCharacter(text.charAt(index - 1)))
                 --index;
@@ -208,7 +209,7 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
         }
 
         /// words may contain some symbols but they may not start with them
-        while( index < text.length() && !Character.isLetter(text.charAt(index)))
+        while( index < initialIndex && !Character.isLetter(text.charAt(index)))
             ++index;
         return index;
     }

@@ -12,7 +12,7 @@ public class BindingAdapters {
 
     @BindingAdapter({"app:imageUrl", "app:placeholder"})
     public static void loadImage(ImageView view, String url, Drawable placeholder) {
-        Picasso.with(view.getContext())
+        Picasso.get()
                 .load(url)
                 .placeholder(placeholder)
                 .resizeDimen(R.dimen.language_flag_size, R.dimen.language_flag_size)

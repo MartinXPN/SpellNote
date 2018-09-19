@@ -27,7 +27,7 @@
             android:onClick="@{() -> viewModel.onShowAvailableLanguages()}"
             app:imageUrl="@{viewModel.currentLanguageLogoUrl}"
             app:placeholder="@{@drawable/ic_language}"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@null" />
 
@@ -85,8 +85,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="top|center_horizontal"
-                            android:textSize="12sp"
-                            android:textColor="#aa000000"
+                            android:textSize="@dimen/language_chooser_text_size"
+                            android:textColor="@color/language_chooser_text_color"
                             android:lines="2"
                             android:ellipsize="end"
                             android:text="@string/title_add_dictionaries"

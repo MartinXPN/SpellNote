@@ -83,7 +83,7 @@ public class SuggestionServiceImpl extends BaseWordService implements Suggestion
             }
 
             /// sort the result in order of decreasing usage
-            Collections.sort(result, (a, b) -> Integer.valueOf( b.getUsage() ).compareTo( a.getUsage() ));
+            Collections.sort(result, (a, b) -> Integer.compare(b.getUsage(), a.getUsage()));
             realm.close();
             return Single.just(result);
         });
@@ -103,18 +103,33 @@ public class SuggestionServiceImpl extends BaseWordService implements Suggestion
         for( int i=0; i < s.length(); i++ ) {
             for( char c : dictionary.getAlphabet().toCharArray() ) {
 
-                StringBuilder tmp = new StringBuilder( now );
-                res.add( tmp.insert( i, c ).toString() );
+                /// Insert character at position [i]
+                now.insert(i, c);
+                res.add( now.toString() );
+                now.deleteCharAt(i);
 
-                if( s.charAt(i) != c ) {
-                    tmp = new StringBuilder( now );
-                    tmp.setCharAt( i, c );
-                    res.add( tmp.toString() );
-                }
+                if( now.charAt(i) == c )
+                    continue;
+
+                /// Replace character at position [i] with c
+                char currentChar = now.charAt(i);
+                now.setCharAt( i, c );
+                res.add( now.toString() );
+                now.setCharAt( i, currentChar );
             }
 
-            StringBuilder tmp = new StringBuilder( now );
-            res.add(tmp.deleteCharAt(i).toString());
+            /// Delete character at position [i]
+            char currentChar = now.charAt(i);
+            now.deleteCharAt(i);
+            res.add(now.toString());
+            now.insert(i, currentChar);
+
+            /// Swap two neighbour characters
+            if( i == s.length() - 1 )
+                continue;
+            swap(now, i, i+1);
+            res.add(now.toString());
+            swap(now, i, i+1);
         }
 
         res.remove(s);
@@ -150,5 +165,12 @@ public class SuggestionServiceImpl extends BaseWordService implements Suggestion
         }
 
         return res;
+    }
+
+
+    private void swap(StringBuilder s, int i, int j) {
+        char tmp = s.charAt(i);
+        s.setCharAt(i, s.charAt(j));
+        s.setCharAt(j, tmp);
     }
 }
