@@ -6,6 +6,9 @@ import com.xpn.spellnote.services.BeanMapper;
 import com.xpn.spellnote.services.word.SpellCheckerService;
 import com.xpn.spellnote.services.word.SuggestionService;
 
+import org.apache.commons.lang3.LocaleUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -44,16 +47,31 @@ public class SuggestionServiceImpl extends BaseWordService implements Suggestion
                 return Single.just( new ArrayList<>() );
 
             /// get continuations
+            String likeWord = StringUtils.isAllUpperCase(word)
+                    ? word
+                    : word.toLowerCase(LocaleUtils.toLocale(dictionary.getLocale()));
             Realm realm = getRealmInstance(dictionary.getLocale());
             RealmResults <WordSchema> continuations = realm.where(WordSchema.class)
-                    .like("word", word + '*')
+                    .like("word", likeWord + '*')
                     .findAll();
 
 
             ArrayList <WordModel> continuationResult = new ArrayList<>();
             for( WordSchema wordSchema : continuations ) {
-                if( !wordSchema.word.equals(word) )                 continuationResult.add( wordMapper.mapFrom(wordSchema) );
-                if( continuationResult.size() >= SUGGESTION_LIMIT ) break;
+                if( !wordSchema.word.equals(word) ) {
+                    /// if the initial version of the word was capitalized => also capitalize the suggestions
+                    WordModel suggestedWord = wordMapper.mapFrom(wordSchema);
+                    if(Character.isUpperCase(word.charAt(0))) {
+                        suggestedWord = new WordModel(
+                                StringUtils.capitalize(suggestedWord.getWord()),
+                                suggestedWord.getUsage(),
+                                suggestedWord.getUserDefined()
+                        );
+                    }
+                    continuationResult.add(suggestedWord);
+                }
+                if( continuationResult.size() >= SUGGESTION_LIMIT )
+                    break;
             }
 
 
@@ -93,7 +111,7 @@ public class SuggestionServiceImpl extends BaseWordService implements Suggestion
     /**
      * @param s the initial string
      * @return  list of words that are different in 1 place from the initial string
-     *          difference -> deletion, insertion, replacing a character
+     *          difference -> deletion, insertion, replacing a character, swap neighbour characters
      */
     private ArrayList<String> editDistance( String s, DictionaryModel dictionary ) {
 
@@ -132,6 +150,14 @@ public class SuggestionServiceImpl extends BaseWordService implements Suggestion
             swap(now, i, i+1);
         }
 
+        /// Try the uppercase versions of the words too
+        res.remove("");
+        Set<String> upperRes = new HashSet<>();
+        for( String word : res ) {
+            upperRes.add(word.toUpperCase(LocaleUtils.toLocale(dictionary.getLocale())));
+        }
+
+        res.addAll(upperRes);
         res.remove(s);
         return new ArrayList<>(res);
     }
