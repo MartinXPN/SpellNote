@@ -2,6 +2,7 @@ package com.xpn.spellnote.ui.document.list;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.view.Gravity;
@@ -149,6 +150,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
     private class DocumentListAdapter extends RecyclerSwipeAdapter<BindingHolder> {
         private static final int MIN_ITEM_COUNT_FOR_TUTORIAL = 1;
 
+        @NonNull
         @Override
         public BindingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from( parent.getContext() ).inflate(R.layout.item_document_list, parent, false);

@@ -20,7 +20,7 @@ public class InterstitialAdHelper {
             return;
         }
 
-        MobileAds.initialize(context, context.getString(R.string.ads_unit_id) );
+        MobileAds.initialize(context, context.getString(R.string.app_id) );
 
         ad = new InterstitialAd(context);
         ad.setAdUnitId( context.getString(R.string.ads_unit_id) );

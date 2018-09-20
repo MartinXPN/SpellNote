@@ -35,6 +35,6 @@ public class WordModel implements Comparable<WordModel> {
 
     @Override
     public int compareTo(@NonNull WordModel wordModel) {
-        return Integer.valueOf(usage).compareTo( wordModel.getUsage() );
+        return Integer.compare(usage, wordModel.getUsage());
     }
 }

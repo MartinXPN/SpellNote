@@ -52,8 +52,10 @@ public class SuggestionServiceImpl extends BaseWordService implements Suggestion
 
             ArrayList <WordModel> continuationResult = new ArrayList<>();
             for( WordSchema wordSchema : continuations ) {
-                if( !wordSchema.word.equals(word) )                 continuationResult.add( wordMapper.mapFrom(wordSchema) );
-                if( continuationResult.size() >= SUGGESTION_LIMIT ) break;
+                if( !wordSchema.word.equals(word) )
+                    continuationResult.add( wordMapper.mapFrom(wordSchema) );
+                if( continuationResult.size() >= SUGGESTION_LIMIT )
+                    break;
             }
 
 
@@ -93,7 +95,7 @@ public class SuggestionServiceImpl extends BaseWordService implements Suggestion
     /**
      * @param s the initial string
      * @return  list of words that are different in 1 place from the initial string
-     *          difference -> deletion, insertion, replacing a character
+     *          difference -> deletion, insertion, replacing a character, swap neighbour characters
      */
     private ArrayList<String> editDistance( String s, DictionaryModel dictionary ) {
 
@@ -132,6 +134,13 @@ public class SuggestionServiceImpl extends BaseWordService implements Suggestion
             swap(now, i, i+1);
         }
 
+        /// Try the uppercase versions of the words too
+        Set<String> upperRes = new HashSet<>();
+        for( String word : res ) {
+            upperRes.add(word.toUpperCase());
+        }
+
+        res.addAll(upperRes);
         res.remove(s);
         return new ArrayList<>(res);
     }
