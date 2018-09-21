@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.speech.RecognizerIntent;
 import android.widget.Toast;
 
+import com.xpn.spellnote.R;
+
 
 public class Util {
 
@@ -35,10 +37,10 @@ public class Util {
         i.putExtra( Intent.EXTRA_EMAIL, receivers );
         i.putExtra( Intent.EXTRA_TEXT, messageBody );
         try {
-            context.startActivity(Intent.createChooser(i, "Choose an Email client:"));
+            context.startActivity(Intent.createChooser(i, context.getString(R.string.hint_choose_email_client)));
         }
         catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText( context, "There are no Email applications installed", Toast.LENGTH_SHORT ).show();
+            Toast.makeText( context, context.getString(R.string.error_no_email_clients), Toast.LENGTH_SHORT ).show();
         }
     }
     public static void sendFeedback( Context context ) {
@@ -56,10 +58,10 @@ public class Util {
         i.putExtra(Intent.EXTRA_SUBJECT, messageTitle);
         i.putExtra(Intent.EXTRA_TEXT, messageBody);
         try {
-            activity.startActivity(Intent.createChooser( i, "Send Message...") );
+            activity.startActivity(Intent.createChooser( i, activity.getString(R.string.hint_sent_file)) );
         }
         catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText( activity, "There are no messaging applications installed", Toast.LENGTH_SHORT ).show();
+            Toast.makeText( activity, activity.getString(R.string.error_no_messaging_apps), Toast.LENGTH_SHORT ).show();
         }
     }
 
@@ -67,11 +69,16 @@ public class Util {
     public static void copyTextToClipboard( Context context, String text, boolean showToast ) {
 
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService( Context.CLIPBOARD_SERVICE );
-        ClipData clip = ClipData.newPlainText("Spell Checker", text);
+        if( clipboard == null ) {
+            Toast.makeText( context, context.getString(R.string.error_no_clipboard), Toast.LENGTH_SHORT ).show();
+            return;
+        }
+
+        ClipData clip = ClipData.newPlainText("SpellNote", text);
         clipboard.setPrimaryClip( clip );
 
         if( showToast )
-            Toast.makeText( context, "Text copied to clipboard", Toast.LENGTH_SHORT ).show();
+            Toast.makeText( context, context.getString(R.string.message_copied_to_clipboard), Toast.LENGTH_SHORT ).show();
     }
     public static void copyTextToClipboard( Context context, String text ) {
         copyTextToClipboard( context, text, true );
@@ -87,7 +94,7 @@ public class Util {
             activity.startActivityForResult(intent, SPEECH_RECOGNIZER_CODE);
         }
         catch ( ActivityNotFoundException e ) {
-            Toast.makeText(activity, "Speech recognizer not found on your device", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, activity.getString(R.string.error_no_speech_recognizer), Toast.LENGTH_SHORT).show();
         }
     }
 }

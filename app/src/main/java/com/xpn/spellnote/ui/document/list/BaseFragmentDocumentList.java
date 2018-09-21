@@ -85,7 +85,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         String sortingOrder = getSortingOrder();
         if( sortingOrder.equals( TagsUtil.ORDER_DATE_MODIFIED ) )   menu.findItem( R.id.action_sort_by_date_modified ).setChecked( true );
         if( sortingOrder.equals( TagsUtil.ORDER_TITLE ) )           menu.findItem( R.id.action_sort_by_title ).setChecked( true );
-        if( sortingOrder.equals( TagsUtil.ORDER_LANUAGE ) )         menu.findItem( R.id.action_sort_by_language ).setChecked( true );
+        if( sortingOrder.equals( TagsUtil.ORDER_LANGUAGE) )         menu.findItem( R.id.action_sort_by_language ).setChecked( true );
     }
 
     @Override
@@ -94,7 +94,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
         if( id == R.id.action_sort_by_date_modified )   { item.setChecked( true );  setSortingOrder(TagsUtil.ORDER_DATE_MODIFIED);    return true; }
         if( id == R.id.action_sort_by_title )           { item.setChecked( true );  setSortingOrder(TagsUtil.ORDER_TITLE);            return true; }
-        if( id == R.id.action_sort_by_language )        { item.setChecked( true );  setSortingOrder(TagsUtil.ORDER_LANUAGE);          return true; }
+        if( id == R.id.action_sort_by_language )        { item.setChecked( true );  setSortingOrder(TagsUtil.ORDER_LANGUAGE);          return true; }
 
         if( id == R.id.action_sort_ascending )          { item.setChecked( !item.isChecked() );  setAscending( !getAscending() );     return true; }
         return super.onOptionsItemSelected(item);
