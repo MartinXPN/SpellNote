@@ -1,0 +1,99 @@
+<resources>
+
+    <string name="title_activity_view_documents">Документи</string>
+    <string name="title_activity_select_languages">Виберіть мови</string>
+    <string name="title_activity_about">Про SpellNote</string>
+    <string name="title_add_dictionaries">Додати словники</string>
+
+    <string name="navigation_drawer_open">Відкрито ящик</string>
+    <string name="navigation_drawer_close">Ящик закритий</string>
+    <string name="nav_documents">Документи</string>
+    <string name="nav_archive">Архів</string>
+    <string name="nav_trash">Кошик</string>
+    <string name="nav_dictionaries">Мої словники</string>
+    <string name="nav_remove_ads">Видалити оголошення</string>
+    <string name="nav_send_feedback">Надіслати відгук</string>
+    <string name="nav_rate">Оцінити в магазині Play Store</string>
+    <string name="nav_about">Про нас</string>
+
+
+    <string name="action_sort_by">Сортувати за</string>
+    <string name="action_sort_by_date_modified">Дата модифікації</string>
+    <string name="action_sort_by_title">Заголовок</string>
+    <string name="action_sort_by_language">Мова</string>
+    <string name="action_sort_by_ascending">Зростання</string>
+    <string name="action_empty_trash">Порожній сміття</string>
+    <string name="action_title_show_suggestions">Показати пропозиції</string>
+    <string name="action_title_hide_suggestions">Приховати пропозиції</string>
+    <string name="action_title_overflow_menu">Додаткові параметри</string>
+    <string name="action_title_record">Запис</string>
+    <string name="action_title_send">Надіслати</string>
+    <string name="action_title_copy">Копіювати</string>
+    <string name="action_title_check_spelling">Перевірка правопису</string>
+    <string name="action_title_add_word_to_dictionary">Додати слово до словника</string>
+    <string name="action_title_remove_word_from_dictionary">Видалити слово зі словника</string>
+
+
+    <string name="advertisement_thank_you_message">Дякуємо за підтримку SpellNote!</string>
+    <string name="advertisement_purchase_failure">Будь ласка, повторіть спробу пізніше</string>
+    <string name="advertisement_loading_description">Завантаження реклами…</string>
+
+    <string name="hint_edit_document_title">Назва…</string>
+    <string name="hint_edit_content">Введіть текст тут…</string>
+    <string name="hint_choose_email_client">Виберіть клієнт електронної пошти…</string>
+    <string name="hint_sent_file">Надіслати повідомлення…</string>
+    <string name="hint_move_to_documents">Перемістити до документів</string>
+    <string name="hint_move_to_archive">Перемістити в Архів</string>
+    <string name="hint_move_to_trash">Перемістити в кошик</string>
+    <string name="hint_restore">Відновити</string>
+    <string name="hint_unarchive">Розархівувати</string>
+    <string name="hint_remove_forever">Видалити назавжди</string>
+    <string name="hint_send">Надіслати</string>
+    <string name="undo">Скасувати</string>
+    <string name="explanation_unarchived">Неархівований</string>
+    <string name="explanation_archived">Архівовано</string>
+    <string name="explanation_moved_to_trash">Переміщено в кошик</string>
+    <string name="explanation_restored">Відновлений</string>
+    <string name="explanation_removed_forever">Вилучено назавжди</string>
+    <string name="explanation_removed">Видалений документ</string>
+    <string name="explanation_document_not_editable">Відновити документ для редагування…</string>
+
+    <string name="empty_archive">Немає елементів в архіві</string>
+    <string name="empty_trash">Немає елементів у кошику</string>
+    <string name="empty_document">Створити новий документ</string>
+
+
+    <string name="request_update_or_delete_dictionary">Оновити або видалити словник?</string>
+    <string name="update_or_delete_dictionary_option_update">Оновити</string>
+    <string name="update_or_delete_dictionary_option_delete">Видалити</string>
+
+    <string name="request_remove_all_documents">Видалити весь документ у кошику?</string>
+    <string name="request_remove_all_documents_option_yes">Так</string>
+    <string name="request_remove_all_documents_option_cancel">Скасувати</string>
+
+
+    <string name="error_couldnt_create_document">Не вдалося створити документ</string>
+    <string name="error_no_email_clients">Установлених електронних програм не встановлено</string>
+    <string name="error_no_messaging_apps">Немає встановлених програм для обміну повідомленнями</string>
+    <string name="error_no_speech_recognizer">Розпізнавання мовлення не знайдено на вашому пристрої</string>
+    <string name="error_no_clipboard">Буфер обміну не знайдено</string>
+    <string name="message_copied_to_clipboard">Текст скопійований</string>
+
+    <string name="dictionary_download_canceled">Завантаження скасовано</string>
+    <string name="dictionary_error_save_failure">Не вдалося зберегти словник</string>
+    <string name="dictionary_error_delete_failure">Неможливо видалити словник </string>
+    <string name="dictionary_message_updated">Словник оновлено</string>
+
+    <string name="tutorial_show_suggestions">Показати або приховати пропозиції</string>
+    <string name="tutorial_swipe">◄◄◄ Проведіть пальцем по лівим документам, щоб видалити, надіслати та ін…\n(торкніться, щоб відхилити).</string>
+    <string name="tutorial_select_dictionaries">Виберіть Словники, які використовуватимуться пізніше…</string>
+    <string name="tutorial_add_word_to_dictionary">Додати слово до словника</string>
+
+
+    <string name="about_app">
+        SpellNote - це програма, призначена для створення текстів, створення нотаток, редагування та виправлення творів тощо. Його можна використовувати будь-коли навіть без доступу до Інтернету.\n\n
+        Програма підтримує декілька мов, включаючи англійську, російську та вірменську.\n\n
+        Це <a href="https://github.com/MartinXPN/SpellNote">проект</a> із відкритим вихідним кодом, виконаний переважно з освітніх цілей.\n
+    </string>
+    <string name="about_author">© 2018 <a href="https://www.linkedin.com/in/martin-mirakyan-945597101">Martin Mirakyan</a>\nВсі права захищені.</string>
+</resources>
