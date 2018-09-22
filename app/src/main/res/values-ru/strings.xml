@@ -3,7 +3,7 @@
 
     <string name="title_activity_view_documents">Документы</string>
     <string name="title_activity_select_languages">Выбрать Словари</string>
-    <string name="title_activity_about">О проложении</string>
+    <string name="title_activity_about">О приложении</string>
     <string name="title_add_dictionaries">Добавить Словарь</string>
 
     <string name="nav_documents">Документы</string>
@@ -33,7 +33,7 @@
     <string name="action_title_remove_word_from_dictionary">Удалить слово из словаря</string>
 
 
-    <string name="advertisement_thank_you_message">Спасибо что используете SpellNote!</string>
+    <string name="advertisement_thank_you_message">Спасибо, что используете SpellNote!</string>
     <string name="advertisement_purchase_failure">Повторите попытку позже</string>
     <string name="advertisement_loading_description">Загрузка рекламы…</string>
 
@@ -44,18 +44,18 @@
     <string name="hint_move_to_documents">Переместить в Документы</string>
     <string name="hint_move_to_archive">Переместить в Архив</string>
     <string name="hint_move_to_trash">Переместить в Корзину</string>
-    <string name="hint_restore">Востановить</string>
-    <string name="hint_unarchive">Востановить в Документы</string>
+    <string name="hint_restore">Восстановить</string>
+    <string name="hint_unarchive">Восстановить в Документы</string>
     <string name="hint_remove_forever">Удалить навсегда</string>
     <string name="hint_send">Отправить</string>
     <string name="undo">ОТМЕНА</string>
-    <string name="explanation_unarchived">Востановлен</string>
+    <string name="explanation_unarchived">Восстановлен</string>
     <string name="explanation_archived">Перемещен в Архив</string>
     <string name="explanation_moved_to_trash">Перемещен в Корзину</string>
-    <string name="explanation_restored">Востановлен</string>
+    <string name="explanation_restored">Восстановлен</string>
     <string name="explanation_removed_forever">Удалён навсегда</string>
     <string name="explanation_removed">Документ удалён</string>
-    <string name="explanation_document_not_editable">Востановите документ для редактирования…</string>
+    <string name="explanation_document_not_editable">Восстановите документ для редактирования…</string>
 
     <string name="empty_archive">Архив пуст</string>
     <string name="empty_trash">Корзина пуста</string>
@@ -75,23 +75,23 @@
     <string name="error_no_email_clients">Не установлены приложения электронной почты</string>
     <string name="error_no_messaging_apps">Не установлены приложения для обмена сообщениями</string>
     <string name="error_no_speech_recognizer">Диктофон не найден</string>
-    <string name="error_no_clipboard">Не возможно скопировать текст</string>
-    <string name="message_copied_to_clipboard">Текост скопирован</string>
+    <string name="error_no_clipboard">Невозможно скопировать текст</string>
+    <string name="message_copied_to_clipboard">Текст скопирован</string>
 
     <string name="dictionary_download_canceled">Отменена установка</string>
     <string name="dictionary_error_save_failure">Не удалось сохранить словарь</string>
     <string name="dictionary_error_delete_failure">Не удалось удалить словарь</string>
-    <string name="dictionary_message_updated">Словарь обнавлён</string>
+    <string name="dictionary_message_updated">Словарь обновлён</string>
 
     <string name="tutorial_show_suggestions">Показывать или скрыть варианты</string>
-    <string name="tutorial_swipe">◄◄◄ Swipe left documents to Delete, Send, etc…\n(tap to dismiss)</string>
+    <string name="tutorial_swipe">◄◄◄ Провести рукой влево для удаления, отправки и т.д.\n(кликнуть, чтобы скрыть)</string>
     <string name="tutorial_select_dictionaries">Выбрать словари для использования…</string>
     <string name="tutorial_add_word_to_dictionary">Добавить слово в словарь</string>
 
 
     <string name="about_app">
         SpellNote-это автономное средство проверки орфографии и хранилище для всех документов, заметок и записей для платформы Android.\n
-        SpellNote <a href="https://github.com/MartinXPN/SpellNote">проэкт</a> с открытым исходным кодом, доступен для всех и сделан по образовательным причинам.
+        SpellNote <a href="https://github.com/MartinXPN/SpellNote">проект</a> с открытым исходным кодом, доступен для всех и сделан с образовательной целью.
     </string>
     <string name="about_author">© 2018 <a href="https://www.linkedin.com/in/martin-mirakyan-945597101">Martin Mirakyan</a>\nВсе права защищены.</string>
 </resources>
