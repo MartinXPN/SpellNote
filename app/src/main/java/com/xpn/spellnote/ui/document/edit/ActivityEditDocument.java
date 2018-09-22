@@ -235,6 +235,9 @@ public class ActivityEditDocument extends AppCompatActivity
         MenuItem addToDictionary = menu.findItem(R.id.action_add_word_to_dictionary);
         ((TooltipActionView) suggestions.getActionView()).setMenuItem(suggestions);
         ((TooltipActionView) addToDictionary.getActionView()).setMenuItem(addToDictionary);
+
+        if( suggestionTutorial == null )
+            suggestionTutorial = new Tutorial(this, "suggestion_tutorial", R.string.tutorial_show_suggestions, Gravity.BOTTOM).setTarget(menu.findItem(R.id.action_show_suggestions));
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -416,7 +419,7 @@ public class ActivityEditDocument extends AppCompatActivity
         binding.suggestions.setVisibility(View.VISIBLE);
 
         /// Show suggestions tutorial if not shown yet
-        showSuggestionsTutorial(menu.findItem(R.id.action_show_suggestions));
+        showSuggestionsTutorial();
     }
 
     @Override
@@ -428,9 +431,8 @@ public class ActivityEditDocument extends AppCompatActivity
 
     /****** Tutorials ******/
     private Tutorial suggestionTutorial = null;
-    private void showSuggestionsTutorial(MenuItem target) {
-        if( suggestionTutorial == null )
-            suggestionTutorial = new Tutorial(this, "suggestion_tutorial", R.string.tutorial_show_suggestions, Gravity.BOTTOM).setTarget(target);
+    private void showSuggestionsTutorial() {
+        if( suggestionTutorial != null )
         suggestionTutorial.showTutorial();
     }
 
