@@ -82,7 +82,7 @@
     <string name="dictionary_error_delete_failure">Не удалось удалить словарь</string>
     <string name="dictionary_message_updated">Словарь обнавлён</string>
 
-    <string name="tutorial_show_suggestions">"Показывать или скрыть варианты"</string>
+    <string name="tutorial_show_suggestions">Показывать или скрыть варианты</string>
     <string name="tutorial_swipe">◄◄◄ Swipe left documents to Delete, Send, etc…\n(tap to dismiss)</string>
     <string name="tutorial_select_dictionaries">Выбрать словари для использования…</string>
     <string name="tutorial_add_word_to_dictionary">Добавить слово в словарь</string>

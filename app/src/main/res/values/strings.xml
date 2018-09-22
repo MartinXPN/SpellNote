@@ -86,7 +86,7 @@
     <string name="dictionary_error_delete_failure">Couldn\'t delete dictionary</string>
     <string name="dictionary_message_updated">Dictionary updated</string>
 
-    <string name="tutorial_show_suggestions">"Show or hide Suggestions"</string>
+    <string name="tutorial_show_suggestions">Show or hide Suggestions</string>
     <string name="tutorial_swipe">◄◄◄ Swipe left documents to Delete, Send, etc…\n(tap to dismiss)</string>
     <string name="tutorial_select_dictionaries">Select Dictionaries to use later on…</string>
     <string name="tutorial_add_word_to_dictionary">Add word to Dictionary</string>
