@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="title_activity_view_documents">Documents</string>
     <string name="title_activity_select_languages">Sélectionner les langues</string>
     <string name="title_activity_about">À propos de SpellNote</string>

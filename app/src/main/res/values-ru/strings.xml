@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="title_activity_view_documents">Документы</string>
     <string name="title_activity_select_languages">Выбрать Словари</string>
     <string name="title_activity_about">О проложении</string>
