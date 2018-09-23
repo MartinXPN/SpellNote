@@ -90,8 +90,8 @@
 
 
     <string name="about_app">
-        SpellNote-это автономное средство проверки орфографии и хранилище для всех документов, заметок и записей для платформы Android.\n
-        SpellNote <a href="https://github.com/MartinXPN/SpellNote">проект</a> с открытым исходным кодом, доступен для всех и сделан с образовательной целью.
+        SpellNote-это автономное средство проверки орфографии и хранилище для всех документов, заметок и записей для платформы Android.\n\n
+        SpellNote <a href="https://github.com/MartinXPN/SpellNote">проект</a> с открытым исходным кодом, доступен для всех и сделан с образовательной целью.\n\n
     </string>
     <string name="about_author">© 2018 <a href="https://www.linkedin.com/in/martin-mirakyan-945597101">Martin Mirakyan</a>\nВсе права защищены.</string>
 </resources>

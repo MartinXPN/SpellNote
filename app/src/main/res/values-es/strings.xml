@@ -91,7 +91,7 @@
 
 
     <string name="about_app">
-        SpellNote es una aplicación diseñada para crear textos, tomar notas, editar y corregir ensayos, etc. Se puede usar en cualquier momento, incluso sin acceso a Internet.\n
+        SpellNote es una aplicación diseñada para crear textos, tomar notas, editar y corregir ensayos, etc. Se puede usar en cualquier momento, incluso sin acceso a Internet.\n\n
         La aplicación es compatible con varios idiomas, incluidos inglés, ruso y armenio.\n\n
         Es un <a href="https://github.com/MartinXPN/SpellNote">proyecto</a> de código abierto hecho principalmente por razones educativas.\n
     </string>
