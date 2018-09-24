@@ -1,6 +1,8 @@
 package com.xpn.spellnote;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -24,6 +26,12 @@ public class SpellNoteApp extends Application {
         Realm.init(this);               // Initialize Realm
         Timber.plant(new Timber.DebugTree());   // Initialize logger
         diContext = new DiContext(this);        // Initialize app context
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     public DiContext getDiContext() {
