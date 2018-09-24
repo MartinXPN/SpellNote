@@ -17,6 +17,7 @@ android {
         targetSdkVersion 28
         versionCode 3
         versionName '1.1.0'
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -46,12 +47,15 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     // Android Support libraries
-    //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'com.android.support:animated-vector-drawable:28.0.0'
+    implementation 'com.android.support:exifinterface:28.0.0'
+    implementation 'com.android.support:customtabs:28.0.0'
+    implementation 'com.android.support:multidex:1.0.3'
 
 
     /// Firebase
