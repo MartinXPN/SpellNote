@@ -2,8 +2,8 @@
 <resources>
 
     <string name="title_activity_view_documents">Documents</string>
-    <string name="title_activity_select_languages">Sélectionner les langues</string>
-    <string name="title_activity_about">À propos de SpellNote</string>
+    <string name="title_activity_select_languages">Sélectionnez les langues</string>
+    <string name="title_activity_about">À propos SpellNote</string>
     <string name="title_add_dictionaries">Ajouter des dictionnaires</string>
 
     <string name="navigation_drawer_open">Tiroir ouvert</string>
@@ -12,52 +12,52 @@
     <string name="nav_archive">Archive</string>
     <string name="nav_trash">Corbeille</string>
     <string name="nav_dictionaries">Mes dictionnaires</string>
-    <string name="nav_remove_ads">Supprimer les annonces</string>
-    <string name="nav_send_feedback">Envoyer un commentaire</string>
+    <string name="nav_remove_ads">Supprimer les publicités</string>
+    <string name="nav_send_feedback">Laisser un avis</string>
     <string name="nav_rate">Taux sur Play Store</string>
-    <string name="nav_about">À propos de nous</string>
+    <string name="nav_about">À propos</string>
 
 
     <string name="action_sort_by">Trier par</string>
     <string name="action_sort_by_date_modified">Date de modification</string>
     <string name="action_sort_by_title">Titre</string>
-    <string name="action_sort_by_language">Langue</string>
-    <string name="action_sort_by_ascending">Croissant</string>
+    <string name="action_sort_by_language">La langue</string>
+    <string name="action_sort_by_ascending">Ordre croissant</string>
     <string name="action_empty_trash">Vider la corbeille</string>
-    <string name="action_title_show_suggestions">Afficher les suggestions</string>
-    <string name="action_title_hide_suggestions">Masquer les suggestions</string>
+    <string name="action_title_show_suggestions">Afficher des suggestions</string>
+    <string name="action_title_hide_suggestions">Masquer des suggestions</string>
     <string name="action_title_overflow_menu">Plus d\'options</string>
-    <string name="action_title_record">Enregistrement</string>
+    <string name="action_title_record">Enregistrer</string>
     <string name="action_title_send">Envoyer</string>
     <string name="action_title_copy">Copier</string>
     <string name="action_title_check_spelling">Vérifier l\'orthographe</string>
-    <string name="action_title_add_word_to_dictionary">Ajouter un mot au dictionnaire</string>
-    <string name="action_title_remove_word_from_dictionary">Supprimer le mot du dictionnaire</string>
+    <string name="action_title_add_word_to_dictionary">Ajouter un mot dans un dictionnaire</string>
+    <string name="action_title_remove_word_from_dictionary">Retirer un mot du dictionnaire</string>
 
 
-    <string name="advertisement_thank_you_message">Merci d\'avoir soutenu SpellNote!</string>
+    <string name="advertisement_thank_you_message">Merci pour soutenir SpellNote!</string>
     <string name="advertisement_purchase_failure">Veuillez réessayer plus tard</string>
-    <string name="advertisement_loading_description">Chargement de la publicité…</string>
+    <string name="advertisement_loading_description">Chargement en cours…</string>
 
     <string name="hint_edit_document_title">Titre…</string>
-    <string name="hint_edit_content">Tapez le texte ici…</string>
-    <string name="hint_choose_email_client">Choisissez un client de messagerie…</string>
+    <string name="hint_edit_content">Saisissez le texte ici…</string>
+    <string name="hint_choose_email_client">Choisir un client mail…</string>
     <string name="hint_sent_file">Envoyer un message…</string>
-    <string name="hint_move_to_documents">Déplacer vers les documents</string>
-    <string name="hint_move_to_archive">Déplacer vers l\'archive</string>
-    <string name="hint_move_to_trash">Déplacer dans la corbeille</string>
+    <string name="hint_move_to_documents">Déplacer vers les Documents</string>
+    <string name="hint_move_to_archive">Archiver</string>
+    <string name="hint_move_to_trash">Mettre à la Corbeille</string>
     <string name="hint_restore">Restaurer</string>
-    <string name="hint_unarchive">Unarchive</string>
-    <string name="hint_remove_forever">Supprimer pour toujours</string>
+    <string name="hint_unarchive">Désarchiver</string>
+    <string name="hint_remove_forever">Supprimer définitivement</string>
     <string name="hint_send">Envoyer</string>
-    <string name="undo">ANNULER</string>
-    <string name="explanation_unarchived">Non archivé</string>
+    <string name="undo">Défaire</string>
+    <string name="explanation_unarchived">Déarchivé</string>
     <string name="explanation_archived">Archivé</string>
-    <string name="explanation_moved_to_trash">Déplacé vers la corbeille</string>
+    <string name="explanation_moved_to_trash">Mettre à la corbeille</string>
     <string name="explanation_restored">Restauré</string>
-    <string name="explanation_removed_forever">Retiré pour toujours</string>
+    <string name="explanation_removed_forever">Supprimé définitivement</string>
     <string name="explanation_removed">Document supprimé</string>
-    <string name="explanation_document_not_editable">Restaurer le document à modifier…</string>
+    <string name="explanation_document_not_editable">Restaurez le document pour éditer…</string>
 
     <string name="empty_archive">Aucun élément dans l\'archive</string>
     <string name="empty_trash">Aucun élément dans la corbeille</string>
@@ -68,33 +68,33 @@
     <string name="update_or_delete_dictionary_option_update">Mise à jour</string>
     <string name="update_or_delete_dictionary_option_delete">Supprimer</string>
 
-    <string name="request_remove_all_documents">Supprimer tout le document dans la corbeille?</string>
+    <string name="request_remove_all_documents">Supprimer tous les documents?</string>
     <string name="request_remove_all_documents_option_yes">Oui</string>
     <string name="request_remove_all_documents_option_cancel">Annuler</string>
 
 
-    <string name="error_couldnt_create_document">Impossible de créer un document</string>
-    <string name="error_no_email_clients">Aucune application de messagerie n\'est installée</string>
-    <string name="error_no_messaging_apps">Aucune application de messagerie n\'est installée</string>
-    <string name="error_no_speech_recognizer">Reconnaissance vocale introuvable sur votre appareil</string>
-    <string name="error_no_clipboard">Aucun presse-papiers trouvé</string>
-    <string name="message_copied_to_clipboard">Texte copié dans le presse-papier</string>
+    <string name="error_couldnt_create_document">Création de document impossible</string>
+    <string name="error_no_email_clients">Aucunes applications mail installées</string>
+    <string name="error_no_messaging_apps">Aucunes applications de messagerie installées</string>
+    <string name="error_no_speech_recognizer">La reconnaissance vocale pas trouvée dans votre appareil</string>
+    <string name="error_no_clipboard">Aucun presse-papier trouvé</string>
+    <string name="message_copied_to_clipboard">Le texte copié dans le presse-papier</string>
 
     <string name="dictionary_download_canceled">Télécharger annulé</string>
     <string name="dictionary_error_save_failure">Impossible de sauvegarder le dictionnaire</string>
     <string name="dictionary_error_delete_failure">Impossible de supprimer le dictionnaire</string>
-    <string name="dictionary_message_updated">Dictionnaire mis à jour</string>
+    <string name="dictionary_message_updated">Le dictionnaire est mise à jour</string>
 
     <string name="tutorial_show_suggestions">Afficher ou masquer les suggestions</string>
-    <string name="tutorial_swipe">◄◄◄ Faites glisser les documents laissés à supprimer, envoyer, etc…\n(appuyez sur pour ignorer)</string>
-    <string name="tutorial_select_dictionaries">Sélectionnez les dictionnaires à utiliser plus tard…</string>
-    <string name="tutorial_add_word_to_dictionary">Ajouter un mot au dictionnaire</string>
+    <string name="tutorial_swipe">◄◄◄ Balayer vers la gauche pour supprimer, envoyer etc.\n(Appuyer pour rejeter)</string>
+    <string name="tutorial_select_dictionaries">Sélectionner des dictionnaires pour utiliser plus tard…</string>
+    <string name="tutorial_add_word_to_dictionary">Ajouter un mot dans un dictionnaire</string>
 
 
     <string name="about_app">
-        SpellNote est une application conçue pour créer des textes, prendre des notes, éditer et corriger des essais, etc. Elle peut être utilisée à tout moment, même sans accès à Internet.\n\n
-        L\'application prend en charge plusieurs langues, dont l\'anglais, le russe et l\'arménien.\n\n
-        C\'est un projet open source <a href="https://github.com/MartinXPN/SpellNote">réalisé</a> principalement pour des raisons éducatives.\n
+        SpellNote est une application destin à créer des textes, prendre des notes, éditer et corriger des essais, etc. Elle peut être utilisée à tout moment, même sans accès à Internet.\n\n
+        L\'application prend en charge plusieurs langues, y compris l\'anglais, le russe et l\'arménien.\n\n
+        C\’est un <a href="https://github.com/MartinXPN/SpellNote">projet</a> open source, réalisé principalement pour des fins éducatives.\n
     </string>
     <string name="about_author">© 2018 <a href="https://www.linkedin.com/in/martin-mirakyan-945597101">Martin Mirakyan</a>\nTous les droits sont réservés.</string>
 </resources>
