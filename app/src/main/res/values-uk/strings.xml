@@ -32,6 +32,7 @@
     <string name="action_title_check_spelling">Перевірка правопису</string>
     <string name="action_title_add_word_to_dictionary">Додати слово до словника</string>
     <string name="action_title_remove_word_from_dictionary">Видалити слово зі словника</string>
+    <string name="action_privacy_policy">Політика конфіденційності</string>
     <string name="action_open_source_licenses">Ліцензії з відкритим кодом</string>
 
 

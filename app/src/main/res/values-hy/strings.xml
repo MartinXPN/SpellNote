@@ -32,6 +32,7 @@
     <string name="action_title_check_spelling">Check Spelling</string>
     <string name="action_title_add_word_to_dictionary">Ավելացնել բառը բառարանում</string>
     <string name="action_title_remove_word_from_dictionary">Ջնջել բառը բառարանից</string>
+    <string name="action_privacy_policy">Գաղտնիության քաղաքականություն</string>
     <string name="action_open_source_licenses">Բաց կոդով լիցենզիաներ</string>
 
 

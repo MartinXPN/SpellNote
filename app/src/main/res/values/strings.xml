@@ -34,6 +34,7 @@
     <string name="action_title_check_spelling">Check Spelling</string>
     <string name="action_title_add_word_to_dictionary">Add word to dictionary</string>
     <string name="action_title_remove_word_from_dictionary">Remove word from dictionary</string>
+    <string name="action_privacy_policy">Privacy Policy</string>
     <string name="action_open_source_licenses">Open source licenses</string>
 
 
@@ -93,6 +94,7 @@
     <string name="tutorial_add_word_to_dictionary">Add word to Dictionary</string>
 
 
+    <string name="privacy_policy_url" translatable="false">https://martinxpn.github.io/SpellNote/PRIVACY_POLICY</string>
     <string name="about_app">
         SpellNote is an app designed for creating texts, taking notes, editing and correcting essays, etc. It can be used any time even without an internet access.\n\n
         The app supports several languages, including English, Russian and Armenian.\n\n
