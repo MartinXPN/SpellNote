@@ -31,6 +31,7 @@
     <string name="action_title_check_spelling">Проверка текста</string>
     <string name="action_title_add_word_to_dictionary">Добавить слово в словарь</string>
     <string name="action_title_remove_word_from_dictionary">Удалить слово из словаря</string>
+    <string name="action_open_source_licenses">Лицензии с открытым кодом</string>
 
 
     <string name="advertisement_thank_you_message">Спасибо, что используете SpellNote!</string>
