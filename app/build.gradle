@@ -59,6 +59,7 @@ dependencies {
     implementation 'com.android.support:exifinterface:28.0.0'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.google.android.gms:play-services-oss-licenses:16.0.1'
+    implementation 'com.google.android.gms:play-services-vision:16.2.0'
 
 
     /// Firebase
