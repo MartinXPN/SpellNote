@@ -15,6 +15,11 @@ import com.xpn.spellnote.R;
 
 public class Util {
 
+    public static void openWebPage(Context context, Uri uri) {
+        Intent web = new Intent(Intent.ACTION_VIEW, uri);
+        context.startActivity(web);
+    }
+
     public static void openAppInPlayStore(Context context) {
         Uri uri = Uri.parse("market://details?id=" + context.getPackageName());
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -23,8 +28,7 @@ public class Util {
         try {
             context.startActivity(goToMarket);
         } catch (ActivityNotFoundException e) {
-            Intent web = new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName()));
-            context.startActivity(web);
+            openWebPage(context, Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName()));
         }
     }
 

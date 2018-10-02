@@ -11,6 +11,10 @@
 
         <menu>
             <item
+                android:id="@+id/action_privacy_policy"
+                android:title="@string/action_privacy_policy"
+                app:showAsAction="ifRoom" />
+            <item
                 android:id="@+id/action_open_source_licenses"
                 android:title="@string/action_open_source_licenses"
                 app:showAsAction="ifRoom" />

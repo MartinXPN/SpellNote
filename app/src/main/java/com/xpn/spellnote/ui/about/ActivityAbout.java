@@ -2,6 +2,7 @@ package com.xpn.spellnote.ui.about;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.LinkMovementMethod;
@@ -12,6 +13,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databinding.ActivityAboutBinding;
+import com.xpn.spellnote.util.Util;
 
 
 public class ActivityAbout extends AppCompatActivity {
@@ -44,10 +46,9 @@ public class ActivityAbout extends AppCompatActivity {
 
         int id = item.getItemId();
 
-        if( id == android.R.id.home )
-            finish();
-        if( id == R.id.action_open_source_licenses )
-            startActivity( new Intent(this, OssLicensesMenuActivity.class) );
+        if( id == android.R.id.home )                   finish();
+        if( id == R.id.action_privacy_policy )          Util.openWebPage(this, Uri.parse(getString(R.string.privacy_policy_url)));
+        if( id == R.id.action_open_source_licenses )    startActivity( new Intent(this, OssLicensesMenuActivity.class) );
 
         return super.onOptionsItemSelected(item);
     }
