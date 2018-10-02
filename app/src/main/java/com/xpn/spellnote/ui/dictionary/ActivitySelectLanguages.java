@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -115,12 +116,12 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
     }
 
     @Override
-    public void showError(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    public void showError(@StringRes int message) {
+        Toast.makeText(this, getString(message), Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    public void showMessage(@StringRes int message) {
+        Toast.makeText(this, getString(message), Toast.LENGTH_SHORT).show();
     }
 }

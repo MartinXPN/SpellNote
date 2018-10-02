@@ -1,5 +1,6 @@
 package com.xpn.spellnote.ui.document.edit;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -74,6 +75,7 @@ public class ActivityEditDocument extends AppCompatActivity
         fragment.startActivityForResult( i, requestCode );
     }
 
+    @SuppressLint("CheckResult")
     public static void launchForResult(Fragment fragment, String category, int requestCode) {
         DocumentModel document = new DocumentModel();
         document.setCategory(category);
@@ -320,7 +322,7 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     public void onDictionaryChanged(WordModel word) {
-        Toast.makeText(this, "Dictionary updated: " + word.getWord(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.dictionary_message_updated) + ": " + word.getWord(), Toast.LENGTH_SHORT).show();
         viewModel.checkSpelling(
                 0,
                 binding.content.getText().length(),
