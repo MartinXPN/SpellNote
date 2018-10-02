@@ -34,6 +34,7 @@
     <string name="action_title_check_spelling">Check Spelling</string>
     <string name="action_title_add_word_to_dictionary">Add word to dictionary</string>
     <string name="action_title_remove_word_from_dictionary">Remove word from dictionary</string>
+    <string name="action_open_source_licenses">Open source licenses</string>
 
 
     <string name="advertisement_thank_you_message">Thanks for supporting SpellNote!</string>
