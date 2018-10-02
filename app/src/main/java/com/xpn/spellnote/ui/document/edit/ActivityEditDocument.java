@@ -1,5 +1,6 @@
 package com.xpn.spellnote.ui.document.edit;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -25,6 +26,7 @@ import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.ui.ads.InterstitialAdHelper;
+import com.xpn.spellnote.ui.ads.RemoveAdsBilling;
 import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
@@ -73,6 +75,7 @@ public class ActivityEditDocument extends AppCompatActivity
         fragment.startActivityForResult( i, requestCode );
     }
 
+    @SuppressLint("CheckResult")
     public static void launchForResult(Fragment fragment, String category, int requestCode) {
         DocumentModel document = new DocumentModel();
         document.setCategory(category);
@@ -99,9 +102,8 @@ public class ActivityEditDocument extends AppCompatActivity
         analytics = FirebaseAnalytics.getInstance(this);
 
         /// set-up advertisement helper
-        ads = new InterstitialAdHelper();
-        ads.initializeAds(this);
-
+        RemoveAdsBilling billing = new RemoveAdsBilling(null, this, getString(R.string.license_key), getString(R.string.remove_ads_id));
+        ads = new InterstitialAdHelper(this, billing);
 
         /// set-up view-models
         DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
@@ -235,6 +237,9 @@ public class ActivityEditDocument extends AppCompatActivity
         MenuItem addToDictionary = menu.findItem(R.id.action_add_word_to_dictionary);
         ((TooltipActionView) suggestions.getActionView()).setMenuItem(suggestions);
         ((TooltipActionView) addToDictionary.getActionView()).setMenuItem(addToDictionary);
+
+        if( suggestionTutorial == null )
+            suggestionTutorial = new Tutorial(this, "suggestion_tutorial", R.string.tutorial_show_suggestions, Gravity.BOTTOM).setTarget(menu.findItem(R.id.action_show_suggestions));
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -317,7 +322,7 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @Override
     public void onDictionaryChanged(WordModel word) {
-        Toast.makeText(this, "Dictionary updated: " + word.getWord(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.dictionary_message_updated) + ": " + word.getWord(), Toast.LENGTH_SHORT).show();
         viewModel.checkSpelling(
                 0,
                 binding.content.getText().length(),
@@ -416,7 +421,7 @@ public class ActivityEditDocument extends AppCompatActivity
         binding.suggestions.setVisibility(View.VISIBLE);
 
         /// Show suggestions tutorial if not shown yet
-        showSuggestionsTutorial(menu.findItem(R.id.action_show_suggestions));
+        showSuggestionsTutorial();
     }
 
     @Override
@@ -428,9 +433,8 @@ public class ActivityEditDocument extends AppCompatActivity
 
     /****** Tutorials ******/
     private Tutorial suggestionTutorial = null;
-    private void showSuggestionsTutorial(MenuItem target) {
-        if( suggestionTutorial == null )
-            suggestionTutorial = new Tutorial(this, "suggestion_tutorial", R.string.tutorial_show_suggestions, Gravity.BOTTOM).setTarget(target);
+    private void showSuggestionsTutorial() {
+        if( suggestionTutorial != null )
         suggestionTutorial.showTutorial();
     }
 

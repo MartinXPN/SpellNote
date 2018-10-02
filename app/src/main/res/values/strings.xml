@@ -1,19 +1,21 @@
 <resources>
 
-    <string name="app_name">SpellNote</string>
+    <string name="app_name" translatable="false">SpellNote</string>
+
     <string name="title_activity_view_documents">Documents</string>
     <string name="title_activity_select_languages">Select Languages</string>
     <string name="title_activity_about">About SpellNote</string>
     <string name="title_add_dictionaries">Add Dictionaries</string>
 
     <string name="navigation_drawer_open">Drawer opened</string>
-    <string name="navigation_drawer_close">drawer closed</string>
+    <string name="navigation_drawer_close">Drawer closed</string>
     <string name="nav_documents">Documents</string>
     <string name="nav_archive">Archive</string>
     <string name="nav_trash">Trash</string>
     <string name="nav_dictionaries">My dictionaries</string>
-    <string name="nav_help_and_tips"><![CDATA[Help & Tips]]></string>
+    <string name="nav_remove_ads">Remove Ads</string>
     <string name="nav_send_feedback">Send feedback</string>
+    <string name="nav_rate">Rate on Play Store</string>
     <string name="nav_about">About us</string>
 
 
@@ -34,7 +36,14 @@
     <string name="action_title_remove_word_from_dictionary">Remove word from dictionary</string>
 
 
-    <string name="description_loading_advertisement">Loading advertisement…</string>
+    <string name="advertisement_thank_you_message">Thanks for supporting SpellNote!</string>
+    <string name="advertisement_purchase_failure">Please try again later</string>
+    <string name="advertisement_loading_description">Loading advertisement…</string>
+
+    <string name="hint_edit_document_title">Title…</string>
+    <string name="hint_edit_content">Type the text here…</string>
+    <string name="hint_choose_email_client">Choose an Email client…</string>
+    <string name="hint_sent_file">Send Message…</string>
     <string name="hint_move_to_documents">Move to Documents</string>
     <string name="hint_move_to_archive">Move to Archive</string>
     <string name="hint_move_to_trash">Move to Trash</string>
@@ -55,9 +64,6 @@
     <string name="empty_trash">No items in Trash</string>
     <string name="empty_document">Create a new Document</string>
 
-    <string name="hint_edit_document_title">Title…</string>
-    <string name="hint_edit_content">Type the text here…</string>
-
 
     <string name="request_update_or_delete_dictionary">Update or Delete the dictionary?</string>
     <string name="update_or_delete_dictionary_option_update">Update</string>
@@ -69,8 +75,18 @@
 
 
     <string name="error_couldnt_create_document">Couldn\'t create document</string>
+    <string name="error_no_email_clients">There are no Email applications installed</string>
+    <string name="error_no_messaging_apps">There are no messaging applications installed</string>
+    <string name="error_no_speech_recognizer">Speech recognizer not found on your device</string>
+    <string name="error_no_clipboard">No clipboard found</string>
+    <string name="message_copied_to_clipboard">Text copied to clipboard</string>
 
-    <string name="tutorial_show_suggestions">"Show or hide Suggestions"</string>
+    <string name="dictionary_download_canceled">Download canceled</string>
+    <string name="dictionary_error_save_failure">Couldn\'t save dictionary</string>
+    <string name="dictionary_error_delete_failure">Couldn\'t delete dictionary</string>
+    <string name="dictionary_message_updated">Dictionary updated</string>
+
+    <string name="tutorial_show_suggestions">Show or hide Suggestions</string>
     <string name="tutorial_swipe">◄◄◄ Swipe left documents to Delete, Send, etc…\n(tap to dismiss)</string>
     <string name="tutorial_select_dictionaries">Select Dictionaries to use later on…</string>
     <string name="tutorial_add_word_to_dictionary">Add word to Dictionary</string>

@@ -1,0 +1,99 @@
+<resources>
+
+    <string name="title_activity_view_documents">Նշումներ</string>
+    <string name="title_activity_select_languages">Լեզուների ընտրություն</string>
+    <string name="title_activity_about">SpellNote֊ի մասին</string>
+    <string name="title_add_dictionaries">Ավելացնել Բառարաններ</string>
+
+    <string name="navigation_drawer_open">Drawer opened</string>
+    <string name="navigation_drawer_close">Drawer closed</string>
+    <string name="nav_documents">Նշումներ</string>
+    <string name="nav_archive">Արխիվ</string>
+    <string name="nav_trash">Աղբ</string>
+    <string name="nav_dictionaries">Իմ բառարանները</string>
+    <string name="nav_remove_ads">Հեռացնել գովազդը</string>
+    <string name="nav_send_feedback">Ուղարկել կարծիք</string>
+    <string name="nav_rate">Գնահատել Play Store֊ում</string>
+    <string name="nav_about">Մեր մասին</string>
+
+
+    <string name="action_sort_by">Դասավորել ըստ</string>
+    <string name="action_sort_by_date_modified">Փոփոխման ժամանակի</string>
+    <string name="action_sort_by_title">Անվան</string>
+    <string name="action_sort_by_language">Լեզվի</string>
+    <string name="action_sort_by_ascending">Աճման կարգով</string>
+    <string name="action_empty_trash">Դատարկել աղբամանը</string>
+    <string name="action_title_show_suggestions">Ցույց տալ առաջարկությունները</string>
+    <string name="action_title_hide_suggestions">Թաքցնել առաջարկությունները</string>
+    <string name="action_title_overflow_menu">Ավելին</string>
+    <string name="action_title_record">Ձայնագրել</string>
+    <string name="action_title_send">Ուղարկել</string>
+    <string name="action_title_copy">Պատճենել</string>
+    <string name="action_title_check_spelling">Check Spelling</string>
+    <string name="action_title_add_word_to_dictionary">Ավելացնել բառը բառարանում</string>
+    <string name="action_title_remove_word_from_dictionary">Ջնջել բառը բառարանից</string>
+
+
+    <string name="advertisement_thank_you_message">Շնորհակալ ենք SpellNote֊ից օգտվելու համար</string>
+    <string name="advertisement_purchase_failure">Խնդրում ենք կրկին փորձել</string>
+    <string name="advertisement_loading_description">Գովազդի բեռնում…</string>
+
+    <string name="hint_edit_document_title">Անվանում…</string>
+    <string name="hint_edit_content">Տեքստ…</string>
+    <string name="hint_choose_email_client">Ընտրեք էլփոստի ծրագիր…</string>
+    <string name="hint_sent_file">Ուղարկել հաղորդագրություն…</string>
+    <string name="hint_move_to_documents">Տեղափոխել Նշումներ</string>
+    <string name="hint_move_to_archive">Տեղափոխել արխիվ</string>
+    <string name="hint_move_to_trash">Ջնջել</string>
+    <string name="hint_restore">Վերականգնել</string>
+    <string name="hint_unarchive">Վերականգնել</string>
+    <string name="hint_remove_forever">Ընդմիշտ Ջնջել</string>
+    <string name="hint_send">Ուղարկել</string>
+    <string name="undo">ՉԵՂԱՐԿԵԼ</string>
+    <string name="explanation_unarchived">Վերականգնված է</string>
+    <string name="explanation_archived">Տեղափոխված է արխիվ</string>
+    <string name="explanation_moved_to_trash">Տեղափոխված է աղբաման</string>
+    <string name="explanation_restored">Վերականգնված է</string>
+    <string name="explanation_removed_forever">Ընդմիշտ Ջնջված է</string>
+    <string name="explanation_removed">Նշումը հեռացված է</string>
+    <string name="explanation_document_not_editable">Վերականգնեք նշումը փոփոխելու համար…</string>
+
+    <string name="empty_archive">Արխիվը դատարկ է</string>
+    <string name="empty_trash">Աղբամանը դատարկ է</string>
+    <string name="empty_document">Ստեղծել նոր նշում</string>
+
+
+    <string name="request_update_or_delete_dictionary">Թարմացնել կամ ջնջել բառարանը</string>
+    <string name="update_or_delete_dictionary_option_update">Թարմացնել</string>
+    <string name="update_or_delete_dictionary_option_delete">Ջնջել</string>
+
+    <string name="request_remove_all_documents">Ջնջե՞լ բոլոր նշումները</string>
+    <string name="request_remove_all_documents_option_yes">Այո</string>
+    <string name="request_remove_all_documents_option_cancel">Ոչ</string>
+
+
+    <string name="error_couldnt_create_document">Չստացվեց ստեղծել նշումը</string>
+    <string name="error_no_email_clients">էլփոստի ծրագիր չի գտնվել</string>
+    <string name="error_no_messaging_apps">Հաղորդագրություններ ուղարկելու ծրագիր չի գտնվել</string>
+    <string name="error_no_speech_recognizer">Ձայն ճանաչող ծրագիր չի գտնվել</string>
+    <string name="error_no_clipboard">Հնարավոր չի պատճենել տեքստը</string>
+    <string name="message_copied_to_clipboard">Տեքստը պատճենված է</string>
+
+    <string name="dictionary_download_canceled">Բեռնումը չեղարկված է</string>
+    <string name="dictionary_error_save_failure">Բառարանի բեռնումը չհաջողվեց</string>
+    <string name="dictionary_error_delete_failure">Չհաջողվեց ջնջել բառարանը</string>
+    <string name="dictionary_message_updated">Բառարանը թարմացված է</string>
+
+    <string name="tutorial_show_suggestions">Ցույց տալ կամ թաքցնել առաջարկությունները</string>
+    <string name="tutorial_swipe">◄◄◄ Ձախ տեղաշարժել ջնջելու, ուղարկելու համար\n(սեղմել փակելու համար)</string>
+    <string name="tutorial_select_dictionaries">Ընտրեք բառարաններ հետագայի օգտագործման համար…</string>
+    <string name="tutorial_add_word_to_dictionary">Ավելացնել բառը բառարանում</string>
+
+
+    <string name="about_app">
+        SpellNote is an app designed for creating texts, taking notes, editing and correcting essays, etc. It can be used any time even without an internet access.\n\n
+        The app supports several languages, including English, Russian and Armenian.\n\n
+        It\'s an open-source <a href="https://github.com/MartinXPN/SpellNote">project</a> done mainly for educational reasons.\n
+    </string>
+    <string name="about_author">© 2018 <a href="https://www.linkedin.com/in/martin-mirakyan-945597101">Martin Mirakyan</a>\nԲոլոր իրավունքները պաշտպանված են։</string>
+</resources>

@@ -4,6 +4,7 @@ import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.BeanMapper;
 import com.xpn.spellnote.services.word.SpellCheckerService;
 
+import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class SpellCheckerServiceImpl extends BaseWordService implements SpellChe
             List <String> lowercaseWords = new ArrayList<>();
             for( String word : words ) {
                 if( !word.isEmpty() && Character.isUpperCase(word.charAt(0)) )
-                    lowercaseWords.add( word.toLowerCase() );
+                    lowercaseWords.add( word.toLowerCase(LocaleUtils.toLocale(locale)) );
             }
             words.addAll(lowercaseWords);
 

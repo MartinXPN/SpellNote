@@ -1,11 +1,13 @@
 package com.xpn.spellnote.ui.dictionary;
 
 import android.databinding.Bindable;
+import android.support.annotation.StringRes;
 
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.xpn.spellnote.BR;
+import com.xpn.spellnote.R;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.WordModel;
 import com.xpn.spellnote.services.dictionary.SavedDictionaryService;
@@ -59,7 +61,7 @@ public class LanguageItemVM extends BaseViewModel {
             if(downloadTask != null )
                 downloadTask.cancel();
             subscriptions.clear();
-            viewContract.showMessage("Download canceled");
+            viewContract.showMessage(R.string.dictionary_download_canceled);
             setStatus(Status.NOT_PRESENT);
         }
         else if(status == Status.SAVED) {
@@ -112,14 +114,14 @@ public class LanguageItemVM extends BaseViewModel {
                                     throwable -> {
                                         setStatus(Status.NOT_PRESENT);
                                         Timber.e(throwable);
-                                        viewContract.showError("Couldn't save dictionary");
+                                        viewContract.showError(R.string.dictionary_error_save_failure);
                                     }));
                     Timber.d("Download complete");
                 })
                 .addOnFailureListener(e -> {
                     Timber.e(e);
                     setStatus(Status.NOT_PRESENT);
-                    viewContract.showError("Couldn't save dictionary");
+                    viewContract.showError(R.string.dictionary_error_save_failure);
                 });
     }
 
@@ -133,7 +135,7 @@ public class LanguageItemVM extends BaseViewModel {
         boolean deleted = file.delete();
         if( !deleted ) {
             setStatus(Status.SAVED);
-            viewContract.showError("Couldn't delete dictionary");
+            viewContract.showError(R.string.dictionary_error_delete_failure);
             return;
         }
 
@@ -147,7 +149,7 @@ public class LanguageItemVM extends BaseViewModel {
                         },
                         throwable -> {
                             setStatus(Status.NOT_PRESENT);
-                            viewContract.showError("Couldn't delete dictionary");
+                            viewContract.showError(R.string.dictionary_error_delete_failure);
                         }
                 ));
     }
@@ -205,7 +207,7 @@ public class LanguageItemVM extends BaseViewModel {
         void onRemovingDictionary(DictionaryModel dictionary);
         void onUpdatingDictionary(DictionaryModel dictionary);
         void onAskUpdateOrRemove(DictionaryModel dictionary, DictionaryListener listener);
-        void showError(String message);
-        void showMessage(String message);
+        void showError(@StringRes int message);
+        void showMessage(@StringRes int message);
     }
 }

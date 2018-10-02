@@ -8,5 +8,5 @@ public class TagsUtil {
 
     public static final String ORDER_DATE_MODIFIED = "dateModified";
     public static final String ORDER_TITLE = "title";
-    public static final String ORDER_LANUAGE = "languageLocale";
+    public static final String ORDER_LANGUAGE = "languageLocale";
 }
