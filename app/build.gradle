@@ -44,6 +44,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
 
     // Android Support libraries
@@ -61,7 +62,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-oss-licenses:16.0.1'
     implementation 'com.google.android.gms:play-services-vision:16.2.0'
 
-
     /// Firebase
     implementation 'com.google.firebase:firebase-core:16.0.4'       // Analytics
     implementation 'com.google.firebase:firebase-ads:16.0.1'        // Ads
@@ -73,14 +73,16 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'           // RxAndroid
     implementation 'io.reactivex.rxjava2:rxjava:2.2.2'              // RxJAVA
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'          // Retrofit for HTTP requests
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'    // Retrofit Gson for parsing json
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    // Retrofit Gson for parsing json
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'   // Retrofit adapter for Rx
     implementation 'com.jakewharton.timber:timber:4.7.1'            // Logger
     implementation 'com.annimon:stream:1.2.1'                       // Stream API
     implementation 'org.apache.commons:commons-lang3:3.8.1'         // Apache Commons: Utilities
 
     implementation 'de.hdodenhof:circleimageview:2.2.0'             // Circle ImageView
-    implementation 'com.daimajia.swipelayout:library:1.2.0@aar'     // Swipe layout (swipe items in document list)
+    implementation 'com.daimajia.swipelayout:library:1.2.0@aar'
+    // Swipe layout (swipe items in document list)
     implementation 'com.github.vihtarb:tooltip:0.1.9'               // Popups for tutorial
 }
 
