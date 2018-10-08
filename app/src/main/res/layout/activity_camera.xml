@@ -22,14 +22,17 @@
             app:layout_constraintRight_toRightOf="parent"
             android:contentDescription="@null" />
 
+        <com.otaliastudios.cameraview.CameraView
+            android:id="@+id/camera"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:keepScreenOn="true" />
+
         <com.xpn.spellnote.ui.document.edit.imagetextrecognition.GraphicOverlay
             android:id="@+id/graphic_overlay"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true" />
+            android:layout_height="match_parent" />
 
         <ImageButton
             android:id="@+id/close"
