@@ -2,6 +2,7 @@ package com.xpn.spellnote.ui.document.list.archive;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +26,7 @@ public class FragmentViewArchive extends BaseFragmentDocumentList {
     private FragmentViewArchiveBinding binding;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_archive, container, false);
         binding.list.setAdapter(adapter);

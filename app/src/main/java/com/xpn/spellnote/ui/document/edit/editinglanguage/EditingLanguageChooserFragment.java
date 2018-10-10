@@ -1,9 +1,10 @@
 package com.xpn.spellnote.ui.document.edit.editinglanguage;
 
-import android.app.Fragment;
 import android.databinding.DataBindingUtil;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,7 +28,7 @@ public class EditingLanguageChooserFragment extends Fragment implements EditingL
     private EditingLanguageChooserVM viewModel;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_editing_language_chooser, container, false);
         contract = (EditingLanguageChooserContract) getActivity();

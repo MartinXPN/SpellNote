@@ -1,11 +1,12 @@
 package com.xpn.spellnote.ui.document.edit;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,6 +30,7 @@ import com.xpn.spellnote.ui.ads.InterstitialAdHelper;
 import com.xpn.spellnote.ui.ads.RemoveAdsBilling;
 import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment;
+import com.xpn.spellnote.ui.document.edit.imagetextrecognition.CameraImageTextRecognitionFragment;
 import com.xpn.spellnote.ui.document.edit.suggestions.SuggestionsVM;
 import com.xpn.spellnote.ui.util.EditCorrectText.WordCorrectness;
 import com.xpn.spellnote.ui.util.ViewUtil;
@@ -48,12 +50,14 @@ import timber.log.Timber;
 public class ActivityEditDocument extends AppCompatActivity
         implements EditDocumentVM.ViewContract,
         EditingLanguageChooserFragment.EditingLanguageChooserContract,
+        CameraImageTextRecognitionFragment.TextRecognitionContract,
         SuggestionsVM.ViewContract {
 
     private static final String USER_PREFERENCE_SHOW_SUGGESTIONS = "show_sugg";
     private static final String USER_PREFERENCE_CHECK_SPELLING = "spell_check";
     private static final String EXTRA_DOCUMENT_ID = "doc_id";
     private static final String CACHE_DEFAULT_LOCALE = "default_locale";
+    private static final String IMAGE_TEXT_RECOGNIZER_FRAGMENT = "img_text_recognition";
     private static final Integer SPEECH_RECOGNIZER_CODE = 1;
     private static final Integer LANGUAGE_SELECTION_CODE = 2;
     private boolean checkSpelling;
@@ -96,7 +100,7 @@ public class ActivityEditDocument extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_document);
-        editingLanguageChooserFragment = (EditingLanguageChooserFragment) getFragmentManager().findFragmentById(R.id.editing_language_chooser_fragment);
+        editingLanguageChooserFragment = (EditingLanguageChooserFragment) getSupportFragmentManager().findFragmentById(R.id.editing_language_chooser_fragment);
 
         /// set-up analytics
         analytics = FirebaseAnalytics.getInstance(this);
@@ -385,6 +389,36 @@ public class ActivityEditDocument extends AppCompatActivity
         editingLanguageChooserFragment.setCurrentLanguage(locale);
         binding.content.setLocale(new Locale(locale));
     }
+
+
+    public void onShowImageTextRecognizer() {
+
+        // get fragment manager, Make sure the current transaction finishes first
+        FragmentManager fm = getSupportFragmentManager();
+        fm.executePendingTransactions();
+
+        // Don't make new transaction if it's already present
+        binding.imageTextRecognition.setVisibility(View.VISIBLE);
+        if( fm.findFragmentByTag( IMAGE_TEXT_RECOGNIZER_FRAGMENT ) == null ) {
+            fm.beginTransaction()
+                    .replace(R.id.image_text_recognition, new CameraImageTextRecognitionFragment(), IMAGE_TEXT_RECOGNIZER_FRAGMENT)
+                    .setCustomAnimations(android.R.anim.bounce_interpolator, android.R.anim.linear_interpolator)
+                    .commit();
+        }
+    }
+
+    @Override
+    public void onTextRecognized(String text) {
+        binding.content.replaceSelection(text);
+    }
+
+    @Override
+    public void onCloseTextRecognizer() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(IMAGE_TEXT_RECOGNIZER_FRAGMENT);
+        if(fragment != null)
+            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+    }
+
 
     @Override
     public void onSuggestionSelected(String suggestion) {

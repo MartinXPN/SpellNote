@@ -127,6 +127,14 @@
                 tools:layout="@layout/fragment_editing_language_chooser" />
 
 
+            <FrameLayout
+                android:id="@+id/image_text_recognition"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_alignParentBottom="true"
+                android:visibility="gone" />
+
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="4dp"

@@ -55,7 +55,7 @@
             tools:replace="android:theme" />
 
         <activity
-            android:name=".ui.document.edit.imagetextrecognition.CameraActivity"
+            android:name=".ui.document.edit.imagetextrecognition.CameraImageTextRecognitionFragment"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

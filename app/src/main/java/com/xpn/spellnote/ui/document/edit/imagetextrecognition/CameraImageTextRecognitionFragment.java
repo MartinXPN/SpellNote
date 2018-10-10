@@ -10,10 +10,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.media.ExifInterface;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.cameraview.AspectRatio;
@@ -36,17 +40,19 @@ import java.util.List;
 import timber.log.Timber;
 
 
-public class CameraActivity extends AppCompatActivity implements CameraVM.ViewContract {
+public class CameraImageTextRecognitionFragment extends Fragment implements CameraVM.ViewContract {
 
     private static final int REQUEST_CAMERA_PERMISSION = 1001;
     public static final int PICK_IMAGE = 1007;
 
+    private TextRecognitionContract contract;
     private ActivityCameraBinding binding;
     private CameraVM viewModel;
 
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case REQUEST_CAMERA_PERMISSION:
                 if (permissions.length != 1 || grantResults.length != 1) {
@@ -60,12 +66,14 @@ public class CameraActivity extends AppCompatActivity implements CameraVM.ViewCo
         }
     }
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_camera);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_camera_image_text_recognition, container, false);
+        contract = (TextRecognitionContract) getActivity();
         viewModel = new CameraVM(this);
         binding.setViewModel(viewModel);
+
         binding.camera.addCallback(new CameraView.Callback() {
 
             @Override
@@ -74,7 +82,7 @@ public class CameraActivity extends AppCompatActivity implements CameraVM.ViewCo
                 try {
                     exifInterface = new ExifInterface(new ByteArrayInputStream(data));
                 } catch (IOException e) {
-                    Toast.makeText(CameraActivity.this, "Couldn\'t display the image", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Couldn\'t display the image", Toast.LENGTH_SHORT).show();
                     Timber.e(e);
                     return;
                 }
@@ -98,45 +106,45 @@ public class CameraActivity extends AppCompatActivity implements CameraVM.ViewCo
                 viewModel.onCaptured(rotatedBitmap);
             }
         });
+
+        return binding.getRoot();
     }
 
+
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         viewModel.onStart();
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        assert getActivity() != null;
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             binding.camera.start();
             for(AspectRatio ratio : binding.camera.getSupportedAspectRatios()) {
                 Timber.d(ratio.toString());
             }
         }
         else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
         }
     }
 
     @Override
-    protected void onPause() {
+    public void onStop() {
         binding.camera.stop();
-        super.onPause();
+        viewModel.onDestroy();
+        super.onStop();
     }
 
-    @Override
-    protected void onDestroy() {
-        viewModel.onDestroy();
-        super.onDestroy();
-    }
 
     private void processCloudTextRecognitionResult(FirebaseVisionDocumentText text) {
         // Task completed successfully
         if (text == null) {
             viewModel.onTextRecognized("");
-            Toast.makeText(getApplicationContext(), "No text found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "No text found", Toast.LENGTH_SHORT).show();
             return;
         }
         binding.graphicOverlay.clear();
@@ -158,17 +166,19 @@ public class CameraActivity extends AppCompatActivity implements CameraVM.ViewCo
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        assert getActivity() != null;
+
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             if (data == null || data.getData() == null) {
-                Toast.makeText(this, "No image selected!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "No image selected!", Toast.LENGTH_SHORT).show();
                 return;
             }
             InputStream inputStream = null;
             try {
-                inputStream = this.getContentResolver().openInputStream(data.getData());
+                inputStream = getActivity().getContentResolver().openInputStream(data.getData());
             }
             catch (FileNotFoundException e) {
-                Toast.makeText(this, "Image corrupted!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Image corrupted!", Toast.LENGTH_SHORT).show();
                 Timber.e(e);
             }
             Bitmap image = BitmapFactory.decodeStream(inputStream);
@@ -210,19 +220,16 @@ public class CameraActivity extends AppCompatActivity implements CameraVM.ViewCo
 
     @Override
     public void onDelegateRecognizedText(String text) {
-        /// TODO delegate the recognized text to parent activity
+        contract.onTextRecognized(text);
     }
 
     @Override
     public void onClose() {
-        /// TODO destroy this object from parent activity
+        contract.onCloseTextRecognizer();
     }
 
-    public interface OnRecognizedTextListener {
-        void onTextRecognized();
-    }
-
-    public interface OnCloseImageTextRecognizerListener {
+    public interface TextRecognitionContract {
+        void onTextRecognized(String text);
         void onCloseTextRecognizer();
     }
 }
