@@ -1,14 +1,14 @@
 package com.xpn.spellnote.ui.document.edit.imagetextrecognition;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.media.ExifInterface;
 import android.support.v4.app.ActivityCompat;
@@ -27,7 +27,9 @@ import com.xpn.spellnote.R;
 import com.xpn.spellnote.databinding.ActivityCameraBinding;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,10 +38,12 @@ import timber.log.Timber;
 
 public class CameraActivity extends AppCompatActivity implements CameraVM.ViewContract {
 
+    private static final int REQUEST_CAMERA_PERMISSION = 1001;
+    public static final int PICK_IMAGE = 1007;
+
     private ActivityCameraBinding binding;
     private CameraVM viewModel;
-    private Handler mBackgroundHandler;
-    private static final int REQUEST_CAMERA_PERMISSION = 1001;
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -63,14 +67,6 @@ public class CameraActivity extends AppCompatActivity implements CameraVM.ViewCo
         viewModel = new CameraVM(this);
         binding.setViewModel(viewModel);
         binding.camera.addCallback(new CameraView.Callback() {
-
-            @Override
-            public void onCameraOpened(CameraView cameraView) {
-            }
-
-            @Override
-            public void onCameraClosed(CameraView cameraView) {
-            }
 
             @Override
             public void onPictureTaken(CameraView cameraView, final byte[] data) {
@@ -133,17 +129,13 @@ public class CameraActivity extends AppCompatActivity implements CameraVM.ViewCo
     @Override
     protected void onDestroy() {
         viewModel.onDestroy();
-        if (mBackgroundHandler != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)    mBackgroundHandler.getLooper().quitSafely();
-            else                                                                mBackgroundHandler.getLooper().quit();
-            mBackgroundHandler = null;
-        }
         super.onDestroy();
     }
 
     private void processCloudTextRecognitionResult(FirebaseVisionDocumentText text) {
         // Task completed successfully
         if (text == null) {
+            viewModel.onTextRecognized("");
             Toast.makeText(getApplicationContext(), "No text found", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -159,6 +151,43 @@ public class CameraActivity extends AppCompatActivity implements CameraVM.ViewCo
                 }
             }
         }
+        viewModel.onTextRecognized(text.getText());
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+            if (data == null || data.getData() == null) {
+                Toast.makeText(this, "No image selected!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            InputStream inputStream = null;
+            try {
+                inputStream = this.getContentResolver().openInputStream(data.getData());
+            }
+            catch (FileNotFoundException e) {
+                Toast.makeText(this, "Image corrupted!", Toast.LENGTH_SHORT).show();
+                Timber.e(e);
+            }
+            Bitmap image = BitmapFactory.decodeStream(inputStream);
+            viewModel.onCaptured(image);
+        }
+    }
+
+    @Override
+    public void onChooseFromGallery() {
+        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.setType("image/*");
+
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+        startActivityForResult(chooserIntent, PICK_IMAGE);
     }
 
     @Override
@@ -177,5 +206,23 @@ public class CameraActivity extends AppCompatActivity implements CameraVM.ViewCo
         detector.processImage(image)
                 .addOnSuccessListener(this::processCloudTextRecognitionResult)
                 .addOnFailureListener(Timber::e);
+    }
+
+    @Override
+    public void onDelegateRecognizedText(String text) {
+        /// TODO delegate the recognized text to parent activity
+    }
+
+    @Override
+    public void onClose() {
+        /// TODO destroy this object from parent activity
+    }
+
+    public interface OnRecognizedTextListener {
+        void onTextRecognized();
+    }
+
+    public interface OnCloseImageTextRecognizerListener {
+        void onCloseTextRecognizer();
     }
 }
