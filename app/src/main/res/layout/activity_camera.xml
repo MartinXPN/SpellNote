@@ -4,7 +4,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <data />
+    <data>
+        <variable
+            name="viewModel"
+            type="com.xpn.spellnote.ui.document.edit.imagetextrecognition.CameraVM" />
+
+        <import type="com.xpn.spellnote.ui.document.edit.imagetextrecognition.CameraVM.State"/>
+        <import type="android.view.View" />
+    </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -12,22 +19,28 @@
         tools:context=".CameraActivity">
 
         <ImageView
-            android:id="@+id/image_view"
+            android:id="@+id/image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitStart"
-            app:layout_constraintTop_toBottomOf="parent"
-            app:layout_constraintBottom_toTopOf="parent"
+            android:layout_height="wrap_content"
+            app:src="@{viewModel.currentImage}"
+            android:visibility="@{viewModel.state != State.CAPTURING ? View.VISIBLE : View.GONE}"
+            android:contentDescription="@null"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:contentDescription="@null" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-        <com.otaliastudios.cameraview.CameraView
+        <com.google.android.cameraview.CameraView
             android:id="@+id/camera"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/black"
-            android:keepScreenOn="true" />
+            android:layout_height="wrap_content"
+            android:keepScreenOn="true"
+            android:adjustViewBounds="true"
+            android:visibility="@{viewModel.state == State.CAPTURING ? View.VISIBLE : View.GONE}"
+            app:autoFocus="true"
+            app:aspectRatio="4:3"
+            app:facing="back"
+            app:flash="off"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <com.xpn.spellnote.ui.document.edit.imagetextrecognition.GraphicOverlay
             android:id="@+id/graphic_overlay"
@@ -64,7 +77,8 @@
             android:src="@drawable/ic_capture"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@null"
-            android:visibility="visible"
+            android:visibility="@{viewModel.state == State.CAPTURING ? View.VISIBLE : View.GONE}"
+            android:onClick="@{() -> viewModel.captureImage()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="@+id/operations_background"
@@ -74,7 +88,7 @@
             android:id="@+id/loading"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:visibility="gone"
+            android:visibility="@{viewModel.state == State.PROCESSING_TEXT ? View.VISIBLE : View.GONE}"
             style="?android:attr/progressBarStyleLarge"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -89,7 +103,7 @@
             android:scaleType="fitCenter"
             android:src="@drawable/ic_done"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:visibility="gone"
+            android:visibility="@{viewModel.state == State.DONE ? View.VISIBLE : View.GONE}"
             android:contentDescription="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -106,6 +120,7 @@
             android:contentDescription="@null"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_retake"
+            android:visibility="@{viewModel.state == State.DONE ? View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="@+id/operations_background"
