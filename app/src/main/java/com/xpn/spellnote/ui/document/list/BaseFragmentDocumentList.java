@@ -158,7 +158,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         }
 
         @Override
-        public void onBindViewHolder(final BindingHolder holder, int position) {
+        public void onBindViewHolder(@NonNull final BindingHolder holder, int position) {
             holder.getBinding().setVariable(BR.viewModel, getListItemVM( documentList.get( position ), BaseFragmentDocumentList.this));
             holder.getBinding().executePendingBindings();
 

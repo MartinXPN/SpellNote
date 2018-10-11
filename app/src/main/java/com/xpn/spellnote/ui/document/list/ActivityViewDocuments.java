@@ -1,11 +1,11 @@
 package com.xpn.spellnote.ui.document.list;
 
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -83,7 +83,7 @@ public class ActivityViewDocuments extends AppCompatActivity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Integer currentFragmentTag = Integer.parseInt(getFragmentManager().findFragmentById( R.id.list_of_documents ).getTag());
+        Integer currentFragmentTag = Integer.parseInt(getSupportFragmentManager().findFragmentById( R.id.list_of_documents ).getTag());
         outState.putInt( SAVED_STATE_FRAGMENT_TAG, currentFragmentTag );
     }
 
@@ -116,7 +116,7 @@ public class ActivityViewDocuments extends AppCompatActivity
         binding.navigation.setCheckedItem(navigationId);
 
         // get fragment manager, Make sure the current transaction finishes first
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
         fm.executePendingTransactions();
 
         // Don't make new transaction if it's already present
