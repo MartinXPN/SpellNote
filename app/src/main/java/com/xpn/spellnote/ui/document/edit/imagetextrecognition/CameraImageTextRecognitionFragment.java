@@ -29,12 +29,14 @@ import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databinding.FragmentCameraImageTextRecognitionBinding;
+import com.xpn.spellnote.models.DictionaryModel;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import timber.log.Timber;
@@ -102,7 +104,22 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
                 }
 
                 Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+                /// compress image for faster performance
+                double originalImageSizeMB = data.length / 1e6;
+                double targetImageSizeMB = 0.2;
+                int quality = 100 - (int) (100. * originalImageSizeMB / targetImageSizeMB);
+                quality = Math.min(quality, 90);
+                quality = Math.max(quality, 20);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream);
+                byte[] byteArray = stream.toByteArray();
+                Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                Timber.d("Length changed from %d to %d with quality %d", data.length, byteArray.length, quality);
+                Timber.d("Original image size: %fMB", originalImageSizeMB);
+                Timber.d("Compressed image size: %fMB", byteArray.length / 1e6);
+
+                Bitmap rotatedBitmap = Bitmap.createBitmap(compressedBitmap, 0, 0, compressedBitmap.getWidth(), compressedBitmap.getHeight(), matrix, true);
                 viewModel.onCaptured(rotatedBitmap);
             }
         });
@@ -208,7 +225,7 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
     @Override
     public void onRecognizeText(Bitmap picture) {
         FirebaseVisionCloudDocumentRecognizerOptions options = new FirebaseVisionCloudDocumentRecognizerOptions.Builder()
-                        .setLanguageHints(Arrays.asList("en", "ru"))
+                        .setLanguageHints(Collections.singletonList(contract.getCurrentDictionary().getLocale()))
                         .build();
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(picture);
         FirebaseVisionDocumentTextRecognizer detector = FirebaseVision.getInstance().getCloudDocumentTextRecognizer(options);
@@ -231,5 +248,6 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
     public interface TextRecognitionContract {
         void onTextRecognized(String text);
         void onCloseTextRecognizer();
+        DictionaryModel getCurrentDictionary();
     }
 }
