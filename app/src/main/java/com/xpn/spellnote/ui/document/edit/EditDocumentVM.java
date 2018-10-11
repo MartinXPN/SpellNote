@@ -93,6 +93,15 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
         addSubscription(documentService.saveDocument(document).subscribe());
     }
 
+    public void onLaunchSpeechRecognizer() {
+        viewContract.onLaunchSpeechRecognizer();
+    }
+
+
+    public void onShowImageTextRecognizer() {
+        viewContract.onShowImageTextRecognizer();
+    }
+
 
     @Bindable
     public String getTitle() {
@@ -210,5 +219,7 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
         DictionaryModel getCurrentDictionary();
         void onDocumentAvailable(DocumentModel document);
         void onDictionaryChanged(WordModel word);
+        void onLaunchSpeechRecognizer();
+        void onShowImageTextRecognizer();
     }
 }

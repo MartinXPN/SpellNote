@@ -253,7 +253,6 @@ public class ActivityEditDocument extends AppCompatActivity
 
         if( id == R.id.action_show_suggestions )    { updateShowSuggestions( false );               return true; }
         if( id == R.id.action_hide_suggestions )    { updateShowSuggestions( true );                return true; }
-        else if( id == R.id.action_record )         { Util.displaySpeechRecognizer( this, SPEECH_RECOGNIZER_CODE, this.getCurrentDictionary().getLocale() );   return true; }
         else if( id == R.id.action_send )           { Util.sendDocument( this, "", binding.content.getText().toString() );      return true; }
         else if( id == R.id.action_copy )           { Util.copyTextToClipboard( this, binding.content.getText().toString() );   return true; }
         else if( id == R.id.action_check_spelling ) { updateSpellChecking( !checkSpelling, item );                              return true; }
@@ -391,7 +390,13 @@ public class ActivityEditDocument extends AppCompatActivity
     }
 
 
+    public void onLaunchSpeechRecognizer() {
+        Util.displaySpeechRecognizer( this, SPEECH_RECOGNIZER_CODE, this.getCurrentDictionary().getLocale() );
+    }
+
+
     public void onShowImageTextRecognizer() {
+        ViewUtil.hideKeyboard(this);
 
         // get fragment manager, Make sure the current transaction finishes first
         FragmentManager fm = getSupportFragmentManager();

@@ -28,7 +28,7 @@ import com.google.firebase.ml.vision.document.FirebaseVisionCloudDocumentRecogni
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer;
 import com.xpn.spellnote.R;
-import com.xpn.spellnote.databinding.ActivityCameraBinding;
+import com.xpn.spellnote.databinding.FragmentCameraImageTextRecognitionBinding;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
@@ -46,7 +46,7 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
     public static final int PICK_IMAGE = 1007;
 
     private TextRecognitionContract contract;
-    private ActivityCameraBinding binding;
+    private FragmentCameraImageTextRecognitionBinding binding;
     private CameraVM viewModel;
 
 
