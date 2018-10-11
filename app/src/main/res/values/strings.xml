@@ -44,6 +44,7 @@
 
     <string name="hint_edit_document_title">Title…</string>
     <string name="hint_edit_content">Type the text here…</string>
+    <string name="hint_choose_image">Choose an image…</string>
     <string name="hint_choose_email_client">Choose an Email client…</string>
     <string name="hint_sent_file">Send Message…</string>
     <string name="hint_move_to_documents">Move to Documents</string>
@@ -76,12 +77,14 @@
     <string name="request_remove_all_documents_option_cancel">Cancel</string>
 
 
+    <string name="error_something_wrong">Something went wrong</string>
     <string name="error_couldnt_create_document">Couldn\'t create document</string>
     <string name="error_no_email_clients">There are no Email applications installed</string>
     <string name="error_no_messaging_apps">There are no messaging applications installed</string>
     <string name="error_no_speech_recognizer">Speech recognizer not found on your device</string>
     <string name="error_no_clipboard">No clipboard found</string>
     <string name="message_copied_to_clipboard">Text copied to clipboard</string>
+    <string name="error_no_text_found">No text found</string>
 
     <string name="dictionary_download_canceled">Download canceled</string>
     <string name="dictionary_error_save_failure">Couldn\'t save dictionary</string>

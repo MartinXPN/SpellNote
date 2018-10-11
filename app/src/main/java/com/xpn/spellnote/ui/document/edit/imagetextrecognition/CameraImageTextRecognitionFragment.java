@@ -84,8 +84,8 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
                 try {
                     exifInterface = new ExifInterface(new ByteArrayInputStream(data));
                 } catch (IOException e) {
-                    Toast.makeText(getActivity(), "Couldn\'t display the image", Toast.LENGTH_SHORT).show();
-                    Timber.e(e);
+                    Toast.makeText(getActivity(), R.string.error_something_wrong, Toast.LENGTH_SHORT).show();
+                    Timber.e(e, "Couldn\'t display the image");
                     return;
                 }
                 int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
@@ -161,7 +161,7 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
         // Task completed successfully
         if (text == null) {
             viewModel.onTextRecognized("");
-            Toast.makeText(getActivity(), "No text found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.error_no_text_found, Toast.LENGTH_SHORT).show();
             return;
         }
         binding.graphicOverlay.clear();
@@ -195,8 +195,8 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
                 inputStream = getActivity().getContentResolver().openInputStream(data.getData());
             }
             catch (FileNotFoundException e) {
-                Toast.makeText(getActivity(), "Image corrupted!", Toast.LENGTH_SHORT).show();
-                Timber.e(e);
+                Toast.makeText(getActivity(), R.string.error_something_wrong, Toast.LENGTH_SHORT).show();
+                Timber.e(e, "Image corrupted");
             }
             Bitmap image = BitmapFactory.decodeStream(inputStream);
             viewModel.onCaptured(image);
@@ -211,7 +211,7 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
         Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickIntent.setType("image/*");
 
-        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+        Intent chooserIntent = Intent.createChooser(getIntent, getString(R.string.hint_choose_image));
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
 
         startActivityForResult(chooserIntent, PICK_IMAGE);
