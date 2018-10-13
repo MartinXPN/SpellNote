@@ -38,6 +38,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    splits {
+        abi {
+            enable true             // Enables building multiple APKs per ABI.
+            reset()                 // Resets the list of ABIs that Gradle should create APKs for to none.
+            include "mips", "x86", "x86_64", "arm64-v8a", "armeabi-v7a"
+            universalApk false      // No universal APK that includes all ABIs
+        }
+    }
 }
 
 dependencies {
