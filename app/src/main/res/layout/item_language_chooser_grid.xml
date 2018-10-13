@@ -23,6 +23,7 @@
             android:padding="5dp"
             app:imageUrl="@{viewModel.logoUrl}"
             app:placeholder="@{@drawable/ic_language}"
+            app:format='@{"svg"}'
             android:layout_centerHorizontal="true"
             android:contentDescription="@null" />
 

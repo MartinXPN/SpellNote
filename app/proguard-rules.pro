@@ -45,7 +45,15 @@
 -keep class com.xpn.spellnote.** { *; }
 -keep class android.view.MenuItem { *; }
 -keep class com.tooltip.** { *; }
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
 
+# for DexGuard only
+-keepresourcexmlelements manifest/application/meta-data@value=GlideModule
 
 -keep class * extends java.util.ListResourceBundle {
     protected java.lang.Object[][] getContents();
