@@ -159,7 +159,7 @@
             <FrameLayout
                 android:id="@+id/image_text_recognition"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="350dp"
                 android:layout_alignParentBottom="true"
                 android:visibility="gone" />
 
