@@ -22,6 +22,8 @@
 -dontwarn java.nio.file.Files
 -dontwarn java.nio.file.Path
 -dontwarn java.nio.file.OpenOption
+-dontwarn com.caverock.androidsvg.**
+-dontwarn org.codehaus.mojo.**
 -dontwarn retrofit2.**
 -dontwarn com.google.appengine.**
 -dontwarn rx.**
@@ -51,9 +53,6 @@
   **[] $VALUES;
   public *;
 }
-
-# for DexGuard only
--keepresourcexmlelements manifest/application/meta-data@value=GlideModule
 
 -keep class * extends java.util.ListResourceBundle {
     protected java.lang.Object[][] getContents();
