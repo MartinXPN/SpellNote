@@ -31,18 +31,21 @@
 -dontwarn com.xpn.spellnote.ui.**
 -dontwarn org.conscrypt.**
 -dontwarn libcore.io.**
+-dontwarn javax.**
+-dontwarn io.realm.**
 
 -keep class io.realm.annotations.RealmModule
 -keep @io.realm.annotations.RealmModule class *
 -keep class io.realm.internal.Keep
 -keep @io.realm.internal.Keep class *
--dontwarn javax.**
--dontwarn io.realm.**
 
 -keep class retrofit2.** { *; }
 -keep public class com.google.** { *; }
 -keep class com.google.android.gms.** { *; }
 -keep class com.xpn.spellnote.** { *; }
+-keep class android.view.MenuItem { *; }
+-keep class com.tooltip.** { *; }
+
 
 -keep class * extends java.util.ListResourceBundle {
     protected java.lang.Object[][] getContents();
