@@ -239,8 +239,8 @@ public class ActivityEditDocument extends AppCompatActivity
 
         MenuItem suggestions = menu.findItem(R.id.action_show_suggestions);
         MenuItem addToDictionary = menu.findItem(R.id.action_add_word_to_dictionary);
-        if(suggestions != null && suggestions.getActionView() != null )         ((TooltipActionView) suggestions.getActionView()).setMenuItem(suggestions);
-        if(addToDictionary != null && addToDictionary.getActionView() != null ) ((TooltipActionView) addToDictionary.getActionView()).setMenuItem(addToDictionary);
+        ((TooltipActionView) suggestions.getActionView()).setMenuItem(suggestions);
+        ((TooltipActionView) addToDictionary.getActionView()).setMenuItem(addToDictionary);
 
         if( suggestionTutorial == null )
             suggestionTutorial = new Tutorial(this, "suggestion_tutorial", R.string.tutorial_show_suggestions, Gravity.BOTTOM).setTarget(menu.findItem(R.id.action_show_suggestions));
