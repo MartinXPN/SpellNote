@@ -23,27 +23,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <io.fotoapparat.view.CameraView
+                android:id="@+id/camera"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:keepScreenOn="true"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
             <ImageView
                 android:id="@+id/image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:scaleType="centerInside"
                 android:visibility="@{viewModel.state != State.CAPTURING ? View.VISIBLE : View.GONE}"
                 android:contentDescription="@null"
                 app:src="@{viewModel.currentImage}"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-            <com.google.android.cameraview.CameraView
-                android:id="@+id/camera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:keepScreenOn="true"
-                android:adjustViewBounds="true"
-                android:visibility="@{viewModel.state == State.CAPTURING ? View.VISIBLE : View.GONE}"
-                app:autoFocus="true"
-                app:facing="back"
-                app:flash="off"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
             <com.xpn.spellnote.ui.document.edit.imagetextrecognition.GraphicOverlay

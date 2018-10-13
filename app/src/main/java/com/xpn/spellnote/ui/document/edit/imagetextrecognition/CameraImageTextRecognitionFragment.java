@@ -11,7 +11,6 @@ import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.media.ExifInterface;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -20,8 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.cameraview.AspectRatio;
-import com.google.android.cameraview.CameraView;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.document.FirebaseVisionCloudDocumentRecognizerOptions;
@@ -31,14 +28,20 @@ import com.xpn.spellnote.R;
 import com.xpn.spellnote.databinding.FragmentCameraImageTextRecognitionBinding;
 import com.xpn.spellnote.models.DictionaryModel;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
+import io.fotoapparat.Fotoapparat;
+import io.fotoapparat.log.LoggersKt;
+import io.fotoapparat.parameter.ScaleType;
+import io.fotoapparat.selector.FlashSelectorsKt;
+import io.fotoapparat.selector.FocusModeSelectorsKt;
+import io.fotoapparat.selector.LensPositionSelectorsKt;
+import io.fotoapparat.selector.ResolutionSelectorsKt;
+import io.fotoapparat.selector.SelectorsKt;
 import timber.log.Timber;
 
 
@@ -50,6 +53,7 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
     private TextRecognitionContract contract;
     private FragmentCameraImageTextRecognitionBinding binding;
     private CameraVM viewModel;
+    private Fotoapparat camera;
 
 
     @Override
@@ -76,54 +80,28 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
         viewModel = new CameraVM(this);
         binding.setViewModel(viewModel);
 
-        binding.camera.addCallback(new CameraView.Callback() {
+        camera = Fotoapparat.with(getActivity())
+                .into(binding.camera)
+                .previewScaleType(ScaleType.CenterInside)
+                .photoResolution(ResolutionSelectorsKt.highestResolution())
+                .lensPosition(LensPositionSelectorsKt.back())
+                // Use the first focus mode which is supported by device
+                .focusMode(SelectorsKt.firstAvailable(
+                        FocusModeSelectorsKt.continuousFocusPicture(),
+                        FocusModeSelectorsKt.autoFocus(),
+                        FocusModeSelectorsKt.fixed()
+                ))
+                // Similar to how it is done for focus mode, this time for flash
+                .flash(SelectorsKt.firstAvailable(
+                        FlashSelectorsKt.off(),
+                        FlashSelectorsKt.autoRedEye(),
+                        FlashSelectorsKt.autoFlash(),
+                        FlashSelectorsKt.torch()
+                ))
+                .logger(LoggersKt.logcat())
+                .build();
 
-            @Override
-            public void onPictureTaken(CameraView cameraView, final byte[] data) {
-                ExifInterface exifInterface;
-                try {
-                    exifInterface = new ExifInterface(new ByteArrayInputStream(data));
-                } catch (IOException e) {
-                    Toast.makeText(getActivity(), R.string.error_something_wrong, Toast.LENGTH_SHORT).show();
-                    Timber.e(e, "Couldn\'t display the image");
-                    return;
-                }
-                int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-
-                Matrix matrix = new Matrix();
-                switch (orientation) {
-                    case ExifInterface.ORIENTATION_NORMAL:          break;
-                    case ExifInterface.ORIENTATION_ROTATE_180:      matrix.setRotate(180);          break;
-                    case ExifInterface.ORIENTATION_ROTATE_90:       matrix.setRotate(90);           break;
-                    case ExifInterface.ORIENTATION_ROTATE_270:      matrix.setRotate(-90);          break;
-                    case ExifInterface.ORIENTATION_FLIP_HORIZONTAL: matrix.setScale(-1, 1); break;
-                    case ExifInterface.ORIENTATION_FLIP_VERTICAL:   matrix.setRotate(180);  matrix.postScale(-1, 1);    break;
-                    case ExifInterface.ORIENTATION_TRANSPOSE:       matrix.setRotate(90);   matrix.postScale(-1, 1);    break;
-                    case ExifInterface.ORIENTATION_TRANSVERSE:      matrix.setRotate(-90);  matrix.postScale(-1, 1);    break;
-                    default:    break;
-                }
-
-                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-
-                /// compress image for faster performance
-                double originalImageSizeMB = data.length / 1e6;
-                double targetImageSizeMB = 0.2;
-                int quality = 100 - (int) (100. * originalImageSizeMB / targetImageSizeMB);
-                quality = Math.min(quality, 90);
-                quality = Math.max(quality, 20);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream);
-                byte[] byteArray = stream.toByteArray();
-                Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-                Timber.d("Length changed from %d to %d with quality %d", data.length, byteArray.length, quality);
-                Timber.d("Original image size: %fMB", originalImageSizeMB);
-                Timber.d("Compressed image size: %fMB", byteArray.length / 1e6);
-
-                Bitmap rotatedBitmap = Bitmap.createBitmap(compressedBitmap, 0, 0, compressedBitmap.getWidth(), compressedBitmap.getHeight(), matrix, true);
-                viewModel.onCaptured(rotatedBitmap);
-            }
-        });
-
+        camera.start();
         return binding.getRoot();
     }
 
@@ -139,10 +117,7 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
         super.onResume();
         assert getActivity() != null;
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            binding.camera.start();
-            for(AspectRatio ratio : binding.camera.getSupportedAspectRatios()) {
-                Timber.d(ratio.toString());
-            }
+            camera.start();
         }
         else {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
@@ -151,7 +126,7 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
 
     @Override
     public void onStop() {
-        binding.camera.stop();
+        camera.stop();
         viewModel.onDestroy();
         super.onStop();
     }
@@ -219,13 +194,39 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
 
     @Override
     public void onCaptureImage() {
-        binding.camera.takePicture();
+        camera.takePicture().toBitmap().whenAvailable(bitmapPhoto -> {
+            if(bitmapPhoto == null ) {
+                Toast.makeText(getActivity(), R.string.error_something_wrong, Toast.LENGTH_SHORT).show();
+                return null;
+            }
+            Matrix matrix = new Matrix();
+            matrix.setRotate(-bitmapPhoto.rotationDegrees);
+
+            /// compress image for faster performance
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            double originalImageSizeMB = bitmapPhoto.bitmap.getByteCount() / 1e6;
+            double targetImageSizeMB = 0.4;
+            int quality = 100 - (int) (100. * originalImageSizeMB / targetImageSizeMB);
+            quality = Math.min(quality, 90);
+            quality = Math.max(quality, 20);
+
+            bitmapPhoto.bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream);
+            byte[] byteArray = stream.toByteArray();
+            Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            Timber.d("Length changed from %d to %d with quality %d", bitmapPhoto.bitmap.getByteCount(), byteArray.length, quality);
+            Timber.d("Original image size: %fMB", originalImageSizeMB);
+            Timber.d("Compressed image size: %fMB", byteArray.length / 1e6);
+
+            Bitmap rotatedBitmap = Bitmap.createBitmap(compressedBitmap, 0, 0, compressedBitmap.getWidth(), compressedBitmap.getHeight(), matrix, true);
+            viewModel.onCaptured(rotatedBitmap);
+            return null;
+        });
     }
 
     @Override
     public void onRecognizeText(Bitmap picture) {
         FirebaseVisionCloudDocumentRecognizerOptions options = new FirebaseVisionCloudDocumentRecognizerOptions.Builder()
-                        .setLanguageHints(Collections.singletonList(contract.getCurrentDictionary().getLocale()))
+                        .setLanguageHints(Arrays.asList(contract.getCurrentDictionary().getLocale()))
                         .build();
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(picture);
         FirebaseVisionDocumentTextRecognizer detector = FirebaseVision.getInstance().getCloudDocumentTextRecognizer(options);
