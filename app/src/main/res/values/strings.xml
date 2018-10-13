@@ -85,6 +85,7 @@
     <string name="error_no_clipboard">No clipboard found</string>
     <string name="message_copied_to_clipboard">Text copied to clipboard</string>
     <string name="error_no_text_found">No text found</string>
+    <string name="error_no_permission_granted">Error! Permission not granted</string>
 
     <string name="dictionary_download_canceled">Download canceled</string>
     <string name="dictionary_error_save_failure">Couldn\'t save dictionary</string>

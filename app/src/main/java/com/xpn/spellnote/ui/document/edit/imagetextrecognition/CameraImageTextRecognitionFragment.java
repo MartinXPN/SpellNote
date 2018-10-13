@@ -79,29 +79,6 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
         contract = (TextRecognitionContract) getActivity();
         viewModel = new CameraVM(this);
         binding.setViewModel(viewModel);
-
-        camera = Fotoapparat.with(getActivity())
-                .into(binding.camera)
-                .previewScaleType(ScaleType.CenterInside)
-                .photoResolution(ResolutionSelectorsKt.highestResolution())
-                .lensPosition(LensPositionSelectorsKt.back())
-                // Use the first focus mode which is supported by device
-                .focusMode(SelectorsKt.firstAvailable(
-                        FocusModeSelectorsKt.continuousFocusPicture(),
-                        FocusModeSelectorsKt.autoFocus(),
-                        FocusModeSelectorsKt.fixed()
-                ))
-                // Similar to how it is done for focus mode, this time for flash
-                .flash(SelectorsKt.firstAvailable(
-                        FlashSelectorsKt.off(),
-                        FlashSelectorsKt.autoRedEye(),
-                        FlashSelectorsKt.autoFlash(),
-                        FlashSelectorsKt.torch()
-                ))
-                .logger(LoggersKt.logcat())
-                .build();
-
-        camera.start();
         return binding.getRoot();
     }
 
@@ -117,6 +94,28 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
         super.onResume();
         assert getActivity() != null;
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            if( camera == null )
+                camera = Fotoapparat.with(getActivity())
+                    .into(binding.camera)
+                    .previewScaleType(ScaleType.CenterInside)
+                    .photoResolution(ResolutionSelectorsKt.highestResolution())
+                    .lensPosition(LensPositionSelectorsKt.back())
+                    // Use the first focus mode which is supported by device
+                    .focusMode(SelectorsKt.firstAvailable(
+                            FocusModeSelectorsKt.continuousFocusPicture(),
+                            FocusModeSelectorsKt.autoFocus(),
+                            FocusModeSelectorsKt.fixed()
+                    ))
+                    // Similar to how it is done for focus mode, this time for flash
+                    .flash(SelectorsKt.firstAvailable(
+                            FlashSelectorsKt.off(),
+                            FlashSelectorsKt.autoRedEye(),
+                            FlashSelectorsKt.autoFlash(),
+                            FlashSelectorsKt.torch()
+                    ))
+                    .logger(LoggersKt.logcat())
+                    .build();
+
             camera.start();
         }
         else {
@@ -126,7 +125,8 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
 
     @Override
     public void onStop() {
-        camera.stop();
+        if( camera != null )
+            camera.stop();
         viewModel.onDestroy();
         super.onStop();
     }
@@ -194,6 +194,11 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
 
     @Override
     public void onCaptureImage() {
+        if( camera == null ) {
+            Toast.makeText(getActivity(), R.string.error_no_permission_granted, Toast.LENGTH_SHORT).show();
+            contract.onCloseTextRecognizer();
+            return;
+        }
         camera.takePicture().toBitmap().whenAvailable(bitmapPhoto -> {
             if(bitmapPhoto == null ) {
                 Toast.makeText(getActivity(), R.string.error_something_wrong, Toast.LENGTH_SHORT).show();
@@ -205,9 +210,9 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
             /// compress image for faster performance
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             double originalImageSizeMB = bitmapPhoto.bitmap.getByteCount() / 1e6;
-            double targetImageSizeMB = 0.4;
+            double targetImageSizeMB = 0.3;
             int quality = 100 - (int) (100. * originalImageSizeMB / targetImageSizeMB);
-            quality = Math.min(quality, 90);
+            quality = Math.min(quality, 95);
             quality = Math.max(quality, 20);
 
             bitmapPhoto.bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream);
