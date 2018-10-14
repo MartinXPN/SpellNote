@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.firebase.ml.vision.FirebaseVision;
@@ -27,6 +28,7 @@ import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecogniz
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databinding.FragmentCameraImageTextRecognitionBinding;
 import com.xpn.spellnote.models.DictionaryModel;
+import com.xpn.spellnote.ui.util.ImageUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -139,7 +141,19 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
             Toast.makeText(getActivity(), R.string.error_no_text_found, Toast.LENGTH_SHORT).show();
             return;
         }
+
+        // clear the graphic overlay
         binding.graphicOverlay.clear();
+        int[] coordinates = ImageUtil.getBitmapPositionInsideImageView(binding.image);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT
+        );
+        params.setMargins(coordinates[0], coordinates[1], coordinates[0], coordinates[1]);
+        binding.graphicOverlay.setLayoutParams(params);
+        Timber.d("left: %d, top: %d, right: %d, bottom: %d", coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
+
+
         List<FirebaseVisionDocumentText.Block> blocks = text.getBlocks();
         for (int i = 0; i < blocks.size(); i++) {
             List<FirebaseVisionDocumentText.Paragraph> paragraphs = blocks.get(i).getParagraphs();
