@@ -26,7 +26,6 @@ import com.xpn.spellnote.ui.document.edit.ActivityEditDocument;
 import com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM;
 import com.xpn.spellnote.ui.util.BindingHolder;
 import com.xpn.spellnote.ui.util.tutorial.Tutorial;
-import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.TagsUtil;
 import com.xpn.spellnote.util.Util;
 
@@ -37,10 +36,14 @@ import java.util.List;
 public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         implements DocumentListItemVM.ViewContract, DocumentListVM.ViewContract {
 
+    protected static final int EDIT_DOCUMENT_CODE = 123;
+
     protected DocumentListVM viewModel;
     protected ArrayList<DocumentModel> documentList = new ArrayList<>();
     protected DocumentListAdapter adapter = new DocumentListAdapter();
+    protected DocumentContract contract;
 
+    public abstract String getTitle();
     public abstract DocumentListItemVM getListItemVM(DocumentModel model, DocumentListItemVM.ViewContract viewContract);
     public abstract void onShowEmptyLogo();
     public abstract void onHideEmptyLogo();
@@ -53,11 +56,13 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
         DiContext diContext = ((SpellNoteApp) getActivity().getApplication()).getDiContext();
         viewModel = new DocumentListVM(this, diContext.getDocumentService());
+        contract = (DocumentContract) getActivity();
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        contract.setTitle(getTitle());
         viewModel.onStart();
         updateDocumentList();
     }
@@ -70,7 +75,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if( requestCode == Codes.EDIT_DOCUMENT_CODE ) {
+        if( requestCode == EDIT_DOCUMENT_CODE ) {
             updateDocumentList();
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -127,7 +132,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
     @Override
     public void onEditDocument(Long documentId) {
-        ActivityEditDocument.launchForResult(this, documentId, Codes.EDIT_DOCUMENT_CODE);
+        ActivityEditDocument.launchForResult(this, documentId, EDIT_DOCUMENT_CODE);
     }
 
     @Override
@@ -158,7 +163,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         }
 
         @Override
-        public void onBindViewHolder(final BindingHolder holder, int position) {
+        public void onBindViewHolder(@NonNull final BindingHolder holder, int position) {
             holder.getBinding().setVariable(BR.viewModel, getListItemVM( documentList.get( position ), BaseFragmentDocumentList.this));
             holder.getBinding().executePendingBindings();
 
@@ -205,5 +210,10 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
             swipeTutorial = new Tutorial(getActivity(), "swipe_tutorial", R.string.tutorial_swipe, Gravity.BOTTOM)
                 .setTarget(target);
         swipeTutorial.showTutorial();
+    }
+
+
+    public interface DocumentContract {
+        void setTitle(String title);
     }
 }

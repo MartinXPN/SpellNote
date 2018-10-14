@@ -33,6 +33,8 @@
     <string name="action_title_check_spelling">Vérifier l\'orthographe</string>
     <string name="action_title_add_word_to_dictionary">Ajouter un mot dans un dictionnaire</string>
     <string name="action_title_remove_word_from_dictionary">Retirer un mot du dictionnaire</string>
+    <string name="action_privacy_policy">Politique de confidentialité</string>
+    <string name="action_open_source_licenses">Licences Open Source</string>
 
 
     <string name="advertisement_thank_you_message">Merci pour soutenir SpellNote!</string>

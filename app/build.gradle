@@ -9,19 +9,21 @@ repositories {
 
 android {
     compileSdkVersion 28
-    buildToolsVersion "27.0.3"
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
         applicationId 'com.xpn.spellnote'
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 3
-        versionName '1.1.0'
+        versionCode 15
+        versionName '2.0.0'
         multiDexEnabled true
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
+            useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -37,8 +39,13 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    packagingOptions {
-        exclude 'META-INF/rxjava.properties'
+    splits {
+        abi {
+            enable true             // Enables building multiple APKs per ABI.
+            reset()                 // Resets the list of ABIs that Gradle should create APKs for to none.
+            include "mips", "x86", "x86_64", "arm64-v8a", "armeabi-v7a"
+            universalApk false      // No universal APK that includes all ABIs
+        }
     }
 }
 
@@ -55,17 +62,20 @@ dependencies {
     implementation 'com.android.support:animated-vector-drawable:28.0.0'
     implementation 'com.android.support:exifinterface:28.0.0'
     implementation 'com.android.support:customtabs:28.0.0'
+    implementation 'com.android.support:animated-vector-drawable:28.0.0'
+    implementation 'com.android.support:exifinterface:28.0.0'
     implementation 'com.android.support:multidex:1.0.3'
-
+    implementation 'com.google.android.gms:play-services-oss-licenses:16.0.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
     /// Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.3'       // Analytics
-    implementation 'com.google.firebase:firebase-ads:15.0.1'        // Ads
-    implementation 'com.google.firebase:firebase-storage:16.0.2'    // Storage
+    implementation 'com.google.firebase:firebase-core:16.0.4'       // Analytics
+    implementation 'com.google.firebase:firebase-ads:17.0.0'        // Ads
+    implementation 'com.google.firebase:firebase-storage:16.0.3'    // Storage
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'  // Crashlytics
+    implementation 'com.google.firebase:firebase-ml-vision:17.0.1'  // OCR - text recognition
 
     implementation 'com.anjlab.android.iab.v3:library:1.0.44'       // Billing
-    implementation 'com.squareup.picasso:picasso:2.71828'           // Picasso - Image loader
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'           // RxAndroid
     implementation 'io.reactivex.rxjava2:rxjava:2.2.2'              // RxJAVA
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'          // Retrofit for HTTP requests
@@ -73,11 +83,17 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'   // Retrofit adapter for Rx
     implementation 'com.jakewharton.timber:timber:4.7.1'            // Logger
     implementation 'com.annimon:stream:1.2.1'                       // Stream API
-    implementation 'org.apache.commons:commons-lang3:3.8'           // Apache Commons: Utilities
+    implementation 'org.apache.commons:commons-lang3:3.8.1'         // Apache Commons: Utilities
 
+    implementation 'io.fotoapparat:fotoapparat:2.5.0'               // Camera View
     implementation 'de.hdodenhof:circleimageview:2.2.0'             // Circle ImageView
     implementation 'com.daimajia.swipelayout:library:1.2.0@aar'     // Swipe layout (swipe items in document list)
     implementation 'com.github.vihtarb:tooltip:0.1.9'               // Popups for tutorial
+
+    implementation 'com.caverock:androidsvg-aar:1.3'                // SVG for Android
+    implementation 'com.github.bumptech.glide:glide:4.8.0'          // Glide - Image loader
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.android.gms.oss-licenses-plugin'

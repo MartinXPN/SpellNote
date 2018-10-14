@@ -1,10 +1,10 @@
 package com.xpn.spellnote.ui.document.list;
 
-
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 
 import com.xpn.spellnote.util.CacheUtil;
 import com.xpn.spellnote.util.TagsUtil;
+
 
 public abstract class BaseSortableFragment extends Fragment {
 

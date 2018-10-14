@@ -119,12 +119,49 @@
             </android.support.v7.widget.CardView>
 
 
+            <ImageButton
+                android:id="@+id/image_text_recognition_launcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_camera"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{() -> model.onShowImageTextRecognizer()}"
+                android:contentDescription="@null"
+                android:padding="8dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="90dp"
+                android:layout_marginEnd="90dp" />
+
+            <ImageButton
+                android:id="@+id/voice_recognition_launcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_record"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="@{() -> model.onLaunchSpeechRecognizer()}"
+                android:contentDescription="@null"
+                android:padding="8dp"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@+id/image_text_recognition_launcher"
+                android:layout_toStartOf="@+id/image_text_recognition_launcher" />
+
+
             <fragment
                 android:id="@+id/editing_language_chooser_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:name="com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment"
                 tools:layout="@layout/fragment_editing_language_chooser" />
+
+
+            <FrameLayout
+                android:id="@+id/image_text_recognition"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_alignParentBottom="true"
+                android:visibility="gone" />
 
 
             <View

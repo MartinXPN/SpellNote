@@ -3,6 +3,7 @@ package com.xpn.spellnote.ui.document.list.trash;
 import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,7 +27,7 @@ public class FragmentViewTrash extends BaseFragmentDocumentList {
     private FragmentViewTrashBinding binding;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_trash, container, false);
         binding.list.setAdapter(adapter);
@@ -61,6 +62,11 @@ public class FragmentViewTrash extends BaseFragmentDocumentList {
     @Override
     public String getCategory() {
         return TagsUtil.CATEGORY_TRASH;
+    }
+
+    @Override
+    public String getTitle() {
+        return getString(R.string.nav_trash);
     }
 
     @Override

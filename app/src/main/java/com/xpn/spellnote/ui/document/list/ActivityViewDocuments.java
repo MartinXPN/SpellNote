@@ -1,11 +1,11 @@
 package com.xpn.spellnote.ui.document.list;
 
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,7 +29,7 @@ import timber.log.Timber;
 
 
 public class ActivityViewDocuments extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, RemoveAdsBilling.ViewContract {
+        implements NavigationView.OnNavigationItemSelectedListener, RemoveAdsBilling.ViewContract, BaseFragmentDocumentList.DocumentContract {
 
 
     private static final String NAVIGATION_DRAWER_FIRST_LAUNCH_TAG = "nav_first";
@@ -83,7 +83,7 @@ public class ActivityViewDocuments extends AppCompatActivity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Integer currentFragmentTag = Integer.parseInt(getFragmentManager().findFragmentById( R.id.list_of_documents ).getTag());
+        Integer currentFragmentTag = Integer.parseInt(getSupportFragmentManager().findFragmentById( R.id.list_of_documents ).getTag());
         outState.putInt( SAVED_STATE_FRAGMENT_TAG, currentFragmentTag );
     }
 
@@ -112,11 +112,10 @@ public class ActivityViewDocuments extends AppCompatActivity
 
         /// use navigation id as fragment tag, show category in toolbar
         String fragmentTag = navigationId.toString();
-        binding.toolbar.setTitle(documentFragment.getCategory());
         binding.navigation.setCheckedItem(navigationId);
 
         // get fragment manager, Make sure the current transaction finishes first
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
         fm.executePendingTransactions();
 
         // Don't make new transaction if it's already present
@@ -146,5 +145,10 @@ public class ActivityViewDocuments extends AppCompatActivity
     public void onPurchaseError(Throwable error) {
         Timber.e(error);
         Toast.makeText(this, getString(R.string.advertisement_purchase_failure), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void setTitle(String title) {
+        binding.toolbar.setTitle(title);
     }
 }

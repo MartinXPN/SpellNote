@@ -29,6 +29,7 @@
             android:layout_centerHorizontal="true"
             app:imageUrl="@{viewModel.logoUrl}"
             app:placeholder="@{@drawable/ic_language}"
+            app:format='@{"svg"}'
             android:contentDescription="@null" />
 
 
