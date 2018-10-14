@@ -29,7 +29,7 @@ import timber.log.Timber;
 
 
 public class ActivityViewDocuments extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, RemoveAdsBilling.ViewContract {
+        implements NavigationView.OnNavigationItemSelectedListener, RemoveAdsBilling.ViewContract, BaseFragmentDocumentList.DocumentContract {
 
 
     private static final String NAVIGATION_DRAWER_FIRST_LAUNCH_TAG = "nav_first";
@@ -112,7 +112,6 @@ public class ActivityViewDocuments extends AppCompatActivity
 
         /// use navigation id as fragment tag, show category in toolbar
         String fragmentTag = navigationId.toString();
-        binding.toolbar.setTitle(documentFragment.getCategory());
         binding.navigation.setCheckedItem(navigationId);
 
         // get fragment manager, Make sure the current transaction finishes first
@@ -146,5 +145,10 @@ public class ActivityViewDocuments extends AppCompatActivity
     public void onPurchaseError(Throwable error) {
         Timber.e(error);
         Toast.makeText(this, getString(R.string.advertisement_purchase_failure), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void setTitle(String title) {
+        binding.toolbar.setTitle(title);
     }
 }

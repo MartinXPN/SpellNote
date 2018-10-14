@@ -65,6 +65,11 @@ public class FragmentViewTrash extends BaseFragmentDocumentList {
     }
 
     @Override
+    public String getTitle() {
+        return getString(R.string.nav_trash);
+    }
+
+    @Override
     public DocumentListItemVM getListItemVM(DocumentModel model, DocumentListItemVM.ViewContract viewContract) {
         DiContext diContext = ((SpellNoteApp)getActivity().getApplication()).getDiContext();
         return new TrashListItemVM(model,

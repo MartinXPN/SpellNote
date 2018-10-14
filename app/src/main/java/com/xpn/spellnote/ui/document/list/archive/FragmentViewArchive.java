@@ -17,7 +17,6 @@ import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.ui.document.edit.ActivityEditDocument;
 import com.xpn.spellnote.ui.document.list.BaseFragmentDocumentList;
 import com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM;
-import com.xpn.spellnote.util.Codes;
 import com.xpn.spellnote.util.TagsUtil;
 
 
@@ -31,7 +30,7 @@ public class FragmentViewArchive extends BaseFragmentDocumentList {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_archive, container, false);
         binding.list.setAdapter(adapter);
 
-        binding.addDocument.setOnClickListener(view -> ActivityEditDocument.launchForResult(this, getCategory(), Codes.EDIT_DOCUMENT_CODE));
+        binding.addDocument.setOnClickListener(view -> ActivityEditDocument.launchForResult(this, getCategory(), EDIT_DOCUMENT_CODE));
         return binding.getRoot();
     }
 
@@ -44,6 +43,11 @@ public class FragmentViewArchive extends BaseFragmentDocumentList {
     @Override
     public String getCategory() {
         return TagsUtil.CATEGORY_ARCHIVE;
+    }
+
+    @Override
+    public String getTitle() {
+        return getString(R.string.nav_archive);
     }
 
     @Override
