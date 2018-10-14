@@ -15,8 +15,8 @@ android {
         applicationId 'com.xpn.spellnote'
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 4
-        versionName '1.1.1'
+        versionCode 15
+        versionName '2.0.0'
         multiDexEnabled true
     }
     buildTypes {
