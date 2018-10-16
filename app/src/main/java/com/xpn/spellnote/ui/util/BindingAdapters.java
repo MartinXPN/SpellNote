@@ -47,6 +47,10 @@ public class BindingAdapters {
     @BindingAdapter("src")
     public static void loadImage(ImageView imageView, Bitmap bitmap) {
         imageView.setImageBitmap(bitmap);
+
+//        GlideApp.with(imageView)
+//                .load(bitmap)
+//                .into(imageView);
     }
 
     @BindingAdapter("src")
