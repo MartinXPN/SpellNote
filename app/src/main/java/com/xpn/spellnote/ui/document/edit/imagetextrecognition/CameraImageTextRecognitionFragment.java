@@ -28,7 +28,7 @@ import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecogniz
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databinding.FragmentCameraImageTextRecognitionBinding;
 import com.xpn.spellnote.models.DictionaryModel;
-import com.xpn.spellnote.ui.util.ImageUtil;
+import com.xpn.spellnote.ui.util.image.ImageUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -221,25 +221,28 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
             Matrix matrix = new Matrix();
             matrix.setRotate(-bitmapPhoto.rotationDegrees);
 
-            /// compress image for faster performance
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            double originalImageSizeMB = bitmapPhoto.bitmap.getByteCount() / 1e6;
-            double targetImageSizeMB = 0.3;
-            int quality = 100 - (int) (100. * originalImageSizeMB / targetImageSizeMB);
-            quality = Math.min(quality, 95);
-            quality = Math.max(quality, 20);
-
-            bitmapPhoto.bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream);
-            byte[] byteArray = stream.toByteArray();
-            Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-            Timber.d("Length changed from %d to %d with quality %d", bitmapPhoto.bitmap.getByteCount(), byteArray.length, quality);
-            Timber.d("Original image size: %fMB", originalImageSizeMB);
-            Timber.d("Compressed image size: %fMB", byteArray.length / 1e6);
-
-            Bitmap rotatedBitmap = Bitmap.createBitmap(compressedBitmap, 0, 0, compressedBitmap.getWidth(), compressedBitmap.getHeight(), matrix, true);
+            Bitmap rotatedBitmap = Bitmap.createBitmap(bitmapPhoto.bitmap, 0, 0, bitmapPhoto.bitmap.getWidth(), bitmapPhoto.bitmap.getHeight(), matrix, true);
             viewModel.onCaptured(rotatedBitmap);
             return null;
         });
+    }
+
+    public Bitmap compressImage(Bitmap image) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        double originalImageSizeMB = image.getByteCount() / 1e6;
+        double targetImageSizeMB = 0.3;
+        int quality = 100 - (int) (100. * originalImageSizeMB / targetImageSizeMB);
+        quality = Math.min(quality, 95);
+        quality = Math.max(quality, 20);
+
+        image.compress(Bitmap.CompressFormat.JPEG, quality, stream);
+        byte[] byteArray = stream.toByteArray();
+        Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
+        Timber.d("Length changed from %d to %d with quality %d", image.getByteCount(), byteArray.length, quality);
+        Timber.d("Original image size: %fMB", originalImageSizeMB);
+        Timber.d("Compressed image size: %fMB", byteArray.length / 1e6);
+        return compressedBitmap;
     }
 
     @Override
