@@ -1,0 +1,101 @@
+<resources>
+
+    <string name="title_activity_view_documents">Documentos</string>
+    <string name="title_activity_select_languages">Selecionar idiomas</string>
+    <string name="title_activity_about">Sobre o SpellNote</string>
+    <string name="title_add_dictionaries">Adicionar Dicionários</string>
+
+    <string name="navigation_drawer_open">Arquivo Aberto</string>
+    <string name="navigation_drawer_close">Arquivo Fechado</string>
+    <string name="nav_documents">Documentos</string>
+    <string name="nav_archive">Arquivos</string>
+    <string name="nav_trash">Lixeira</string>
+    <string name="nav_dictionaries">Meus Dicionários</string>
+    <string name="nav_remove_ads">Eliminar anúncios</string>
+    <string name="nav_send_feedback">Enviar comentários</string>
+    <string name="nav_rate">Classificar na Play Store</string>
+    <string name="nav_about">Sobre a equipe</string>
+
+
+    <string name="action_sort_by">Ordenar por</string>
+    <string name="action_sort_by_date_modified">Data de Modificação</string>
+    <string name="action_sort_by_title">Título</string>
+    <string name="action_sort_by_language">Idioma</string>
+    <string name="action_sort_by_ascending">Ascendente</string>
+    <string name="action_empty_trash">Esvaziar Lixeira</string>
+    <string name="action_title_show_suggestions">Mostrar Sugestões</string>
+    <string name="action_title_hide_suggestions">Ocultar Sugestões</string>
+    <string name="action_title_overflow_menu">Mais Opções</string>
+    <string name="action_title_record">Gravar</string>
+    <string name="action_title_send">Enviar</string>
+    <string name="action_title_copy">Copiar</string>
+    <string name="action_title_check_spelling">Verificar ortografía</string>
+    <string name="action_title_add_word_to_dictionary">Adicionar palavra ao dicionário</string>
+    <string name="action_title_remove_word_from_dictionary">Remover palavra do dicionário</string>
+    <string name="action_privacy_policy">Política de Privacidade</string>
+    <string name="action_open_source_licenses">Licença de Código Aberto</string>
+
+
+    <string name="advertisement_thank_you_message">Obrigado por apoiar a SpellNote!</string>
+    <string name="advertisement_purchase_failure">Tente novamente mais tarde!</string>
+    <string name="advertisement_loading_description">Carregando publicidade...</string>
+
+    <string name="hint_edit_document_title">Título…</string>
+    <string name="hint_edit_content">EEscreva o título aqui…</string>
+    <string name="hint_choose_email_client">Escolha um e-mail de um cliente...</string>
+    <string name="hint_sent_file">Enviar mensagem…</string>
+    <string name="hint_move_to_documents">Mover para Documentos</string>
+    <string name="hint_move_to_archive">Mover para o Arquivo</string>
+    <string name="hint_move_to_trash">Mover para a Lixeira</string>
+    <string name="hint_restore">Restaurar</string>
+    <string name="hint_unarchive">Desarquivar</string>
+    <string name="hint_remove_forever">Eliminar Permanentemente</string>
+    <string name="hint_send">Enviar</string>
+    <string name="undo">Desfazer</string>
+    <string name="explanation_unarchived">Desarquivado</string>
+    <string name="explanation_archived">Arquivado</string>
+    <string name="explanation_moved_to_trash">Movido a lixeira</string>
+    <string name="explanation_restored">Restaurado</string>
+    <string name="explanation_removed_forever">Removido para sempre!</string>
+    <string name="explanation_removed">Documento removido.</string>
+    <string name="explanation_document_not_editable">Restaurar documento para editar…</string>
+
+    <string name="empty_archive">Não possui itens no arquivo.</string>
+    <string name="empty_trash">Não possui itens na lixeira.</string>
+    <string name="empty_document">Criar um novo documento</string>
+
+
+    <string name="request_update_or_delete_dictionary">Atualizar ou remover o dicionário?</string>
+    <string name="update_or_delete_dictionary_option_update">Atualizar</string>
+    <string name="update_or_delete_dictionary_option_delete">Remover</string>
+
+    <string name="request_remove_all_documents">Deletar todos os itens da lixeira?</string>
+    <string name="request_remove_all_documents_option_yes">Sim</string>
+    <string name="request_remove_all_documents_option_cancel">Cancelar</string>
+
+
+    <string name="error_couldnt_create_document">Erro ao criar o documento.</string>
+    <string name="error_no_email_clients">Sem aplicativos de e-mail instalados!</string>
+    <string name="error_no_messaging_apps">Sem aplicativos de mensagem instalados!</string>
+    <string name="error_no_speech_recognizer">Não foi possível reconhecer o sistema de aúdio do dispositivo.</string>
+    <string name="error_no_clipboard">Não possui nada no CTRL+V :()</string>
+    <string name="message_copied_to_clipboard">Texto copiado com sucesso!</string>
+
+    <string name="dictionary_download_canceled">Download cancelado!</string>
+    <string name="dictionary_error_save_failure">Não foi possível salvar o dicionário </string>
+    <string name="dictionary_error_delete_failure">Não foi possível deletar o dicionário </string>
+    <string name="dictionary_message_updated">Dicionário Atualizado</string>
+
+    <string name="tutorial_show_suggestions">Mostre ou oculte as sugestões</string>
+    <string name="tutorial_swipe">◄◄◄ Deslize os documentos para esquerda para abrir o menu de ações...\n(toque para fechar)</string>
+    <string name="tutorial_select_dictionaries">Selecione dicionários para utilizar depois…</string>
+    <string name="tutorial_add_word_to_dictionary">Adicionar palavra ao Dicionários</string>
+
+
+    <string name="about_app">
+        SpellNote é uma aplicação desenhada para criar textos, tomar notas, editar e corrigir ensaios, etc. Pode ser usado a qualquer momento, mesmo sem acesso à Internet.\n\n
+        O aplicativo é compatível com vários idiomas, incluindo inglês, russo e armênio.\n\n
+        É um <a href="https://github.com/MartinXPN/SpellNote">projeto</a> de código aberto para razões educacionais..\n
+    </string>
+    <string name="about_author">© 2018 <a href="https://www.linkedin.com/in/martin-mirakyan-945597101">Martin Mirakyan</a>\nTodos los derechos reservados.</string>
+</resources>
