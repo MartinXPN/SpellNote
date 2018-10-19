@@ -81,6 +81,8 @@ public class ActivityEditDocument extends AppCompatActivity
 
     @SuppressLint("CheckResult")
     public static void launchForResult(Fragment fragment, String category, int requestCode) {
+        if( fragment.getActivity() == null )
+            return;
         DocumentModel document = new DocumentModel();
         document.setCategory(category);
 
