@@ -215,6 +215,8 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
         }
         camera.takePicture().toBitmap().whenAvailable(bitmapPhoto -> {
             if(bitmapPhoto == null ) {
+                if( getActivity() == null )
+                    return null;
                 getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), R.string.error_something_wrong, Toast.LENGTH_SHORT).show());
                 return null;
             }
