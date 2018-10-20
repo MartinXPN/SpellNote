@@ -51,8 +51,10 @@ public class CameraVM extends BaseViewModel {
      void onCaptured(Bitmap image) {
         if(isCanceled)
             return;
-        setCurrentImage(image);
-        view.onRecognizeText(image);
+
+        Bitmap compressedImage = view.compressImage(image);
+        setCurrentImage(compressedImage);
+        view.onRecognizeText(compressedImage);
      }
 
      void onTextRecognized(String text) {
@@ -87,6 +89,7 @@ public class CameraVM extends BaseViewModel {
     public interface ViewContract {
         void onChooseFromGallery();
         void onCaptureImage();
+        Bitmap compressImage(Bitmap image);
         void onRecognizeText(Bitmap picture);
         void onDelegateRecognizedText(String text);
         void onClose();

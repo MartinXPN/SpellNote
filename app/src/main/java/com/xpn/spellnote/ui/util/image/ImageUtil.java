@@ -1,4 +1,4 @@
-package com.xpn.spellnote.ui.util;
+package com.xpn.spellnote.ui.util.image;
 
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;

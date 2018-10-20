@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.annotation.Nonnull;
+
 import timber.log.Timber;
 
 
@@ -34,6 +36,16 @@ public class EditCorrectText extends AppCompatEditText implements SpellCheckingL
     }
     public EditCorrectText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    @Nonnull
+    public Editable getText() {
+        Editable res = super.getText();
+        if( res == null ) {
+            this.setText("");
+            return super.getText();
+        }
+        return res;
     }
 
     public boolean isSpellCheckingEnabled() {
