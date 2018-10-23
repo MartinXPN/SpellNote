@@ -3,6 +3,7 @@ package com.xpn.spellnote.ui.dictionary;
 import android.databinding.Bindable;
 import android.support.annotation.StringRes;
 
+import com.google.firebase.perf.metrics.AddTrace;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -87,6 +88,7 @@ public class LanguageItemVM extends BaseViewModel {
     private void saveDictionary() {
         saveDictionary( new ArrayList<>() );
     }
+    @AddTrace(name = "saveDictionary")
     private void saveDictionary(List<WordModel> defaultWords) {
         viewContract.onDownloadingDictionary(dictionaryModel);
         setStatus(Status.SAVE_IN_PROGRESS);
@@ -125,6 +127,7 @@ public class LanguageItemVM extends BaseViewModel {
                 });
     }
 
+    @AddTrace(name = "removeDictionary")
     private void removeDictionary() {
         viewContract.onRemovingDictionary(dictionaryModel);
         setStatus(Status.DELETE_IN_PROGRESS);

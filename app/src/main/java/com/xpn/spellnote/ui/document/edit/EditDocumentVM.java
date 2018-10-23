@@ -3,6 +3,7 @@ package com.xpn.spellnote.ui.document.edit;
 import android.databinding.Bindable;
 import android.util.Pair;
 
+import com.google.firebase.perf.metrics.AddTrace;
 import com.xpn.spellnote.BR;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
@@ -89,6 +90,7 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
                 ));
     }
 
+    @AddTrace(name = "saveDocument")
     void onSaveDocument() {
         addSubscription(documentService.saveDocument(document).subscribe());
     }
@@ -188,6 +190,7 @@ public class EditDocumentVM extends BaseViewModel implements EditCorrectText.Spe
 
     /// check spelling of the text on the interval [left, right]
     @Override
+    @AddTrace(name = "checkSpelling")
     public void checkSpelling(int left, int right, List <String> words, SpellCheckingListener listener) {
         if( viewContract.getCurrentDictionary().getLocale() == null )
             return;
