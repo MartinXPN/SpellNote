@@ -2,6 +2,7 @@ package com.xpn.spellnote.ui.document.edit.suggestions;
 
 import android.databinding.Bindable;
 
+import com.google.firebase.perf.metrics.AddTrace;
 import com.xpn.spellnote.BR;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.WordModel;
@@ -36,6 +37,7 @@ public class SuggestionsVM extends BaseViewModel {
         super.onDestroy();
     }
 
+    @AddTrace(name = "suggestWords")
     public void suggest(String word) {
         /// cancel previous suggestion subscription
         if( suggestionSubscription != null && !suggestionSubscription.isDisposed() )
