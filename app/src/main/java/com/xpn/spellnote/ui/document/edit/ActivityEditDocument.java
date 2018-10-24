@@ -113,6 +113,11 @@ public class ActivityEditDocument extends AppCompatActivity
         RemoveAdsBilling billing = new RemoveAdsBilling(null, this, getString(R.string.license_key), getString(R.string.remove_ads_id));
         ads = new InterstitialAdHelper(this, billing);
 
+        // check if we know the document ID. If it's not available => finish the activity
+        if(getIntent() == null || getIntent().getExtras() == null) {
+            finish();
+            return;
+        }
         /// set-up view-models
         DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
         viewModel = new EditDocumentVM(this,
