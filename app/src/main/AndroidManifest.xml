@@ -22,6 +22,7 @@
         android:theme="@style/AppTheme">
         <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="@string/app_id"/>
         <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
+        <meta-data android:name="firebase_performance_logcat_enabled" android:value="true" />
 
         <activity
             android:name=".ui.document.list.ActivityViewDocuments"
@@ -29,6 +30,9 @@
             android:theme="@style/AppTheme.NoActionBar.NavigationDrawer">
 
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

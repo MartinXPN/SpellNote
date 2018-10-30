@@ -25,6 +25,7 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.document.FirebaseVisionCloudDocumentRecognizerOptions;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer;
+import com.google.firebase.perf.metrics.AddTrace;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databinding.FragmentCameraImageTextRecognitionBinding;
 import com.xpn.spellnote.models.DictionaryModel;
@@ -134,6 +135,7 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
     }
 
 
+    @AddTrace(name = "processCloudTextRecognitionResult")
     private void processCloudTextRecognitionResult(FirebaseVisionDocumentText text) {
         // Task completed successfully
         if (text == null) {
@@ -207,6 +209,7 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
     }
 
     @Override
+    @AddTrace(name = "onCaptureImage")
     public void onCaptureImage() {
         if( camera == null ) {
             Toast.makeText(getActivity(), R.string.error_no_permission_granted, Toast.LENGTH_SHORT).show();
@@ -229,6 +232,7 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
         });
     }
 
+    @AddTrace(name = "compressImage")
     public Bitmap compressImage(Bitmap image) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         double originalImageSizeMB = image.getByteCount() / 1e6;

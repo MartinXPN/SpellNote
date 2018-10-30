@@ -18,6 +18,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.perf.metrics.AddTrace;
 import com.tooltip.TooltipActionView;
 import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
@@ -98,6 +99,7 @@ public class ActivityEditDocument extends AppCompatActivity
     }
 
     @Override
+    @AddTrace(name = "onCreateEditDocument")
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -111,6 +113,11 @@ public class ActivityEditDocument extends AppCompatActivity
         RemoveAdsBilling billing = new RemoveAdsBilling(null, this, getString(R.string.license_key), getString(R.string.remove_ads_id));
         ads = new InterstitialAdHelper(this, billing);
 
+        // check if we know the document ID. If it's not available => finish the activity
+        if(getIntent() == null || getIntent().getExtras() == null) {
+            finish();
+            return;
+        }
         /// set-up view-models
         DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
         viewModel = new EditDocumentVM(this,
@@ -171,7 +178,6 @@ public class ActivityEditDocument extends AppCompatActivity
 
         /// hide suggestions on scroll
         binding.contentScroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-
             int prevY = 0;
 
             @Override

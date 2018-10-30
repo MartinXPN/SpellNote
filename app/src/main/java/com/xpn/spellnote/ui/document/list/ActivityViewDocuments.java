@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.perf.metrics.AddTrace;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databinding.ActivityViewDocumentsBinding;
 import com.xpn.spellnote.ui.about.ActivityAbout;
@@ -40,6 +41,7 @@ public class ActivityViewDocuments extends AppCompatActivity
 
 
     @Override
+    @AddTrace(name = "onCreateViewDocuments")
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate( savedInstanceState );
