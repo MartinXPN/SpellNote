@@ -53,6 +53,7 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
     private static final int REQUEST_CAMERA_PERMISSION = 1001;
     public static final int PICK_IMAGE = 1007;
 
+    private int currentTextRecognitionTaskId = 1;
     private TextRecognitionContract contract;
     private FragmentCameraImageTextRecognitionBinding binding;
     private CameraVM viewModel;
@@ -96,34 +97,34 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
     public void onResume() {
         super.onResume();
         assert getActivity() != null;
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            if( camera == null )
-                camera = Fotoapparat.with(getActivity())
-                    .into(binding.camera)
-                    .previewScaleType(ScaleType.CenterInside)
-                    .photoResolution(ResolutionSelectorsKt.highestResolution())
-                    .lensPosition(LensPositionSelectorsKt.back())
-                    // Use the first focus mode which is supported by device
-                    .focusMode(SelectorsKt.firstAvailable(
-                            FocusModeSelectorsKt.continuousFocusPicture(),
-                            FocusModeSelectorsKt.autoFocus(),
-                            FocusModeSelectorsKt.fixed()
-                    ))
-                    // Similar to how it is done for focus mode, this time for flash
-                    .flash(SelectorsKt.firstAvailable(
-                            FlashSelectorsKt.off(),
-                            FlashSelectorsKt.autoRedEye(),
-                            FlashSelectorsKt.autoFlash(),
-                            FlashSelectorsKt.torch()
-                    ))
-                    .logger(LoggersKt.logcat())
-                    .build();
 
-            camera.start();
-        }
-        else {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+            return;
         }
+        if( camera == null )
+            camera = Fotoapparat.with(getActivity())
+                .into(binding.camera)
+                .previewScaleType(ScaleType.CenterInside)
+                .photoResolution(ResolutionSelectorsKt.highestResolution())
+                .lensPosition(LensPositionSelectorsKt.back())
+                // Use the first focus mode which is supported by device
+                .focusMode(SelectorsKt.firstAvailable(
+                        FocusModeSelectorsKt.continuousFocusPicture(),
+                        FocusModeSelectorsKt.autoFocus(),
+                        FocusModeSelectorsKt.fixed()
+                ))
+                // Similar to how it is done for focus mode, this time for flash
+                .flash(SelectorsKt.firstAvailable(
+                        FlashSelectorsKt.off(),
+                        FlashSelectorsKt.autoRedEye(),
+                        FlashSelectorsKt.autoFlash(),
+                        FlashSelectorsKt.torch()
+                ))
+                .logger(LoggersKt.logcat())
+                .build();
+
+        camera.start();
     }
 
     @Override
@@ -259,9 +260,20 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(picture);
         FirebaseVisionDocumentTextRecognizer detector = FirebaseVision.getInstance().getCloudDocumentTextRecognizer(options);
 
+        /// fix current id
+        onCancelPreviousRecognitionTasks();
+        final int currentTaskId = currentTextRecognitionTaskId;
         detector.processImage(image)
-                .addOnSuccessListener(this::processCloudTextRecognitionResult)
+                .addOnSuccessListener(firebaseVisionDocumentText -> {
+                    if( currentTaskId == currentTextRecognitionTaskId ) {
+                        processCloudTextRecognitionResult(firebaseVisionDocumentText);
+                    }
+                })
                 .addOnFailureListener(Timber::e);
+    }
+
+    public void onCancelPreviousRecognitionTasks() {
+        ++currentTextRecognitionTaskId;
     }
 
     @Override

@@ -13,7 +13,6 @@ public class CameraVM extends BaseViewModel {
     private State state = State.CAPTURING;
     private Bitmap currentImage;
     private String recognizedText;
-    private boolean isCanceled = false;
 
     CameraVM(ViewContract viewContract) {
         this.view = viewContract;
@@ -38,35 +37,29 @@ public class CameraVM extends BaseViewModel {
     }
 
     public void chooseFromGallery() {
-        isCanceled = false;
+        view.onCancelPreviousRecognitionTasks();
         view.onChooseFromGallery();
     }
 
     public void captureImage() {
-        isCanceled = false;
         view.onCaptureImage();
         setState(State.PROCESSING_TEXT);
     }
 
      void onCaptured(Bitmap image) {
-        if(isCanceled)
-            return;
-
         Bitmap compressedImage = view.compressImage(image);
         setCurrentImage(compressedImage);
         view.onRecognizeText(compressedImage);
      }
 
      void onTextRecognized(String text) {
-         if(isCanceled)
-             return;
-         recognizedText = text;
+        recognizedText = text;
         setState(State.DONE);
      }
 
      public void onRetakeImage() {
-        isCanceled = true;
         setCurrentImage(null);
+        view.onCancelPreviousRecognitionTasks();
         setState(State.CAPTURING);
      }
 
@@ -76,7 +69,8 @@ public class CameraVM extends BaseViewModel {
      }
 
      public void onClose() {
-        view.onClose();
+         view.onCancelPreviousRecognitionTasks();
+         view.onClose();
      }
 
 
@@ -93,5 +87,6 @@ public class CameraVM extends BaseViewModel {
         void onRecognizeText(Bitmap picture);
         void onDelegateRecognizedText(String text);
         void onClose();
+        void onCancelPreviousRecognitionTasks();
     }
 }
