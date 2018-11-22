@@ -36,9 +36,15 @@ public class CameraVM extends BaseViewModel {
         notifyPropertyChanged(BR.currentImage);
     }
 
+    public void onFailure() {
+        setCurrentImage(null);
+        setState(State.CAPTURING);
+    }
+
     public void chooseFromGallery() {
         view.onCancelPreviousRecognitionTasks();
         view.onChooseFromGallery();
+        setState(State.PROCESSING_TEXT);
     }
 
     public void captureImage() {
@@ -46,10 +52,10 @@ public class CameraVM extends BaseViewModel {
         setState(State.PROCESSING_TEXT);
     }
 
-     void onCaptured(Bitmap image) {
-        Bitmap compressedImage = view.compressImage(image);
-        setCurrentImage(compressedImage);
-        view.onRecognizeText(compressedImage);
+     void onImageReady(Bitmap image) {
+        setCurrentImage(image);
+        setState(State.PROCESSING_TEXT);
+        view.onRecognizeText(image);
      }
 
      void onTextRecognized(String text) {
@@ -83,7 +89,6 @@ public class CameraVM extends BaseViewModel {
     public interface ViewContract {
         void onChooseFromGallery();
         void onCaptureImage();
-        Bitmap compressImage(Bitmap image);
         void onRecognizeText(Bitmap picture);
         void onDelegateRecognizedText(String text);
         void onClose();

@@ -37,10 +37,9 @@
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
                 android:visibility="@{viewModel.state != State.CAPTURING ? View.VISIBLE : View.GONE}"
-                android:contentDescription="@null"
-                app:src="@{viewModel.currentImage}" />
+                android:contentDescription="@null" />
 
-            <com.xpn.spellnote.ui.document.edit.imagetextrecognition.GraphicOverlay
+            <com.xpn.spellnote.ui.document.edit.imagetextrecognition.FirebaseCloudTextGraphicOverlay
                 android:id="@+id/graphic_overlay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
