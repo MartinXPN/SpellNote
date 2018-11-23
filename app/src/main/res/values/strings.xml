@@ -91,6 +91,7 @@
     <string name="dictionary_error_save_failure">Couldn\'t save dictionary</string>
     <string name="dictionary_error_delete_failure">Couldn\'t delete dictionary</string>
     <string name="dictionary_message_updated">Dictionary updated</string>
+    <string name="dictionary_install_in_progress">Dictionary installation in progress…</string>
 
     <string name="tutorial_show_suggestions">Show or hide Suggestions</string>
     <string name="tutorial_swipe">◄◄◄ Swipe left documents to Delete, Send, etc…\n(tap to dismiss)</string>

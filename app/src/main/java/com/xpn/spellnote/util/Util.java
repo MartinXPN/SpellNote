@@ -8,12 +8,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.speech.RecognizerIntent;
+import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import com.xpn.spellnote.R;
 
 
 public class Util {
+
+    public static void chooseImageFromGallery(Fragment fragment, int requestCode) {
+        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.setType("image/*");
+
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        Intent chooserIntent = Intent.createChooser(getIntent, fragment.getString(R.string.hint_choose_image));
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+        fragment.startActivityForResult(chooserIntent, requestCode);
+    }
 
     public static void openWebPage(Context context, Uri uri) {
         Intent web = new Intent(Intent.ACTION_VIEW, uri);

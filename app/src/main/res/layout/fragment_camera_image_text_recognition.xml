@@ -23,11 +23,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <io.fotoapparat.view.CameraView
+            <com.otaliastudios.cameraview.CameraView
                 android:id="@+id/camera"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:keepScreenOn="true"
+                android:visibility="@{viewModel.state != State.DONE ? View.VISIBLE : View.GONE}"
                 android:layout_alignParentBottom="true" />
 
             <ImageView
@@ -35,12 +37,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerInside"
+                android:layout_centerInParent="true"
                 android:adjustViewBounds="true"
-                android:visibility="@{viewModel.state != State.CAPTURING ? View.VISIBLE : View.GONE}"
-                android:contentDescription="@null"
-                app:src="@{viewModel.currentImage}" />
+                android:src="@drawable/rectangle_transparent"
+                android:contentDescription="@null" />
 
-            <com.xpn.spellnote.ui.document.edit.imagetextrecognition.GraphicOverlay
+            <com.xpn.spellnote.ui.document.edit.imagetextrecognition.FirebaseCloudTextGraphicOverlay
                 android:id="@+id/graphic_overlay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
