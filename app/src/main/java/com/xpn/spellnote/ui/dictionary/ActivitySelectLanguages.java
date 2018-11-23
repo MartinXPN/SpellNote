@@ -36,10 +36,7 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
 
         /// setup the toolbar
         setSupportActionBar(binding.toolbar);
-        binding.toolbar.setNavigationOnClickListener(view -> {
-            setResult(RESULT_OK);
-            finish();
-        });
+        binding.toolbar.setNavigationOnClickListener(view -> finish());
 
         DiContext diContext = ((SpellNoteApp) getApplication()).getDiContext();
         viewModel = new SelectLanguagesVM(this,
@@ -63,6 +60,21 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
     protected void onDestroy() {
         super.onDestroy();
         viewModel.onDestroy();
+    }
+
+    @Override
+    public void finish() {
+        for( LanguageItemVM item : viewModel.getListViewModels() ) {
+            /// if dictionary is still being installed don't finish the activity
+            /// block the user from closing it and show a message
+            if( item.getStatus() == LanguageItemVM.Status.DELETE_IN_PROGRESS ||
+                    item.getStatus() == LanguageItemVM.Status.SAVE_IN_PROGRESS ) {
+                Toast.makeText(this, R.string.dictionary_install_in_progress, Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+        setResult(RESULT_OK);
+        super.finish();
     }
 
     @Override
