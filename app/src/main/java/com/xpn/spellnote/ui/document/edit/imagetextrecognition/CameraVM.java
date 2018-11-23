@@ -32,11 +32,13 @@ public class CameraVM extends BaseViewModel {
     }
 
     public void chooseFromGallery() {
+        view.clearImage();
         view.onCancelPreviousRecognitionTasks();
         view.onChooseFromGallery();
     }
 
     public void captureImage() {
+        view.clearImage();
         view.onCaptureImage();
         setState(State.PROCESSING_TEXT);
     }
@@ -52,12 +54,13 @@ public class CameraVM extends BaseViewModel {
      }
 
      public void onRetakeImage() {
+        view.clearImage();
         view.onCancelPreviousRecognitionTasks();
         setState(State.CAPTURING);
      }
 
      public void onDone() {
-        view.onDelegateRecognizedText(this.recognizedText);
+        view.onDelegateRecognizedText(recognizedText);
         view.onClose();
      }
 
@@ -79,6 +82,7 @@ public class CameraVM extends BaseViewModel {
         void onRecognizeText(Bitmap picture);
         void onDelegateRecognizedText(String text);
         void onClose();
+        void clearImage();
         void onCancelPreviousRecognitionTasks();
     }
 }

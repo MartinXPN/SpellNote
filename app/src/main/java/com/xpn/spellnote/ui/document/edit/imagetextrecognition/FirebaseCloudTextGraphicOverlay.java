@@ -23,7 +23,7 @@ public class FirebaseCloudTextGraphicOverlay extends GraphicOverlay {
 
     public void process(FirebaseVisionDocumentText text, ImageView image) {
 
-        // clear the graphic overlay
+        // clearImage the graphic overlay
         clear();
         if( text == null )
             return;

@@ -13,10 +13,10 @@ android {
 
     defaultConfig {
         applicationId 'com.xpn.spellnote'
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 28
-        versionCode 16
-        versionName '2.0.2'
+        versionCode 17
+        versionName '2.0.5'
         multiDexEnabled true
     }
     buildTypes {
@@ -108,7 +108,7 @@ dependencies {
     implementation 'com.annimon:stream:1.2.1'                       // Stream API
     implementation 'org.apache.commons:commons-lang3:3.8.1'         // Apache Commons: Utilities
 
-    implementation 'io.fotoapparat:fotoapparat:2.5.0'               // Camera View
+    implementation 'com.otaliastudios:cameraview:1.6.0'             // Camera View
     implementation 'de.hdodenhof:circleimageview:2.2.0'             // Circle ImageView
     implementation 'com.daimajia.swipelayout:library:1.2.0@aar'     // Swipe layout (swipe items in document list)
     implementation 'com.github.vihtarb:tooltip:0.1.9'               // Popups for tutorial

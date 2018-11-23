@@ -1,18 +1,14 @@
 package com.xpn.spellnote.ui.document.edit.imagetextrecognition;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,55 +26,33 @@ import com.google.firebase.ml.vision.document.FirebaseVisionCloudDocumentRecogni
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer;
 import com.google.firebase.perf.metrics.AddTrace;
+import com.otaliastudios.cameraview.CameraListener;
+import com.otaliastudios.cameraview.Gesture;
+import com.otaliastudios.cameraview.GestureAction;
 import com.xpn.spellnote.GlideApp;
 import com.xpn.spellnote.GlideRequest;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databinding.FragmentCameraImageTextRecognitionBinding;
 import com.xpn.spellnote.models.DictionaryModel;
+import com.xpn.spellnote.ui.util.CameraInfoUtil;
 import com.xpn.spellnote.ui.util.image.CompressTransformation;
 import com.xpn.spellnote.ui.util.image.RotateTransformation;
 import com.xpn.spellnote.util.Util;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
-import io.fotoapparat.Fotoapparat;
-import io.fotoapparat.log.LoggersKt;
-import io.fotoapparat.parameter.ScaleType;
-import io.fotoapparat.selector.FlashSelectorsKt;
-import io.fotoapparat.selector.FocusModeSelectorsKt;
-import io.fotoapparat.selector.LensPositionSelectorsKt;
-import io.fotoapparat.selector.ResolutionSelectorsKt;
-import io.fotoapparat.selector.SelectorsKt;
 import timber.log.Timber;
 
 
 public class CameraImageTextRecognitionFragment extends Fragment implements CameraVM.ViewContract {
 
-    private static final int REQUEST_CAMERA_PERMISSION = 1001;
     public static final int PICK_IMAGE_REQUEST_CODE = 1007;
     private int currentTextRecognitionTaskId = 1;
 
     private TextRecognitionContract contract;
     private FragmentCameraImageTextRecognitionBinding binding;
     private CameraVM viewModel;
-    private Fotoapparat camera;
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_CAMERA_PERMISSION:
-                if (permissions.length != 1 || grantResults.length != 1) {
-                    throw new RuntimeException("Error on requesting camera permission.");
-                }
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Timber.d("Permission not granted");
-                }
-                // No need to start camera here; it is handled by onResume
-                break;
-        }
-    }
 
     @Nullable
     @Override
@@ -87,6 +61,17 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
         contract = (TextRecognitionContract) getActivity();
         viewModel = new CameraVM(this);
         binding.setViewModel(viewModel);
+
+        binding.camera.setLifecycleOwner(getViewLifecycleOwner());
+        binding.camera.mapGesture(Gesture.PINCH, GestureAction.ZOOM);
+        binding.camera.mapGesture(Gesture.TAP, GestureAction.FOCUS_WITH_MARKER);
+        binding.camera.addCameraListener(new CameraListener() {
+            @Override
+            public void onPictureTaken(byte[] picture) {
+                setImage(picture, CameraInfoUtil.getRotation(picture));
+            }
+        });
+
         return binding.getRoot();
     }
 
@@ -98,43 +83,7 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        assert getActivity() != null;
-
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
-            return;
-        }
-        if( camera == null )
-            camera = Fotoapparat.with(getActivity())
-                .into(binding.camera)
-                .previewScaleType(ScaleType.CenterInside)
-                .photoResolution(ResolutionSelectorsKt.highestResolution())
-                .lensPosition(LensPositionSelectorsKt.back())
-                // Use the first focus mode which is supported by device
-                .focusMode(SelectorsKt.firstAvailable(
-                        FocusModeSelectorsKt.continuousFocusPicture(),
-                        FocusModeSelectorsKt.autoFocus(),
-                        FocusModeSelectorsKt.fixed()
-                ))
-                // Similar to how it is done for focus mode, this time for flash
-                .flash(SelectorsKt.firstAvailable(
-                        FlashSelectorsKt.off(),
-                        FlashSelectorsKt.autoRedEye(),
-                        FlashSelectorsKt.autoFlash(),
-                        FlashSelectorsKt.torch()
-                ))
-                .logger(LoggersKt.logcat())
-                .build();
-
-        camera.start();
-    }
-
-    @Override
     public void onStop() {
-        if( camera != null )
-            camera.stop();
         viewModel.onDestroy();
         super.onStop();
     }
@@ -158,26 +107,22 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
                 .into(binding.image);
     }
 
-    private void setImage(Bitmap image, int rotation) {
-        setImage(
-                GlideApp.with(this)
+    private void setImage(byte[] data, int rotation) {
+        setImage(GlideApp.with(this)
                         .asBitmap()
-                        .load(image)
+                        .load(data)
                         .apply(RequestOptions.bitmapTransform(new MultiTransformation<>(
                                 new RotateTransformation(rotation),
                                 new CompressTransformation(0.3)
-                        )))
-        );
+                        ))));
     }
 
     private void setImage(Uri uri) {
         Timber.d("Load image: %s", uri.toString() );
-        setImage(
-                GlideApp.with(this)
+        setImage(GlideApp.with(this)
                         .asBitmap()
                         .load(uri)
-                        .transform(new CompressTransformation(0.3))
-        );
+                        .transform(new CompressTransformation(0.3)));
     }
 
 
@@ -219,24 +164,16 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
     @Override
     @AddTrace(name = "onCaptureImage")
     public void onCaptureImage() {
-        if( camera == null ) {
-            Toast.makeText(getActivity(), R.string.error_no_permission_granted, Toast.LENGTH_SHORT).show();
-            contract.onCloseTextRecognizer();
-            return;
-        }
-        camera.takePicture().toBitmap().whenAvailable(bitmapPhoto -> {
-            if(bitmapPhoto != null )
-                setImage(bitmapPhoto.bitmap, -bitmapPhoto.rotationDegrees);
-            else
-                viewModel.onFailure();
-            return null;
-        });
+        binding.camera.captureSnapshot();
     }
 
     @Override
     public void onRecognizeText(Bitmap picture) {
+        List<String> languageHints = new ArrayList<>();
+        languageHints.add(contract.getCurrentDictionary().getLocale());
+
         FirebaseVisionCloudDocumentRecognizerOptions options = new FirebaseVisionCloudDocumentRecognizerOptions.Builder()
-                        .setLanguageHints(Arrays.asList(contract.getCurrentDictionary().getLocale()))
+                        .setLanguageHints(languageHints)
                         .build();
         FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(picture);
         FirebaseVisionDocumentTextRecognizer detector = FirebaseVision.getInstance().getCloudDocumentTextRecognizer(options);
@@ -257,8 +194,14 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
                 });
     }
 
-    public void onCancelPreviousRecognitionTasks() {
+    public void clearImage() {
         binding.graphicOverlay.clear();
+        GlideApp.with(this)
+                .load(R.drawable.rectangle_transparent)
+                .into(binding.image);
+    }
+
+    public void onCancelPreviousRecognitionTasks() {
         ++currentTextRecognitionTaskId;
     }
 
