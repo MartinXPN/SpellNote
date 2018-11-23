@@ -11,8 +11,6 @@ import com.xpn.spellnote.ui.util.image.ImageUtil;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import timber.log.Timber;
 
 
@@ -33,10 +31,16 @@ public class FirebaseCloudTextGraphicOverlay extends GraphicOverlay {
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT
         );
-        params.setMargins(coordinates.left, coordinates.top, coordinates.left, coordinates.top);
+
+        // margin = innerBitmapOffsetInsideImageView + imageViewOffsetInsideParent
+        params.setMargins(
+                coordinates.left + image.getLeft(),
+                coordinates.top + image.getTop(),
+                coordinates.left + image.getLeft(),
+                coordinates.top + image.getTop());
         setLayoutParams(params);
         Timber.d("Bitmap: left: %d, top: %d, right: %d, bottom: %d", coordinates.left, coordinates.top, coordinates.right, coordinates.bottom);
-        Timber.d("Margins: left: %d, top: %d, right: %d, bottom: %d", coordinates.left, coordinates.top, coordinates.left, coordinates.top);
+        Timber.d("Margins: left: %d, top: %d, right: %d, bottom: %d", params.leftMargin, params.topMargin, params.rightMargin, params.bottomMargin);
 
 
         List<FirebaseVisionDocumentText.Block> blocks = text.getBlocks();
