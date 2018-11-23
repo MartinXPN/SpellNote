@@ -11,7 +11,6 @@ public class CameraVM extends BaseViewModel {
 
     private final ViewContract view;
     private State state = State.CAPTURING;
-    private Bitmap currentImage;
     private String recognizedText;
 
     CameraVM(ViewContract viewContract) {
@@ -27,24 +26,14 @@ public class CameraVM extends BaseViewModel {
         notifyPropertyChanged(BR.state);
     }
 
-    @Bindable
-    public Bitmap getCurrentImage() {
-        return currentImage;
-    }
-    private void setCurrentImage(Bitmap image) {
-        currentImage = image;
-        notifyPropertyChanged(BR.currentImage);
-    }
 
     public void onFailure() {
-        setCurrentImage(null);
         setState(State.CAPTURING);
     }
 
     public void chooseFromGallery() {
         view.onCancelPreviousRecognitionTasks();
         view.onChooseFromGallery();
-        setState(State.PROCESSING_TEXT);
     }
 
     public void captureImage() {
@@ -53,7 +42,6 @@ public class CameraVM extends BaseViewModel {
     }
 
      void onImageReady(Bitmap image) {
-        setCurrentImage(image);
         setState(State.PROCESSING_TEXT);
         view.onRecognizeText(image);
      }
@@ -64,7 +52,6 @@ public class CameraVM extends BaseViewModel {
      }
 
      public void onRetakeImage() {
-        setCurrentImage(null);
         view.onCancelPreviousRecognitionTasks();
         setState(State.CAPTURING);
      }

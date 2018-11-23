@@ -28,6 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:keepScreenOn="true"
+                android:visibility="@{viewModel.state != State.DONE ? View.VISIBLE : View.GONE}"
                 android:layout_alignParentBottom="true" />
 
             <ImageView

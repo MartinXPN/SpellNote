@@ -140,7 +140,8 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
     }
 
     private void setImage(GlideRequest <Bitmap> request) {
-        request.listener(new RequestListener<Bitmap>() {
+        request.placeholder(R.drawable.rectangle_transparent)
+                .listener(new RequestListener<Bitmap>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                         Timber.e(e);
@@ -249,7 +250,11 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
                         processCloudTextRecognitionResult(firebaseVisionDocumentText);
                     }
                 })
-                .addOnFailureListener(Timber::e);
+                .addOnFailureListener(e -> {
+                    Timber.e(e);
+                    viewModel.onFailure();
+                    Toast.makeText(getContext(), R.string.error_something_wrong, Toast.LENGTH_SHORT).show();
+                });
     }
 
     public void onCancelPreviousRecognitionTasks() {
