@@ -23,9 +23,6 @@ public class ActivityAbout extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityAboutBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_about);
 
-        /// set-up analytics
-        FirebaseAnalytics.getInstance(this);
-
         /// set-up toolbar
         setSupportActionBar(binding.toolbar);
         assert getSupportActionBar() != null;
@@ -33,6 +30,9 @@ public class ActivityAbout extends AppCompatActivity {
 
         binding.aboutAuthor.setMovementMethod( LinkMovementMethod.getInstance() );
         binding.aboutApp.setMovementMethod( LinkMovementMethod.getInstance() );
+
+        /// set-up analytics
+        FirebaseAnalytics.getInstance(this).logEvent("about_activity_launch", null);
     }
 
     @Override

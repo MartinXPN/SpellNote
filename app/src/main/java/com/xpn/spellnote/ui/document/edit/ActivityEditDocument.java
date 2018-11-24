@@ -196,16 +196,15 @@ public class ActivityEditDocument extends AppCompatActivity
         super.onStart();
         viewModel.onStart();
         suggestionsVM.onStart();
+
+        /// send data to analytics
+        Bundle analyticsBundle = new Bundle();
+        analyticsBundle.putString( "title", viewModel.getTitle() );
+        analytics.logEvent("edit_document", analyticsBundle);
     }
 
     @Override
     protected void onDestroy() {
-        /// send data to analytics
-        Bundle analyticsBundle = new Bundle();
-        analyticsBundle.putString( "title", viewModel.getTitle() );
-        analyticsBundle.putString( "content", viewModel.getContent() );
-        analytics.logEvent("edit_document", analyticsBundle);
-
         /// control lifecycle of VMs
         viewModel.onDestroy();
         suggestionsVM.onDestroy();
