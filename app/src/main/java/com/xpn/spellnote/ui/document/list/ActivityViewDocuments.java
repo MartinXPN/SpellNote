@@ -36,6 +36,7 @@ public class ActivityViewDocuments extends AppCompatActivity
     private static final String NAVIGATION_DRAWER_FIRST_LAUNCH_TAG = "nav_first";
     private static final String SAVED_STATE_FRAGMENT_TAG = "curr_f";
     private ActivityViewDocumentsBinding binding;
+    private FirebaseAnalytics analytics;
     BaseFragmentDocumentList documentFragment = null;
     private RemoveAdsBilling billing;
 
@@ -46,9 +47,6 @@ public class ActivityViewDocuments extends AppCompatActivity
 
         super.onCreate( savedInstanceState );
         binding = DataBindingUtil.setContentView(this, R.layout.activity_view_documents);
-
-        /// set-up analytics
-        FirebaseAnalytics.getInstance(this);
 
         /// set-up remove-ads
         billing = new RemoveAdsBilling(this, this, getString(R.string.license_key), getString(R.string.remove_ads_id));
@@ -74,6 +72,9 @@ public class ActivityViewDocuments extends AppCompatActivity
             binding.drawer.openDrawer(Gravity.START, true);
             CacheUtil.setCache(this, NAVIGATION_DRAWER_FIRST_LAUNCH_TAG, false );
         }
+
+        /// initialize analytics
+        analytics = FirebaseAnalytics.getInstance(this);
     }
 
     @Override
@@ -99,7 +100,7 @@ public class ActivityViewDocuments extends AppCompatActivity
         else if( id == R.id.nav_archive )       showFragment( id, new FragmentViewArchive() );
         else if( id == R.id.nav_trash )         showFragment( id, new FragmentViewTrash() );
         else if( id == R.id.nav_dictionaries)   startActivity( new Intent( this, ActivitySelectLanguages.class ) ) ;
-        else if( id == R.id.nav_remove_ads)     billing.purchase();
+        else if( id == R.id.nav_remove_ads)     purchaseRemoveAds();
         else if( id == R.id.nav_feedback )      Util.sendFeedback( this );
         else if( id == R.id.nav_rate )          Util.openAppInPlayStore( this );
         else if( id == R.id.nav_about )         startActivity( new Intent( this, ActivityAbout.class ) );
@@ -135,6 +136,11 @@ public class ActivityViewDocuments extends AppCompatActivity
         if (!billing.handleActivityResult(requestCode, resultCode, data)) {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    private void purchaseRemoveAds() {
+        billing.purchase();
+        analytics.logEvent("remove_ads_click", null);
     }
 
     @Override
