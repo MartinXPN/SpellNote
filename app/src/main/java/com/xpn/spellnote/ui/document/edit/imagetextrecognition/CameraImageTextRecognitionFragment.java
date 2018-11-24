@@ -133,7 +133,8 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
         // Task completed successfully
         if (text == null) {
             viewModel.onTextRecognized("");
-            Toast.makeText(getActivity(), R.string.error_no_text_found, Toast.LENGTH_SHORT).show();
+            if( getActivity() != null )
+                Toast.makeText(getActivity(), R.string.error_no_text_found, Toast.LENGTH_SHORT).show();
             return;
         }
 
