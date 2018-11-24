@@ -63,7 +63,7 @@ public class Tutorial {
                 .setBackgroundColor(context.getResources().getColor(R.color.tutorial_background_color))
                 .setTextColor(context.getResources().getColor(android.R.color.white))
                 .setTextSize(R.dimen.tutorial_text_size)
-                .setPadding(R.dimen.tutorial_padding)
+                .setPadding(context.getResources().getDimensionPixelSize(R.dimen.tutorial_padding))
                 .setCornerRadius(R.dimen.tutorial_corner_radius)
                 .show();
 
