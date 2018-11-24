@@ -20,6 +20,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.document.FirebaseVisionCloudDocumentRecognizerOptions;
@@ -53,6 +54,7 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
     private TextRecognitionContract contract;
     private FragmentCameraImageTextRecognitionBinding binding;
     private CameraVM viewModel;
+    private FirebaseAnalytics analytics;
 
     @Nullable
     @Override
@@ -60,6 +62,7 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_camera_image_text_recognition, container, false);
         contract = (TextRecognitionContract) getActivity();
         viewModel = new CameraVM(this);
+        analytics = FirebaseAnalytics.getInstance(getActivity());
         binding.setViewModel(viewModel);
 
         binding.camera.setLifecycleOwner(getViewLifecycleOwner());
@@ -80,6 +83,7 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
     public void onStart() {
         super.onStart();
         viewModel.onStart();
+        analytics.logEvent("image_text_recognizer_launch", null);
     }
 
     @Override
@@ -133,11 +137,19 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
         // Task completed successfully
         if (text == null) {
             viewModel.onTextRecognized("");
-            Toast.makeText(getActivity(), R.string.error_no_text_found, Toast.LENGTH_SHORT).show();
+            if( getActivity() != null )
+                Toast.makeText(getActivity(), R.string.error_no_text_found, Toast.LENGTH_SHORT).show();
             return;
         }
 
         viewModel.onTextRecognized(text.getText());
+
+        /// send data to analytics
+        Bundle analyticsBundle = new Bundle();
+        analyticsBundle.putInt("text_length", text.getText().length());
+        analyticsBundle.putInt("blocks", text.getBlocks().size());
+        analyticsBundle.putString("locale", contract.getCurrentDictionary().getLocale());
+        analytics.logEvent("image_text_recognizer_render", analyticsBundle);
     }
 
 
@@ -158,12 +170,13 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
 
     @Override
     public void onChooseFromGallery() {
+        analytics.logEvent("image_text_recognizer_gallery", null);
         Util.chooseImageFromGallery(this, PICK_IMAGE_REQUEST_CODE);
     }
 
     @Override
-    @AddTrace(name = "onCaptureImage")
     public void onCaptureImage() {
+        analytics.logEvent("image_text_recognizer_capture", null);
         binding.camera.captureSnapshot();
     }
 
@@ -192,6 +205,12 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
                     viewModel.onFailure();
                     Toast.makeText(getContext(), R.string.error_something_wrong, Toast.LENGTH_SHORT).show();
                 });
+
+        /// send data to analytics
+        Bundle analyticsBundle = new Bundle();
+        analyticsBundle.putInt("image_size", picture.getByteCount());
+        analyticsBundle.putString("locale", contract.getCurrentDictionary().getLocale());
+        analytics.logEvent("image_text_recognizer_process", analyticsBundle);
     }
 
     public void clearImage() {
