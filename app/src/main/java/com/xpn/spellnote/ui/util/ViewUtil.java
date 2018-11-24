@@ -3,6 +3,7 @@ package com.xpn.spellnote.ui.util;
 import android.app.Service;
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.annotation.DimenRes;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.View;
@@ -15,6 +16,11 @@ public class ViewUtil {
         Resources r = context.getResources();
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
     }
+    public static int dpToPx(@DimenRes int dp, Context context ) {
+        float res = context.getResources().getDimension(dp);
+        return dpToPx(res, context);
+    }
+
     public static int getWindowWidth( Context context) {
         return context.getResources().getDisplayMetrics().widthPixels;
     }
