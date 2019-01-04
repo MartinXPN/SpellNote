@@ -15,8 +15,8 @@ android {
         applicationId 'com.xpn.spellnote'
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 18
-        versionName '2.0.6'
+        versionCode 19
+        versionName '2.0.7'
         multiDexEnabled true
     }
     buildTypes {
@@ -37,6 +37,11 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'META-INF/proguard/androidx-annotations.pro'
+        exclude 'META-INF/androidx.exifinterface_exifinterface.version'
     }
 
     splits {
@@ -86,21 +91,22 @@ dependencies {
     implementation 'com.android.support:customtabs:28.0.0'
     implementation 'com.android.support:animated-vector-drawable:28.0.0'
     implementation 'com.android.support:exifinterface:28.0.0'
+
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.google.android.gms:play-services-oss-licenses:16.0.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
     /// Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.4'       // Analytics
-    implementation 'com.google.firebase:firebase-ads:17.0.0'        // Ads
-    implementation 'com.google.firebase:firebase-storage:16.0.4'    // Storage
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'  // Crashlytics
-    implementation 'com.google.firebase:firebase-ml-vision:18.0.1'  // OCR - text recognition
-    implementation 'com.google.firebase:firebase-perf:16.2.0'       // Performance
+    implementation 'com.google.firebase:firebase-core:16.0.6'       // Analytics
+    implementation 'com.google.firebase:firebase-ads:17.1.2'        // Ads
+    implementation 'com.google.firebase:firebase-storage:16.0.5'    // Storage
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'  // Crashlytics
+    implementation 'com.google.firebase:firebase-ml-vision:18.0.2'  // OCR - text recognition
+    implementation 'com.google.firebase:firebase-perf:16.2.3'       // Performance
 
     implementation 'com.anjlab.android.iab.v3:library:1.0.44'       // Billing
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'           // RxAndroid
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.4'              // RxJAVA
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.5'              // RxJAVA
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'          // Retrofit for HTTP requests
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'    // Retrofit Gson for parsing json
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'   // Retrofit adapter for Rx
