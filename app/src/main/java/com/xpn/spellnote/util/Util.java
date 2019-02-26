@@ -62,7 +62,7 @@ public class Util {
         }
     }
     public static void sendFeedback( Context context ) {
-        sendEmail( context, new String[] {"XPNInc@gmail.com"}, "SpellNote Feedback", "" );
+        sendEmail( context, new String[] {"support@xpnsolutions.com"}, "SpellNote Feedback", "" );
     }
 
 
