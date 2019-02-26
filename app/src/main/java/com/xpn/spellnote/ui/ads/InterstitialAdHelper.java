@@ -10,8 +10,10 @@ import com.xpn.spellnote.R;
 
 
 public class InterstitialAdHelper {
+    private static final int FAILED_LOAD_COUNT_LIMIT = 10;
     private final InterstitialAd ad;
     private final RemoveAdsBilling billing;
+    private int failedLoadCount = 0;
 
     public InterstitialAdHelper(Context context, RemoveAdsBilling billing) {
         this.billing = billing;
@@ -30,8 +32,13 @@ public class InterstitialAdHelper {
 
             @Override
             public void onAdFailedToLoad(int i) {
-                /// request once again
+                ++failedLoadCount;
+                if( failedLoadCount >= FAILED_LOAD_COUNT_LIMIT )
+                    return;
+
                 super.onAdFailedToLoad(i);
+
+                /// request once again
                 loadAd();
             }
         });

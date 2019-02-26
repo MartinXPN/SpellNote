@@ -110,8 +110,12 @@ public class ActivityEditDocument extends AppCompatActivity
         analytics = FirebaseAnalytics.getInstance(this);
 
         /// set-up advertisement helper
+        /// show ads only in 2/3 cases
         RemoveAdsBilling billing = new RemoveAdsBilling(null, this, getString(R.string.license_key), getString(R.string.remove_ads_id));
-        ads = new InterstitialAdHelper(this, billing);
+        int number = new Random().nextInt(3);
+        if(number < 2) {
+            ads = new InterstitialAdHelper(this, billing);
+        }
 
         // check if we know the document ID. If it's not available => finish the activity
         if(getIntent() == null || getIntent().getExtras() == null) {
@@ -134,7 +138,7 @@ public class ActivityEditDocument extends AppCompatActivity
 
         /// set-up the actionbar
         setSupportActionBar(binding.toolbar);
-        binding.toolbar.setNavigationOnClickListener(v -> showAdOrFinish());
+        binding.toolbar.setNavigationOnClickListener(v -> showAdAndFinish());
 
 
         /// set-up edit-correct text
@@ -212,19 +216,17 @@ public class ActivityEditDocument extends AppCompatActivity
         super.onDestroy();
     }
 
-    private void showAdOrFinish() {
-        /// show ads in 50% of all cases
-        int number = new Random().nextInt(2);
-        if(number == 0) {
-            try {
-                ads.showAd(this::finish);
-            }
-            catch (IllegalStateException e) {
-                Timber.e(e);
-                finish();
-            }
+    private void showAdAndFinish() {
+        if( ads == null ) {
+            finish();
+            return;
         }
-        else {
+
+        try {
+            ads.showAd(this::finish);
+        }
+        catch (IllegalStateException e) {
+            Timber.e(e);
             finish();
         }
     }
@@ -456,7 +458,7 @@ public class ActivityEditDocument extends AppCompatActivity
         float y = binding.content.getCursorPositionY();
 
         y -= h + binding.suggestions.getPaddingTop();
-        x -= binding.suggestions.getWidth() / 2;
+        x -= binding.suggestions.getWidth() / 2.;
 
         x = Math.min( x, binding.content.getWidth() - binding.suggestions.getWidth() );
         x = Math.max( x, 0 );
