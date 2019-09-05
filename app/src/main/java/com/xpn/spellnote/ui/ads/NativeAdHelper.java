@@ -19,14 +19,16 @@ import com.xpn.spellnote.databinding.NativeAdListItemBinding;
 
 public class NativeAdHelper {
     private static final int FAILED_LOAD_COUNT_LIMIT = 10;
-    private AdLoader adLoader;
+    private final AdLoader adLoader;
     private UnifiedNativeAd ad = null;
     private int failedLoadCount = 0;
 
 
     public NativeAdHelper(Context context, RemoveAdsBilling billing, OnAdDisplayListener onAdDisplayListener) {
-        if( billing.areAdsRemoved() )
+        if( billing.areAdsRemoved() ) {
+            adLoader = null;
             return;
+        }
 
         adLoader = new AdLoader.Builder(context, context.getString(R.string.ads_native_unit_id))
                 .forUnifiedNativeAd(unifiedNativeAd -> {
@@ -53,7 +55,8 @@ public class NativeAdHelper {
     }
 
     public void loadAd() {
-        adLoader.loadAd(new AdRequest.Builder().build());
+        if( adLoader != null )
+            adLoader.loadAd(new AdRequest.Builder().build());
     }
 
     public UnifiedNativeAd getAd() {
