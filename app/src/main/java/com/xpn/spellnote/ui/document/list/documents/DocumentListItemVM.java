@@ -1,7 +1,7 @@
 package com.xpn.spellnote.ui.document.list.documents;
 
-import android.databinding.Bindable;
-import android.support.annotation.StringRes;
+import androidx.databinding.Bindable;
+import androidx.annotation.StringRes;
 
 import com.xpn.spellnote.BR;
 import com.xpn.spellnote.R;

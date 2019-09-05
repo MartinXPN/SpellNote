@@ -1,7 +1,7 @@
 package com.xpn.spellnote.ui.dictionary;
 
-import android.databinding.Bindable;
-import android.support.annotation.StringRes;
+import androidx.databinding.Bindable;
+import androidx.annotation.StringRes;
 
 import com.google.firebase.perf.metrics.AddTrace;
 import com.google.firebase.storage.FileDownloadTask;

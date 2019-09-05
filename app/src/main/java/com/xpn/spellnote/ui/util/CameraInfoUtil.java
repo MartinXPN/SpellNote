@@ -1,6 +1,6 @@
 package com.xpn.spellnote.ui.util;
 
-import android.support.media.ExifInterface;
+import androidx.exifinterface.media.ExifInterface;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

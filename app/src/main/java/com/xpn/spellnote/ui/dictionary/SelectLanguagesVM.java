@@ -1,6 +1,6 @@
 package com.xpn.spellnote.ui.dictionary;
 
-import android.databinding.Bindable;
+import androidx.databinding.Bindable;
 import android.util.Pair;
 
 import com.xpn.spellnote.BR;

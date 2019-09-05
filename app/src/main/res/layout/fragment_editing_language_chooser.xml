@@ -32,7 +32,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@null" />
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/supported_languages_card"
             android:layout_width="@dimen/language_chooser_grid_width"
             android:layout_height="@dimen/language_chooser_grid_height"
@@ -100,7 +100,7 @@
                 </LinearLayout>
             </ScrollView>
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
 </layout>

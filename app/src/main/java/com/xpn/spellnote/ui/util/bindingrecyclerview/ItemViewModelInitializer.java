@@ -1,7 +1,7 @@
 package com.xpn.spellnote.ui.util.bindingrecyclerview;
 
 
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 
 public interface ItemViewModelInitializer<VDB extends ViewDataBinding> {
 

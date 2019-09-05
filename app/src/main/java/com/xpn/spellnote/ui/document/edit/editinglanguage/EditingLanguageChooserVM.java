@@ -1,6 +1,6 @@
 package com.xpn.spellnote.ui.document.edit.editinglanguage;
 
-import android.databinding.Bindable;
+import androidx.databinding.Bindable;
 
 import com.xpn.spellnote.BR;
 import com.xpn.spellnote.models.DictionaryModel;
