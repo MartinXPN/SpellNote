@@ -1,8 +1,8 @@
 package com.xpn.spellnote.ui.util;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatEditText;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;

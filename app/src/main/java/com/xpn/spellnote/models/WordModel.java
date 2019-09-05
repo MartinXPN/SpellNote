@@ -1,7 +1,7 @@
 package com.xpn.spellnote.models;
 
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class WordModel implements Comparable<WordModel> {
 

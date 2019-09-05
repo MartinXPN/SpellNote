@@ -1,6 +1,6 @@
 package com.xpn.spellnote.ui.util.svg;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.bumptech.glide.load.Options;
 import com.bumptech.glide.load.ResourceDecoder;

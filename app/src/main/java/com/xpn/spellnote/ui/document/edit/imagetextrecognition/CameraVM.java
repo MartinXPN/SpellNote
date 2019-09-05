@@ -1,6 +1,6 @@
 package com.xpn.spellnote.ui.document.edit.imagetextrecognition;
 
-import android.databinding.Bindable;
+import androidx.databinding.Bindable;
 import android.graphics.Bitmap;
 
 import com.xpn.spellnote.BR;

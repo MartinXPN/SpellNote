@@ -1,6 +1,6 @@
 package com.xpn.spellnote.ui.document.edit;
 
-import android.databinding.Bindable;
+import androidx.databinding.Bindable;
 import android.util.Pair;
 
 import com.google.firebase.perf.metrics.AddTrace;
