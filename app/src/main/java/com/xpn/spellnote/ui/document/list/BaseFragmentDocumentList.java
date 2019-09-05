@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+
+import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.material.snackbar.Snackbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,7 +23,10 @@ import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.ItemDocumentListBinding;
+import com.xpn.spellnote.databinding.NativeAdListItemBinding;
 import com.xpn.spellnote.models.DocumentModel;
+import com.xpn.spellnote.ui.ads.NativeAdHelper;
+import com.xpn.spellnote.ui.ads.RemoveAdsBilling;
 import com.xpn.spellnote.ui.document.edit.ActivityEditDocument;
 import com.xpn.spellnote.ui.document.list.documents.DocumentListItemVM;
 import com.xpn.spellnote.ui.util.BindingHolder;
@@ -34,7 +39,7 @@ import java.util.List;
 
 
 public abstract class BaseFragmentDocumentList extends BaseSortableFragment
-        implements DocumentListItemVM.ViewContract, DocumentListVM.ViewContract {
+        implements DocumentListItemVM.ViewContract, DocumentListVM.ViewContract, NativeAdHelper.OnAdDisplayListener {
 
     protected static final int EDIT_DOCUMENT_CODE = 123;
 
@@ -42,6 +47,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
     protected ArrayList<DocumentModel> documentList = new ArrayList<>();
     protected DocumentListAdapter adapter = new DocumentListAdapter();
     protected DocumentContract contract;
+    protected NativeAdHelper adHelper;
 
     public abstract String getTitle();
     public abstract DocumentListItemVM getListItemVM(DocumentModel model, DocumentListItemVM.ViewContract viewContract);
@@ -57,6 +63,10 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         DiContext diContext = ((SpellNoteApp) getActivity().getApplication()).getDiContext();
         viewModel = new DocumentListVM(this, diContext.getDocumentService());
         contract = (DocumentContract) getActivity();
+
+        // setup ads
+        RemoveAdsBilling billing = new RemoveAdsBilling(null, getActivity(), getString(R.string.license_key), getString(R.string.remove_ads_id));
+        adHelper = new NativeAdHelper(getActivity(), billing, this);
     }
 
     @Override
@@ -65,12 +75,14 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         contract.setTitle(getTitle());
         viewModel.onStart();
         updateDocumentList();
+        adHelper.loadAd();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         viewModel.onDestroy();
+        adHelper.onDestroy();
     }
 
     @Override
@@ -151,20 +163,42 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         adapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onAdReady(UnifiedNativeAd ad) {
+        adapter.notifyItemInserted(DocumentListAdapter.ADVERTISEMENT_LIST_ITEM_ID);
+    }
 
     private class DocumentListAdapter extends RecyclerSwipeAdapter<BindingHolder> {
         private static final int MIN_ITEM_COUNT_FOR_TUTORIAL = 1;
+        private static final int ADVERTISEMENT_LIST_ITEM_ID = 3;
+
+        private static final int LIST_ITEM_TYPE_DOCUMENT = 0;
+        private static final int LIST_ITEM_TYPE_ADVERTISEMENT = 1;
+
+        private boolean showAd(int position) {
+            return adHelper.getAd() != null && position == ADVERTISEMENT_LIST_ITEM_ID;
+        }
 
         @NonNull
         @Override
         public BindingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            if( viewType == LIST_ITEM_TYPE_ADVERTISEMENT ) {
+                View v = LayoutInflater.from( parent.getContext() ).inflate(R.layout.native_ad_list_item, parent, false);
+                return new BindingHolder(v);
+            }
             View v = LayoutInflater.from( parent.getContext() ).inflate(R.layout.item_document_list, parent, false);
             return new BindingHolder(v);
         }
 
         @Override
         public void onBindViewHolder(@NonNull final BindingHolder holder, int position) {
-            holder.getBinding().setVariable(BR.viewModel, getListItemVM( documentList.get( position ), BaseFragmentDocumentList.this));
+            if( showAd(position) ) {
+                adHelper.populate((NativeAdListItemBinding) holder.getBinding());
+                return;
+            }
+
+            int documentItemPosition = adHelper.getAd() != null && position >= ADVERTISEMENT_LIST_ITEM_ID ? position - 1 : position;
+            holder.getBinding().setVariable(BR.viewModel, getListItemVM( documentList.get( documentItemPosition ), BaseFragmentDocumentList.this));
             holder.getBinding().executePendingBindings();
 
 
@@ -191,11 +225,19 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         }
 
         @Override
+        public int getItemViewType(int position) {
+            if( showAd(position) )
+                return LIST_ITEM_TYPE_ADVERTISEMENT;
+            return LIST_ITEM_TYPE_DOCUMENT;
+        }
+
+        @Override
         public int getItemCount() {
             if( documentList.isEmpty() )    onShowEmptyLogo();
             else                            onHideEmptyLogo();
 
-            return documentList.size();
+            int add = adHelper.getAd() == null || documentList.size() <= ADVERTISEMENT_LIST_ITEM_ID ? 0 : 1;
+            return documentList.size() + add;
         }
 
         @Override
