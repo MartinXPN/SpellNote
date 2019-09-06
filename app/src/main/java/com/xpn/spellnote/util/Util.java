@@ -8,7 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.speech.RecognizerIntent;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.widget.Toast;
 
 import com.xpn.spellnote.R;
@@ -20,8 +20,8 @@ public class Util {
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
 
-        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickIntent.setType("image/*");
+        Intent pickIntent = new Intent(Intent.ACTION_PICK);
+        pickIntent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
 
         Intent chooserIntent = Intent.createChooser(getIntent, fragment.getString(R.string.hint_choose_image));
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
@@ -62,7 +62,7 @@ public class Util {
         }
     }
     public static void sendFeedback( Context context ) {
-        sendEmail( context, new String[] {"XPNInc@gmail.com"}, "SpellNote Feedback", "" );
+        sendEmail( context, new String[] {"support@xpnsolutions.com"}, "SpellNote Feedback", "" );
     }
 
 

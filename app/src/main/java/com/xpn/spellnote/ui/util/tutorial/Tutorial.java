@@ -1,8 +1,8 @@
 package com.xpn.spellnote.ui.util.tutorial;
 
 import android.content.Context;
-import android.support.annotation.StringRes;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 

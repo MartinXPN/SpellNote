@@ -1,6 +1,6 @@
 package com.xpn.spellnote.ui;
 
-import android.databinding.BaseObservable;
+import androidx.databinding.BaseObservable;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
