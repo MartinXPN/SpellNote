@@ -38,11 +38,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    packagingOptions {
-        exclude 'META-INF/proguard/androidx-annotations.pro'
-        exclude 'META-INF/androidx.exifinterface_exifinterface.version'
-    }
-
     splits {
         abi {
             enable true             // Enables building multiple APKs per ABI.
