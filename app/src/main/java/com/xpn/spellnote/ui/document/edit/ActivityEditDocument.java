@@ -27,8 +27,6 @@ import com.xpn.spellnote.databinding.ActivityEditDocumentBinding;
 import com.xpn.spellnote.models.DictionaryModel;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.models.WordModel;
-import com.xpn.spellnote.ui.ads.InterstitialAdHelper;
-import com.xpn.spellnote.ui.ads.RemoveAdsBilling;
 import com.xpn.spellnote.ui.dictionary.ActivitySelectLanguages;
 import com.xpn.spellnote.ui.document.edit.editinglanguage.EditingLanguageChooserFragment;
 import com.xpn.spellnote.ui.document.edit.imagetextrecognition.CameraImageTextRecognitionFragment;
@@ -43,7 +41,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import timber.log.Timber;
 
@@ -64,7 +61,6 @@ public class ActivityEditDocument extends AppCompatActivity
     private boolean checkSpelling;
 
     private FirebaseAnalytics analytics;
-    private InterstitialAdHelper ads;
 
     private ActivityEditDocumentBinding binding;
     private Menu menu;
@@ -109,14 +105,6 @@ public class ActivityEditDocument extends AppCompatActivity
         /// set-up analytics
         analytics = FirebaseAnalytics.getInstance(this);
 
-        /// set-up advertisement helper
-        /// show ads only in 2/3 cases
-        RemoveAdsBilling billing = new RemoveAdsBilling(null, this, getString(R.string.license_key), getString(R.string.remove_ads_id));
-        int number = new Random().nextInt(3);
-        if(number < 2) {
-            ads = new InterstitialAdHelper(this, billing);
-        }
-
         // check if we know the document ID. If it's not available => finish the activity
         if(getIntent() == null || getIntent().getExtras() == null) {
             finish();
@@ -138,7 +126,7 @@ public class ActivityEditDocument extends AppCompatActivity
 
         /// set-up the actionbar
         setSupportActionBar(binding.toolbar);
-        binding.toolbar.setNavigationOnClickListener(v -> showAdAndFinish());
+        binding.toolbar.setNavigationOnClickListener(v -> finish());
 
 
         /// set-up edit-correct text
@@ -216,20 +204,6 @@ public class ActivityEditDocument extends AppCompatActivity
         super.onDestroy();
     }
 
-    private void showAdAndFinish() {
-        if( ads == null ) {
-            finish();
-            return;
-        }
-
-        try {
-            ads.showAd(this::finish);
-        }
-        catch (IllegalStateException e) {
-            Timber.e(e);
-            finish();
-        }
-    }
 
     private void refreshActivity() {
         Intent refresh = new Intent(this, ActivityEditDocument.class);
