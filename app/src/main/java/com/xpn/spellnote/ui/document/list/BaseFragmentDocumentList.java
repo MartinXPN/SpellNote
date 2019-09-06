@@ -178,6 +178,9 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         private boolean showAd(int position) {
             return adHelper.getAd() != null && position == ADVERTISEMENT_LIST_ITEM_ID;
         }
+        private boolean isAdShown() {
+            return adHelper.getAd() != null && documentList.size() > ADVERTISEMENT_LIST_ITEM_ID;
+        }
 
         @NonNull
         @Override
@@ -197,7 +200,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
                 return;
             }
 
-            int documentItemPosition = adHelper.getAd() != null && position >= ADVERTISEMENT_LIST_ITEM_ID ? position - 1 : position;
+            int documentItemPosition = isAdShown() && position >= ADVERTISEMENT_LIST_ITEM_ID ? position - 1 : position;
             holder.getBinding().setVariable(BR.viewModel, getListItemVM( documentList.get( documentItemPosition ), BaseFragmentDocumentList.this));
             holder.getBinding().executePendingBindings();
 
@@ -236,7 +239,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
             if( documentList.isEmpty() )    onShowEmptyLogo();
             else                            onHideEmptyLogo();
 
-            int add = adHelper.getAd() == null || documentList.size() <= ADVERTISEMENT_LIST_ITEM_ID ? 0 : 1;
+            int add = isAdShown() ? 1 : 0;
             return documentList.size() + add;
         }
 

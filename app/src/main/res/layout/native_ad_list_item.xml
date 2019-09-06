@@ -22,8 +22,7 @@
             android:textSize="12sp"
             android:text="Ad"
             android:background="#FFCC66"
-            android:width="15dp"
-            android:height="15dp" />
+            android:padding="2dp" />
 
 
         <LinearLayout
@@ -44,9 +43,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:adjustViewBounds="true"
-                    android:paddingBottom="5dp"
-                    android:paddingEnd="5dp"
-                    android:paddingRight="5dp"/>
+                    android:padding="5dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -118,26 +115,22 @@
                         android:id="@+id/ad_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="5dp"
-                        android:paddingStart="5dp"
-                        android:paddingRight="5dp"
-                        android:paddingEnd="5dp"
+                        android:padding="5dp"
                         android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/ad_store"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="5dp"
-                        android:paddingStart="5dp"
-                        android:paddingRight="5dp"
-                        android:paddingEnd="5dp"
+                        android:padding="5dp"
                         android:textSize="12sp" />
 
                     <Button
                         android:id="@+id/ad_call_to_action"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:textColor="@color/url_color"
                         android:gravity="center"
                         android:textSize="12sp" />
                 </LinearLayout>

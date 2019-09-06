@@ -55,7 +55,7 @@ public class NativeAdHelper {
     }
 
     public void loadAd() {
-        if( adLoader != null )
+        if( adLoader != null && ad == null )
             adLoader.loadAd(new AdRequest.Builder().build());
     }
 
@@ -97,8 +97,7 @@ public class NativeAdHelper {
         if (ad.getIcon() == null) {
             binding.adRoot.getIconView().setVisibility(View.GONE);
         } else {
-            ((ImageView) binding.adRoot.getIconView()).setImageDrawable(
-                    ad.getIcon().getDrawable());
+            ((ImageView) binding.adRoot.getIconView()).setImageDrawable(ad.getIcon().getDrawable());
             binding.adRoot.getIconView().setVisibility(View.VISIBLE);
         }
 
@@ -119,8 +118,7 @@ public class NativeAdHelper {
         if (ad.getStarRating() == null) {
             binding.adRoot.getStarRatingView().setVisibility(View.INVISIBLE);
         } else {
-            ((RatingBar) binding.adRoot.getStarRatingView())
-                    .setRating(ad.getStarRating().floatValue());
+            ((RatingBar) binding.adRoot.getStarRatingView()).setRating(ad.getStarRating().floatValue());
             binding.adRoot.getStarRatingView().setVisibility(View.VISIBLE);
         }
 
