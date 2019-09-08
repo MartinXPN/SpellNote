@@ -22,9 +22,11 @@ public class NativeAdHelper {
     private final AdLoader adLoader;
     private UnifiedNativeAd ad = null;
     private int failedLoadCount = 0;
+    private final OnAdDisplayListener listener;
 
 
     public NativeAdHelper(Context context, RemoveAdsBilling billing, OnAdDisplayListener onAdDisplayListener) {
+        listener = onAdDisplayListener;
         if( billing.areAdsRemoved() ) {
             adLoader = null;
             return;
@@ -55,8 +57,13 @@ public class NativeAdHelper {
     }
 
     public void loadAd() {
-        if( adLoader != null && ad == null )
+        if( adLoader == null )
+            return;
+
+        if( ad == null )
             adLoader.loadAd(new AdRequest.Builder().build());
+        else
+            listener.onAdReady(ad);
     }
 
     public UnifiedNativeAd getAd() {
@@ -155,12 +162,14 @@ public class NativeAdHelper {
     }
 
     public void onDestroy() {
-        if( ad != null )
-            ad.destroy();
-        ad = null;
+        if( ad == null )
+            return;
+        listener.onHideAd(ad);
+        ad.destroy();
     }
 
     public interface OnAdDisplayListener {
         void onAdReady(UnifiedNativeAd ad);
+        void onHideAd(UnifiedNativeAd ad);
     }
 }

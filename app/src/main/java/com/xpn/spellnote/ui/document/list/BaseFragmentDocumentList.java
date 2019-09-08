@@ -80,9 +80,9 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         viewModel.onDestroy();
         adHelper.onDestroy();
+        super.onDestroy();
     }
 
     @Override
@@ -159,13 +159,18 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
     @Override
     public void onDocumentsAvailable(List<DocumentModel> documents) {
-        this.documentList = new ArrayList<>(documents);
+        documentList = new ArrayList<>(documents);
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onAdReady(UnifiedNativeAd ad) {
-        adapter.notifyItemInserted(DocumentListAdapter.ADVERTISEMENT_LIST_ITEM_ID);
+        adapter.showAd();
+    }
+
+    @Override
+    public void onHideAd(UnifiedNativeAd ad) {
+        adapter.hideAd();
     }
 
     private class DocumentListAdapter extends RecyclerSwipeAdapter<BindingHolder> {
@@ -175,11 +180,23 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         private static final int LIST_ITEM_TYPE_DOCUMENT = 0;
         private static final int LIST_ITEM_TYPE_ADVERTISEMENT = 1;
 
-        private boolean showAd(int position) {
-            return adHelper.getAd() != null && position == ADVERTISEMENT_LIST_ITEM_ID;
+        private boolean isAdShown = false;
+
+        private boolean shouldAdBeShown(int position) {
+            return adHelper.getAd() != null && position == ADVERTISEMENT_LIST_ITEM_ID && documentList.size() > ADVERTISEMENT_LIST_ITEM_ID;
         }
-        private boolean isAdShown() {
-            return adHelper.getAd() != null && documentList.size() > ADVERTISEMENT_LIST_ITEM_ID;
+        void showAd() {
+            if( !shouldAdBeShown(ADVERTISEMENT_LIST_ITEM_ID) )
+                return;
+
+            if( !isAdShown)
+                notifyItemInserted(DocumentListAdapter.ADVERTISEMENT_LIST_ITEM_ID);
+            isAdShown = true;
+        }
+        void hideAd() {
+            if(isAdShown)
+                notifyItemRemoved(DocumentListAdapter.ADVERTISEMENT_LIST_ITEM_ID);
+            isAdShown = false;
         }
 
         @NonNull
@@ -195,12 +212,12 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
         @Override
         public void onBindViewHolder(@NonNull final BindingHolder holder, int position) {
-            if( showAd(position) ) {
+            if( shouldAdBeShown(position) ) {
                 adHelper.populate((NativeAdListItemBinding) holder.getBinding());
                 return;
             }
 
-            int documentItemPosition = isAdShown() && position >= ADVERTISEMENT_LIST_ITEM_ID ? position - 1 : position;
+            int documentItemPosition = isAdShown && position >= ADVERTISEMENT_LIST_ITEM_ID ? position - 1 : position;
             holder.getBinding().setVariable(BR.viewModel, getListItemVM( documentList.get( documentItemPosition ), BaseFragmentDocumentList.this));
             holder.getBinding().executePendingBindings();
 
@@ -229,7 +246,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
         @Override
         public int getItemViewType(int position) {
-            if( showAd(position) )
+            if( shouldAdBeShown(position) )
                 return LIST_ITEM_TYPE_ADVERTISEMENT;
             return LIST_ITEM_TYPE_DOCUMENT;
         }
@@ -239,7 +256,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
             if( documentList.isEmpty() )    onShowEmptyLogo();
             else                            onHideEmptyLogo();
 
-            int add = isAdShown() ? 1 : 0;
+            int add = isAdShown ? 1 : 0;
             return documentList.size() + add;
         }
 
