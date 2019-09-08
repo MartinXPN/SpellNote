@@ -183,9 +183,12 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         private boolean isAdShown = false;
 
         private boolean shouldAdBeShown(int position) {
-            return adHelper.getAd() != null && position == ADVERTISEMENT_LIST_ITEM_ID;
+            return adHelper.getAd() != null && position == ADVERTISEMENT_LIST_ITEM_ID && documentList.size() > ADVERTISEMENT_LIST_ITEM_ID;
         }
         void showAd() {
+            if( !shouldAdBeShown(ADVERTISEMENT_LIST_ITEM_ID) )
+                return;
+
             if( !isAdShown)
                 notifyItemInserted(DocumentListAdapter.ADVERTISEMENT_LIST_ITEM_ID);
             isAdShown = true;
