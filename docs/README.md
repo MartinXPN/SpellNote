@@ -1,1 +1,1 @@
-/Users/martin/Desktop/Projects/SpellNote/README.md
+../README.md
