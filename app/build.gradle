@@ -15,8 +15,8 @@ android {
         applicationId 'com.xpn.spellnote'
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 22
-        versionName '2.0.10'
+        versionCode 23
+        versionName '2.0.11'
         multiDexEnabled true
     }
     buildTypes {
@@ -38,56 +38,29 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    splits {
-        abi {
-            enable true             // Enables building multiple APKs per ABI.
-            reset()                 // Resets the list of ABIs that Gradle should create APKs for to none.
-            include "mips", "x86", "x86_64", "arm64-v8a", "armeabi-v7a"
-            universalApk false      // No universal APK that includes all ABIs
-        }
+    configurations {
+        compile.exclude group: 'androidx.transition', module: 'transition'
     }
 }
-
-// Map for the version code that gives each ABI a value.
-ext.abiCodes = [mips: 1, 'armeabi-v7a': 2, x86: 3, x86_64: 4, 'arm64-v8a': 5]
-
-import com.android.build.OutputFile
-
-// versionCode = ext.abiCodes * 1000 + variant.versionCode (variant.versionCode = defaultConfig.versionCode)
-android.applicationVariants.all { variant ->
-
-    // Assigns a different version code for each output APK other than the universal APK.
-    variant.outputs.each { output ->
-
-        // Stores the value of ext.abiCodes that is associated with the ABI for this variant.
-        def baseAbiVersionCode = project.ext.abiCodes.get(output.getFilter(OutputFile.ABI))
-
-        // apk not in ext.abiCodes (universal) => map lowest possible version code
-        if (baseAbiVersionCode != null) {
-            output.versionCodeOverride = baseAbiVersionCode * 1000 + variant.versionCode
-        }
-    }
-}
-
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
 
     // Android Support libraries
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.vectordrawable:vectordrawable-animated:1.0.0'
+    implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
     implementation 'androidx.exifinterface:exifinterface:1.0.0'
     implementation 'androidx.browser:browser:1.0.0'
-    implementation 'androidx.vectordrawable:vectordrawable-animated:1.0.0'
-    implementation 'androidx.exifinterface:exifinterface:1.0.0'
-
-    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
     /// Firebase
