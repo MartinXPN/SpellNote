@@ -15,8 +15,8 @@ android {
         applicationId 'com.xpn.spellnote'
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 22
-        versionName '2.0.10'
+        versionCode 23
+        versionName '2.0.11'
         multiDexEnabled true
     }
     buildTypes {
@@ -41,38 +41,7 @@ android {
     configurations {
         compile.exclude group: 'androidx.transition', module: 'transition'
     }
-
-    splits {
-        abi {
-            enable true             // Enables building multiple APKs per ABI.
-            reset()                 // Resets the list of ABIs that Gradle should create APKs for to none.
-            include "mips", "x86", "x86_64", "arm64-v8a", "armeabi-v7a"
-            universalApk false      // No universal APK that includes all ABIs
-        }
-    }
 }
-
-// Map for the version code that gives each ABI a value.
-ext.abiCodes = [mips: 1, 'armeabi-v7a': 2, x86: 3, x86_64: 4, 'arm64-v8a': 5]
-
-import com.android.build.OutputFile
-
-// versionCode = ext.abiCodes * 1000 + variant.versionCode (variant.versionCode = defaultConfig.versionCode)
-android.applicationVariants.all { variant ->
-
-    // Assigns a different version code for each output APK other than the universal APK.
-    variant.outputs.each { output ->
-
-        // Stores the value of ext.abiCodes that is associated with the ABI for this variant.
-        def baseAbiVersionCode = project.ext.abiCodes.get(output.getFilter(OutputFile.ABI))
-
-        // apk not in ext.abiCodes (universal) => map lowest possible version code
-        if (baseAbiVersionCode != null) {
-            output.versionCodeOverride = baseAbiVersionCode * 1000 + variant.versionCode
-        }
-    }
-}
-
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
