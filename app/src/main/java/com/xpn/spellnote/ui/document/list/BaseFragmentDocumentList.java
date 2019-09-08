@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ProcessLifecycleOwner;
 
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.material.snackbar.Snackbar;
@@ -183,7 +185,10 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         private boolean isAdShown = false;
 
         private boolean shouldAdBeShown(int position) {
-            return adHelper.getAd() != null && position == ADVERTISEMENT_LIST_ITEM_ID && documentList.size() > ADVERTISEMENT_LIST_ITEM_ID;
+            return adHelper.getAd() != null
+                    && position == ADVERTISEMENT_LIST_ITEM_ID
+                    && documentList.size() > ADVERTISEMENT_LIST_ITEM_ID
+                    && ProcessLifecycleOwner.get().getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED);
         }
         void showAd() {
             if( !shouldAdBeShown(ADVERTISEMENT_LIST_ITEM_ID) )
