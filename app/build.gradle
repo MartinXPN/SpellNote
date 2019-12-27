@@ -8,15 +8,15 @@ repositories {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion "29.0.0"
 
     defaultConfig {
         applicationId 'com.xpn.spellnote'
         minSdkVersion 16
-        targetSdkVersion 28
-        versionCode 23
-        versionName '2.0.11'
+        targetSdkVersion 29
+        versionCode 24
+        versionName '2.0.12'
         multiDexEnabled true
     }
     buildTypes {
@@ -51,11 +51,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
-    implementation 'androidx.exifinterface:exifinterface:1.0.0'
-    implementation 'androidx.browser:browser:1.0.0'
+    implementation 'androidx.exifinterface:exifinterface:1.1.0'
+    implementation 'androidx.browser:browser:1.2.0'
     implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
@@ -64,32 +64,32 @@ dependencies {
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
     /// Firebase
-    implementation 'com.google.firebase:firebase-core:17.2.0'       // Analytics
-    implementation 'com.google.firebase:firebase-ads:18.2.0'        // Ads
-    implementation 'com.google.firebase:firebase-storage:19.0.0'    // Storage
+    implementation 'com.google.firebase:firebase-core:17.2.1'       // Analytics
+    implementation 'com.google.firebase:firebase-ads:18.3.0'        // Ads
+    implementation 'com.google.firebase:firebase-storage:19.1.0'    // Storage
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1' // Crashlytics
-    implementation 'com.google.firebase:firebase-ml-vision:23.0.0'  // OCR - text recognition
-    implementation 'com.google.firebase:firebase-perf:19.0.0'       // Performance
+    implementation 'com.google.firebase:firebase-ml-vision:24.0.1'  // OCR - text recognition
+    implementation 'com.google.firebase:firebase-perf:19.0.4'       // Performance
 
-    implementation 'com.anjlab.android.iab.v3:library:1.0.44'       // Billing
+    implementation 'com.anjlab.android.iab.v3:library:1.1.0'        // Billing
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'           // RxAndroid
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.12'             // RxJAVA
-    implementation 'com.squareup.retrofit2:retrofit:2.6.1'          // Retrofit for HTTP requests
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'    // Retrofit Gson for parsing json
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.1'   // Retrofit adapter for Rx
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.16'             // RxJAVA
+    implementation 'com.squareup.retrofit2:retrofit:2.7.0'          // Retrofit for HTTP requests
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.0'    // Retrofit Gson for parsing json
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.0'   // Retrofit adapter for Rx
     implementation 'com.jakewharton.timber:timber:4.7.1'            // Logger
     implementation 'com.annimon:stream:1.2.1'                       // Stream API
     implementation 'org.apache.commons:commons-lang3:3.9'           // Apache Commons: Utilities
 
     implementation 'com.otaliastudios:cameraview:1.6.0'             // Camera View
-    implementation 'de.hdodenhof:circleimageview:3.0.0'             // Circle ImageView
+    implementation 'de.hdodenhof:circleimageview:3.0.1'             // Circle ImageView
     implementation 'com.daimajia.swipelayout:library:1.2.0@aar'     // Swipe layout (swipe items in document list)
     implementation 'com.github.vihtarb:tooltip:0.2.0'               // Popups for tutorial
 
     implementation 'com.caverock:androidsvg:1.4'                    // SVG for Android
-    implementation 'com.github.bumptech.glide:glide:4.9.0'          // Glide - Image loader
+    implementation 'com.github.bumptech.glide:glide:4.10.0'         // Glide - Image loader
     annotationProcessor 'androidx.annotation:annotation:1.1.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

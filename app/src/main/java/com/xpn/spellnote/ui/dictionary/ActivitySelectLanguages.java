@@ -47,6 +47,7 @@ public class ActivitySelectLanguages extends AppCompatActivity implements Select
         binding.setViewModel(viewModel);
         int numberOfColumns = (int) (ViewUtil.getWindowWidth(this) / getResources().getDimension(R.dimen.language_grid_column_width));
         binding.languagesGrid.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
+        binding.languagesGrid.setNestedScrollingEnabled(false);
     }
 
     @Override

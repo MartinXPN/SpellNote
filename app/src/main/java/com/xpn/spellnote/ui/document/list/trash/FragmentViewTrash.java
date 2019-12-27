@@ -35,7 +35,7 @@ public class FragmentViewTrash extends BaseFragmentDocumentList {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate( R.menu.menu_view_trash, menu );
         super.onCreateOptionsMenu(menu, inflater);
     }

@@ -14,7 +14,7 @@ import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.xpn.spellnote.R;
-import com.xpn.spellnote.databinding.NativeAdListItemBinding;
+import com.xpn.spellnote.databinding.NativeAdBinding;
 
 
 public class NativeAdHelper {
@@ -70,7 +70,7 @@ public class NativeAdHelper {
         return ad;
     }
 
-    public void populate(NativeAdListItemBinding binding) {
+    public void populate(NativeAdBinding binding) {
         binding.adRoot.setMediaView(binding.adMedia);
         binding.adRoot.setHeadlineView(binding.adHeadline);
         binding.adRoot.setBodyView(binding.adBody);
