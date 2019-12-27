@@ -25,7 +25,7 @@ import com.xpn.spellnote.DiContext;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.SpellNoteApp;
 import com.xpn.spellnote.databinding.ItemDocumentListBinding;
-import com.xpn.spellnote.databinding.NativeAdListItemBinding;
+import com.xpn.spellnote.databinding.NativeAdBinding;
 import com.xpn.spellnote.models.DocumentModel;
 import com.xpn.spellnote.ui.ads.NativeAdHelper;
 import com.xpn.spellnote.ui.ads.RemoveAdsBilling;
@@ -97,7 +97,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
 
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
 
         super.onCreateOptionsMenu(menu, inflater);
         menu.findItem( R.id.action_sort_ascending ).setChecked( getAscending() );
@@ -208,7 +208,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         @Override
         public BindingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if( viewType == LIST_ITEM_TYPE_ADVERTISEMENT ) {
-                View v = LayoutInflater.from( parent.getContext() ).inflate(R.layout.native_ad_list_item, parent, false);
+                View v = LayoutInflater.from( parent.getContext() ).inflate(R.layout.native_ad, parent, false);
                 return new BindingHolder(v);
             }
             View v = LayoutInflater.from( parent.getContext() ).inflate(R.layout.item_document_list, parent, false);
@@ -218,7 +218,7 @@ public abstract class BaseFragmentDocumentList extends BaseSortableFragment
         @Override
         public void onBindViewHolder(@NonNull final BindingHolder holder, int position) {
             if( shouldAdBeShown(position) ) {
-                adHelper.populate((NativeAdListItemBinding) holder.getBinding());
+                adHelper.populate((NativeAdBinding) holder.getBinding());
                 return;
             }
 
