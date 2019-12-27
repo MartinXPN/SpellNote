@@ -10,7 +10,6 @@
             type="com.xpn.spellnote.ui.dictionary.SelectLanguagesVM" />
     </data>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -32,12 +31,35 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <com.xpn.spellnote.ui.util.bindingrecyclerview.BindingRecyclerView
-            android:id="@+id/languages_grid"
+
+        <ScrollView
+            android:id="@+id/scroll"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:bindingVarPath="com.xpn.spellnote.BR.viewModel"
-            app:itemLayoutResId="@layout/item_language_grid"
-            app:viewModelList="@{viewModel.listViewModels}" />
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.xpn.spellnote.ui.util.bindingrecyclerview.BindingRecyclerView
+                    android:id="@+id/languages_grid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    app:bindingVarPath="com.xpn.spellnote.BR.viewModel"
+                    app:itemLayoutResId="@layout/item_language_grid"
+                    app:viewModelList="@{viewModel.listViewModels}" />
+
+                <fragment
+                    android:id="@+id/ad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="100dp"
+                    android:name="com.xpn.spellnote.ui.ads.NativeAdFragment"
+                    tools:layout="@layout/native_ad" />
+            </LinearLayout>
+        </ScrollView>
+
     </LinearLayout>
 </layout>
