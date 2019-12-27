@@ -30,7 +30,16 @@
                 android:layout_centerHorizontal="true"
                 android:keepScreenOn="true"
                 android:visibility="@{viewModel.state != State.DONE ? View.VISIBLE : View.GONE}"
-                android:layout_alignParentBottom="true" />
+                android:layout_alignParentBottom="true"
+                app:cameraAudio="off"
+                app:cameraUseDeviceOrientation="true"
+                app:cameraMode="picture"
+                app:cameraHdr="off"
+                app:cameraPlaySounds="false"
+                app:cameraGestureTap="autoFocus"
+                app:cameraGestureLongTap="autoFocus"
+                app:cameraGesturePinch="zoom"
+                app:cameraPictureSizeAspectRatio="1:1" />
 
             <ImageView
                 android:id="@+id/image"

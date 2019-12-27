@@ -2,23 +2,22 @@ package com.xpn.spellnote.ui.document.edit.imagetextrecognition;
 
 import android.app.Activity;
 import android.content.Intent;
-import androidx.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.ml.vision.FirebaseVision;
@@ -28,16 +27,13 @@ import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer;
 import com.google.firebase.perf.metrics.AddTrace;
 import com.otaliastudios.cameraview.CameraListener;
-import com.otaliastudios.cameraview.Gesture;
-import com.otaliastudios.cameraview.GestureAction;
+import com.otaliastudios.cameraview.PictureResult;
 import com.xpn.spellnote.GlideApp;
 import com.xpn.spellnote.GlideRequest;
 import com.xpn.spellnote.R;
 import com.xpn.spellnote.databinding.FragmentCameraImageTextRecognitionBinding;
 import com.xpn.spellnote.models.DictionaryModel;
-import com.xpn.spellnote.ui.util.CameraInfoUtil;
 import com.xpn.spellnote.ui.util.image.CompressTransformation;
-import com.xpn.spellnote.ui.util.image.RotateTransformation;
 import com.xpn.spellnote.util.Util;
 
 import java.util.ArrayList;
@@ -66,12 +62,10 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
         binding.setViewModel(viewModel);
 
         binding.camera.setLifecycleOwner(getViewLifecycleOwner());
-        binding.camera.mapGesture(Gesture.PINCH, GestureAction.ZOOM);
-        binding.camera.mapGesture(Gesture.TAP, GestureAction.FOCUS_WITH_MARKER);
         binding.camera.addCameraListener(new CameraListener() {
             @Override
-            public void onPictureTaken(byte[] picture) {
-                setImage(picture, CameraInfoUtil.getRotation(picture));
+            public void onPictureTaken(@NonNull PictureResult result) {
+                result.toBitmap(bitmap -> setImage(bitmap));
             }
         });
 
@@ -111,18 +105,15 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
                 .into(binding.image);
     }
 
-    private void setImage(byte[] data, int rotation) {
+    private void setImage(Bitmap bitmap) {
         setImage(GlideApp.with(this)
                         .asBitmap()
-                        .load(data)
-                        .apply(RequestOptions.bitmapTransform(new MultiTransformation<>(
-                                new RotateTransformation(rotation),
-                                new CompressTransformation(0.3)
-                        ))));
+                        .load(bitmap)
+                        .transform(new CompressTransformation(0.3)));
     }
 
     private void setImage(Uri uri) {
-        Timber.d("Load image: %s", uri.toString() );
+        Timber.d("Load image: %s", uri.toString());
         setImage(GlideApp.with(this)
                         .asBitmap()
                         .load(uri)
@@ -177,7 +168,7 @@ public class CameraImageTextRecognitionFragment extends Fragment implements Came
     @Override
     public void onCaptureImage() {
         analytics.logEvent("image_text_recognizer_capture", null);
-        binding.camera.captureSnapshot();
+        binding.camera.takePictureSnapshot();
     }
 
     @Override
